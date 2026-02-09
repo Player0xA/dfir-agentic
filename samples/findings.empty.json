@@ -1,0 +1,17 @@
+{
+  "run_metadata": {
+    "run_id": "d9a7d098-ca4c-43d4-8cea-707ace4ba578",
+    "timestamp_utc": "2026-02-09T22:27:45Z",
+    "environment": {
+      "hostname": "siftworkstation",
+      "os": "Ubuntu 22.04.5 LTS",
+      "timezone": "Etc/UTC"
+    },
+    "pipeline": {
+      "name": "contract-smoke",
+      "version": "0.0.1"
+    }
+  },
+  "findings": [],
+  "requests": []
+}
