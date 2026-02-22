@@ -83,10 +83,9 @@ def main() -> int:
         count = 0
         source = "default:0"
 
-    count = detections
-    tier = "fast"
+    tier = "quick"
     if count >= int(args.threshold_detections):
-        tier = "default"
+        tier = "deep"
     should_run = True
     reason = f"baseline count={count} threshold={args.threshold_detections} tier={tier}"
 

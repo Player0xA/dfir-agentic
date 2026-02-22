@@ -14,6 +14,7 @@ ENFORCE = Path("tools/router/enforce_capabilities.py")
 DISPATCH = Path("tools/router/dispatch_intake.py")
 
 # NEW: optional stages
+ENRICH_DECIDER = Path("tools/enrich/decide_enrichment.py")
 ENRICH_RUNNER = Path("tools/enrich/run_hayabusa_if_needed.py")
 MERGE_TOOL = Path("tools/merge/merge_case_findings.py")
 
@@ -119,10 +120,22 @@ def main() -> int:
 
     # 6) Optional enrichment stage
     if args.enrichment_policy == "always":
+        plan_json = out_path.parent / "enrichment_plan.json"
+        enrich_json = out_path.parent / "enrichment.json"
+
+        if not ENRICH_DECIDER.is_file():
+            print(f"FAIL: enrichment decider not found: {ENRICH_DECIDER}", file=sys.stderr)
+            return 2
+        
+        # Decide (deterministic depth check)
+        run_must([str(ENRICH_DECIDER), "--auto-json", str(out_path), "--out-plan", str(plan_json)])
+        
         if not ENRICH_RUNNER.is_file():
             print(f"FAIL: enrichment runner not found: {ENRICH_RUNNER}", file=sys.stderr)
             return 2
-        run_must([str(ENRICH_RUNNER), "--auto-json", str(out_path), "--policy", "always"])
+            
+        # Run
+        run_must([str(ENRICH_RUNNER), "--plan-json", str(plan_json), "--out-json", str(enrich_json)])
 
     # 7) Optional merge stage
     if args.run_merge:

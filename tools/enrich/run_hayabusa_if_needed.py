@@ -97,7 +97,8 @@ def main() -> int:
         raise SystemExit(f"FAIL: plan pipeline_script not allowed: {pipeline_script} (expected {HAYABUSA_PIPELINE})")
 
     evtx_dir = plan["baseline"]["evtx_dir"]
-    run_must([str(HAYABUSA_PIPELINE), evtx_dir])
+    tier = plan["enrichment"].get("tier", "quick")
+    run_must([str(HAYABUSA_PIPELINE), evtx_dir, "--tier", tier])
 
     # Resolve hayabusa run_id via LATEST pointer
     latest_file = Path("outputs/jsonl/hayabusa_evtx/LATEST")

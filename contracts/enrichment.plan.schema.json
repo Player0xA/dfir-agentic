@@ -4,55 +4,118 @@
   "title": "DFIR Enrichment Plan",
   "type": "object",
   "additionalProperties": false,
-  "required": ["plan_id", "timestamp_utc", "agent_id", "baseline", "enrichment", "decision"],
+  "required": [
+    "plan_id",
+    "timestamp_utc",
+    "agent_id",
+    "baseline",
+    "enrichment",
+    "decision"
+  ],
   "properties": {
-    "plan_id": { "type": "string", "minLength": 8 },
-    "timestamp_utc": { "type": "string", "minLength": 10 },
-
-    "agent_id": { "type": "string", "minLength": 1 },
-
+    "plan_id": {
+      "type": "string",
+      "minLength": 8
+    },
+    "timestamp_utc": {
+      "type": "string",
+      "minLength": 10
+    },
+    "agent_id": {
+      "type": "string",
+      "minLength": 1
+    },
     "baseline": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["auto_json", "baseline_manifest_path", "evtx_dir"],
+      "required": [
+        "auto_json",
+        "baseline_manifest_path",
+        "evtx_dir"
+      ],
       "properties": {
-        "auto_json": { "type": "string", "minLength": 1 },
-        "baseline_manifest_path": { "type": "string", "minLength": 1 },
-        "evtx_dir": { "type": "string", "minLength": 1 }
-      }
-    },
-
-    "enrichment": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": ["enrichment_id", "pipeline_script", "args"],
-      "properties": {
-        "enrichment_id": { "type": "string", "minLength": 1 },
-        "pipeline_script": { "type": "string", "minLength": 1 },
-        "args": {
-          "type": "array",
-          "items": { "type": "string" }
+        "auto_json": {
+          "type": "string",
+          "minLength": 1
+        },
+        "baseline_manifest_path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "evtx_dir": {
+          "type": "string",
+          "minLength": 1
         }
       }
     },
-
+    "enrichment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "enrichment_id",
+        "pipeline_script",
+        "args",
+        "tier"
+      ],
+      "properties": {
+        "enrichment_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "pipeline_script": {
+          "type": "string",
+          "minLength": 1
+        },
+        "args": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "tier": {
+          "type": "string",
+          "enum": [
+            "fast",
+            "default",
+            "quick",
+            "deep"
+          ]
+        }
+      }
+    },
     "decision": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["should_run", "reason", "policy"],
+      "required": [
+        "should_run",
+        "reason",
+        "policy"
+      ],
       "properties": {
-        "should_run": { "type": "boolean" },
-        "reason": { "type": "string", "minLength": 1, "maxLength": 800 },
+        "should_run": {
+          "type": "boolean"
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 800
+        },
         "policy": {
           "type": "object",
           "additionalProperties": false,
-          "required": ["mode"],
+          "required": [
+            "mode"
+          ],
           "properties": {
-            "mode": { "type": "string", "enum": ["agent_decision"] }
+            "mode": {
+              "type": "string",
+              "enum": [
+                "agent_decision"
+              ]
+            }
           }
         }
       }
     }
   }
 }
-
