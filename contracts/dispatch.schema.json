@@ -1,0 +1,39 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.local/dfir-agentic/contracts/dispatch.schema.json",
+  "title": "DFIR Intake Dispatch Record",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["intake_id", "timestamp_utc", "decision", "result"],
+  "properties": {
+    "intake_id": {
+      "type": "string",
+      "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+    },
+    "timestamp_utc": {
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}Z$"
+    },
+    "decision": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["recommended_pipeline", "evidence_path", "status"],
+      "properties": {
+        "recommended_pipeline": { "type": ["string", "null"] },
+        "evidence_path": { "type": "string", "minLength": 1 },
+        "status": { "type": "string", "enum": ["dispatch", "skip"] }
+      }
+    },
+    "result": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["ok", "run_id", "manifest_path"],
+      "properties": {
+        "ok": { "type": "boolean" },
+        "run_id": { "type": ["string", "null"] },
+        "manifest_path": { "type": ["string", "null"] }
+      }
+    }
+  }
+}
+

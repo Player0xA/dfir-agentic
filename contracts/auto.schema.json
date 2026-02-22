@@ -1,0 +1,61 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.local/dfir-agentic/contracts/auto.schema.json",
+  "title": "DFIR Autonomous Execution Record",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["auto_id", "timestamp_utc", "intake", "selection", "enforcement", "dispatch"],
+  "properties": {
+    "auto_id": {
+      "type": "string",
+      "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+    },
+    "timestamp_utc": {
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}Z$"
+    },
+    "intake": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["intake_id", "intake_json"],
+      "properties": {
+        "intake_id": {
+          "type": "string",
+          "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+        },
+        "intake_json": { "type": "string", "minLength": 1 }
+      }
+    },
+    "selection": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["selected_agent", "kind"],
+      "properties": {
+        "selected_agent": { "type": "string", "minLength": 1 },
+        "kind": { "type": "string", "minLength": 1 }
+      }
+    },
+    "enforcement": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["allowed", "action", "details"],
+      "properties": {
+        "allowed": { "type": "boolean" },
+        "action": { "type": "string", "enum": ["dispatch_pipeline", "skip"] },
+        "details": { "type": "string", "minLength": 1 }
+      }
+    },
+    "dispatch": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "dispatch_json", "run_id", "manifest_path"],
+      "properties": {
+        "status": { "type": "string", "enum": ["ok", "skipped", "denied", "error"] },
+        "dispatch_json": { "type": ["string", "null"] },
+        "run_id": { "type": ["string", "null"] },
+        "manifest_path": { "type": ["string", "null"] }
+      }
+    }
+  }
+}
+

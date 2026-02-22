@@ -1,0 +1,59 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.local/dfir-agentic/contracts/intake.schema.json",
+  "title": "DFIR Evidence Intake Classification",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["intake_id", "timestamp_utc", "inputs", "classification", "signals"],
+  "properties": {
+    "intake_id": {
+      "type": "string",
+      "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+    },
+    "timestamp_utc": {
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}Z$"
+    },
+    "inputs": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["paths"],
+      "properties": {
+        "paths": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string", "minLength": 1 }
+        }
+      }
+    },
+    "classification": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "confidence", "recommended_pipeline"],
+      "properties": {
+        "kind": {
+          "type": "string",
+          "enum": [
+            "windows_evtx_dir",
+            "windows_evtx_file",
+            "linux_logs_dir",
+            "pcap_file",
+            "disk_image_file",
+            "memory_dump_file",
+            "unknown"
+          ]
+        },
+        "confidence": { "type": "string", "enum": ["high", "medium", "low"] },
+        "recommended_pipeline": {
+          "type": ["string", "null"],
+          "enum": ["chainsaw_evtx", null]
+        }
+      }
+    },
+    "signals": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 }
+    }
+  }
+}
+

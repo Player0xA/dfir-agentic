@@ -1,0 +1,63 @@
+{
+ "client_id": "C.dda7e44469fe1afc-O71H0",
+ "session_id": "F.D5TE50PQSJUJM",
+ "request": {
+  "creator": "mariano.sanchez",
+  "client_id": "C.dda7e44469fe1afc-O71H0",
+  "urgent": true,
+  "artifacts": [
+   "System.VFS.DownloadFile"
+  ],
+  "specs": [
+   {
+    "artifact": "System.VFS.DownloadFile",
+    "parameters": {
+     "env": [
+      {
+       "key": "Components",
+       "value": "[\"B:\",\"Windows\",\"System32\",\"winevt\",\"Logs\"]"
+      },
+      {
+       "key": "Accessor",
+       "value": "auto"
+      },
+      {
+       "key": "Recursively",
+       "value": "Y"
+      }
+     ]
+    }
+   }
+  ],
+  "max_upload_bytes": 1048576000
+ },
+ "create_time": 1769661059328430,
+ "start_time": 1769661059351963,
+ "active_time": 1769661060788904,
+ "total_uploaded_files": 335,
+ "total_expected_uploaded_bytes": 38858752,
+ "total_uploaded_bytes": 38858752,
+ "total_collected_rows": 335,
+ "total_logs": 5,
+ "total_requests": 1,
+ "execution_duration": 1436941000,
+ "state": 2,
+ "artifacts_with_results": [
+  "System.VFS.DownloadFile"
+ ],
+ "query_stats": [
+  {
+   "duration": 1436941000,
+   "last_active": 1769661060788904,
+   "first_active": 1769661059351963,
+   "names_with_response": [
+    "System.VFS.DownloadFile"
+   ],
+   "log_rows": 5,
+   "uploaded_files": 335,
+   "uploaded_bytes": 38858752,
+   "expected_uploaded_bytes": 38858752,
+   "result_rows": 335
+  }
+ ]
+}

@@ -1,0 +1,139 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.local/dfir-agentic/contracts/manifest.hayabusa.schema.json",
+  "title": "DFIR Run Manifest (Hayabusa Enrichment)",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "run_id",
+    "timestamp_utc",
+    "pipeline",
+    "status",
+    "inputs",
+    "tooling",
+    "artifacts",
+    "latest"
+  ],
+  "properties": {
+    "run_id": {
+      "type": "string",
+      "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+    },
+    "timestamp_utc": {
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}Z$"
+    },
+    "pipeline": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "version"],
+      "properties": {
+        "name": { "type": "string", "minLength": 1 },
+        "version": { "type": "string", "minLength": 1 }
+      }
+    },
+    "status": { "type": "string", "enum": ["ok", "error"] },
+    "inputs": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["evtx_dir", "evtx_files"],
+      "properties": {
+        "evtx_dir": { "type": "string", "minLength": 1 },
+        "evtx_files": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/file_ref" }
+        }
+      }
+    },
+    "tooling": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["hayabusa", "normalizer", "schema", "validator"],
+      "properties": {
+        "hayabusa": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["path", "version", "rules_dir", "config_dir", "profile", "cmd"],
+          "properties": {
+            "path": { "type": "string", "minLength": 1 },
+            "version": { "type": "string", "minLength": 1 },
+            "rules_dir": { "type": "string", "minLength": 1 },
+            "config_dir": { "type": "string", "minLength": 1 },
+            "profile": { "type": "string", "minLength": 1 },
+            "cmd": {
+              "type": "array",
+              "minItems": 1,
+              "items": { "type": "string", "minLength": 1 }
+            }
+          }
+        },
+        "normalizer": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["path"],
+          "properties": { "path": { "type": "string", "minLength": 1 } }
+        },
+        "schema": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["path"],
+          "properties": { "path": { "type": "string", "minLength": 1 } }
+        },
+        "validator": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["path"],
+          "properties": { "path": { "type": "string", "minLength": 1 } }
+        }
+      }
+    },
+    "artifacts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["request", "timeline_csv", "findings_json", "stdout_log", "stderr_log", "manifest_json"],
+      "properties": {
+        "request": { "$ref": "#/$defs/file_meta" },
+        "timeline_csv": { "$ref": "#/$defs/file_meta" },
+        "findings_json": { "$ref": "#/$defs/file_meta" },
+        "stdout_log": { "$ref": "#/$defs/file_meta" },
+        "stderr_log": { "$ref": "#/$defs/file_meta" },
+        "manifest_json": { "$ref": "#/$defs/file_meta" }
+      }
+    },
+    "latest": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["outputs/jsonl/hayabusa_evtx/LATEST"],
+      "properties": {
+        "outputs/jsonl/hayabusa_evtx/LATEST": { "type": "boolean" }
+      }
+    }
+  },
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "file_ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "sha256", "size"],
+      "properties": {
+        "path": { "type": "string", "minLength": 1 },
+        "sha256": { "$ref": "#/$defs/sha256" },
+        "size": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "file_meta": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "sha256", "size"],
+      "properties": {
+        "path": { "type": "string", "minLength": 1 },
+        "sha256": { "$ref": "#/$defs/sha256" },
+        "size": { "type": "integer", "minimum": 0 }
+      }
+    }
+  }
+}
+

@@ -1,0 +1,67 @@
+{
+ "items": [
+  {
+   "session_id": "F.D5TE50PQSJUJM",
+   "request_id": 1,
+   "urgent": true,
+   "FlowRequest": {
+    "VQLClientActions": [
+     {
+      "query_id": 1,
+      "total_queries": 1,
+      "env": [
+       {
+        "key": "Path",
+        "value": "/"
+       },
+       {
+        "key": "Components",
+        "value": "[\"B:\",\"Windows\",\"System32\",\"winevt\",\"Logs\"]"
+       },
+       {
+        "key": "Accessor",
+        "value": "auto"
+       },
+       {
+        "key": "Recursively",
+        "value": "Y"
+       },
+       {
+        "key": "UPLOAD_IS_RESUMABLE",
+        "value": "N"
+       }
+      ],
+      "Query": [
+       {
+        "VQL": "LET Components \u003c= if(condition=format(format=\"%T\", args=[Components, ]) = \"string\", then=parse_json_array(data=Components), else=Components)"
+       },
+       {
+        "VQL": "LET Recursively \u003c= get(field='Recursively') = TRUE OR get(field='Recursively') =~ '^(Y|TRUE|YES|OK)$'"
+       },
+       {
+        "VQL": "LET UPLOAD_IS_RESUMABLE \u003c= get(field='UPLOAD_IS_RESUMABLE') = TRUE OR get(field='UPLOAD_IS_RESUMABLE') =~ '^(Y|TRUE|YES|OK)$'"
+       },
+       {
+        "VQL": "LET download_one_file = if(condition=version(plugin=\"stat\") \u003e 1, then={ SELECT OSPath AS Path, Accessor, Size, upload(file=OSPath, accessor=Accessor) AS Upload FROM stat(filename=Components, accessor=Accessor) }, else={ SELECT OSPath AS Path, Accessor, Size, upload(file=OSPath, accessor=Accessor) AS Upload FROM stat(filename=Path, accessor=Accessor) })"
+       },
+       {
+        "VQL": "LET download_recursive = if(condition=version(plugin=\"stat\") \u003e 1, then={ SELECT OSPath AS Path, Accessor, Size, upload(file=OSPath, accessor=Accessor) AS Upload FROM glob(globs=\"**\", root=Components, accessor=Accessor, nosymlink=TRUE) WHERE Mode.IsRegular }, else={ SELECT OSPath AS Path, Accessor, Size, upload(file=OSPath, accessor=Accessor) AS Upload FROM glob(globs=\"**\", root=Path, accessor=Accessor) WHERE Mode.IsRegular })"
+       },
+       {
+        "VQL": "LET System_VFS_DownloadFile_0_2 = SELECT Path, Accessor, Upload.Size AS Size, Upload.StoredSize AS StoredSize, Upload.Sha256 AS Sha256, Upload.Md5 AS Md5, Upload.Error AS Error, Path.Components AS _Components FROM if(condition=Recursively, then={ SELECT * FROM download_recursive }, else={ SELECT * FROM download_one_file })"
+       },
+       {
+        "Name": "$195184c68f599835c480061ba49b8b65c04cf6b424ec65fd2765b144c3405726",
+        "VQL": "SELECT * FROM System_VFS_DownloadFile_0_2"
+       }
+      ],
+      "max_row": 1000
+     }
+    ],
+    "log_batch_time": 2000,
+    "max_upload_bytes": 1048576000,
+    "compression": 1
+   }
+  }
+ ]
+}
