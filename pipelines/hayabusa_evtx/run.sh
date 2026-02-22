@@ -170,7 +170,7 @@ set +e
   -w \
   -r "${RULES_DIR}" \
   -c "${CONFIG_DIR}" \
-  -p verbose \
+  "${HAYA_TIER_ARGS[@]}" \
   -O \
   -C \
   -o "${TIMELINE_CSV}" \
