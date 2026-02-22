@@ -143,7 +143,8 @@ cat > "${REQUEST_JSON}" <<JSON
     "bin": "${HAYA_BIN}",
     "rules_dir": "${RULES_DIR}",
     "config_dir": "${CONFIG_DIR}",
-    "profile": "verbose",
+    "tier": "${TIER}",
+    "tier_args": "${HAYA_TIER_ARGS[*]}",
     "iso_utc": true,
     "no_wizard": true,
     "clobber": true
@@ -197,7 +198,7 @@ python3 -u "${ADAPTER_CONTRACT}" \
   --pipeline-version "${PIPELINE_VERSION}" \
   --hayabusa-version "${HAYA_VERSION}" \
   --evtx-dir "${EVTX_DIR}" \
-  --profile "verbose"
+  --profile "${TIER}"
 
 
 test -s "${FINDINGS_JSON}" || { echo "FAIL: findings.json not created or empty: ${FINDINGS_JSON}" >&2; exit 2; }
@@ -250,14 +251,15 @@ manifest = {
       "version": ${HAYA_VERSION@Q},
       "rules_dir": ${RULES_DIR@Q},
       "config_dir": ${CONFIG_DIR@Q},
-      "profile": "verbose",
+      "tier": ${TIER@Q},
+      "tier_args": """${HAYA_TIER_ARGS[*]}""".split(),
       "cmd": [
         ${HAYA_BIN@Q}, "csv-timeline",
         "-d", ${EVTX_DIR@Q},
         "-w",
         "-r", ${RULES_DIR@Q},
-        "-c", ${CONFIG_DIR@Q},
-        "-p", "verbose",
+        "-c", ${CONFIG_DIR@Q}
+      ] + """${HAYA_TIER_ARGS[*]}""".split() + [
         "-O",
         "-C",
         "-o", ${TIMELINE_CSV@Q}
