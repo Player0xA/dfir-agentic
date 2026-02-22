@@ -1,0 +1,1950 @@
+{
+  "run_id": "a02d7ec5-e85f-4b36-b858-b39384fda950",
+  "timestamp_utc": "2026-02-12T04:02:29Z",
+  "pipeline": {
+    "name": "chainsaw-evtx",
+    "version": "0.1.0"
+  },
+  "source_findings": {
+    "path": "outputs/jsonl/chainsaw_evtx/a02d7ec5-e85f-4b36-b858-b39384fda950/findings.json",
+    "sha256": "91ce64370c806b7fe59e50003c4b871e3e5a2167d55d4bf1936f14fa8c1cfe98",
+    "size": 1306866,
+    "count": 339
+  },
+  "time_bounds": {
+    "min_first_seen": "2026-01-14T10:49:44.557632+00:00",
+    "max_last_seen": "2026-01-14T12:57:04.021180+00:00"
+  },
+  "counts": {
+    "total_findings": 339,
+    "by_severity": {
+      "critical": 1,
+      "high": 2,
+      "informational": 336
+    },
+    "by_rule_id": [
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:1",
+        "rule_title": "User Profile Disk - Registry file loaded",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:10",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:100",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:101",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:102",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:103",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:104",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:105",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:106",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:107",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:108",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:109",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:11",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:110",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:111",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:112",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:113",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:114",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:115",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:116",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:117",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:118",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:119",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:12",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:120",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:121",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:122",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:123",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:124",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:125",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:126",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:127",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:128",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:129",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:13",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:130",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:131",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:132",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:133",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:134",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:135",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:136",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:137",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:138",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:139",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:14",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:140",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:141",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:142",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:143",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:144",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:145",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:146",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:147",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:148",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:149",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:15",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:150",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:151",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:152",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:153",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:154",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:155",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:156",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:157",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:158",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:159",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:16",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:160",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:161",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:162",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:163",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:164",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:165",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:166",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:167",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:168",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:169",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:17",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:170",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:171",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:172",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:173",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:174",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:175",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:176",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:177",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:178",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:179",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:18",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:180",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:181",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:182",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:183",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:184",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:185",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:186",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:187",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:188",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:189",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:19",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:190",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:191",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:192",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:193",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:194",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:195",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:196",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:197",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:198",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:199",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:2",
+        "rule_title": "User Profile Disk - Registry file loaded",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:20",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:200",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:201",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:202",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:203",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:204",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:205",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:206",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:207",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:208",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:209",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:21",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:210",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:211",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:212",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:213",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:214",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:215",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:216",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:217",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:218",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:219",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:22",
+        "rule_title": "Account Brute Force",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:220",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:221",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:222",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:223",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:224",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:225",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:226",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:227",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:228",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:229",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:23",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:230",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:231",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:232",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:233",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:234",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:235",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:236",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:237",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:238",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:239",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:24",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:240",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:241",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:242",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:243",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:244",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:245",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:246",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:247",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:248",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:249",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:25",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:250",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:251",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:252",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:253",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:254",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:255",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:256",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:257",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:258",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:259",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:26",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:260",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:261",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:262",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:263",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:264",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:265",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:266",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:267",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:268",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:269",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:27",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:270",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:271",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:272",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:273",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:274",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:275",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:276",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:277",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:278",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:279",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:28",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:280",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:281",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:282",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:283",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:284",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:285",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:286",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:287",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:288",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:289",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:29",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:290",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:291",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:292",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:293",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:294",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:295",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:296",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:297",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:298",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:299",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:3",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:30",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:300",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:301",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:302",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:303",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:304",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:305",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:306",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:307",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:308",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:309",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:31",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:310",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:311",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:312",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:313",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:314",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:315",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:316",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:317",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:318",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:319",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:32",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:320",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:321",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:322",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:323",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:324",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:325",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:326",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:327",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:328",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:329",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:33",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:330",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:331",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:332",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:333",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:334",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:335",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:336",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:337",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:338",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:339",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:34",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:35",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:36",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:37",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:38",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:39",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:4",
+        "rule_title": "System Logs Cleared",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:40",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:41",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:42",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:43",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:44",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:45",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:46",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:47",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:48",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:49",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:5",
+        "rule_title": "System Logs Cleared",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:50",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:51",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:52",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:53",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:54",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:55",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:56",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:57",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:58",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:59",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:6",
+        "rule_title": "Security Audit Logs Cleared",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:60",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:61",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:62",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:63",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:64",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:65",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:66",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:67",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:68",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:69",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:7",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:70",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:71",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:72",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:73",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:74",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:75",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:76",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:77",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:78",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:79",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:8",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:80",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:81",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:82",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:83",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:84",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:85",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:86",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:87",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:88",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:89",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:9",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:90",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:91",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:92",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:93",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:94",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:95",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:96",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:97",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:98",
+        "rule_title": "Network Logon",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:99",
+        "rule_title": "Network Logon",
+        "count": 1
+      }
+    ]
+  },
+  "top_findings": [
+    {
+      "finding_id": "F-a02d7ec5-000006",
+      "severity": "critical",
+      "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:6",
+      "rule_title": "Security Audit Logs Cleared",
+      "first_seen": "2026-01-14T10:49:44.557632+00:00",
+      "last_seen": "2026-01-14T10:49:44.557632+00:00",
+      "summary": "Security Audit Logs Cleared"
+    },
+    {
+      "finding_id": "F-a02d7ec5-000004",
+      "severity": "high",
+      "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:4",
+      "rule_title": "System Logs Cleared",
+      "first_seen": "2026-01-14T10:49:44.557632+00:00",
+      "last_seen": "2026-01-14T10:49:44.557632+00:00",
+      "summary": "System Logs Cleared"
+    },
+    {
+      "finding_id": "F-a02d7ec5-000005",
+      "severity": "high",
+      "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:5",
+      "rule_title": "System Logs Cleared",
+      "first_seen": "2026-01-14T10:49:44.557632+00:00",
+      "last_seen": "2026-01-14T10:49:44.557632+00:00",
+      "summary": "System Logs Cleared"
+    },
+    {
+      "finding_id": "F-a02d7ec5-000003",
+      "severity": "informational",
+      "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:3",
+      "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+      "first_seen": "2026-01-14T10:49:44.573258+00:00",
+      "last_seen": "2026-01-14T10:49:44.573258+00:00",
+      "summary": "PowerShell - Engine state is changed from Available to Stopped"
+    },
+    {
+      "finding_id": "F-a02d7ec5-000007",
+      "severity": "informational",
+      "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:7",
+      "rule_title": "Network Logon",
+      "first_seen": "2026-01-14T10:49:48.197122+00:00",
+      "last_seen": "2026-01-14T10:49:48.197122+00:00",
+      "summary": "Network Logon"
+    },
+    {
+      "finding_id": "F-a02d7ec5-000008",
+      "severity": "informational",
+      "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:8",
+      "rule_title": "Network Logon",
+      "first_seen": "2026-01-14T10:50:43.428485+00:00",
+      "last_seen": "2026-01-14T10:50:43.428485+00:00",
+      "summary": "Network Logon"
+    },
+    {
+      "finding_id": "F-a02d7ec5-000009",
+      "severity": "informational",
+      "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:9",
+      "rule_title": "Network Logon",
+      "first_seen": "2026-01-14T10:51:01.522970+00:00",
+      "last_seen": "2026-01-14T10:51:01.522970+00:00",
+      "summary": "Network Logon"
+    },
+    {
+      "finding_id": "F-a02d7ec5-000010",
+      "severity": "informational",
+      "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:10",
+      "rule_title": "Network Logon",
+      "first_seen": "2026-01-14T10:52:04.453219+00:00",
+      "last_seen": "2026-01-14T10:52:04.453219+00:00",
+      "summary": "Network Logon"
+    },
+    {
+      "finding_id": "F-a02d7ec5-000011",
+      "severity": "informational",
+      "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:11",
+      "rule_title": "Network Logon",
+      "first_seen": "2026-01-14T10:52:21.549523+00:00",
+      "last_seen": "2026-01-14T10:52:21.549523+00:00",
+      "summary": "Network Logon"
+    },
+    {
+      "finding_id": "F-a02d7ec5-000012",
+      "severity": "informational",
+      "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:12",
+      "rule_title": "Network Logon",
+      "first_seen": "2026-01-14T10:52:48.045827+00:00",
+      "last_seen": "2026-01-14T10:52:48.045827+00:00",
+      "summary": "Network Logon"
+    },
+    {
+      "finding_id": "F-a02d7ec5-000013",
+      "severity": "informational",
+      "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:13",
+      "rule_title": "Network Logon",
+      "first_seen": "2026-01-14T10:53:25.453893+00:00",
+      "last_seen": "2026-01-14T10:53:25.453893+00:00",
+      "summary": "Network Logon"
+    },
+    {
+      "finding_id": "F-a02d7ec5-000014",
+      "severity": "informational",
+      "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:14",
+      "rule_title": "Network Logon",
+      "first_seen": "2026-01-14T10:53:41.578749+00:00",
+      "last_seen": "2026-01-14T10:53:41.578749+00:00",
+      "summary": "Network Logon"
+    },
+    {
+      "finding_id": "F-a02d7ec5-000015",
+      "severity": "informational",
+      "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:15",
+      "rule_title": "Network Logon",
+      "first_seen": "2026-01-14T10:54:46.070030+00:00",
+      "last_seen": "2026-01-14T10:54:46.070030+00:00",
+      "summary": "Network Logon"
+    },
+    {
+      "finding_id": "F-a02d7ec5-000016",
+      "severity": "informational",
+      "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:16",
+      "rule_title": "Network Logon",
+      "first_seen": "2026-01-14T10:55:01.611073+00:00",
+      "last_seen": "2026-01-14T10:55:01.611073+00:00",
+      "summary": "Network Logon"
+    },
+    {
+      "finding_id": "F-a02d7ec5-000017",
+      "severity": "informational",
+      "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:17",
+      "rule_title": "Network Logon",
+      "first_seen": "2026-01-14T10:55:48.208797+00:00",
+      "last_seen": "2026-01-14T10:55:48.208797+00:00",
+      "summary": "Network Logon"
+    },
+    {
+      "finding_id": "F-a02d7ec5-000018",
+      "severity": "informational",
+      "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:18",
+      "rule_title": "Network Logon",
+      "first_seen": "2026-01-14T10:56:07.468532+00:00",
+      "last_seen": "2026-01-14T10:56:07.468532+00:00",
+      "summary": "Network Logon"
+    },
+    {
+      "finding_id": "F-a02d7ec5-000019",
+      "severity": "informational",
+      "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:19",
+      "rule_title": "Network Logon",
+      "first_seen": "2026-01-14T10:57:28.389367+00:00",
+      "last_seen": "2026-01-14T10:57:28.389367+00:00",
+      "summary": "Network Logon"
+    },
+    {
+      "finding_id": "F-a02d7ec5-000020",
+      "severity": "informational",
+      "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:20",
+      "rule_title": "Network Logon",
+      "first_seen": "2026-01-14T10:58:46.318455+00:00",
+      "last_seen": "2026-01-14T10:58:46.318455+00:00",
+      "summary": "Network Logon"
+    },
+    {
+      "finding_id": "F-a02d7ec5-000021",
+      "severity": "informational",
+      "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:21",
+      "rule_title": "Network Logon",
+      "first_seen": "2026-01-14T10:58:48.095542+00:00",
+      "last_seen": "2026-01-14T10:58:48.095542+00:00",
+      "summary": "Network Logon"
+    },
+    {
+      "finding_id": "F-a02d7ec5-000022",
+      "severity": "informational",
+      "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:22",
+      "rule_title": "Account Brute Force",
+      "first_seen": "2026-01-14T11:00:02.918130+00:00",
+      "last_seen": "2026-01-14T11:00:02.918130+00:00",
+      "summary": "Account Brute Force"
+    },
+    {
+      "finding_id": "F-a02d7ec5-000023",
+      "severity": "informational",
+      "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:23",
+      "rule_title": "Network Logon",
+      "first_seen": "2026-01-14T11:01:23.966398+00:00",
+      "last_seen": "2026-01-14T11:01:23.966398+00:00",
+      "summary": "Network Logon"
+    },
+    {
+      "finding_id": "F-a02d7ec5-000024",
+      "severity": "informational",
+      "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:24",
+      "rule_title": "Network Logon",
+      "first_seen": "2026-01-14T11:01:48.064906+00:00",
+      "last_seen": "2026-01-14T11:01:48.064906+00:00",
+      "summary": "Network Logon"
+    },
+    {
+      "finding_id": "F-a02d7ec5-000025",
+      "severity": "informational",
+      "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:25",
+      "rule_title": "Network Logon",
+      "first_seen": "2026-01-14T11:02:44.778816+00:00",
+      "last_seen": "2026-01-14T11:02:44.778816+00:00",
+      "summary": "Network Logon"
+    },
+    {
+      "finding_id": "F-a02d7ec5-000026",
+      "severity": "informational",
+      "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:26",
+      "rule_title": "Network Logon",
+      "first_seen": "2026-01-14T11:03:12.539438+00:00",
+      "last_seen": "2026-01-14T11:03:12.539438+00:00",
+      "summary": "Network Logon"
+    },
+    {
+      "finding_id": "F-a02d7ec5-000027",
+      "severity": "informational",
+      "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:27",
+      "rule_title": "Network Logon",
+      "first_seen": "2026-01-14T11:04:03.044128+00:00",
+      "last_seen": "2026-01-14T11:04:03.044128+00:00",
+      "summary": "Network Logon"
+    }
+  ]
+}

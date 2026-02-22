@@ -1,0 +1,14 @@
+{
+  "intake_id": "be230b77-e92d-4679-a92b-fa39b02882d6",
+  "timestamp_utc": "2026-02-11T06:50:00Z",
+  "decision": {
+    "recommended_pipeline": "chainsaw_evtx",
+    "evidence_path": "/home/nevermore/cases/intake/evtx/Logs",
+    "status": "dispatch"
+  },
+  "result": {
+    "ok": true,
+    "run_id": "b817cfbd-a7d0-48b9-9ad6-e642a8e50615",
+    "manifest_path": "outputs/jsonl/chainsaw_evtx/b817cfbd-a7d0-48b9-9ad6-e642a8e50615/manifest.json"
+  }
+}

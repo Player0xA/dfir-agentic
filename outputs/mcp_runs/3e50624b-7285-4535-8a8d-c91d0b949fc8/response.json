@@ -1,0 +1,12 @@
+{
+  "jsonrpc": "2.0",
+  "id": 2,
+  "error": {
+    "code": -32010,
+    "message": "permission denied",
+    "data": {
+      "call_id": "3e50624b-7285-4535-8a8d-c91d0b949fc8",
+      "detail": "evidence denied: path outside allowed evidence roots: /tmp"
+    }
+  }
+}

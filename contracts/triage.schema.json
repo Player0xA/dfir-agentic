@@ -1,0 +1,98 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.local/dfir-agentic/contracts/triage.schema.json",
+  "title": "DFIR Deterministic Triage Summary",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "run_id",
+    "timestamp_utc",
+    "pipeline",
+    "source_findings",
+    "time_bounds",
+    "counts",
+    "top_findings"
+  ],
+  "properties": {
+    "run_id": {
+      "type": "string",
+      "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+    },
+    "timestamp_utc": {
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}Z$"
+    },
+    "pipeline": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "version"],
+      "properties": {
+        "name": { "type": "string", "minLength": 1 },
+        "version": { "type": "string", "minLength": 1 }
+      }
+    },
+    "source_findings": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "sha256", "size", "count"],
+      "properties": {
+        "path": { "type": "string", "minLength": 1 },
+        "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+        "size": { "type": "integer", "minimum": 0 },
+        "count": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "time_bounds": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["min_first_seen", "max_last_seen"],
+      "properties": {
+        "min_first_seen": { "type": ["string", "null"] },
+        "max_last_seen": { "type": ["string", "null"] }
+      }
+    },
+    "counts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["by_severity", "by_rule_id"],
+      "properties": {
+	"total_findings": { "type": "integer", "minimum": 0 },      
+        "by_severity": {
+          "type": "object",
+          "additionalProperties": { "type": "integer", "minimum": 0 }
+        },
+        "by_rule_id": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["rule_id", "rule_title", "count"],
+            "properties": {
+              "rule_id": { "type": "string", "minLength": 1 },
+              "rule_title": { "type": ["string", "null"] },
+              "count": { "type": "integer", "minimum": 0 }
+            }
+          }
+        }
+      }
+    },
+    "top_findings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["finding_id", "severity", "rule_id", "rule_title", "first_seen", "last_seen", "summary"],
+        "properties": {
+          "finding_id": { "type": "string", "minLength": 1 },
+          "severity": { "type": ["string", "null"] },
+          "rule_id": { "type": ["string", "null"] },
+          "rule_title": { "type": ["string", "null"] },
+          "first_seen": { "type": ["string", "null"] },
+          "last_seen": { "type": ["string", "null"] },
+          "summary": { "type": ["string", "null"] }
+        }
+      }
+    }
+  }
+}
+

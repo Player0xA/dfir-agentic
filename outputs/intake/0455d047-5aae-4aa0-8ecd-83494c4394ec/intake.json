@@ -1,0 +1,19 @@
+{
+  "intake_id": "0455d047-5aae-4aa0-8ecd-83494c4394ec",
+  "timestamp_utc": "2026-02-12T04:02:11Z",
+  "inputs": {
+    "paths": [
+      "/home/nevermore/cases/intake/evtx/Logs"
+    ]
+  },
+  "classification": {
+    "kind": "windows_evtx_dir",
+    "confidence": "high",
+    "recommended_pipeline": "chainsaw_evtx"
+  },
+  "signals": [
+    "Logs:dir_contains_evtx_count:335",
+    "Logs:dir_contains_evt_count:0",
+    "Logs:security_evtx_present"
+  ]
+}

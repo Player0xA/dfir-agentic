@@ -1,0 +1,117 @@
+[0m[38;2;0;255;0m
+┏┓ ┏┳━━━┳┓  ┏┳━━━┳━━┓┏┓ ┏┳━━━┳━━━┓
+┃┃ ┃┃┏━┓┃┗┓┏┛┃┏━┓┃┏┓┃┃┃ ┃┃┏━┓┃┏━┓┃
+┃┗━┛┃┃ ┃┣┓┗┛┏┫┃ ┃┃┗┛┗┫┃ ┃┃┗━━┫┃ ┃┃
+┃┏━┓┃┗━┛┃┗┓┏┛┃┗━┛┃┏━┓┃┃ ┃┣━━┓┃┗━┛┃
+┃┃ ┃┃┏━┓┃ ┃┃ ┃┏━┓┃┗━┛┃┗━┛┃┗━┛┃┏━┓┃
+┗┛ ┗┻┛ ┗┛ ┗┛ ┗┛ ┗┻━━━┻━━━┻━━━┻┛ ┗┛
+   by Yamato Security 
+[0m
+[0m[0m[38;2;0;255;0mStart time: [0m2026/02/12 04:35
+[0m[38;2;0;255;0mTotal event log files: [0m335
+[0m[38;2;0;255;0mTotal file size: [0m37.1 MiB
+
+[0m[38;2;255;175;0mLoading detection rules. Please wait.
+
+[0m[38;2;0;255;0mExcluded rules: [0m26
+[0m[38;2;0;255;0mNoisy rules: [0m12 (Disabled)
+
+[0m[38;2;0;255;0mDeprecated rules: [0m229 (5.00%) (Disabled)
+[0m[38;2;0;255;0mExperimental rules: [0m295 (6.44%)
+[0m[38;2;0;255;0mStable rules: [0m244 (5.33%)
+[0m[38;2;0;255;0mTest rules: [0m4,041 (88.23%)
+[0m[38;2;0;255;0mUnsupported rules: [0m42 (0.92%) (Disabled)
+
+[0m[38;2;0;255;0mCorrelation rules: [0m3 (0.07%)
+[0m[38;2;0;255;0mCorrelation referenced rules: [0m3 (0.07%)
+
+[0m[38;2;0;255;0mExpand rules: [0m10 (0.22%)
+[0m[38;2;0;255;0mEnabled expand rules: [0m0 (0.00%)
+
+[0m[38;2;0;255;0mHayabusa rules: [0m181
+[0m[38;2;0;255;0mSigma rules: [0m4,399
+[0m[38;2;0;255;0mTotal detection rules: [0m4,580
+
+[0m[38;2;255;175;0mCreating the channel filter. Please wait.
+
+[0m[38;2;0;255;0mEvtx files loaded after channel filter: [0m18
+[0m[38;2;0;255;0mDetection rules enabled after channel filter: [0m2,048
+
+[0m[38;2;0;255;0mOutput profile: [0mverbose
+
+[0m[38;2;255;175;0mScanning in progress. Please wait.
+
+[0m[38;2;0;255;0mRule Authors:[0m 
+
+╭───────────────────────────────────────────────────────────────╮
+│ Zach Mathis (24)              Florian Roth (4)                │
+│ Nasreddine Bencherchali (3)   Tim Shelton (2)                 │
+│ Fukusuke Takahashi (2)        frack113 (1)                    │
+│ Gleb Sukhodolskiy (1)         Thomas DIOT (1)                 │
+│ Micah Babinski (1)            Timur Zinniatullin oscd.... (1) │
+╰─────────────────────────────╌─────────────────────────────────╯
+
+[0m[38;2;0;255;0mResults Summary:
+
+[0m[38;2;255;255;0mEvents with hits[0m / [0m[38;2;0;255;255mTotal events[0m: [0m[38;2;255;255;0m719[0m / [0m[38;2;0;255;255m2,602[0m ([0m[38;2;0;255;0mData reduction: 1,883 events (72.37%)[0m)
+
+[0mTotal | Unique detections: 741 | 32
+[0m[38;2;255;0;0mTotal | Unique emergency detections: 0 (0.00%) | 0 (0.00%)
+[0m[38;2;255;0;0mTotal | Unique critical detections: 0 (0.00%) | 0 (62.50%)
+[0m[38;2;255;193;0mTotal | Unique high detections: 16 (2.16%) | 3 (15.62%)
+[0m[38;2;255;255;0mTotal | Unique medium detections: 11 (1.48%) | 4 (12.50%)
+[0m[38;2;0;255;0mTotal | Unique low detections: 304 (41.03%) | 5 (9.38%)
+[0mTotal | Unique informational detections: 410 (55.33%) | 20 (0.00%)
+
+[0mFirst timestamp: 2026-01-14T10:49:44.557632Z
+[0mLast timestamp: 2026-01-14T12:57:19.073059Z
+
+[0mFirst detection: 2026-01-14T10:49:44.557632Z
+[0mLast detection: 2026-01-14T12:57:19.073059Z
+
+[0mDates with most total detections:
+[0m[0m[38;2;255;0;0memergency: n/a[0m, [0m[38;2;255;0;0mcritical: n/a[0m, [0m[38;2;255;193;0mhigh: 2026-01-14 (16)[0m, [0m[38;2;255;255;0mmedium: 2026-01-14 (11)[0m, [0m[38;2;0;255;0mlow: 2026-01-14 (304)[0m, [0minformational: 2026-01-14 (410)
+
+[0mTop 5 computers with most unique detections:
+[0m[38;2;255;0;0memergency: n/a
+[0m[38;2;255;0;0mcritical: n/a
+[0m[38;2;255;193;0mhigh: SQLSERVER.Mills.local (3)
+[0m[38;2;255;255;0mmedium: SQLSERVER.Mills.local (4)
+[0m[38;2;0;255;0mlow: SQLSERVER.Mills.local (5)
+[0minformational: SQLSERVER.Mills.local (20)
+
+╭──────────────────────────────────────────────────────────────────────────────╮
+│ Top emergency alerts:                   Top critical alerts:                 │
+├╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌┤
+│ n/a                                     n/a                                  │
+│ n/a                                     n/a                                  │
+│ n/a                                     n/a                                  │
+│ n/a                                     n/a                                  │
+│ n/a                                     n/a                                  │
+├╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌┤
+│ Top high alerts:                        Top medium alerts:                   │
+├╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌┤
+│ External Remote SMB Logon fro... (13)   Account Tampering - Suspiciou... (8) │
+│ Important Log File Cleared (2)          Potential CVE-2023-23397 Expl... (1) │
+│ Log Cleared (1)                         NTLMv1 Logon Between Client a... (1) │
+│ n/a                                     WMI Persistence (1)                  │
+│ n/a                                     n/a                                  │
+├╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌┤
+│ Top low alerts:                         Top informational alerts:            │
+├╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌┤
+│ NTLM Logon (273)                        Logoff (123)                         │
+│ Logon Failure (Unknown Reason... (26)   Logon (Network) (110)                │
+│ Windows Firewall Settings Hav... (3)    Admin Logon (81)                     │
+│ Service Crashed (1)                     Task Executed (39)                   │
+│ Unexpected Shutdown (1)                 Proc Exec (11)                       │
+╰───────────────────────────────────────╌──────────────────────────────────────╯
+
+[0m[38;2;0;255;0mSaved file:[0m /home/nevermore/dfir-agentic/outputs/csv/hayabusa_evtx/4d007284-3756-4c37-ae60-f51d7df4e386/timeline.csv (409.6 KiB)
+
+[0m[38;2;0;255;0mElapsed time: [0m00:00:03.950
+
+[0m[38;2;0;255;0mPlease report any issues with Hayabusa rules to: [0mhttps://github.com/Yamato-Security/hayabusa-rules/issues
+[0m[38;2;0;255;0mPlease report any false positives with Sigma rules to: [0mhttps://github.com/SigmaHQ/sigma/issues
+[0m[38;2;0;255;0mPlease submit new Sigma rules with pull requests to: [0mhttps://github.com/SigmaHQ/sigma/pulls
+
+[0m

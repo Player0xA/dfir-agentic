@@ -1,0 +1,63 @@
+{
+  "schema_version": "agent_registry@1.0.0",
+  "agents": [
+    {
+      "agent_id": "triage_agent",
+      "description": "Reads intake/dispatch/manifest/triage only. Cannot run pipelines or enrichments.",
+      "capabilities": {
+        "can_dispatch_pipelines": [],
+        "can_run_enrichments": [],
+        "can_read_roots": [
+          "outputs/intake",
+          "outputs/jsonl",
+          "contracts"
+        ],
+        "can_read_globs": [
+          "**/intake.json",
+          "**/dispatch.json",
+          "**/manifest.json",
+          "**/triage.json",
+          "**/auto.json",
+          "**/enrichment.json"
+        ]
+      }
+    },
+    {
+      "agent_id": "windows_evtx_agent",
+      "description": "May dispatch chainsaw_evtx (baseline) and run hayabusa_evtx enrichment; may read their outputs.",
+      "capabilities": {
+        "can_dispatch_pipelines": [
+          "chainsaw_evtx"
+        ],
+        "can_run_enrichments": [
+          "hayabusa_evtx"
+        ],
+        "can_read_roots": [
+          "outputs/intake",
+          "outputs/jsonl/chainsaw_evtx",
+          "outputs/toon/chainsaw_evtx",
+          "outputs/jsonl/hayabusa_evtx",
+          "outputs/csv/hayabusa_evtx",
+          "contracts"
+        ],
+        "can_read_globs": [
+          "**/intake.json",
+          "**/dispatch.json",
+          "**/auto.json",
+          "**/enrichment.json",
+          "**/manifest.json",
+          "**/triage.json",
+          "**/findings.json",
+          "**/chainsaw.evtx.jsonl",
+          "**/findings.toon",
+          "LATEST",
+          "**/timeline.csv",
+          "**/stdout.log",
+          "**/stderr.log",
+          "**/request.json"
+        ]
+      }
+    }
+  ]
+}
+

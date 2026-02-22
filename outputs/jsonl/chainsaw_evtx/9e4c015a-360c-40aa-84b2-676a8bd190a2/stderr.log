@@ -1,0 +1,15 @@
+
+ ██████╗██╗  ██╗ █████╗ ██╗███╗   ██╗███████╗ █████╗ ██╗    ██╗
+██╔════╝██║  ██║██╔══██╗██║████╗  ██║██╔════╝██╔══██╗██║    ██║
+██║     ███████║███████║██║██╔██╗ ██║███████╗███████║██║ █╗ ██║
+██║     ██╔══██║██╔══██║██║██║╚██╗██║╚════██║██╔══██║██║███╗██║
+╚██████╗██║  ██║██║  ██║██║██║ ╚████║███████║██║  ██║╚███╔███╔╝
+ ╚═════╝╚═╝  ╚═╝╚═╝  ╚═╝╚═╝╚═╝  ╚═══╝╚══════╝╚═╝  ╚═╝ ╚══╝╚══╝
+    By WithSecure Countercept (@FranticTyping, @AlexKornitzer)
+
+[+] Loading detection rules from: /opt/dfir-tools/chainsaw/rules/evtx
+[+] Loaded 78 detection rules
+[+] Loading forensic artefacts from: /home/nevermore/cases/intake/evtx/Logs (extensions: .evtx, .evt)
+[+] Loaded 335 forensic artefacts (37.1 MiB)
+
+[+] 339 Detections found on 339 documents

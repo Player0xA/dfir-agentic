@@ -1,0 +1,141 @@
+#!/usr/bin/env python3
+import argparse
+import json
+import subprocess
+import sys
+import uuid
+from datetime import datetime, timezone
+from pathlib import Path
+
+REGISTRY = Path(".agents/registry.json")
+
+SELECT_AGENT = Path("tools/router/select_agent.py")
+ENFORCE = Path("tools/router/enforce_capabilities.py")
+DISPATCH = Path("tools/router/dispatch_intake.py")
+
+# NEW: optional stages
+ENRICH_RUNNER = Path("tools/enrich/run_hayabusa_if_needed.py")
+MERGE_TOOL = Path("tools/merge/merge_case_findings.py")
+
+VALIDATE_AUTO = Path("tools/contracts/validate_auto.py")
+AUTO_SCHEMA = Path("contracts/auto.schema.json")
+
+def utc_now_z() -> str:
+    return datetime.now(timezone.utc).replace(microsecond=0).strftime("%Y-%m-%dT%H:%M:%SZ")
+
+def run_capture(cmd):
+    p = subprocess.run(cmd, text=True, capture_output=True)
+    return p.returncode, p.stdout, p.stderr
+
+def run_must(cmd):
+    p = subprocess.run(cmd, text=True)
+    if p.returncode != 0:
+        raise SystemExit(p.returncode)
+
+def load_json(p: Path):
+    return json.loads(p.read_text(encoding="utf-8"))
+
+def main() -> int:
+    ap = argparse.ArgumentParser(description="Autonomous local protocol runner (no MCP)")
+    ap.add_argument("--intake-json", required=True)
+
+    # NEW: deterministic orchestration flags
+    ap.add_argument("--enrichment-policy", choices=["always", "never"], default="never",
+                    help="whether to run enrichment stage after baseline (default: never)")
+    ap.add_argument("--run-merge", action="store_true",
+                    help="run merge stage to produce case_findings.json + case_manifest.json")
+    ap.add_argument("--merge-dedupe", action="store_true",
+                    help="enable merge dedupe (same tool/rule_id/event_refs)")
+
+    args = ap.parse_args()
+
+    intake_json = Path(args.intake_json)
+    if not intake_json.is_file():
+        print(f"FAIL: intake.json not found: {intake_json}", file=sys.stderr)
+        return 2
+
+    intake = load_json(intake_json)
+    intake_id = intake["intake_id"]
+    kind = intake["classification"]["kind"]
+    rec = intake["classification"]["recommended_pipeline"]
+
+    auto_id = str(uuid.uuid4())
+    ts = utc_now_z()
+
+    # 1) Select agent deterministically
+    code, out, err = run_capture([str(SELECT_AGENT), "--intake-json", str(intake_json), "--registry", str(REGISTRY)])
+    if code != 0:
+        print(err, file=sys.stderr)
+        return code
+    sel = json.loads(out)
+    agent_id = sel["selected_agent"]
+
+    # 2) Enforce capability (dispatch pipeline only if recommended)
+    if rec:
+        code, out2, err2 = run_capture([str(ENFORCE), "--registry", str(REGISTRY),
+                                        "--agent-id", agent_id, "--action", "dispatch_pipeline",
+                                        "--pipeline-id", rec])
+        allowed = (code == 0 and out2.strip() == "ALLOW")
+        enforcement = {
+            "allowed": allowed,
+            "action": "dispatch_pipeline",
+            "details": ("ALLOW" if allowed else err2.strip() or "DENY")
+        }
+    else:
+        enforcement = {"allowed": True, "action": "skip", "details": "no recommended pipeline"}
+
+    dispatch_block = {"status": "skipped", "dispatch_json": None, "run_id": None, "manifest_path": None}
+
+    # 3) Execute dispatch if allowed
+    if enforcement["action"] == "dispatch_pipeline" and enforcement["allowed"]:
+        run_must([str(DISPATCH), "--intake-json", str(intake_json)])
+        dispatch_json = intake_json.parent / "dispatch.json"
+        d = load_json(dispatch_json)
+        dispatch_block = {
+            "status": "ok" if d["result"]["ok"] else "error",
+            "dispatch_json": str(dispatch_json),
+            "run_id": d["result"]["run_id"],
+            "manifest_path": d["result"]["manifest_path"]
+        }
+    elif enforcement["action"] == "dispatch_pipeline" and not enforcement["allowed"]:
+        dispatch_block = {"status": "denied", "dispatch_json": None, "run_id": None, "manifest_path": None}
+
+    # 4) Write auto.json next to intake.json
+    auto_doc = {
+        "auto_id": auto_id,
+        "timestamp_utc": ts,
+        "intake": {"intake_id": intake_id, "intake_json": str(intake_json)},
+        "selection": {"selected_agent": agent_id, "kind": kind},
+        "enforcement": enforcement,
+        "dispatch": dispatch_block
+    }
+
+    out_path = intake_json.parent / "auto.json"
+    out_path.write_text(json.dumps(auto_doc, indent=2), encoding="utf-8")
+    print(f"OK: wrote {out_path}")
+
+    # 5) Validate auto.json
+    run_must([str(VALIDATE_AUTO), str(AUTO_SCHEMA), str(out_path)])
+
+    # 6) Optional enrichment stage
+    if args.enrichment_policy == "always":
+        if not ENRICH_RUNNER.is_file():
+            print(f"FAIL: enrichment runner not found: {ENRICH_RUNNER}", file=sys.stderr)
+            return 2
+        run_must([str(ENRICH_RUNNER), "--auto-json", str(out_path), "--policy", "always"])
+
+    # 7) Optional merge stage
+    if args.run_merge:
+        if not MERGE_TOOL.is_file():
+            print(f"FAIL: merge tool not found: {MERGE_TOOL}", file=sys.stderr)
+            return 2
+        cmd = [str(MERGE_TOOL), "--intake-dir", str(intake_json.parent)]
+        if args.merge_dedupe:
+            cmd.append("--dedupe")
+        run_must(cmd)
+
+    return 0
+
+if __name__ == "__main__":
+    raise SystemExit(main())
+

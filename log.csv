@@ -1,0 +1,9 @@
+client_time,level,message
+1769661059,INFO,"Starting query execution for System.VFS.DownloadFile.
+"
+1769661060,DEFAULT,System.VFS.DownloadFile: Time 1: System.VFS.DownloadFile: Sending response part 0 101 kB (335 rows).
+1769661060,DEFAULT,System.VFS.DownloadFile: Uploaded 335 files.
+1769661060,INFO,"Collection System.VFS.DownloadFile is done after 1.4363647s
+"
+1769661060,DEBUG,"Query Stats: {""RowsScanned"":1340,""PluginsCalled"":2,""FunctionsCalled"":344,""ProtocolSearch"":165825,""ScopeCopy"":3017}
+"

@@ -1,0 +1,23 @@
+{
+  "auto_id": "326f6716-9e74-4fc2-830a-eb1f0aac0238",
+  "timestamp_utc": "2026-02-11T23:37:21Z",
+  "intake": {
+    "intake_id": "090d3c78-a33f-429a-bd6c-becd7afef304",
+    "intake_json": "outputs/intake/090d3c78-a33f-429a-bd6c-becd7afef304/intake.json"
+  },
+  "selection": {
+    "selected_agent": "windows_evtx_agent",
+    "kind": "windows_evtx_dir"
+  },
+  "enforcement": {
+    "allowed": true,
+    "action": "dispatch_pipeline",
+    "details": "ALLOW"
+  },
+  "dispatch": {
+    "status": "ok",
+    "dispatch_json": "outputs/intake/090d3c78-a33f-429a-bd6c-becd7afef304/dispatch.json",
+    "run_id": "4e962c85-f25a-49e6-8c74-cd7d9872f104",
+    "manifest_path": "outputs/jsonl/chainsaw_evtx/4e962c85-f25a-49e6-8c74-cd7d9872f104/manifest.json"
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "timestamp_utc": "2026-02-11T17:19:08Z",
+  "rpc": {
+    "jsonrpc": "2.0",
+    "id": 2,
+    "method": "tools/call",
+    "params": {
+      "name": "dfir.read_json@1",
+      "arguments": {
+        "path": "outputs/intake/090d3c78-a33f-429a-bd6c-becd7afef304/intake.json",
+        "max_bytes": 1048576
+      }
+    }
+  }
+}

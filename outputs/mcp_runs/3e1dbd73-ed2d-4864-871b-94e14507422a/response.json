@@ -1,0 +1,42 @@
+{
+  "jsonrpc": "2.0",
+  "id": 2,
+  "result": {
+    "call_id": "3e1dbd73-ed2d-4864-871b-94e14507422a",
+    "result": {
+      "path": "/home/nevermore/dfir-agentic/outputs/jsonl/chainsaw_evtx/169e6e3b-eab6-4a06-9e44-10ef9b2b3e68/manifest.json",
+      "json_pointer": "/tooling",
+      "value": {
+        "chainsaw": {
+          "path": "/opt/dfir-tools/chainsaw/chainsaw.bin",
+          "version": "2.13.1",
+          "rules_dir": "/opt/dfir-tools/chainsaw/rules/evtx",
+          "cmd": [
+            "/opt/dfir-tools/chainsaw/chainsaw.bin",
+            "hunt",
+            "/opt/dfir-tools/chainsaw/rules/evtx",
+            "/home/nevermore/cases/intake/evtx/Logs",
+            "--jsonl",
+            "-o",
+            "outputs/jsonl/chainsaw_evtx/169e6e3b-eab6-4a06-9e44-10ef9b2b3e68/chainsaw.evtx.jsonl"
+          ]
+        },
+        "normalizer": {
+          "path": "adapters/chainsaw_evtx_to_findings.py"
+        },
+        "schema": {
+          "path": "contracts/findings.schema.json"
+        },
+        "validator": {
+          "path": "tools/contracts/validate_findings.py"
+        },
+        "triage": {
+          "generator": "tools/triage/gen_triage_from_findings.py"
+        },
+        "toon": {
+          "cli": "@toon-format/cli"
+        }
+      }
+    }
+  }
+}

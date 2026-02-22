@@ -1,0 +1,5696 @@
+Timestamp,started,vfs_path,Type,_Components,file_size,_accessor,_client_components,uploaded_size
+1769661059,2026-01-29 04:30:59.840324897 +0000 UTC,B:\Windows\System32\winevt\Logs\Application.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Application.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Application.evtx""
+]",69632
+1769661059,2026-01-29 04:30:59.840731747 +0000 UTC,B:\Windows\System32\winevt\Logs\HardwareEvents.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""HardwareEvents.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""HardwareEvents.evtx""
+]",69632
+1769661059,2026-01-29 04:30:59.841069372 +0000 UTC,B:\Windows\System32\winevt\Logs\Internet Explorer.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Internet Explorer.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Internet Explorer.evtx""
+]",69632
+1769661059,2026-01-29 04:30:59.84138619 +0000 UTC,B:\Windows\System32\winevt\Logs\Key Management Service.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Key Management Service.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Key Management Service.evtx""
+]",69632
+1769661059,2026-01-29 04:30:59.841720049 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-AppV-Client%4Admin.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-AppV-Client%4Admin.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-AppV-Client%4Admin.evtx""
+]",69632
+1769661059,2026-01-29 04:30:59.842066427 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-AppV-Client%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-AppV-Client%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-AppV-Client%4Operational.evtx""
+]",69632
+1769661059,2026-01-29 04:30:59.842575673 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-AppV-Client%4Virtual Applications.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-AppV-Client%4Virtual Applications.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-AppV-Client%4Virtual Applications.evtx""
+]",69632
+1769661059,2026-01-29 04:30:59.84307318 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Client-Licensing-Platform%4Admin.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Client-Licensing-Platform%4Admin.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Client-Licensing-Platform%4Admin.evtx""
+]",69632
+1769661059,2026-01-29 04:30:59.843576512 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Rdms-UI%4Admin.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Rdms-UI%4Admin.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Rdms-UI%4Admin.evtx""
+]",69632
+1769661059,2026-01-29 04:30:59.844027229 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Rdms-UI%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Rdms-UI%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Rdms-UI%4Operational.evtx""
+]",69632
+1769661059,2026-01-29 04:30:59.844379052 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-User Experience Virtualization-Agent Driver%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-User Experience Virtualization-Agent Driver%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-User Experience Virtualization-Agent Driver%4Operational.evtx""
+]",69632
+1769661059,2026-01-29 04:30:59.844701978 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-User Experience Virtualization-App Agent%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-User Experience Virtualization-App Agent%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-User Experience Virtualization-App Agent%4Operational.evtx""
+]",69632
+1769661059,2026-01-29 04:30:59.845041918 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-User Experience Virtualization-IPC%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-User Experience Virtualization-IPC%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-User Experience Virtualization-IPC%4Operational.evtx""
+]",69632
+1769661059,2026-01-29 04:30:59.845365056 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-User Experience Virtualization-SQM Uploader%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-User Experience Virtualization-SQM Uploader%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-User Experience Virtualization-SQM Uploader%4Operational.evtx""
+]",69632
+1769661059,2026-01-29 04:30:59.845685075 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-AAD%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-AAD%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-AAD%4Operational.evtx""
+]",69632
+1769661059,2026-01-29 04:30:59.8460077 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-All-User-Install-Agent%4Admin.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-All-User-Install-Agent%4Admin.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-All-User-Install-Agent%4Admin.evtx""
+]",69632
+1769661059,2026-01-29 04:30:59.846328308 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-AllJoyn%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-AllJoyn%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-AllJoyn%4Operational.evtx""
+]",69632
+1769661059,2026-01-29 04:30:59.846637061 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-AppHost%4Admin.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-AppHost%4Admin.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-AppHost%4Admin.evtx""
+]",69632
+1769661059,2026-01-29 04:30:59.846955026 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-AppID%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-AppID%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-AppID%4Operational.evtx""
+]",69632
+1769661059,2026-01-29 04:30:59.847269607 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-AppLocker%4EXE and DLL.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-AppLocker%4EXE and DLL.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-AppLocker%4EXE and DLL.evtx""
+]",69632
+1769661059,2026-01-29 04:30:59.847608074 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-AppLocker%4MSI and Script.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-AppLocker%4MSI and Script.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-AppLocker%4MSI and Script.evtx""
+]",69632
+1769661059,2026-01-29 04:30:59.847908604 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-AppLocker%4Packaged app-Deployment.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-AppLocker%4Packaged app-Deployment.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-AppLocker%4Packaged app-Deployment.evtx""
+]",69632
+1769661059,2026-01-29 04:30:59.848231138 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-AppLocker%4Packaged app-Execution.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-AppLocker%4Packaged app-Execution.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-AppLocker%4Packaged app-Execution.evtx""
+]",69632
+1769661059,2026-01-29 04:30:59.848538722 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-AppModel-Runtime%4Admin.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-AppModel-Runtime%4Admin.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-AppModel-Runtime%4Admin.evtx""
+]",69632
+1769661059,2026-01-29 04:30:59.84887441 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-AppReadiness%4Admin.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-AppReadiness%4Admin.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-AppReadiness%4Admin.evtx""
+]",69632
+1769661059,2026-01-29 04:30:59.849199792 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-AppReadiness%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-AppReadiness%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-AppReadiness%4Operational.evtx""
+]",69632
+1769661059,2026-01-29 04:30:59.849497483 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-AppXDeployment%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-AppXDeployment%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-AppXDeployment%4Operational.evtx""
+]",69632
+1769661059,2026-01-29 04:30:59.849820143 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-AppXDeploymentServer%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-AppXDeploymentServer%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-AppXDeploymentServer%4Operational.evtx""
+]",69632
+1769661059,2026-01-29 04:30:59.850131324 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-AppXDeploymentServer%4Restricted.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-AppXDeploymentServer%4Restricted.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-AppXDeploymentServer%4Restricted.evtx""
+]",69632
+1769661059,2026-01-29 04:30:59.850466489 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-ApplicabilityEngine%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-ApplicabilityEngine%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-ApplicabilityEngine%4Operational.evtx""
+]",69632
+1769661059,2026-01-29 04:30:59.85078104 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-Application Server-Applications%4Admin.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Application Server-Applications%4Admin.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Application Server-Applications%4Admin.evtx""
+]",69632
+1769661059,2026-01-29 04:30:59.851105136 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-Application Server-Applications%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Application Server-Applications%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Application Server-Applications%4Operational.evtx""
+]",69632
+1769661059,2026-01-29 04:30:59.851468898 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-Application-Experience%4Program-Compatibility-Assistant.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Application-Experience%4Program-Compatibility-Assistant.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Application-Experience%4Program-Compatibility-Assistant.evtx""
+]",69632
+1769661059,2026-01-29 04:30:59.851783108 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-Application-Experience%4Program-Compatibility-Troubleshooter.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Application-Experience%4Program-Compatibility-Troubleshooter.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Application-Experience%4Program-Compatibility-Troubleshooter.evtx""
+]",69632
+1769661059,2026-01-29 04:30:59.85210987 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-Application-Experience%4Program-Inventory.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Application-Experience%4Program-Inventory.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Application-Experience%4Program-Inventory.evtx""
+]",69632
+1769661059,2026-01-29 04:30:59.852424157 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-Application-Experience%4Program-Telemetry.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Application-Experience%4Program-Telemetry.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Application-Experience%4Program-Telemetry.evtx""
+]",69632
+1769661059,2026-01-29 04:30:59.852734501 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-Application-Experience%4Steps-Recorder.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Application-Experience%4Steps-Recorder.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Application-Experience%4Steps-Recorder.evtx""
+]",69632
+1769661059,2026-01-29 04:30:59.853081775 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-AppxPackaging%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-AppxPackaging%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-AppxPackaging%4Operational.evtx""
+]",69632
+1769661059,2026-01-29 04:30:59.853401387 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-Audio%4CaptureMonitor.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Audio%4CaptureMonitor.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Audio%4CaptureMonitor.evtx""
+]",69632
+1769661059,2026-01-29 04:30:59.853699728 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-Audio%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Audio%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Audio%4Operational.evtx""
+]",69632
+1769661059,2026-01-29 04:30:59.854017749 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-Audio%4PlaybackManager.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Audio%4PlaybackManager.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Audio%4PlaybackManager.evtx""
+]",69632
+1769661059,2026-01-29 04:30:59.854325097 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-Authentication User Interface%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Authentication User Interface%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Authentication User Interface%4Operational.evtx""
+]",69632
+1769661059,2026-01-29 04:30:59.854632015 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-BackgroundTaskInfrastructure%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-BackgroundTaskInfrastructure%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-BackgroundTaskInfrastructure%4Operational.evtx""
+]",69632
+1769661059,2026-01-29 04:30:59.854951748 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-Backup.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Backup.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Backup.evtx""
+]",69632
+1769661059,2026-01-29 04:30:59.85525835 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-BestPractices%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-BestPractices%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-BestPractices%4Operational.evtx""
+]",69632
+1769661059,2026-01-29 04:30:59.855595123 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-Biometrics%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Biometrics%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Biometrics%4Operational.evtx""
+]",69632
+1769661059,2026-01-29 04:30:59.855926516 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-Bits-Client%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Bits-Client%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Bits-Client%4Operational.evtx""
+]",69632
+1769661059,2026-01-29 04:30:59.856265166 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-Bluetooth-BthLEPrepairing%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Bluetooth-BthLEPrepairing%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Bluetooth-BthLEPrepairing%4Operational.evtx""
+]",69632
+1769661059,2026-01-29 04:30:59.856598302 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-Bluetooth-MTPEnum%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Bluetooth-MTPEnum%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Bluetooth-MTPEnum%4Operational.evtx""
+]",69632
+1769661059,2026-01-29 04:30:59.856895085 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-Bluetooth-Policy%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Bluetooth-Policy%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Bluetooth-Policy%4Operational.evtx""
+]",69632
+1769661059,2026-01-29 04:30:59.857228023 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-BranchCacheSMB%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-BranchCacheSMB%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-BranchCacheSMB%4Operational.evtx""
+]",69632
+1769661059,2026-01-29 04:30:59.857533797 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-CAPI2%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-CAPI2%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-CAPI2%4Operational.evtx""
+]",69632
+1769661059,2026-01-29 04:30:59.857845984 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-CertificateServices-Deployment%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-CertificateServices-Deployment%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-CertificateServices-Deployment%4Operational.evtx""
+]",69632
+1769661059,2026-01-29 04:30:59.858164492 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-CertificateServicesClient-Lifecycle-System%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-CertificateServicesClient-Lifecycle-System%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-CertificateServicesClient-Lifecycle-System%4Operational.evtx""
+]",69632
+1769661059,2026-01-29 04:30:59.858483487 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-CertificateServicesClient-Lifecycle-User%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-CertificateServicesClient-Lifecycle-User%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-CertificateServicesClient-Lifecycle-User%4Operational.evtx""
+]",69632
+1769661059,2026-01-29 04:30:59.858794394 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-CloudStore%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-CloudStore%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-CloudStore%4Operational.evtx""
+]",69632
+1769661059,2026-01-29 04:30:59.85911083 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-CodeIntegrity%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-CodeIntegrity%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-CodeIntegrity%4Operational.evtx""
+]",69632
+1769661059,2026-01-29 04:30:59.859425146 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-Compat-Appraiser%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Compat-Appraiser%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Compat-Appraiser%4Operational.evtx""
+]",69632
+1769661059,2026-01-29 04:30:59.859730864 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-Containers-BindFlt%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Containers-BindFlt%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Containers-BindFlt%4Operational.evtx""
+]",69632
+1769661059,2026-01-29 04:30:59.860049337 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-Containers-CCG%4Admin.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Containers-CCG%4Admin.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Containers-CCG%4Admin.evtx""
+]",69632
+1769661059,2026-01-29 04:30:59.860366155 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-Containers-Wcifs%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Containers-Wcifs%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Containers-Wcifs%4Operational.evtx""
+]",69632
+1769661059,2026-01-29 04:30:59.860724235 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-Containers-Wcnfs%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Containers-Wcnfs%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Containers-Wcnfs%4Operational.evtx""
+]",69632
+1769661059,2026-01-29 04:30:59.861076267 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-CoreApplication%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-CoreApplication%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-CoreApplication%4Operational.evtx""
+]",69632
+1769661059,2026-01-29 04:30:59.861389718 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-CorruptedFileRecovery-Client%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-CorruptedFileRecovery-Client%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-CorruptedFileRecovery-Client%4Operational.evtx""
+]",69632
+1769661059,2026-01-29 04:30:59.86173475 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-CorruptedFileRecovery-Server%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-CorruptedFileRecovery-Server%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-CorruptedFileRecovery-Server%4Operational.evtx""
+]",69632
+1769661059,2026-01-29 04:30:59.862057639 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-Crypto-DPAPI%4BackUpKeySvc.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Crypto-DPAPI%4BackUpKeySvc.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Crypto-DPAPI%4BackUpKeySvc.evtx""
+]",69632
+1769661059,2026-01-29 04:30:59.862367871 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-Crypto-DPAPI%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Crypto-DPAPI%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Crypto-DPAPI%4Operational.evtx""
+]",69632
+1769661059,2026-01-29 04:30:59.862670853 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-Crypto-NCrypt%4CertInUse.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Crypto-NCrypt%4CertInUse.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Crypto-NCrypt%4CertInUse.evtx""
+]",69632
+1769661059,2026-01-29 04:30:59.862981912 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-DAL-Provider%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-DAL-Provider%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-DAL-Provider%4Operational.evtx""
+]",69632
+1769661059,2026-01-29 04:30:59.863304652 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-DSC%4Admin.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-DSC%4Admin.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-DSC%4Admin.evtx""
+]",69632
+1769661059,2026-01-29 04:30:59.863614823 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-DSC%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-DSC%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-DSC%4Operational.evtx""
+]",69632
+1769661059,2026-01-29 04:30:59.86392599 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-DataIntegrityScan%4Admin.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-DataIntegrityScan%4Admin.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-DataIntegrityScan%4Admin.evtx""
+]",69632
+1769661059,2026-01-29 04:30:59.864242666 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-DataIntegrityScan%4CrashRecovery.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-DataIntegrityScan%4CrashRecovery.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-DataIntegrityScan%4CrashRecovery.evtx""
+]",69632
+1769661059,2026-01-29 04:30:59.864552473 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-DateTimeControlPanel%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-DateTimeControlPanel%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-DateTimeControlPanel%4Operational.evtx""
+]",69632
+1769661059,2026-01-29 04:30:59.864868855 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-DeviceGuard%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-DeviceGuard%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-DeviceGuard%4Operational.evtx""
+]",69632
+1769661059,2026-01-29 04:30:59.865204684 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-DeviceManagement-Enterprise-Diagnostics-Provider%4Admin.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-DeviceManagement-Enterprise-Diagnostics-Provider%4Admin.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-DeviceManagement-Enterprise-Diagnostics-Provider%4Admin.evtx""
+]",69632
+1769661059,2026-01-29 04:30:59.86551726 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-DeviceManagement-Enterprise-Diagnostics-Provider%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-DeviceManagement-Enterprise-Diagnostics-Provider%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-DeviceManagement-Enterprise-Diagnostics-Provider%4Operational.evtx""
+]",69632
+1769661059,2026-01-29 04:30:59.865819612 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-DeviceSetupManager%4Admin.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-DeviceSetupManager%4Admin.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-DeviceSetupManager%4Admin.evtx""
+]",69632
+1769661059,2026-01-29 04:30:59.866142973 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-DeviceSetupManager%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-DeviceSetupManager%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-DeviceSetupManager%4Operational.evtx""
+]",69632
+1769661059,2026-01-29 04:30:59.866452931 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-DeviceSync%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-DeviceSync%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-DeviceSync%4Operational.evtx""
+]",69632
+1769661059,2026-01-29 04:30:59.866753843 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-DeviceUpdateAgent%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-DeviceUpdateAgent%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-DeviceUpdateAgent%4Operational.evtx""
+]",69632
+1769661059,2026-01-29 04:30:59.867058153 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-Devices-Background%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Devices-Background%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Devices-Background%4Operational.evtx""
+]",69632
+1769661059,2026-01-29 04:30:59.867381769 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-Dhcp-Client%4Admin.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Dhcp-Client%4Admin.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Dhcp-Client%4Admin.evtx""
+]",69632
+1769661059,2026-01-29 04:30:59.867689941 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-Dhcpv6-Client%4Admin.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Dhcpv6-Client%4Admin.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Dhcpv6-Client%4Admin.evtx""
+]",69632
+1769661059,2026-01-29 04:30:59.868029559 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-Diagnosis-DPS%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Diagnosis-DPS%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Diagnosis-DPS%4Operational.evtx""
+]",69632
+1769661059,2026-01-29 04:30:59.868371959 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-Diagnosis-PCW%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Diagnosis-PCW%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Diagnosis-PCW%4Operational.evtx""
+]",69632
+1769661059,2026-01-29 04:30:59.868687762 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-Diagnosis-PLA%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Diagnosis-PLA%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Diagnosis-PLA%4Operational.evtx""
+]",69632
+1769661059,2026-01-29 04:30:59.869018175 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-Diagnosis-Scheduled%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Diagnosis-Scheduled%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Diagnosis-Scheduled%4Operational.evtx""
+]",69632
+1769661059,2026-01-29 04:30:59.869351702 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-Diagnosis-Scripted%4Admin.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Diagnosis-Scripted%4Admin.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Diagnosis-Scripted%4Admin.evtx""
+]",69632
+1769661059,2026-01-29 04:30:59.869662747 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-Diagnosis-ScriptedDiagnosticsProvider%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Diagnosis-ScriptedDiagnosticsProvider%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Diagnosis-ScriptedDiagnosticsProvider%4Operational.evtx""
+]",69632
+1769661059,2026-01-29 04:30:59.86998946 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-Diagnostics-Networking%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Diagnostics-Networking%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Diagnostics-Networking%4Operational.evtx""
+]",69632
+1769661059,2026-01-29 04:30:59.870299015 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-DirectoryServices-Deployment%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-DirectoryServices-Deployment%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-DirectoryServices-Deployment%4Operational.evtx""
+]",69632
+1769661059,2026-01-29 04:30:59.870636939 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-DiskDiagnostic%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-DiskDiagnostic%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-DiskDiagnostic%4Operational.evtx""
+]",69632
+1769661059,2026-01-29 04:30:59.870942283 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-DiskDiagnosticDataCollector%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-DiskDiagnosticDataCollector%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-DiskDiagnosticDataCollector%4Operational.evtx""
+]",69632
+1769661059,2026-01-29 04:30:59.871261427 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-DiskDiagnosticResolver%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-DiskDiagnosticResolver%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-DiskDiagnosticResolver%4Operational.evtx""
+]",69632
+1769661059,2026-01-29 04:30:59.871557707 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-EDP-Application-Learning%4Admin.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-EDP-Application-Learning%4Admin.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-EDP-Application-Learning%4Admin.evtx""
+]",69632
+1769661059,2026-01-29 04:30:59.871875873 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-EDP-Audit-Regular%4Admin.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-EDP-Audit-Regular%4Admin.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-EDP-Audit-Regular%4Admin.evtx""
+]",69632
+1769661059,2026-01-29 04:30:59.87225037 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-EDP-Audit-TCB%4Admin.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-EDP-Audit-TCB%4Admin.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-EDP-Audit-TCB%4Admin.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.240802868 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-EapHost%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-EapHost%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-EapHost%4Operational.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.24119368 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-EapMethods-RasChap%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-EapMethods-RasChap%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-EapMethods-RasChap%4Operational.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.241630356 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-EapMethods-RasTls%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-EapMethods-RasTls%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-EapMethods-RasTls%4Operational.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.24214851 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-EapMethods-Sim%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-EapMethods-Sim%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-EapMethods-Sim%4Operational.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.242560337 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-EapMethods-Ttls%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-EapMethods-Ttls%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-EapMethods-Ttls%4Operational.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.242867263 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-EnrollmentPolicyWebService%4Admin.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-EnrollmentPolicyWebService%4Admin.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-EnrollmentPolicyWebService%4Admin.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.243197804 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-EnrollmentWebService%4Admin.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-EnrollmentWebService%4Admin.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-EnrollmentWebService%4Admin.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.243508568 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-EventCollector%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-EventCollector%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-EventCollector%4Operational.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.243828637 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-FMS%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-FMS%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-FMS%4Operational.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.244168266 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-Fault-Tolerant-Heap%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Fault-Tolerant-Heap%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Fault-Tolerant-Heap%4Operational.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.244522111 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-FeatureConfiguration%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-FeatureConfiguration%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-FeatureConfiguration%4Operational.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.244847587 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-FederationServices-Deployment%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-FederationServices-Deployment%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-FederationServices-Deployment%4Operational.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.245192782 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-FileServices-ServerManager-EventProvider%4Admin.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-FileServices-ServerManager-EventProvider%4Admin.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-FileServices-ServerManager-EventProvider%4Admin.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.245567212 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-FileServices-ServerManager-EventProvider%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-FileServices-ServerManager-EventProvider%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-FileServices-ServerManager-EventProvider%4Operational.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.245889415 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-FileShareShadowCopyProvider%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-FileShareShadowCopyProvider%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-FileShareShadowCopyProvider%4Operational.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.246238274 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-Folder Redirection%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Folder Redirection%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Folder Redirection%4Operational.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.246571383 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-Forwarding%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Forwarding%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Forwarding%4Operational.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.24688815 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-GenericRoaming%4Admin.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-GenericRoaming%4Admin.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-GenericRoaming%4Admin.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.247296155 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-GroupPolicy%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-GroupPolicy%4Operational.evtx""
+]",1118208,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-GroupPolicy%4Operational.evtx""
+]",1118208
+1769661061,2026-01-29 04:31:01.247628274 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-HelloForBusiness%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-HelloForBusiness%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-HelloForBusiness%4Operational.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.247962876 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-Help%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Help%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Help%4Operational.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.248270582 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-HomeGroup Control Panel%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-HomeGroup Control Panel%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-HomeGroup Control Panel%4Operational.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.248638411 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-Hyper-V-Guest-Drivers%4Admin.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Hyper-V-Guest-Drivers%4Admin.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Hyper-V-Guest-Drivers%4Admin.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.248976267 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-Hyper-V-Hypervisor-Admin.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Hyper-V-Hypervisor-Admin.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Hyper-V-Hypervisor-Admin.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.249308363 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-Hyper-V-Hypervisor-Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Hyper-V-Hypervisor-Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Hyper-V-Hypervisor-Operational.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.249617118 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-IKE%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-IKE%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-IKE%4Operational.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.249944211 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-IdCtrls%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-IdCtrls%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-IdCtrls%4Operational.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.250278034 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-International%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-International%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-International%4Operational.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.250589176 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-International-RegionalOptionsControlPanel%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-International-RegionalOptionsControlPanel%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-International-RegionalOptionsControlPanel%4Operational.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.250898082 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-Iphlpsvc%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Iphlpsvc%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Iphlpsvc%4Operational.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.251214957 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-KdsSvc%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-KdsSvc%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-KdsSvc%4Operational.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.251531045 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-Kernel-ApphelpCache%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Kernel-ApphelpCache%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Kernel-ApphelpCache%4Operational.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.251844032 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-Kernel-Boot%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Kernel-Boot%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Kernel-Boot%4Operational.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.25217693 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-Kernel-EventTracing%4Admin.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Kernel-EventTracing%4Admin.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Kernel-EventTracing%4Admin.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.252494274 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-Kernel-IO%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Kernel-IO%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Kernel-IO%4Operational.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.25282322 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-Kernel-PnP%4Configuration.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Kernel-PnP%4Configuration.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Kernel-PnP%4Configuration.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.253338659 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-Kernel-Power%4Thermal-Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Kernel-Power%4Thermal-Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Kernel-Power%4Thermal-Operational.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.253880506 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-Kernel-ShimEngine%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Kernel-ShimEngine%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Kernel-ShimEngine%4Operational.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.25433548 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-Kernel-StoreMgr%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Kernel-StoreMgr%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Kernel-StoreMgr%4Operational.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.254679107 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-Kernel-WDI%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Kernel-WDI%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Kernel-WDI%4Operational.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.25502149 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-Kernel-WHEA%4Errors.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Kernel-WHEA%4Errors.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Kernel-WHEA%4Errors.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.255369454 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-Kernel-WHEA%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Kernel-WHEA%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Kernel-WHEA%4Operational.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.255737277 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-Known Folders API Service.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Known Folders API Service.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Known Folders API Service.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.25610625 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-LAPS%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-LAPS%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-LAPS%4Operational.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.256440124 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-LanguagePackSetup%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-LanguagePackSetup%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-LanguagePackSetup%4Operational.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.256944094 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-LiveId%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-LiveId%4Operational.evtx""
+]",1052672,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-LiveId%4Operational.evtx""
+]",1052672
+1769661061,2026-01-29 04:31:01.257280635 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-MUI%4Admin.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-MUI%4Admin.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-MUI%4Admin.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.257636769 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-MUI%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-MUI%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-MUI%4Operational.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.257963346 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-ManagementTools-RegistryProvider%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-ManagementTools-RegistryProvider%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-ManagementTools-RegistryProvider%4Operational.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.258318773 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-ManagementTools-TaskManagerProvider%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-ManagementTools-TaskManagerProvider%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-ManagementTools-TaskManagerProvider%4Operational.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.258648936 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-MemoryDiagnostics-Results%4Debug.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-MemoryDiagnostics-Results%4Debug.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-MemoryDiagnostics-Results%4Debug.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.258977918 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-MiStreamProvider%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-MiStreamProvider%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-MiStreamProvider%4Operational.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.259314913 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-Mobile-Broadband-Experience-Parser-Task%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Mobile-Broadband-Experience-Parser-Task%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Mobile-Broadband-Experience-Parser-Task%4Operational.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.259755287 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-Mobile-Broadband-Experience-SmsRouter%4Admin.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Mobile-Broadband-Experience-SmsRouter%4Admin.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Mobile-Broadband-Experience-SmsRouter%4Admin.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.260268593 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-Mprddm%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Mprddm%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Mprddm%4Operational.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.260746147 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-MsLbfoProvider%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-MsLbfoProvider%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-MsLbfoProvider%4Operational.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.261287209 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-NCSI%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-NCSI%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-NCSI%4Operational.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.261933627 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-NTLM%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-NTLM%4Operational.evtx""
+]",1052672,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-NTLM%4Operational.evtx""
+]",1052672
+1769661061,2026-01-29 04:31:01.262439173 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-NdisImPlatform%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-NdisImPlatform%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-NdisImPlatform%4Operational.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.262953088 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-NetworkLocationWizard%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-NetworkLocationWizard%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-NetworkLocationWizard%4Operational.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.263408966 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-NetworkProfile%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-NetworkProfile%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-NetworkProfile%4Operational.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.263762473 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-NetworkProvider%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-NetworkProvider%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-NetworkProvider%4Operational.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.264132427 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-NlaSvc%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-NlaSvc%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-NlaSvc%4Operational.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.264546159 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-Ntfs%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Ntfs%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Ntfs%4Operational.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.265069838 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-Ntfs%4WHC.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Ntfs%4WHC.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Ntfs%4WHC.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.265601513 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-OOBE-Machine-DUI%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-OOBE-Machine-DUI%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-OOBE-Machine-DUI%4Operational.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.266012984 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-OfflineFiles%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-OfflineFiles%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-OfflineFiles%4Operational.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.266372823 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-PackageStateRoaming%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-PackageStateRoaming%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-PackageStateRoaming%4Operational.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.266707049 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-Partition%4Diagnostic.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Partition%4Diagnostic.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Partition%4Diagnostic.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.267058315 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-PerceptionRuntime%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-PerceptionRuntime%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-PerceptionRuntime%4Operational.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.267398223 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-PerceptionSensorDataService%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-PerceptionSensorDataService%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-PerceptionSensorDataService%4Operational.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.267723591 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-PersistentMemory-Nvdimm%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-PersistentMemory-Nvdimm%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-PersistentMemory-Nvdimm%4Operational.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.268049904 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-PersistentMemory-PmemDisk%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-PersistentMemory-PmemDisk%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-PersistentMemory-PmemDisk%4Operational.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.268342932 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-PersistentMemory-ScmBus%4Certification.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-PersistentMemory-ScmBus%4Certification.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-PersistentMemory-ScmBus%4Certification.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.268648549 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-Policy%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Policy%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Policy%4Operational.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.268982526 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-PowerShell%4Admin.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-PowerShell%4Admin.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-PowerShell%4Admin.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.269350768 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-PowerShell%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-PowerShell%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-PowerShell%4Operational.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.269709128 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-PowerShell-DesiredStateConfiguration-FileDownloadManager%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-PowerShell-DesiredStateConfiguration-FileDownloadManager%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-PowerShell-DesiredStateConfiguration-FileDownloadManager%4Operational.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.270053221 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-PriResources-Deployment%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-PriResources-Deployment%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-PriResources-Deployment%4Operational.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.270367086 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-PrintBRM%4Admin.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-PrintBRM%4Admin.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-PrintBRM%4Admin.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.270675198 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-PrintService%4Admin.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-PrintService%4Admin.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-PrintService%4Admin.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.270997771 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-Program-Compatibility-Assistant%4CompatAfterUpgrade.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Program-Compatibility-Assistant%4CompatAfterUpgrade.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Program-Compatibility-Assistant%4CompatAfterUpgrade.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.271331296 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-PushNotification-Platform%4Admin.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-PushNotification-Platform%4Admin.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-PushNotification-Platform%4Admin.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.271629413 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-PushNotification-Platform%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-PushNotification-Platform%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-PushNotification-Platform%4Operational.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.271948103 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-ReFS%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-ReFS%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-ReFS%4Operational.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.272267525 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-ReadyBoost%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-ReadyBoost%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-ReadyBoost%4Operational.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.272583991 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-Regsvr32%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Regsvr32%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Regsvr32%4Operational.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.272886276 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-RemoteApp and Desktop Connections%4Admin.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-RemoteApp and Desktop Connections%4Admin.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-RemoteApp and Desktop Connections%4Admin.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.273221239 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-RemoteApp and Desktop Connections%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-RemoteApp and Desktop Connections%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-RemoteApp and Desktop Connections%4Operational.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.273554167 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-RemoteDesktopServices-RdpCoreTS%4Admin.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-RemoteDesktopServices-RdpCoreTS%4Admin.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-RemoteDesktopServices-RdpCoreTS%4Admin.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.273968202 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-RemoteDesktopServices-RdpCoreTS%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-RemoteDesktopServices-RdpCoreTS%4Operational.evtx""
+]",1052672,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-RemoteDesktopServices-RdpCoreTS%4Operational.evtx""
+]",1052672
+1769661061,2026-01-29 04:31:01.274290124 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-RemoteDesktopServices-RemoteFX-Synth3dvsc%4Admin.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-RemoteDesktopServices-RemoteFX-Synth3dvsc%4Admin.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-RemoteDesktopServices-RemoteFX-Synth3dvsc%4Admin.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.274607389 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-RemoteDesktopServices-SessionServices%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-RemoteDesktopServices-SessionServices%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-RemoteDesktopServices-SessionServices%4Operational.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.274933361 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-Resource-Exhaustion-Detector%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Resource-Exhaustion-Detector%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Resource-Exhaustion-Detector%4Operational.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.275236302 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-Resource-Exhaustion-Resolver%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Resource-Exhaustion-Resolver%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Resource-Exhaustion-Resolver%4Operational.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.275554174 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-RestartManager%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-RestartManager%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-RestartManager%4Operational.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.275852341 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-SENSE%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-SENSE%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-SENSE%4Operational.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.276185103 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-SMBClient%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-SMBClient%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-SMBClient%4Operational.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.276543584 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-SMBDirect%4Admin.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-SMBDirect%4Admin.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-SMBDirect%4Admin.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.276845836 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-SMBServer%4Audit.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-SMBServer%4Audit.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-SMBServer%4Audit.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.27718125 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-SMBServer%4Connectivity.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-SMBServer%4Connectivity.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-SMBServer%4Connectivity.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.277496885 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-SMBServer%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-SMBServer%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-SMBServer%4Operational.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.277830285 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-SMBServer%4Security.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-SMBServer%4Security.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-SMBServer%4Security.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.278148943 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-SMBWitnessClient%4Admin.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-SMBWitnessClient%4Admin.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-SMBWitnessClient%4Admin.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.278456082 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-SMBWitnessClient%4Informational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-SMBWitnessClient%4Informational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-SMBWitnessClient%4Informational.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.278789674 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-SearchUI%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-SearchUI%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-SearchUI%4Operational.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.279098793 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-Security-Adminless%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Security-Adminless%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Security-Adminless%4Operational.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.27940832 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-Security-Audit-Configuration-Client%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Security-Audit-Configuration-Client%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Security-Audit-Configuration-Client%4Operational.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.279740027 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-Security-EnterpriseData-FileRevocationManager%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Security-EnterpriseData-FileRevocationManager%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Security-EnterpriseData-FileRevocationManager%4Operational.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.280062956 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-Security-LessPrivilegedAppContainer%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Security-LessPrivilegedAppContainer%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Security-LessPrivilegedAppContainer%4Operational.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.280366717 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-Security-Mitigations%4KernelMode.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Security-Mitigations%4KernelMode.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Security-Mitigations%4KernelMode.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.280696065 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-Security-Mitigations%4UserMode.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Security-Mitigations%4UserMode.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Security-Mitigations%4UserMode.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.281009505 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-Security-Netlogon%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Security-Netlogon%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Security-Netlogon%4Operational.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.281321222 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-Security-SPP-UX-GenuineCenter-Logging%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Security-SPP-UX-GenuineCenter-Logging%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Security-SPP-UX-GenuineCenter-Logging%4Operational.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.281646461 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-Security-SPP-UX-Notifications%4ActionCenter.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Security-SPP-UX-Notifications%4ActionCenter.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Security-SPP-UX-Notifications%4ActionCenter.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.281962674 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-Security-UserConsentVerifier%4Audit.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Security-UserConsentVerifier%4Audit.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Security-UserConsentVerifier%4Audit.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.282292125 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-SecurityMitigationsBroker%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-SecurityMitigationsBroker%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-SecurityMitigationsBroker%4Operational.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.282608494 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-SenseIR%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-SenseIR%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-SenseIR%4Operational.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.282922993 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-ServerManager-ConfigureSMRemoting%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-ServerManager-ConfigureSMRemoting%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-ServerManager-ConfigureSMRemoting%4Operational.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.283251517 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-ServerManager-DeploymentProvider%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-ServerManager-DeploymentProvider%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-ServerManager-DeploymentProvider%4Operational.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.283550382 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-ServerManager-MgmtProvider%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-ServerManager-MgmtProvider%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-ServerManager-MgmtProvider%4Operational.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.28386396 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-ServerManager-MultiMachine%4Admin.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-ServerManager-MultiMachine%4Admin.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-ServerManager-MultiMachine%4Admin.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.284183378 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-ServerManager-MultiMachine%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-ServerManager-MultiMachine%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-ServerManager-MultiMachine%4Operational.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.284647515 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-ServicesForNFS-Client%4IdentityMapping.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-ServicesForNFS-Client%4IdentityMapping.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-ServicesForNFS-Client%4IdentityMapping.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.285199032 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-ServicesForNFS-Client%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-ServicesForNFS-Client%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-ServicesForNFS-Client%4Operational.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.285735451 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-SettingSync%4Debug.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-SettingSync%4Debug.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-SettingSync%4Debug.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.286278611 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-SettingSync%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-SettingSync%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-SettingSync%4Operational.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.286802616 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-SettingSync-Azure%4Debug.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-SettingSync-Azure%4Debug.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-SettingSync-Azure%4Debug.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.287341454 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-SettingSync-Azure%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-SettingSync-Azure%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-SettingSync-Azure%4Operational.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.28786444 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-SettingSync-OneDrive%4Debug.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-SettingSync-OneDrive%4Debug.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-SettingSync-OneDrive%4Debug.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.288394656 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-SettingSync-OneDrive%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-SettingSync-OneDrive%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-SettingSync-OneDrive%4Operational.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.288977219 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-Shell-ConnectedAccountState%4ActionCenter.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Shell-ConnectedAccountState%4ActionCenter.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Shell-ConnectedAccountState%4ActionCenter.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.289571404 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-Shell-Core%4ActionCenter.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Shell-Core%4ActionCenter.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Shell-Core%4ActionCenter.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.29013035 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-Shell-Core%4AppDefaults.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Shell-Core%4AppDefaults.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Shell-Core%4AppDefaults.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.290693035 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-Shell-Core%4LogonTasksChannel.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Shell-Core%4LogonTasksChannel.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Shell-Core%4LogonTasksChannel.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.291216538 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-Shell-Core%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Shell-Core%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Shell-Core%4Operational.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.291781788 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-ShellCommon-StartLayoutPopulation%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-ShellCommon-StartLayoutPopulation%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-ShellCommon-StartLayoutPopulation%4Operational.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.292351338 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-SilProvider%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-SilProvider%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-SilProvider%4Operational.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.292876172 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-SmartCard-Audit%4Authentication.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-SmartCard-Audit%4Authentication.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-SmartCard-Audit%4Authentication.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.293422925 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-SmartCard-DeviceEnum%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-SmartCard-DeviceEnum%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-SmartCard-DeviceEnum%4Operational.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.2939729 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-SmartCard-TPM-VCard-Module%4Admin.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-SmartCard-TPM-VCard-Module%4Admin.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-SmartCard-TPM-VCard-Module%4Admin.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.294529723 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-SmartCard-TPM-VCard-Module%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-SmartCard-TPM-VCard-Module%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-SmartCard-TPM-VCard-Module%4Operational.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.295065228 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-SmbClient%4Audit.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-SmbClient%4Audit.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-SmbClient%4Audit.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.295607263 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-SmbClient%4Connectivity.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-SmbClient%4Connectivity.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-SmbClient%4Connectivity.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.296128524 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-SmbClient%4Security.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-SmbClient%4Security.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-SmbClient%4Security.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.296623463 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-StateRepository%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-StateRepository%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-StateRepository%4Operational.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.297148972 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-StateRepository%4Restricted.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-StateRepository%4Restricted.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-StateRepository%4Restricted.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.297738151 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-Storage-ClassPnP%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Storage-ClassPnP%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Storage-ClassPnP%4Operational.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.298189776 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-Storage-Storport%4Health.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Storage-Storport%4Health.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Storage-Storport%4Health.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.298651171 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-Storage-Storport%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Storage-Storport%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Storage-Storport%4Operational.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.29915808 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-Storage-Tiering%4Admin.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Storage-Tiering%4Admin.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Storage-Tiering%4Admin.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.299556613 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-StorageManagement%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-StorageManagement%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-StorageManagement%4Operational.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.29990003 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-StorageManagement-PartUtil%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-StorageManagement-PartUtil%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-StorageManagement-PartUtil%4Operational.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.300264011 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-StorageSpaces-Api%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-StorageSpaces-Api%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-StorageSpaces-Api%4Operational.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.300595467 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-StorageSpaces-Driver%4Diagnostic.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-StorageSpaces-Driver%4Diagnostic.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-StorageSpaces-Driver%4Diagnostic.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.300925005 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-StorageSpaces-Driver%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-StorageSpaces-Driver%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-StorageSpaces-Driver%4Operational.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.30130544 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-StorageSpaces-ManagementAgent%4WHC.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-StorageSpaces-ManagementAgent%4WHC.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-StorageSpaces-ManagementAgent%4WHC.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.301639609 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-StorageSpaces-SpaceManager%4Diagnostic.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-StorageSpaces-SpaceManager%4Diagnostic.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-StorageSpaces-SpaceManager%4Diagnostic.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.301966349 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-StorageSpaces-SpaceManager%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-StorageSpaces-SpaceManager%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-StorageSpaces-SpaceManager%4Operational.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.302296097 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-Store%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Store%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Store%4Operational.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.306603962 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-SystemDataArchiver%4Diagnostic.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-SystemDataArchiver%4Diagnostic.evtx""
+]",7409664,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-SystemDataArchiver%4Diagnostic.evtx""
+]",7409664
+1769661061,2026-01-29 04:31:01.307199717 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-SystemSettingsThreshold%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-SystemSettingsThreshold%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-SystemSettingsThreshold%4Operational.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.307720254 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-TCPIP%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-TCPIP%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-TCPIP%4Operational.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.308246074 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-TWinUI%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-TWinUI%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-TWinUI%4Operational.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.308754855 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-TZSync%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-TZSync%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-TZSync%4Operational.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.309127009 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-TZUtil%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-TZUtil%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-TZUtil%4Operational.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.309468477 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-TaskScheduler%4Maintenance.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-TaskScheduler%4Maintenance.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-TaskScheduler%4Maintenance.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.309931114 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-TaskScheduler%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-TaskScheduler%4Operational.evtx""
+]",1118208,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-TaskScheduler%4Operational.evtx""
+]",1118208
+1769661061,2026-01-29 04:31:01.310301898 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-TerminalServices-ClientUSBDevices%4Admin.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-TerminalServices-ClientUSBDevices%4Admin.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-TerminalServices-ClientUSBDevices%4Admin.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.3108097 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-TerminalServices-ClientUSBDevices%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-TerminalServices-ClientUSBDevices%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-TerminalServices-ClientUSBDevices%4Operational.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.311257707 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-TerminalServices-LocalSessionManager%4Admin.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-TerminalServices-LocalSessionManager%4Admin.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-TerminalServices-LocalSessionManager%4Admin.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.311599245 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-TerminalServices-LocalSessionManager%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-TerminalServices-LocalSessionManager%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-TerminalServices-LocalSessionManager%4Operational.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.311992241 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-TerminalServices-PnPDevices%4Admin.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-TerminalServices-PnPDevices%4Admin.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-TerminalServices-PnPDevices%4Admin.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.312525142 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-TerminalServices-PnPDevices%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-TerminalServices-PnPDevices%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-TerminalServices-PnPDevices%4Operational.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.313019611 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-TerminalServices-Printers%4Admin.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-TerminalServices-Printers%4Admin.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-TerminalServices-Printers%4Admin.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.313492545 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-TerminalServices-Printers%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-TerminalServices-Printers%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-TerminalServices-Printers%4Operational.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.3139864 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-TerminalServices-RDPClient%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-TerminalServices-RDPClient%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-TerminalServices-RDPClient%4Operational.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.314464146 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-TerminalServices-RemoteConnectionManager%4Admin.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-TerminalServices-RemoteConnectionManager%4Admin.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-TerminalServices-RemoteConnectionManager%4Admin.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.348472578 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-TerminalServices-RemoteConnectionManager%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-TerminalServices-RemoteConnectionManager%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-TerminalServices-RemoteConnectionManager%4Operational.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.348979859 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-TerminalServices-ServerUSBDevices%4Admin.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-TerminalServices-ServerUSBDevices%4Admin.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-TerminalServices-ServerUSBDevices%4Admin.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.349363953 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-TerminalServices-ServerUSBDevices%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-TerminalServices-ServerUSBDevices%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-TerminalServices-ServerUSBDevices%4Operational.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.349689526 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-TerminalServices-SessionBroker-Client%4Admin.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-TerminalServices-SessionBroker-Client%4Admin.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-TerminalServices-SessionBroker-Client%4Admin.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.350043129 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-TerminalServices-SessionBroker-Client%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-TerminalServices-SessionBroker-Client%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-TerminalServices-SessionBroker-Client%4Operational.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.350408977 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-Time-Service%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Time-Service%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Time-Service%4Operational.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.350750499 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-Time-Service-PTP-Provider%4PTP-Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Time-Service-PTP-Provider%4PTP-Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Time-Service-PTP-Provider%4PTP-Operational.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.351094966 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-UAC%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-UAC%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-UAC%4Operational.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.351425614 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-UAC-FileVirtualization%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-UAC-FileVirtualization%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-UAC-FileVirtualization%4Operational.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.351758454 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-UniversalTelemetryClient%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-UniversalTelemetryClient%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-UniversalTelemetryClient%4Operational.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.352105414 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-User Control Panel%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-User Control Panel%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-User Control Panel%4Operational.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.352443343 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-User Device Registration%4Admin.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-User Device Registration%4Admin.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-User Device Registration%4Admin.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.352755805 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-User Profile Service%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-User Profile Service%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-User Profile Service%4Operational.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.353099461 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-User-Loader%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-User-Loader%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-User-Loader%4Operational.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.353444082 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-UserPnp%4ActionCenter.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-UserPnp%4ActionCenter.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-UserPnp%4ActionCenter.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.35374413 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-UserPnp%4DeviceInstall.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-UserPnp%4DeviceInstall.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-UserPnp%4DeviceInstall.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.354084056 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-VDRVROOT%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-VDRVROOT%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-VDRVROOT%4Operational.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.354391725 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-VHDMP-Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-VHDMP-Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-VHDMP-Operational.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.354707628 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-VPN%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-VPN%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-VPN%4Operational.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.35504826 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-VPN-Client%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-VPN-Client%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-VPN-Client%4Operational.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.355399948 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-VerifyHardwareSecurity%4Admin.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-VerifyHardwareSecurity%4Admin.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-VerifyHardwareSecurity%4Admin.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.355704178 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-Volume%4Diagnostic.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Volume%4Diagnostic.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Volume%4Diagnostic.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.356019975 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-VolumeSnapshot-Driver%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-VolumeSnapshot-Driver%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-VolumeSnapshot-Driver%4Operational.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.35635615 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-WER-PayloadHealth%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-WER-PayloadHealth%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-WER-PayloadHealth%4Operational.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.356663786 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-WFP%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-WFP%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-WFP%4Operational.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.357006981 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-WMI-Activity%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-WMI-Activity%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-WMI-Activity%4Operational.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.357320462 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-WMPNSS-Service%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-WMPNSS-Service%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-WMPNSS-Service%4Operational.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.35764386 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-WPD-ClassInstaller%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-WPD-ClassInstaller%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-WPD-ClassInstaller%4Operational.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.357962825 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-WPD-CompositeClassDriver%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-WPD-CompositeClassDriver%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-WPD-CompositeClassDriver%4Operational.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.358267941 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-WPD-MTPClassDriver%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-WPD-MTPClassDriver%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-WPD-MTPClassDriver%4Operational.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.358588529 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-Wcmsvc%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Wcmsvc%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Wcmsvc%4Operational.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.358906961 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-WebAuthN%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-WebAuthN%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-WebAuthN%4Operational.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.359244553 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-Win32k%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Win32k%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Win32k%4Operational.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.35958413 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-WinHttp%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-WinHttp%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-WinHttp%4Operational.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.359920879 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-WinINet%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-WinINet%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-WinINet%4Operational.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.360259807 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-WinINet-Config%4ProxyConfigChanged.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-WinINet-Config%4ProxyConfigChanged.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-WinINet-Config%4ProxyConfigChanged.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.360558882 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-WinRM%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-WinRM%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-WinRM%4Operational.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.36087724 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-Windows Defender%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Windows Defender%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Windows Defender%4Operational.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.371100976 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-Windows Defender%4WHC.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Windows Defender%4WHC.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Windows Defender%4WHC.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.37155074 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-Windows Firewall With Advanced Security%4ConnectionSecurity.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Windows Firewall With Advanced Security%4ConnectionSecurity.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Windows Firewall With Advanced Security%4ConnectionSecurity.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.371879649 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-Windows Firewall With Advanced Security%4Firewall.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Windows Firewall With Advanced Security%4Firewall.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Windows Firewall With Advanced Security%4Firewall.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.372263183 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-Windows Firewall With Advanced Security%4FirewallDiagnostics.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Windows Firewall With Advanced Security%4FirewallDiagnostics.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Windows Firewall With Advanced Security%4FirewallDiagnostics.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.372603317 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-WindowsSystemAssessmentTool%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-WindowsSystemAssessmentTool%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-WindowsSystemAssessmentTool%4Operational.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.372920546 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-WindowsUpdateClient%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-WindowsUpdateClient%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-WindowsUpdateClient%4Operational.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.373283118 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-Winlogon%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Winlogon%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Winlogon%4Operational.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.373591943 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-Winsock-WS2HELP%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Winsock-WS2HELP%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Winsock-WS2HELP%4Operational.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.373906747 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-Wired-AutoConfig%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Wired-AutoConfig%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Wired-AutoConfig%4Operational.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.374233882 +0000 UTC,B:\Windows\System32\winevt\Logs\Microsoft-Windows-Workplace Join%4Admin.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Workplace Join%4Admin.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Microsoft-Windows-Workplace Join%4Admin.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.3745381 +0000 UTC,B:\Windows\System32\winevt\Logs\On-premises data gateway service.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""On-premises data gateway service.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""On-premises data gateway service.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.374871148 +0000 UTC,B:\Windows\System32\winevt\Logs\OpenSSH%4Admin.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""OpenSSH%4Admin.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""OpenSSH%4Admin.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.375234864 +0000 UTC,B:\Windows\System32\winevt\Logs\OpenSSH%4Operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""OpenSSH%4Operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""OpenSSH%4Operational.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.375550649 +0000 UTC,B:\Windows\System32\winevt\Logs\Parameters.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Parameters.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Parameters.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.375864128 +0000 UTC,B:\Windows\System32\winevt\Logs\SMSApi.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""SMSApi.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""SMSApi.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.376471313 +0000 UTC,B:\Windows\System32\winevt\Logs\Security.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Security.evtx""
+]",2166784,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Security.evtx""
+]",2166784
+1769661061,2026-01-29 04:31:01.376804117 +0000 UTC,B:\Windows\System32\winevt\Logs\Setup.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Setup.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Setup.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.377153019 +0000 UTC,B:\Windows\System32\winevt\Logs\State.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""State.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""State.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.377542433 +0000 UTC,B:\Windows\System32\winevt\Logs\System.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""System.evtx""
+]",1118208,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""System.evtx""
+]",1118208
+1769661061,2026-01-29 04:31:01.377853389 +0000 UTC,B:\Windows\System32\winevt\Logs\Windows PowerShell.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Windows PowerShell.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""Windows PowerShell.evtx""
+]",69632
+1769661061,2026-01-29 04:31:01.378194132 +0000 UTC,B:\Windows\System32\winevt\Logs\microsoft-windows-diagnosis-scripted%4operational.evtx,,"[
+ ""uploads"",
+ ""auto"",
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""microsoft-windows-diagnosis-scripted%4operational.evtx""
+]",69632,auto,"[
+ ""B:"",
+ ""Windows"",
+ ""System32"",
+ ""winevt"",
+ ""Logs"",
+ ""microsoft-windows-diagnosis-scripted%4operational.evtx""
+]",69632

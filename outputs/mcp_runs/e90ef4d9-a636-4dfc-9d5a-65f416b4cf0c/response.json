@@ -1,0 +1,10 @@
+{
+  "jsonrpc": "2.0",
+  "id": 2,
+  "result": {
+    "call_id": "e90ef4d9-a636-4dfc-9d5a-65f416b4cf0c",
+    "result": {
+      "auto_json": "/home/nevermore/dfir-agentic/outputs/intake/090d3c78-a33f-429a-bd6c-becd7afef304/auto.json"
+    }
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "timestamp_utc": "2026-02-12T05:42:40Z",
+  "plan_json": "outputs/intake/0455d047-5aae-4aa0-8ecd-83494c4394ec/enrichment_plan.json",
+  "agent_id": "windows_evtx_agent",
+  "baseline": {
+    "auto_json": "outputs/intake/0455d047-5aae-4aa0-8ecd-83494c4394ec/auto.json",
+    "baseline_manifest_path": "outputs/jsonl/chainsaw_evtx/06fca1cd-d46f-4e96-b993-33687e3fe59d/manifest.json",
+    "evtx_dir": "/home/nevermore/cases/intake/evtx/Logs"
+  },
+  "decision": {
+    "should_run": true,
+    "reason": "baseline count=339 threshold=50 source=path:counts.total_findings",
+    "policy": {
+      "mode": "agent_decision"
+    }
+  },
+  "enforcement": {
+    "allowed": true,
+    "action": "run_enrichment",
+    "details": "ALLOW"
+  },
+  "result": {
+    "status": "ok",
+    "run_id": "31572b89-096b-4265-9570-0eba8582838c",
+    "manifest_path": "outputs/jsonl/hayabusa_evtx/31572b89-096b-4265-9570-0eba8582838c/manifest.json"
+  }
+}

@@ -1,0 +1,21 @@
+{
+ "client_id": "C.dda7e44469fe1afc-O71H0",
+ "hostname": "InfraComprometi",
+ "fqdn": "InfraComprometi.vcnmills.oraclevcn.com",
+ "system": "windows",
+ "release": "Microsoft Windows Server 2019 Standard",
+ "architecture": "amd64",
+ "ip_address": "129.213.142.182:27740",
+ "ping": 1769661106162691,
+ "client_version": "0.75.6",
+ "client_name": "velociraptor",
+ "first_seen_at": 1769554597,
+ "build_time": "2025-12-29T14:18:22Z",
+ "mac_addresses": [
+  "02:00:17:31:72:60"
+ ],
+ "last_interrogate_flow_id": "F.D5SK59D978APS",
+ "last_interrogate_artifact_name": "Generic.Client.Info/BasicInformation",
+ "last_hunt_timestamp": 1769658924857186,
+ "last_event_table_version": 1769565665577654138
+}

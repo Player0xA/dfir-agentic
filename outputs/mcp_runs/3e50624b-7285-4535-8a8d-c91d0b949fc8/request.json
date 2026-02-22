@@ -1,0 +1,14 @@
+{
+  "timestamp_utc": "2026-02-11T21:42:45Z",
+  "rpc": {
+    "jsonrpc": "2.0",
+    "id": 2,
+    "method": "tools/call",
+    "params": {
+      "name": "dfir.hayabusa_csv_timeline@1",
+      "arguments": {
+        "evtx_dir": "/tmp"
+      }
+    }
+  }
+}

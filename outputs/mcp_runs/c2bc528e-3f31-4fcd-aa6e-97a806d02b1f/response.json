@@ -1,0 +1,13 @@
+{
+  "jsonrpc": "2.0",
+  "id": 2,
+  "result": {
+    "call_id": "c2bc528e-3f31-4fcd-aa6e-97a806d02b1f",
+    "result": {
+      "run_id": "709052a8-fdca-487f-800e-8e5aa8eb46bf",
+      "timeline_csv": "/home/nevermore/dfir-agentic/outputs/csv/hayabusa_evtx/709052a8-fdca-487f-800e-8e5aa8eb46bf/timeline.csv",
+      "evtx_dir": "/home/nevermore/cases/intake/evtx/Logs",
+      "profile": "verbose"
+    }
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "jsonrpc": "2.0",
+  "id": 2,
+  "result": {
+    "call_id": "3b1e0d24-418a-45ba-824f-0101c2ad95db",
+    "result": {
+      "path": "/home/nevermore/dfir-agentic/outputs/jsonl/chainsaw_evtx/169e6e3b-eab6-4a06-9e44-10ef9b2b3e68/manifest.json",
+      "json_pointer": "/artifacts/findings_json",
+      "value": {
+        "path": "outputs/jsonl/chainsaw_evtx/169e6e3b-eab6-4a06-9e44-10ef9b2b3e68/findings.json",
+        "sha256": "a41c957f35ac92e03580fe590a88aff1aa482e183e070f581e51fc794549cad9",
+        "size": 1306866
+      }
+    }
+  }
+}

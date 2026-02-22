@@ -1,0 +1,18 @@
+{
+  "timestamp_utc": "2026-02-11T21:47:03Z",
+  "rpc": {
+    "jsonrpc": "2.0",
+    "id": 2,
+    "method": "tools/call",
+    "params": {
+      "name": "dfir.hayabusa_csv_timeline@1",
+      "arguments": {
+        "evtx_dir": "/home/nevermore/cases/intake/evtx/Logs",
+        "profile": "verbose",
+        "iso_utc": true,
+        "no_wizard": true,
+        "clobber": true
+      }
+    }
+  }
+}

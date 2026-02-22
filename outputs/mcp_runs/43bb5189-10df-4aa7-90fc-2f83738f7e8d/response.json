@@ -1,0 +1,17 @@
+{
+  "jsonrpc": "2.0",
+  "id": 2,
+  "result": {
+    "call_id": "43bb5189-10df-4aa7-90fc-2f83738f7e8d",
+    "result": {
+      "path": "/home/nevermore/dfir-agentic/outputs/intake/090d3c78-a33f-429a-bd6c-becd7afef304/auto.json",
+      "json_pointer": "/dispatch",
+      "value": {
+        "status": "ok",
+        "dispatch_json": "/home/nevermore/dfir-agentic/outputs/intake/090d3c78-a33f-429a-bd6c-becd7afef304/dispatch.json",
+        "run_id": "169e6e3b-eab6-4a06-9e44-10ef9b2b3e68",
+        "manifest_path": "outputs/jsonl/chainsaw_evtx/169e6e3b-eab6-4a06-9e44-10ef9b2b3e68/manifest.json"
+      }
+    }
+  }
+}

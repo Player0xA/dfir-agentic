@@ -1,0 +1,9 @@
+{
+  "generated_utc": "2026-02-10T06:49:30Z",
+  "provider": "openai-compatible",
+  "base_url": "https://api.deepseek.com",
+  "model": "deepseek-chat",
+  "max_findings": 30,
+  "toon_path": "/home/nevermore/dfir-agentic/outputs/toon/chainsaw_evtx/7fb0c806-651e-4524-8b00-b8d76a13e993/findings.toon",
+  "decoded_json": "/home/nevermore/dfir-agentic/outputs/ai/chainsaw_evtx/7fb0c806-651e-4524-8b00-b8d76a13e993/decoded.json"
+}

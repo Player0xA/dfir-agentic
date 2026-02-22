@@ -1,0 +1,9 @@
+{
+  "generated_utc": "2026-02-10T06:44:29Z",
+  "error": "Error code: 401 - {'error': {'message': 'Authentication Fails, Your api key: ****HERE is invalid', 'type': 'authentication_error', 'param': None, 'code': 'invalid_request_error'}}",
+  "traceback": "Traceback (most recent call last):\n  File \"/home/nevermore/dfir-agentic/tools/ai/deepseek_summarize_toon.py\", line 247, in main\n    md = deepseek_chat(\n  File \"/home/nevermore/dfir-agentic/tools/ai/deepseek_summarize_toon.py\", line 175, in deepseek_chat\n    resp = client.chat.completions.create(\n  File \"/home/nevermore/.local/lib/python3.10/site-packages/openai/_utils/_utils.py\", line 286, in wrapper\n    return func(*args, **kwargs)\n  File \"/home/nevermore/.local/lib/python3.10/site-packages/openai/resources/chat/completions/completions.py\", line 1192, in create\n    return self._post(\n  File \"/home/nevermore/.local/lib/python3.10/site-packages/openai/_base_client.py\", line 1297, in post\n    return cast(ResponseT, self.request(cast_to, opts, stream=stream, stream_cls=stream_cls))\n  File \"/home/nevermore/.local/lib/python3.10/site-packages/openai/_base_client.py\", line 1070, in request\n    raise self._make_status_error_from_response(err.response) from None\nopenai.AuthenticationError: Error code: 401 - {'error': {'message': 'Authentication Fails, Your api key: ****HERE is invalid', 'type': 'authentication_error', 'param': None, 'code': 'invalid_request_error'}}\n",
+  "toon_path": "/home/nevermore/dfir-agentic/outputs/toon/chainsaw_evtx/7fb0c806-651e-4524-8b00-b8d76a13e993/findings.toon",
+  "out_md": "/home/nevermore/dfir-agentic/outputs/ai/chainsaw_evtx/7fb0c806-651e-4524-8b00-b8d76a13e993/summary.md",
+  "decoded_json": "/home/nevermore/dfir-agentic/outputs/ai/chainsaw_evtx/7fb0c806-651e-4524-8b00-b8d76a13e993/decoded.json",
+  "request_json": "/home/nevermore/dfir-agentic/outputs/ai/chainsaw_evtx/7fb0c806-651e-4524-8b00-b8d76a13e993/request.json"
+}

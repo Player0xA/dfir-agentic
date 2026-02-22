@@ -1,0 +1,25 @@
+{
+  "run_id": "c8daab79-5b83-4ace-939f-846c966daae3",
+  "timestamp_utc": "2026-02-11T17:17:44Z",
+  "pipeline": {
+    "name": "chainsaw-evtx",
+    "version": "0.1.0"
+  },
+  "inputs": {
+    "evtx_dir": "/home/nevermore/cases/intake/evtx/Logs"
+  },
+  "tools": {
+    "chainsaw_bin": "/opt/dfir-tools/chainsaw/chainsaw.bin",
+    "chainsaw_version": "2.13.1",
+    "rules_dir": "/opt/dfir-tools/chainsaw/rules/evtx",
+    "normalizer": "adapters/chainsaw_evtx_to_findings.py",
+    "findings_schema": "contracts/findings.schema.json",
+    "findings_validator": "tools/contracts/validate_findings.py",
+    "triage_schema": "contracts/triage.schema.json",
+    "triage_generator": "tools/triage/gen_triage_from_findings.py",
+    "triage_validator": "tools/contracts/validate_triage.py",
+    "manifest_schema": "contracts/manifest.schema.json",
+    "manifest_validator": "tools/contracts/validate_manifest.py",
+    "toon_cli": "@toon-format/cli"
+  }
+}

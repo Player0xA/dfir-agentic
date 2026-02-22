@@ -1,0 +1,23 @@
+{
+  "auto_id": "782afd41-aebc-4978-9e1e-78ef9e483991",
+  "timestamp_utc": "2026-02-11T06:50:00Z",
+  "intake": {
+    "intake_id": "be230b77-e92d-4679-a92b-fa39b02882d6",
+    "intake_json": "/home/nevermore/dfir-agentic/outputs/intake/be230b77-e92d-4679-a92b-fa39b02882d6/intake.json"
+  },
+  "selection": {
+    "selected_agent": "windows_evtx_agent",
+    "kind": "windows_evtx_dir"
+  },
+  "enforcement": {
+    "allowed": true,
+    "action": "dispatch_pipeline",
+    "details": "ALLOW"
+  },
+  "dispatch": {
+    "status": "ok",
+    "dispatch_json": "/home/nevermore/dfir-agentic/outputs/intake/be230b77-e92d-4679-a92b-fa39b02882d6/dispatch.json",
+    "run_id": "b817cfbd-a7d0-48b9-9ad6-e642a8e50615",
+    "manifest_path": "outputs/jsonl/chainsaw_evtx/b817cfbd-a7d0-48b9-9ad6-e642a8e50615/manifest.json"
+  }
+}

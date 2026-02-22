@@ -1,0 +1,5 @@
+{
+  "call_id": "24e74eb6-3c2a-439e-9b28-c7edf561a7d7",
+  "timestamp_utc": "2026-02-11T17:19:12Z",
+  "tool": "dfir.read_json@1"
+}

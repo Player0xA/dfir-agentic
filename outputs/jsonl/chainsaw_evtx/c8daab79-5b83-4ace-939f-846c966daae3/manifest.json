@@ -1,0 +1,1761 @@
+{
+  "run_id": "c8daab79-5b83-4ace-939f-846c966daae3",
+  "timestamp_utc": "2026-02-11T17:17:44Z",
+  "pipeline": {
+    "name": "chainsaw-evtx",
+    "version": "0.1.0"
+  },
+  "status": "ok",
+  "inputs": {
+    "evtx_dir": "/home/nevermore/cases/intake/evtx/Logs",
+    "evtx_files": [
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Application.evtx",
+        "sha256": "de22cdce433219485393eb77dfadcf49b448fba0f423f5bcf28ffccbaae8d43a",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/HardwareEvents.evtx",
+        "sha256": "b790c872a389511da32f190adf66f301283c86a7acbbbfcfe154c70858fae70d",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Internet Explorer.evtx",
+        "sha256": "91129b3089f19147440ef26f91062ce3b6237e12a67a20f739736e73c29a19ff",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Key Management Service.evtx",
+        "sha256": "20958eabc5351bebe426b29c4d81d9241e7e3158fd9f5bba6311114978c80d6d",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-AppV-Client%254Admin.evtx",
+        "sha256": "474f22d0fc1f963b42e522e74e85bb820225d77f38560b8ec7ba038d3b7d694e",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-AppV-Client%254Operational.evtx",
+        "sha256": "bb99501810f1c7c25d81269a8414bd57dab1fe0ce91b6920951ce35061f3d0d2",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-AppV-Client%254Virtual Applications.evtx",
+        "sha256": "67af25bc9f3048ee2eabf5cdf23f4e21f215d3cceadc3d23d7bdbce9af25d339",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Client-Licensing-Platform%254Admin.evtx",
+        "sha256": "e318292757f747ba183f09e020f47ad5339bf3f2ec8826af5e292cc7a12fb870",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Rdms-UI%254Admin.evtx",
+        "sha256": "cbd523e81ddfa94b4694f03f4406d1610e2375a933f0b2ff6a9f7c1394dd55ee",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Rdms-UI%254Operational.evtx",
+        "sha256": "b790c872a389511da32f190adf66f301283c86a7acbbbfcfe154c70858fae70d",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-User Experience Virtualization-Agent Driver%254Operational.evtx",
+        "sha256": "b790c872a389511da32f190adf66f301283c86a7acbbbfcfe154c70858fae70d",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-User Experience Virtualization-App Agent%254Operational.evtx",
+        "sha256": "b790c872a389511da32f190adf66f301283c86a7acbbbfcfe154c70858fae70d",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-User Experience Virtualization-IPC%254Operational.evtx",
+        "sha256": "b790c872a389511da32f190adf66f301283c86a7acbbbfcfe154c70858fae70d",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-User Experience Virtualization-SQM Uploader%254Operational.evtx",
+        "sha256": "b70c3c2cd30cb6c6ac1437a6f7cfdeac1cc742e15bf3e503cb89b65facfb7080",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-AAD%254Operational.evtx",
+        "sha256": "dc41df9036d25c7105fa09403e8b562ed811b35a4f7c61662b3a570f20245d26",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-All-User-Install-Agent%254Admin.evtx",
+        "sha256": "892f0103a8372808abd845286dc0f5ae2588779b2eafaa061e3559e7a5e78186",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-AllJoyn%254Operational.evtx",
+        "sha256": "301749c5e17d3f7886884ac7a308f1878d8558d86e92f9c80b30fbe5efad9656",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-AppHost%254Admin.evtx",
+        "sha256": "4e95dc4a3568d0930e9db4e8955895616598ea8d6687f3254e48643dc9c3bd9c",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-AppID%254Operational.evtx",
+        "sha256": "48f93b562cc41c57a81e84297412696f2b44f31ca23d85d3a915c8ee0cfcabd5",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-AppLocker%254EXE and DLL.evtx",
+        "sha256": "e0dfb97ece7bc6af19eeb44392a843b82af79fdaee927e4333700a000461ee07",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-AppLocker%254MSI and Script.evtx",
+        "sha256": "afe1302ea70111a9564bd7fe9c01a8da2c20aed8b999f86b277197e839df4115",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-AppLocker%254Packaged app-Deployment.evtx",
+        "sha256": "06b80884418271da92d47a13cee203ce5266c9c9f8a9f8e4b5e1ad4a711c1bdb",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-AppLocker%254Packaged app-Execution.evtx",
+        "sha256": "53e3f59370041aa998f5bbf17376c43f237ca32a52dd5acfab9d1d7cd5c0b489",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-AppModel-Runtime%254Admin.evtx",
+        "sha256": "8dd20379eaa589c8d25ae4a8357cccbcdf249816181f05407e7a7bb5f9b515b4",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-AppReadiness%254Admin.evtx",
+        "sha256": "a410852d1f5df561c5f2c16d0b34fa98cd358afeaaf88655425f6e93c6349682",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-AppReadiness%254Operational.evtx",
+        "sha256": "0d1704e6485009e96d0e6ac5a8ebc2c137085b974b112b4b0163599c0dc15c57",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-AppXDeployment%254Operational.evtx",
+        "sha256": "9fb52c991f424ebd52aa277eb5b58857eb96ef88e903e732829e45274a48fc50",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-AppXDeploymentServer%254Operational.evtx",
+        "sha256": "e52605e47e70bb940123e8e9ab3fc2f00572df81bb9e1786c0052aa016349310",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-AppXDeploymentServer%254Restricted.evtx",
+        "sha256": "252145463cbb2eabf98ee0f12e27a1bcbb7aecfae3372fcec2e2d9d81202f289",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-ApplicabilityEngine%254Operational.evtx",
+        "sha256": "fe09b16bd44ab7481b8ee6b6a1b87ffee99b6e70a32c678d2cd842c56afb8803",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-Application Server-Applications%254Admin.evtx",
+        "sha256": "c12760970705d60ceb9dfe57de08ad10c13d1674014cee553b9322fd058577ec",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-Application Server-Applications%254Operational.evtx",
+        "sha256": "2958c4a513b3da88b3ee89aa11254ef1713121aede96d138b31ed58f3f90ddb2",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-Application-Experience%254Program-Compatibility-Assistant.evtx",
+        "sha256": "d4a75f4faaa062fcfff6bd342f424bdd7a604e46371ffe4a9836f78e6f8db66d",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-Application-Experience%254Program-Compatibility-Troubleshooter.evtx",
+        "sha256": "396238f4ddb98ec1607906840c1355e728b7b513b3df6de1d060d135d00e5223",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-Application-Experience%254Program-Inventory.evtx",
+        "sha256": "69dd8d53a59d80569b93e6298304acb7a87201ed6cdd18d6475732ad63b908f9",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-Application-Experience%254Program-Telemetry.evtx",
+        "sha256": "bf4cf0bfeb63fb90ff5eda2afd1adf9f75017eba1123fc58ed4f32a48c508224",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-Application-Experience%254Steps-Recorder.evtx",
+        "sha256": "b386e0c779068696adc72f932174c62eed5ef0669fc451903d45f9688371be8c",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-AppxPackaging%254Operational.evtx",
+        "sha256": "4bc79e538bd5cc4bf31abe535a59d4d40f3e68be261c43ce7232cd8a23a8133b",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-Audio%254CaptureMonitor.evtx",
+        "sha256": "704faf1cdba4d54d23abed3b380b287de5861757a85f5ff99c95734e2d5cbd5d",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-Audio%254Operational.evtx",
+        "sha256": "4be541adc4484f653b6a3ca796f6d923c8beeae8929abbfdd597551a761bb5bc",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-Audio%254PlaybackManager.evtx",
+        "sha256": "0b5c05ff359764f67c41c53719a5b219f125a5ff7c0d8ba2c69b1fd0cb53f70e",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-Authentication User Interface%254Operational.evtx",
+        "sha256": "00de4c3d12de7938c8c70ac279cd78bb2fbe95453b2a925db5126796913f5afb",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-BackgroundTaskInfrastructure%254Operational.evtx",
+        "sha256": "630466c02eea88e78746baa82d3ce49f946ae554e6c96d160959f9cb30fee10f",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-Backup.evtx",
+        "sha256": "e28848886f564fd3ed21d327ebec38e1038867ab5a51579e1a97b743b76955f7",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-BestPractices%254Operational.evtx",
+        "sha256": "9aa55e7324da68d92b95af3db7560e4073438b1903179bf84f5b517d097fa5b5",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-Biometrics%254Operational.evtx",
+        "sha256": "498d7e563bd5c4e57ee53e1b1d99a404090250e3cb6a24f7431d345fd2622ccd",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-Bits-Client%254Operational.evtx",
+        "sha256": "243740e01aebb07311fc0e1c49f497b74edadc384a6b1c9054ec176f49b0621d",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-Bluetooth-BthLEPrepairing%254Operational.evtx",
+        "sha256": "b790c872a389511da32f190adf66f301283c86a7acbbbfcfe154c70858fae70d",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-Bluetooth-MTPEnum%254Operational.evtx",
+        "sha256": "57d96432e6923b67fb6d120dcfe73c305a01a304c1f143b5dcfdf2efcd28d7e2",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-Bluetooth-Policy%254Operational.evtx",
+        "sha256": "bb74da0d8fda0f28cd24cefd375ae70318689ee9952b5940a4aaa2af84da9849",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-BranchCacheSMB%254Operational.evtx",
+        "sha256": "673e2493d4c3acdde030654986f41ec995dc0c9bff1a55a3d76fa6d4a8bd8540",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-CAPI2%254Operational.evtx",
+        "sha256": "ce048d2d5ff8be67a838c044517d3c826537d6a231d1496d1b76e3d0738229f4",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-CertificateServices-Deployment%254Operational.evtx",
+        "sha256": "e664347c24dc15a5ad505141419a0f9e5ce5b6ad7c7f480e62dfd80ad7bd4055",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-CertificateServicesClient-Lifecycle-System%254Operational.evtx",
+        "sha256": "87b7c18eee95af16b517b2c46cfe6451c97870a548ee31b810d7d66fcc5d843b",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-CertificateServicesClient-Lifecycle-User%254Operational.evtx",
+        "sha256": "304c3ad4ceec0dfa725001b988c988ab33b571dd367f6a17ec574dc4a45dacad",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-CloudStore%254Operational.evtx",
+        "sha256": "b790c872a389511da32f190adf66f301283c86a7acbbbfcfe154c70858fae70d",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-CodeIntegrity%254Operational.evtx",
+        "sha256": "e379f9f0905c13642dcfe2c62b9443e1faf45f877f1266770a7476290ca8414c",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-Compat-Appraiser%254Operational.evtx",
+        "sha256": "2e5779b8782c6b01212a4e3f1a971380c5d26906372c7f1cc69d25b35128facc",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-Containers-BindFlt%254Operational.evtx",
+        "sha256": "edc36d03f8ce4ade70da431b0fe3eeae537676675b97624c172a27de8515127a",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-Containers-CCG%254Admin.evtx",
+        "sha256": "e110045b4c327940d86482346c45f578209a51cc19323aefa2954fe1c68ca643",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-Containers-Wcifs%254Operational.evtx",
+        "sha256": "81c3eaf934c052af911a202460bf5fb68fe35eed632d28d86011e37038c87795",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-Containers-Wcnfs%254Operational.evtx",
+        "sha256": "b790c872a389511da32f190adf66f301283c86a7acbbbfcfe154c70858fae70d",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-CoreApplication%254Operational.evtx",
+        "sha256": "8136c805ae8de0425d7d656b0dd62c2c210b093afa786f44d17aa1342e12abb4",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-CorruptedFileRecovery-Client%254Operational.evtx",
+        "sha256": "a79bb91b3f3c1da96d4c7c7dd584f4329a85d2bd801c15df3cf8d235bc0bba6f",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-CorruptedFileRecovery-Server%254Operational.evtx",
+        "sha256": "a7090475b598de420e0df217feb4eb5284fe5b7d64255d5c20ed450b623ba9ad",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-Crypto-DPAPI%254BackUpKeySvc.evtx",
+        "sha256": "408dea209fa4f82bb6b8dbb91063cb5b976f6a96b0690d87091174bcceee0098",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-Crypto-DPAPI%254Operational.evtx",
+        "sha256": "d91582a2fe2c6b612d2fab3e0a2adb261e9807870c491de83d80a07c9d5eb806",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-Crypto-NCrypt%254CertInUse.evtx",
+        "sha256": "cb2a3f19d6bf5752b9673a2e845f09f6919d4bccf6583255d1fad1ba273f0a7e",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-DAL-Provider%254Operational.evtx",
+        "sha256": "dd20b032f46df428a5223c09da3f447a695b2d6a594d38f1dffd7eb54c6afba4",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-DSC%254Admin.evtx",
+        "sha256": "485ddafa65c33b8381c14ee6262f4ca01eae680ad9280ab2d37632e68ba465e8",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-DSC%254Operational.evtx",
+        "sha256": "1af83c148417fc7be2d65e4441e3f5814bbf5c717eef0dd5531631cf952750c0",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-DataIntegrityScan%254Admin.evtx",
+        "sha256": "9aa387b94061eba572eab8133bfa1eb2c450fb30ccef9d7375d9bc8de9c9a139",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-DataIntegrityScan%254CrashRecovery.evtx",
+        "sha256": "c448ac375171bc154dd63cc1b466ea8497dddf35624cfad216cde9fec644c3e6",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-DateTimeControlPanel%254Operational.evtx",
+        "sha256": "d6ceb2cf2e3dd62d267d91b9a2a3c0dd450eda373dbd045e7835dbad37e999a6",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-DeviceGuard%254Operational.evtx",
+        "sha256": "b790c872a389511da32f190adf66f301283c86a7acbbbfcfe154c70858fae70d",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-DeviceManagement-Enterprise-Diagnostics-Provider%254Admin.evtx",
+        "sha256": "a33bc382138c0b14386af212de140a794ed93db8ac1f3771de2783831250825b",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-DeviceManagement-Enterprise-Diagnostics-Provider%254Operational.evtx",
+        "sha256": "ab42ba9687c3060470933dad90873d605219cf6d087a4ffadf4565b6b3ec6772",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-DeviceSetupManager%254Admin.evtx",
+        "sha256": "19233ecefb2ba9cb424845a49dfa9daa42bbcef70e9a2f0c3c2ce8caa82a6c6d",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-DeviceSetupManager%254Operational.evtx",
+        "sha256": "10b59a4ef6ec72992c6c44338087b2782a804316e043b73130ed35423397252a",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-DeviceSync%254Operational.evtx",
+        "sha256": "5fa4b3b7e7d3b6edd6cf07f66216217cd3d29294317919d3df94a02450f55255",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-DeviceUpdateAgent%254Operational.evtx",
+        "sha256": "749fecf3c254b3a1bdec3da5faa5ac25e59ca0291baf8e32b14b71ecc36ebee4",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-Devices-Background%254Operational.evtx",
+        "sha256": "b7a886e54083469bb24c4e58f8ba20fd36845c8ecfe08d1c72447992ee340d89",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-Dhcp-Client%254Admin.evtx",
+        "sha256": "c2de0b1f9e3d460748dded1060f2e533a7df7745ac1ecbfc698739730c2cecaf",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-Dhcpv6-Client%254Admin.evtx",
+        "sha256": "270e06c7ca79b10ad32f8d3471245c6ffbe22c2d6bc73342fdff153168aff9a3",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-Diagnosis-DPS%254Operational.evtx",
+        "sha256": "a73ab76fb10e0de073613837833c8be189db02218d10f5e569907de4a3773ff8",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-Diagnosis-PCW%254Operational.evtx",
+        "sha256": "cb08fef1c7aaab0b2ffda887061387590a7882ef39d64042d3d5190cfdc21bc6",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-Diagnosis-PLA%254Operational.evtx",
+        "sha256": "772c5aa57f744e66850ed91efbcc28acef3d43c9fa701d447d2c32cd00c7e785",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-Diagnosis-Scheduled%254Operational.evtx",
+        "sha256": "90f2e9791df59a97e982ccfcc8c426d48f8678e661155243d9a52de5a310d9d1",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-Diagnosis-Scripted%254Admin.evtx",
+        "sha256": "fdc7a0ff16ec65e8ca1815fcb7ba4811ffc3d45ac14487e908bf17b9a3abe923",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-Diagnosis-ScriptedDiagnosticsProvider%254Operational.evtx",
+        "sha256": "71f4ff09092d95e9de556d1a22ac2fd253c11c80a2ea2a6fd6795ca04a567f5d",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-Diagnostics-Networking%254Operational.evtx",
+        "sha256": "ae6de32c4903ac72e7469cd09ea9b6101a132e56ef6d83dbd058485e4e180a4b",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-DirectoryServices-Deployment%254Operational.evtx",
+        "sha256": "e6776a92289cfa3bd97d604250346b3a31cdea04ceaed9288d7799a9cb04ca42",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-DiskDiagnostic%254Operational.evtx",
+        "sha256": "b346c6955414f48b56f038a6891b460cf087a3f02c8a89f432787cca133b8aa0",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-DiskDiagnosticDataCollector%254Operational.evtx",
+        "sha256": "9171cc41f55750e4de4da89b2a6c2f3828da056f3f250e414063d5e11794bac6",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-DiskDiagnosticResolver%254Operational.evtx",
+        "sha256": "be1c970b4216a4b3538c2fbcbd576715a072ecc84d82f210985ffe1dc904a93b",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-EDP-Application-Learning%254Admin.evtx",
+        "sha256": "94b03c9707be79b8a221dd54dd70b2d4b4104f019216be4359a6ce21110ad498",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-EDP-Audit-Regular%254Admin.evtx",
+        "sha256": "abe0a21a48af8861619f14e6a9dc4d3801db9a794e62272cd195992c8b73bc5b",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-EDP-Audit-TCB%254Admin.evtx",
+        "sha256": "d382c552c143f95a877344d46be3ef217eaeab6e4393f186c91059e92f02f7e8",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-EapHost%254Operational.evtx",
+        "sha256": "867108c1d944103c858570ab4f7c82a9cd495026082c0f5d3c9505cf29ed595f",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-EapMethods-RasChap%254Operational.evtx",
+        "sha256": "10e0303ac0c19b0e29d655f28c024311d181ee057c32ad004727a0342305e9ed",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-EapMethods-RasTls%254Operational.evtx",
+        "sha256": "15f29ed4a61fa1c58ac0552c74e3d163a570b5ed91f3f7b278d086c1ae54dd35",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-EapMethods-Sim%254Operational.evtx",
+        "sha256": "acd764206c1b1e6ba4389c02800ebe37fcedf8549f7765b06382a2765898dac5",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-EapMethods-Ttls%254Operational.evtx",
+        "sha256": "eb8186fd70c6a401a9035ac608381b15d55e0b69a4cbc13c3af80623641ab065",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-EnrollmentPolicyWebService%254Admin.evtx",
+        "sha256": "af2007283d27c22df0c51756ff1451bf7ad830d9764022130d1cdfa2df291b00",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-EnrollmentWebService%254Admin.evtx",
+        "sha256": "b5822b7e22d803e6da10257f64bf72859662e82f874b89e3831c4a4e334734f8",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-EventCollector%254Operational.evtx",
+        "sha256": "ebc30803e718ae6342899200ebdce22b28a2555f8c63746112119f76f2d89b33",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-FMS%254Operational.evtx",
+        "sha256": "d55b6aed4486f6ec4b56420f24d02176ed2e5a7e9f79f8467dbe92f5f0bfd95d",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-Fault-Tolerant-Heap%254Operational.evtx",
+        "sha256": "f1c837227ff269ffcff4c06f16e894b99b0bf25848a69e49182592a77a07af60",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-FeatureConfiguration%254Operational.evtx",
+        "sha256": "a0842cea3c8229c684e9a9b882bc0463ad8f49864880972fda178f039a0c1cd7",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-FederationServices-Deployment%254Operational.evtx",
+        "sha256": "0b08837c3726b1dbc0fb2da556e5661f0871a37f18bf2dc27951c4b1e1e1284f",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-FileServices-ServerManager-EventProvider%254Admin.evtx",
+        "sha256": "9a0a7ff7b4d1036cf22cbaa6395375bed2336027b483b025f8290e9b2e0d4968",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-FileServices-ServerManager-EventProvider%254Operational.evtx",
+        "sha256": "d23a22f41fb8f6b8923ce5235b0853fdf911645c0fd41c2695a3e82ad01203eb",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-FileShareShadowCopyProvider%254Operational.evtx",
+        "sha256": "e2acfd142637f1a1a1308272b7bed3b9d98fdcad1487e23df4623a5b492dd564",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-Folder Redirection%254Operational.evtx",
+        "sha256": "8b252dc2905d014904e191e9087cd2b6a53d2cb1eea4f5a01ecce757d807bb98",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-Forwarding%254Operational.evtx",
+        "sha256": "700e7f9e31591498a469c47c7957d7017e41c4d546d3385d39f7ac2a89aa825b",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-GenericRoaming%254Admin.evtx",
+        "sha256": "92606fe07db93c28dced7a5474338ca1ab440bdfb77f250cdb1385e76c60b21d",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-GroupPolicy%254Operational.evtx",
+        "sha256": "affb72a5d7f82eb4ed3ddad7050914e059a9bfe9508b93f4db1677201c1959f9",
+        "size": 1118208
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-HelloForBusiness%254Operational.evtx",
+        "sha256": "e455ac3070d0213da89bd529cf4f9901a5a8ea28d91fa00d2f7f3e425cb0e7e2",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-Help%254Operational.evtx",
+        "sha256": "7398bbf195ada01cfe5241377d0a5acfbdc4473f6680ad89c38b3db7e2da3249",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-HomeGroup Control Panel%254Operational.evtx",
+        "sha256": "62127d8360485e8718a6b5d5e286da3b51932184e54dc7ce5a841cd862eb4b68",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-Hyper-V-Guest-Drivers%254Admin.evtx",
+        "sha256": "c6b5b4f8b1676cf49ef4a2721a734fb0ecd50996f2f1cc3c565ad7a1ad3f57f4",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-Hyper-V-Hypervisor-Admin.evtx",
+        "sha256": "cc7feee2a7905449d640f5604a6aa91dd105677577bdde513ed7d584d59b785e",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-Hyper-V-Hypervisor-Operational.evtx",
+        "sha256": "145d1b73310a9066d804726739f15615fbe7de7b607779bbdd1da57c5b40f8fb",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-IKE%254Operational.evtx",
+        "sha256": "6cc91ab202e1711a5804ec10c260a1523090c7ffd09341c2d54e1ea78f190ca4",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-IdCtrls%254Operational.evtx",
+        "sha256": "cbd7ba84929aba2c9001c8184cfff11c3342f11860af35a8423b42c46a458be3",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-International%254Operational.evtx",
+        "sha256": "63052f671bca6f7183babf4af0a28b90b839df0332730b0585cfff979e9dc00a",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-International-RegionalOptionsControlPanel%254Operational.evtx",
+        "sha256": "60715f6c3144c1958e7af8ffb0f19028e3eb3ed31cf1f04368439f60d2135f2e",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-Iphlpsvc%254Operational.evtx",
+        "sha256": "340819147b8f58f20e7e751e8eaab4fd2e1967cc951328937524a408cd5fd30b",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-KdsSvc%254Operational.evtx",
+        "sha256": "55e595c55088813dd474c26801ff9dae91cb9605e0cbdbe91ce90cdb7fd0da65",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-Kernel-ApphelpCache%254Operational.evtx",
+        "sha256": "94605bc6145ef64cf63020f44d37f7f3766bb9846256800e306b684c5db22023",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-Kernel-Boot%254Operational.evtx",
+        "sha256": "ca0cb52beca563e802c90d0ed62654adc2ac82b74318bf7867323d991b584335",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-Kernel-EventTracing%254Admin.evtx",
+        "sha256": "116629cd42fabe2b5e0d551297c42477cac358d4c7b772a64cff95c2bc1f539b",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-Kernel-IO%254Operational.evtx",
+        "sha256": "7ce36cd283ae9808c0fad8dbc96b87464a12260e55c8f339e29ff88eb557f868",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-Kernel-PnP%254Configuration.evtx",
+        "sha256": "bc2ec0353202895a3ce59214172a5d24973640f24938e43abbe569859d09a7c3",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-Kernel-Power%254Thermal-Operational.evtx",
+        "sha256": "b790c872a389511da32f190adf66f301283c86a7acbbbfcfe154c70858fae70d",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-Kernel-ShimEngine%254Operational.evtx",
+        "sha256": "ce067d08446ec633dfeb5d236fc7781174731eb528c9377887596fce2ee5f5c9",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-Kernel-StoreMgr%254Operational.evtx",
+        "sha256": "0d37b8c238bc5d0311bea732c237beb00749781d28736cb1fad6fb25f7516777",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-Kernel-WDI%254Operational.evtx",
+        "sha256": "cac5ae6655f5d126e9075a4be2da4c20c30c3c42242efba9010b88a24871ddb7",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-Kernel-WHEA%254Errors.evtx",
+        "sha256": "b790c872a389511da32f190adf66f301283c86a7acbbbfcfe154c70858fae70d",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-Kernel-WHEA%254Operational.evtx",
+        "sha256": "9d13fd5d30eb739f21d608c6571fcb1059162e7dbc77e2917ed87bd163016134",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-Known Folders API Service.evtx",
+        "sha256": "d0eccea3c931737e495c6a3064f6229ae74a0d995c336fe76954bf76f294177d",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-LAPS%254Operational.evtx",
+        "sha256": "0453b832f10626a23ff5e1f34fd10198f37a71d900773d3e652d9b122e84039f",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-LanguagePackSetup%254Operational.evtx",
+        "sha256": "523bbb25108b0e347b5ab6d52e8d5a8bd925d67cc5e6a6bd58b57e3fee0558a1",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-LiveId%254Operational.evtx",
+        "sha256": "8b9cb3cd1bb88287d405517f0d7f79dc55b577328e73489cdfe7bf8eac9587dd",
+        "size": 1052672
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-MUI%254Admin.evtx",
+        "sha256": "aed01be492cd7fa7bb583dd749d81e79b9f9ff43f0c56f5af0231c20a958a0d2",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-MUI%254Operational.evtx",
+        "sha256": "dcf21c3d3b6ab88bbee4dd531135946286dce5e653d11d4c57d8211de19a546b",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-ManagementTools-RegistryProvider%254Operational.evtx",
+        "sha256": "08905e6b87886f483598e91974ef3b970a06f2f39ef87bb55d071678b0b721a6",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-ManagementTools-TaskManagerProvider%254Operational.evtx",
+        "sha256": "992f61b61e349ae549b3e99ffbb0a6a3a6f9bb2c7e9867ee3a2587181f3865ad",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-MemoryDiagnostics-Results%254Debug.evtx",
+        "sha256": "3cd28fbc8dba79861b16239de061dcde5f9c8ca5b975408159e335152ce980b4",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-MiStreamProvider%254Operational.evtx",
+        "sha256": "1dd653ca35633fb6d37a33c7c05e4080c1d08ad69819298bb70b4dee6240e7a1",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-Mobile-Broadband-Experience-Parser-Task%254Operational.evtx",
+        "sha256": "fe808cf1896ab7365a024f7b042b180fbb318106f5f8360d912752f3dc3ac4d2",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-Mobile-Broadband-Experience-SmsRouter%254Admin.evtx",
+        "sha256": "5184c6fe3351055568250d50f943faa85df9289ddc88b215b1e1062d77db4946",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-Mprddm%254Operational.evtx",
+        "sha256": "2ab7895bdcb8ffada0a78041a38ab41337c74a08514b327e2da950b43abd0d19",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-MsLbfoProvider%254Operational.evtx",
+        "sha256": "ac6966d9745be2316fd60eda5d188ddb32b4eb71bbe3d79054d9c7b6165ebddf",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-NCSI%254Operational.evtx",
+        "sha256": "1e9b8a1122dc242b18849a41188c913963db8a484d7a8c756ab8b05dbf61979f",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-NTLM%254Operational.evtx",
+        "sha256": "5d0ec780cb55dad8f4ecb3065976d15265dd22602e58cf100e899f188df1e092",
+        "size": 1052672
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-NdisImPlatform%254Operational.evtx",
+        "sha256": "0f9ccaf1e17dc1cf41b60a81c767ae955ab26484c3db1109e763e162ede70d7d",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-NetworkLocationWizard%254Operational.evtx",
+        "sha256": "71470d185c09938fdb8ae19956ce973e2c8b49f292af0f9ea3a3c9c17d8fd699",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-NetworkProfile%254Operational.evtx",
+        "sha256": "53dc629d7d5f3bb50553b7c4b60c54a191eaba571d05dd26af93a38344507ee8",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-NetworkProvider%254Operational.evtx",
+        "sha256": "9c1659be8ea6e17c7c813d40718d07f07689e9e408cd05b0469b424291c28a4a",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-NlaSvc%254Operational.evtx",
+        "sha256": "baa2aaa41a6a557e4cc6037e5f04ae6995da6e04523ee5ca69aad81c6f05bf4b",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-Ntfs%254Operational.evtx",
+        "sha256": "176a1648e3d8d3fa79dbbbca5dadb95c212d2da8e8ff577c1b9fd72ac16fbe28",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-Ntfs%254WHC.evtx",
+        "sha256": "6154980bf8915d50a9d43476e49bbf806b3b6e4a12bfb852189d413fd74aca91",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-OOBE-Machine-DUI%254Operational.evtx",
+        "sha256": "8e6ecbaa416f8652ebe00d63dba83c4e991e50cf93c17446e22ce6dee3382237",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-OfflineFiles%254Operational.evtx",
+        "sha256": "42e2c02378568f7403b82c5e781ae382e8513f36030e23fc48ff952037459f1e",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-PackageStateRoaming%254Operational.evtx",
+        "sha256": "cd0380823a7c1e3f74d73f47592b3d2ee628fb860e7369f87fcad18385601b24",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-Partition%254Diagnostic.evtx",
+        "sha256": "d56b6a9d09a527f99b66e30a2d327009fcc485f5be2cece82109e2f72ebcd78d",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-PerceptionRuntime%254Operational.evtx",
+        "sha256": "b05271c2f27112d6b1c716792383d456ce1ff3b708d87cea5415f46924ffb98f",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-PerceptionSensorDataService%254Operational.evtx",
+        "sha256": "f83f82cd240c9a011d1b58025dbe381a19df603db045392b6fd0d8b0ab917c86",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-PersistentMemory-Nvdimm%254Operational.evtx",
+        "sha256": "e64ab895a571aebd2035d59a096391a201961f521d55dd02beddd99a417bfbec",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-PersistentMemory-PmemDisk%254Operational.evtx",
+        "sha256": "f1d54c255113dea5d1ff36cc02ef1cf7a9f8e07911209dea03846396fec1073e",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-PersistentMemory-ScmBus%254Certification.evtx",
+        "sha256": "a192fe3067ee7b156df9673ad6fd9a664cc0323319b2615355ce7a5a88f1517f",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-Policy%254Operational.evtx",
+        "sha256": "c78dbe4225afbec94be7e66e3e5ee28eafe257d0e3eb2aba8f544f92dad9ff4e",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-PowerShell%254Admin.evtx",
+        "sha256": "28225599a396e5a10d04599e8c0169964a7386b425a145a331887161d197560b",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-PowerShell%254Operational.evtx",
+        "sha256": "8d67af7fb11db0925076b73fab8fc01b84a0beb5e6ba639c31b9f7c07d7b21c7",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-PowerShell-DesiredStateConfiguration-FileDownloadManager%254Operational.evtx",
+        "sha256": "7f03de9af3c2fcd862dfc628155b9cce1293b317d2d845a2270567de05322070",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-PriResources-Deployment%254Operational.evtx",
+        "sha256": "ef8f47723c05db2593dfdf621c17b5b43cf06a4623534683c64aa6ac7e01ba3a",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-PrintBRM%254Admin.evtx",
+        "sha256": "72d0bf375ad9fa099b5c205c21d0d9e804f8c2e7314827f7d8c5ee9de33f8e02",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-PrintService%254Admin.evtx",
+        "sha256": "b72d3578cd94449e3d1e0f228b8950823f3699965969ca7efad3d75d82074e75",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-Program-Compatibility-Assistant%254CompatAfterUpgrade.evtx",
+        "sha256": "9258bd100f9df064a390a37f4109b9da7102444868164e648aca9857409e42f6",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-PushNotification-Platform%254Admin.evtx",
+        "sha256": "fc1d53ca4e4dcf4702b036e4026206b2d0dc66f06fa7f0c6af821e28880cb480",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-PushNotification-Platform%254Operational.evtx",
+        "sha256": "355679b8bac9cd0194bebabbd788a3aefbfaed8b8dec3bac2fd92489f8974bea",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-ReFS%254Operational.evtx",
+        "sha256": "f7fc4b554928411c828e29cb94d90474b53a33dda386f369be713487f35d55c0",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-ReadyBoost%254Operational.evtx",
+        "sha256": "90b5397297b0f15f015fb7143da92c05b5a57a9ca96313e40943b9fa18a342b3",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-Regsvr32%254Operational.evtx",
+        "sha256": "433231ddd2a2231fac2076b6cc71660e840a0449caab5bb0459a2dfc1ca2f957",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-RemoteApp and Desktop Connections%254Admin.evtx",
+        "sha256": "21c8d6b154e37c2c6a9cb7281c02272e37094638c2604c7988c6d8d8b8503c2d",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-RemoteApp and Desktop Connections%254Operational.evtx",
+        "sha256": "9ed5d8bbd1b574b63b2922075469911bb2a7e89ae477b12f224eb0611f1d0fdf",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-RemoteDesktopServices-RdpCoreTS%254Admin.evtx",
+        "sha256": "885a70c82dffbac15f37930504d39a0aee110a2a4e4dd93fc5445a001750a5ab",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-RemoteDesktopServices-RdpCoreTS%254Operational.evtx",
+        "sha256": "8859ab8a0380c817166e0b65101a3f332316d194dd5c3949da3b63199703031b",
+        "size": 1052672
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-RemoteDesktopServices-RemoteFX-Synth3dvsc%254Admin.evtx",
+        "sha256": "fa2e56e4f7a53b56fa32d851593e77da430f99357e1d192c62bc9e3209f8e009",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-RemoteDesktopServices-SessionServices%254Operational.evtx",
+        "sha256": "acf9c055d505c81c4abac427426ef80ddc3c13548d7b1bfd8c32e90a7398dbeb",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-Resource-Exhaustion-Detector%254Operational.evtx",
+        "sha256": "5d0ec76bcfb4d7b8c1637fa1503dfaeafaaa00b24270ee539028d081d13f1876",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-Resource-Exhaustion-Resolver%254Operational.evtx",
+        "sha256": "be4b61f46377eb8b149b3587bc2787fce84c574d301948e9a56120e9d1458896",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-RestartManager%254Operational.evtx",
+        "sha256": "c8ce037a2e49cf64958004d7b1367ff5ea96802e3e26292d6c1e2bc6b0c22dd2",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-SENSE%254Operational.evtx",
+        "sha256": "54e4e8edc71157455eb8e9fe5bc86d59beee0dccc9acaeee63f4d6f039f03548",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-SMBClient%254Operational.evtx",
+        "sha256": "b790c872a389511da32f190adf66f301283c86a7acbbbfcfe154c70858fae70d",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-SMBDirect%254Admin.evtx",
+        "sha256": "a035b7f23d536d1c655d4b338a2327787f7f90e16ac98ca6e14598f351a62133",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-SMBServer%254Audit.evtx",
+        "sha256": "e56deab61875dcf281080e7b33a6da844e36706b3e6bbed82e7745905adc561d",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-SMBServer%254Connectivity.evtx",
+        "sha256": "f4e0dce764be0547c64fddaf9aea570189623875f974c42755eb6335a48de518",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-SMBServer%254Operational.evtx",
+        "sha256": "06be5340adbe41d6f2489333a4dc9e72b377901d5462cad31fe7160d9ea85705",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-SMBServer%254Security.evtx",
+        "sha256": "57f249a368c39dfccb06b5951dfe2d128f562f73e14d50c984e28f4477a80638",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-SMBWitnessClient%254Admin.evtx",
+        "sha256": "37529bea01be44f750c05a03a4b08a45d64037f25b27a2cafdd0d934b7797b08",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-SMBWitnessClient%254Informational.evtx",
+        "sha256": "e75bce4c86be5fa98023de799e545002b50357693eae9d5e07d8191eb895473f",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-SearchUI%254Operational.evtx",
+        "sha256": "492777e3564c447b284f7de93c7878447f20ce9b1f6314fe0417b91c5ae24bc0",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-Security-Adminless%254Operational.evtx",
+        "sha256": "916c16bfd2d43c3709d9f9080edd9d1e071151676881e89587bf77d4b99ddf6a",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-Security-Audit-Configuration-Client%254Operational.evtx",
+        "sha256": "b54914731f0dd14749c299a9704cefa5364ab9135330c031334647139f7b28d4",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-Security-EnterpriseData-FileRevocationManager%254Operational.evtx",
+        "sha256": "447a8208b4904bb5ed953868eec04f77cb861ea32da02185279a3fa22b6901b5",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-Security-LessPrivilegedAppContainer%254Operational.evtx",
+        "sha256": "9d0f3ea39dc9541d77264c0a53b438a4e1bd10526c6c6e18d4a485aefd447928",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-Security-Mitigations%254KernelMode.evtx",
+        "sha256": "0ce21865aa8951750cf1d23bafabd8c121fdcaf140ad9d0e1e6eaf7240a29711",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-Security-Mitigations%254UserMode.evtx",
+        "sha256": "16698eece3f28ffbafb6b458200467e227c39b3e655ddc90dc8c7cdb88a2ef31",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-Security-Netlogon%254Operational.evtx",
+        "sha256": "62f852728aba10054a22d5368b99a5c9208a8382b809575949425d28e21a2c81",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-Security-SPP-UX-GenuineCenter-Logging%254Operational.evtx",
+        "sha256": "837043fd892b625d875968f94cd94ea58287faa22771fcd938b62d9c5df641a3",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-Security-SPP-UX-Notifications%254ActionCenter.evtx",
+        "sha256": "14626aca199039d274721e62c18527a5ae3fe121a38e0c9e9d2961c9701a53a1",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-Security-UserConsentVerifier%254Audit.evtx",
+        "sha256": "1ac88e3e5b5e0ef3aba7fa473f558e74f0c7934fa440a33ad8023ac4a6eec824",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-SecurityMitigationsBroker%254Operational.evtx",
+        "sha256": "b50e514e7f28d5fedc4530d8a7e3c8b5b5075caabcaeccf7c841b5092351cacc",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-SenseIR%254Operational.evtx",
+        "sha256": "9a5cde38a4f9db070242b05ac2ea7424e5051d02aa2ba3410b301d13b6f2b578",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-ServerManager-ConfigureSMRemoting%254Operational.evtx",
+        "sha256": "f490cc0401fe57d01bcf393b7b42e0c99c1c4dd35d5af8ca0d58d40ca7c4a22d",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-ServerManager-DeploymentProvider%254Operational.evtx",
+        "sha256": "c7c14c99f475d58b8a818ab015d3eb76fb7553dd0ea873d317a6a4b6413daf84",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-ServerManager-MgmtProvider%254Operational.evtx",
+        "sha256": "bb053ba721e7b2ba553b4b72d2a161dc01130d40148d9a4aca87b948bd32d451",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-ServerManager-MultiMachine%254Admin.evtx",
+        "sha256": "b790c872a389511da32f190adf66f301283c86a7acbbbfcfe154c70858fae70d",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-ServerManager-MultiMachine%254Operational.evtx",
+        "sha256": "09d004fab78321af52b4638c571ab1ba226ff29b3a617dd23c9cb4073759480e",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-ServicesForNFS-Client%254IdentityMapping.evtx",
+        "sha256": "5e361149e043cdf27245a1a9e2d8287ef71a61cffde8a17033e766a85b98f276",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-ServicesForNFS-Client%254Operational.evtx",
+        "sha256": "ac22bdf239a8fcbc1a07dda65ff79e342448f5818d4a4c3d2b69eee333142f05",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-SettingSync%254Debug.evtx",
+        "sha256": "1ae69b5ffc6e008b235b56b201e3428b72d5304bfd54e65bfc8658587e092a6e",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-SettingSync%254Operational.evtx",
+        "sha256": "29d8c3432365bcc52ebd1ecb1f4939ddc987577940a3b06085071f884fff2684",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-SettingSync-Azure%254Debug.evtx",
+        "sha256": "ffd794bafd78253d1e6b1771716e83c14a0948294a00b05055c98730f6a1ea99",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-SettingSync-Azure%254Operational.evtx",
+        "sha256": "2775062214ee01f433713a2f7dc44b0fe28346bb50ad0f05af5db94838a2f919",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-SettingSync-OneDrive%254Debug.evtx",
+        "sha256": "973a59373275e131cad0e19443fd8b2dd43757ad83188de8b6e8fb24ea7857b0",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-SettingSync-OneDrive%254Operational.evtx",
+        "sha256": "86cdb4ef7a4e09f8fb27574b6ba63d4b0a70c6ec257f1490e508be0c77e0f113",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-Shell-ConnectedAccountState%254ActionCenter.evtx",
+        "sha256": "68b94d4cc7b39c2019aad72268216772672ba9074b9d0724d95bfb0e35705eed",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-Shell-Core%254ActionCenter.evtx",
+        "sha256": "26892a9c0c70d66df3e31589df7f42c944960ced15e755d55adabdd5231e4dfe",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-Shell-Core%254AppDefaults.evtx",
+        "sha256": "b34359d0020b501459c6f87fb0f8b3d0e8a1a9733ccff885b37eda27554c2908",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-Shell-Core%254LogonTasksChannel.evtx",
+        "sha256": "859e3671478fdc7a162dc31e5f84be32f5d5688e15de5ea6ee295e4055404ce3",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-Shell-Core%254Operational.evtx",
+        "sha256": "48be38c03db0c8883872cdbfbb883e40b8febb778db051157393d4836981d2ac",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-ShellCommon-StartLayoutPopulation%254Operational.evtx",
+        "sha256": "1249469e94a551a61eee0dfafc2892a04fd78b76c43d499d30a7bb08040a41b5",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-SilProvider%254Operational.evtx",
+        "sha256": "bb175fdd80fd355b38af7793293c0d2aaf3e1ed9ff5425045b6f74636525f863",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-SmartCard-Audit%254Authentication.evtx",
+        "sha256": "b7877770dd707e288f1a0b777bf4ec0d6288a29ae747d393a984f1066cf41281",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-SmartCard-DeviceEnum%254Operational.evtx",
+        "sha256": "375dad13d09bee5ba56ce6129ed73e078d5d77e5a37897863bfd608a8952ad61",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-SmartCard-TPM-VCard-Module%254Admin.evtx",
+        "sha256": "39a1d706d83bfa0b6e1097a6fa0443152ba4534433b3324a21a9f2485276d9b5",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-SmartCard-TPM-VCard-Module%254Operational.evtx",
+        "sha256": "471b09b6d104db4b637ec4b41e1b4e79affec79096c04dec3d01616e80ab6cde",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-SmbClient%254Audit.evtx",
+        "sha256": "440a984bab416c4a004df37e922a2e1086ee0c07794c41860e8eef5b7b790c3f",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-SmbClient%254Connectivity.evtx",
+        "sha256": "a05e9086b0eeec4385c9faa8a608dcc83152ce3b28e2b739b176e8dd77b68499",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-SmbClient%254Security.evtx",
+        "sha256": "e1b81e8135d045db858febb84952d23b3c4983c8c8e1ebc18e03c7ea983669b5",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-StateRepository%254Operational.evtx",
+        "sha256": "c755d13218320d0d20f5f3a37228ca9126039ad3264a3449cb5f0f3c0e600b2c",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-StateRepository%254Restricted.evtx",
+        "sha256": "f98060a1199d5a3870b84496141163a8d9af365abfefee0f0de56f33efa24e5e",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-Storage-ClassPnP%254Operational.evtx",
+        "sha256": "935f5818939024dbaaf6542303c99c6e93cfd6e63405524fb999440c3ddb0ecd",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-Storage-Storport%254Health.evtx",
+        "sha256": "b790c872a389511da32f190adf66f301283c86a7acbbbfcfe154c70858fae70d",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-Storage-Storport%254Operational.evtx",
+        "sha256": "335cbaf69aa0269203accaed5768fd3cc22f0eba7d132ace527764483dbd2f16",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-Storage-Tiering%254Admin.evtx",
+        "sha256": "8494400bb4b795d4a88900c477890091f647e00003344e1e6f2049d231e79bb9",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-StorageManagement%254Operational.evtx",
+        "sha256": "c7aaee4ebbb83a0b40c20ac31a807b2c22af38691c37eed0f75244f850d740cd",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-StorageManagement-PartUtil%254Operational.evtx",
+        "sha256": "1433af58f3db77ecad3e854eefd49627e6e44267bf6fe07620f6b20f4e0d2cc3",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-StorageSpaces-Api%254Operational.evtx",
+        "sha256": "ac1dca1eccef57fa2c5d628739e7fd879907f452975ba5d5cd31947683f4eaf8",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-StorageSpaces-Driver%254Diagnostic.evtx",
+        "sha256": "b790c872a389511da32f190adf66f301283c86a7acbbbfcfe154c70858fae70d",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-StorageSpaces-Driver%254Operational.evtx",
+        "sha256": "15c3678d77183068020ab43a93f5b9973f1678538ee63f941933aec4da9f6a5c",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-StorageSpaces-ManagementAgent%254WHC.evtx",
+        "sha256": "90327605ce8b1743ed91ea92e5adf3a54bf0177d7ab9f65ba37615a317730bdf",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-StorageSpaces-SpaceManager%254Diagnostic.evtx",
+        "sha256": "5ea86951c206e48fa96a52791a84778f9e02f83ce4351f80794a3713c0fd32c0",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-StorageSpaces-SpaceManager%254Operational.evtx",
+        "sha256": "c1163f419b2b19c7a672aea7f093d7f0754078ce625a44fbba1e0cd8147199d7",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-Store%254Operational.evtx",
+        "sha256": "d972319484ba1defd351b2105401fbbe41c0d53661db78a212ebfdd16f7b743a",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-SystemDataArchiver%254Diagnostic.evtx",
+        "sha256": "2c58917ec2ec6321a80f43e8d1d7253a04b01be5ff0e61de9f492c8a2e3f57b3",
+        "size": 7409664
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-SystemSettingsThreshold%254Operational.evtx",
+        "sha256": "776d03a9dfdf8f2883cbd3680ebb289c76d6c415afa0352339721779e045dab2",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-TCPIP%254Operational.evtx",
+        "sha256": "3cf822bda4017d8178cea5f3ab619e0191d40b1fa95efd96abb83a2fe1c4351c",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-TWinUI%254Operational.evtx",
+        "sha256": "d6fa0c801745600c8ab77a88590e678f2fe71419323549fbe9f6a98499e8fb9a",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-TZSync%254Operational.evtx",
+        "sha256": "18eae05513ac7f279b372e727ebb7e884d0688494f950af88be388e1d832736f",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-TZUtil%254Operational.evtx",
+        "sha256": "bf7b7b3c49e1e64365b22468be55b9a33e60cf885e1b8cc4e09a1a9a73183e49",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-TaskScheduler%254Maintenance.evtx",
+        "sha256": "aadf8dda3d115d82e68a16bb4ac50556dcbe43eb3bc5ed72f71cc975f8bb38d6",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-TaskScheduler%254Operational.evtx",
+        "sha256": "26f3fab5283c9a94bf1d4a6249cb208e0d72bb6e4a3c25fed3e25add55b2782a",
+        "size": 1118208
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-TerminalServices-ClientUSBDevices%254Admin.evtx",
+        "sha256": "1696d5b7aef406ca860ca55da392552328aafcfe5f2aea869149b1a265d777e3",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-TerminalServices-ClientUSBDevices%254Operational.evtx",
+        "sha256": "678b7dbf648a7085708758a924345c246dfa24d6c3930875085407737b2fb6f2",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-TerminalServices-LocalSessionManager%254Admin.evtx",
+        "sha256": "b790c872a389511da32f190adf66f301283c86a7acbbbfcfe154c70858fae70d",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-TerminalServices-LocalSessionManager%254Operational.evtx",
+        "sha256": "cefd83da51168ef5a2ef9cd124ea269af16c63b28be47e62553485f4348e632c",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-TerminalServices-PnPDevices%254Admin.evtx",
+        "sha256": "d0f7c44956640850c2aadca7ea90037ba1e2995c8e152903653b180f21bf9f9e",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-TerminalServices-PnPDevices%254Operational.evtx",
+        "sha256": "122da003f8662854bdf0c51b229a4b6e91700cd3d96b9d0217ac23aab9531904",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-TerminalServices-Printers%254Admin.evtx",
+        "sha256": "0dd6b17d4b375b16b3c54e69d07fa74475a07fcd2dc5140e536a5ff85052a8ae",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-TerminalServices-Printers%254Operational.evtx",
+        "sha256": "838fe5566b91130ff49df6c651a41854dd208e7bcfaf49c77d0fd1ad9d831deb",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-TerminalServices-RDPClient%254Operational.evtx",
+        "sha256": "3388e94c725f84117b8a74a6159ee5473aa6f7eea48bf022818efc4cda43a9a3",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-TerminalServices-RemoteConnectionManager%254Admin.evtx",
+        "sha256": "118ef5767d3977a23817c20275458fe1c9f1019284c683b715183187696313c2",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-TerminalServices-RemoteConnectionManager%254Operational.evtx",
+        "sha256": "2dd1ec96afa6af07c698d54f03bc52a78c389c50208fca1f53d45ac14ead570a",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-TerminalServices-ServerUSBDevices%254Admin.evtx",
+        "sha256": "48de85ef86028900ac406755e0b987d2c8403b1b299f7c7f8ad26a40dfe8f041",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-TerminalServices-ServerUSBDevices%254Operational.evtx",
+        "sha256": "96ffe824f5dc925ea43f018bcc5f9b55799e5d35be01c9b2e33a4c479e324e56",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-TerminalServices-SessionBroker-Client%254Admin.evtx",
+        "sha256": "546ac986b9959791703eabf342ffc2037408257f0ff9cbaeef865af15d7310dc",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-TerminalServices-SessionBroker-Client%254Operational.evtx",
+        "sha256": "a6877d734f7fa296b323a3e2eb235a9624e73535106cc90078916705bd4f9c9e",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-Time-Service%254Operational.evtx",
+        "sha256": "41ccf3da93fbc6ad70ecaf3b9f393478b069c33d1b8928040d32ee8bfaa173b4",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-Time-Service-PTP-Provider%254PTP-Operational.evtx",
+        "sha256": "344d04e5fd1fb55b5ee5d869a76aec32a34698c31ac293709848218220234ca4",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-UAC%254Operational.evtx",
+        "sha256": "26dc82a859097795c03022ddaec2fbb386f41ebb6e031b26279902eaf14c7587",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-UAC-FileVirtualization%254Operational.evtx",
+        "sha256": "aef247669571603bb61dcfa83898fdf1a5d17b0a1e59781652f701e70ac65e19",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-UniversalTelemetryClient%254Operational.evtx",
+        "sha256": "43af5df8a1a1be92139bb5a95c74e0a80f6c4a0d81ec39ac2f3bef1f48c1c6d5",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-User Control Panel%254Operational.evtx",
+        "sha256": "5a5157ff74b3cc7e2597e9069703200ff4a79d9f1973bfe1ddc36f5ece128785",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-User Device Registration%254Admin.evtx",
+        "sha256": "229fb9fdae75ae42332066568dd99af21a7dac1f04b6292c0882ccbd401c0976",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-User Profile Service%254Operational.evtx",
+        "sha256": "bede8b0ffd10998a36c61dd31bba8027e0c055c791cd3dddd0f463a022585850",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-User-Loader%254Operational.evtx",
+        "sha256": "935577993d262d8a4407e08fbc891a9e6ff9f42a8c5fc109e880d37ff02edbb0",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-UserPnp%254ActionCenter.evtx",
+        "sha256": "b790c872a389511da32f190adf66f301283c86a7acbbbfcfe154c70858fae70d",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-UserPnp%254DeviceInstall.evtx",
+        "sha256": "2a22ce79abe97da19193f2634c5fb9b09a8148e7ae24e35b9a43d390202c0a8d",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-VDRVROOT%254Operational.evtx",
+        "sha256": "8377ec09a39c5ba50a7c4f2903b472ac0f9d09c3e609419e7e413b2daa529a68",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-VHDMP-Operational.evtx",
+        "sha256": "5402a1572f4a1765ea0e8b7cddeab8d25df82dfd0bbf5f3dacd7d61d1326ab9d",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-VPN%254Operational.evtx",
+        "sha256": "ff56985d01e885c15669f197332506388d00757b81fa5e2482dee5c950be90a0",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-VPN-Client%254Operational.evtx",
+        "sha256": "6da1a28618d177725fd9d0d340e20670f55b4dc8cc5c91a5543c11fa5b35c536",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-VerifyHardwareSecurity%254Admin.evtx",
+        "sha256": "c23aa7462ff02b8b9bb9ba9c54b13a72f948885604945b2a151f2c51cf1492f3",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-Volume%254Diagnostic.evtx",
+        "sha256": "89ee6abd7e2db1677b3478794113e9390bd01693d08c5e09ac0abe37c6f1663b",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-VolumeSnapshot-Driver%254Operational.evtx",
+        "sha256": "eec89734e7e969406169606466e773ff5723dd3cbf7ec0950172a1470efacb19",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-WER-PayloadHealth%254Operational.evtx",
+        "sha256": "d973af0042ef1dc9ae4e1220aaa17ec29c14042b5b7f884688fea5ac7df09b75",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-WFP%254Operational.evtx",
+        "sha256": "ca602b00c7fd42dac81a292599d0ef6351f1490f798a9d10136821452415992e",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-WMI-Activity%254Operational.evtx",
+        "sha256": "cb611a7815abdc237b96c3b6aadb47d9cbaed8df5e54869b989d6f57c61e4659",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-WMPNSS-Service%254Operational.evtx",
+        "sha256": "8ba506af08054919f3e62f9ba7000f5f3232177011de5deab50a373e7eb9983f",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-WPD-ClassInstaller%254Operational.evtx",
+        "sha256": "a0bfdd5477ba5e7f2bed4b9a9ae4dc805aca5011f520954ec095aadd7f89f066",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-WPD-CompositeClassDriver%254Operational.evtx",
+        "sha256": "11a41e674bf2f6ad0807b7c4420840ed6e7a6b597293129db3711355c2ffd21a",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-WPD-MTPClassDriver%254Operational.evtx",
+        "sha256": "822d377b846c46644120885bedd6eb5c3cd816f03cf64aef2f55a6f5c2f3b35c",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-Wcmsvc%254Operational.evtx",
+        "sha256": "adcc08d4bcacdbf326628254d627237effdf6ce0e240a1d667675288477ec5dc",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-WebAuthN%254Operational.evtx",
+        "sha256": "73b744fd4fda3ae1b0606ebd45eaf13dcdccd6bdffde51957c9f9ad9a737ebd4",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-Win32k%254Operational.evtx",
+        "sha256": "39b28ff3c9b7eec894dd13e45377b7a8fdf4f3486da507054e86591292277d3b",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-WinHttp%254Operational.evtx",
+        "sha256": "e2d274e04ab7f6128bff14d880f7f2de0eceb14c7b62d3bbc36d29c7a43db587",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-WinINet%254Operational.evtx",
+        "sha256": "2fbf4a9f35690df27659e390923e1cb11b7b3e1d8b087f03e96d55553255903e",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-WinINet-Config%254ProxyConfigChanged.evtx",
+        "sha256": "1b47c7dc135e0bbf78a4e9daca022126fd7d040fdbd07d2b256c95779ec66a56",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-WinRM%254Operational.evtx",
+        "sha256": "617367b2bd6558aeb90a8296193d0517f4113ce9dc864d359b1b4aa3ffee1c0d",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-Windows Defender%254Operational.evtx",
+        "sha256": "bb60de19753d941f2866e61c186838d13297ece286bdfbbc8e91bb11ea280810",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-Windows Defender%254WHC.evtx",
+        "sha256": "1e23ed886af6444e4844b3a1bb9f72dd689b4d4a5c6407653878913475e128f9",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-Windows Firewall With Advanced Security%254ConnectionSecurity.evtx",
+        "sha256": "89b0694aa4decdf30e9ac0b3fe734b8455f354a0721f7771bc49a7088d8a60d8",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-Windows Firewall With Advanced Security%254Firewall.evtx",
+        "sha256": "6a3975dd6da12758e2b66670260c0b2e41e28d68fa7d0a2c65334cfef6af9d6c",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-Windows Firewall With Advanced Security%254FirewallDiagnostics.evtx",
+        "sha256": "87510d03e9bd9e207530a1483e011ad5d7154be9ce75be0f7f7160a3750f1527",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-WindowsSystemAssessmentTool%254Operational.evtx",
+        "sha256": "d8cf142b53d29d765555291cae31cf4d251b44494970633fb37ea4a0fe787678",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-WindowsUpdateClient%254Operational.evtx",
+        "sha256": "97df541438df36f2621bf0fc076f25d9fb56c4aa3b2c5b832be1c51d7d5c4eb9",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-Winlogon%254Operational.evtx",
+        "sha256": "7836fcaa89416cedfb66042618c7bab4511e8ad31a8043583f90fad5b7de87fe",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-Winsock-WS2HELP%254Operational.evtx",
+        "sha256": "522eba494d9c1b2820652df65a3795e1ac4da58e6641451a33360e880f813b49",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-Wired-AutoConfig%254Operational.evtx",
+        "sha256": "642d58984d01002f083ab5d08f39f922fcbd6d99813f72d58485b97edf7fa709",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Microsoft-Windows-Workplace Join%254Admin.evtx",
+        "sha256": "db24a5c2872555682d916a30108f7d65b7b8fdcd1e3660f6444dd7673c7e92a6",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/On-premises data gateway service.evtx",
+        "sha256": "9f3089961a7d57e6933e174a2f08e943810cd46e562aac409c8c5616ea27a3fc",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/OpenSSH%254Admin.evtx",
+        "sha256": "2926cd09b2cfb3a79837da24ad73809b0461efde81354480261e8b59c126fdf7",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/OpenSSH%254Operational.evtx",
+        "sha256": "2e7d09c46283d8c27105c108a3f3c5576907ba3c66f273bbb966f8bf4826494d",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Parameters.evtx",
+        "sha256": "ad36315a768bb100f6193c23800631dedac088e462542dfb5e3c70b783d2eeea",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/SMSApi.evtx",
+        "sha256": "0edb569307c55a6301313493222ccbadadb99b4527d1206eb95069082867004a",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Security.evtx",
+        "sha256": "f00aa82ce87fdc34d27305f466f2592e5ae954614a95bd54739701c33e01c23a",
+        "size": 2166784
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Setup.evtx",
+        "sha256": "b0d8863d2ce5ed8716de0cbba240ba056747c30e417113d47c67688f3bd85bad",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/State.evtx",
+        "sha256": "8acf15e513ff9c4893374c72ae865b0944c74e3ac4dd87808cc335c71398dfae",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/System.evtx",
+        "sha256": "c67e21ace2ad54e5e85fe1b25dcbd520eae8f98d06c78927592add3949287887",
+        "size": 1118208
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/Windows PowerShell.evtx",
+        "sha256": "1250745b09fcae4abc4c8e0f3b2be6fbbd5a8d48b7038104c810d9207252ea11",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/cases/intake/evtx/Logs/microsoft-windows-diagnosis-scripted%254operational.evtx",
+        "sha256": "7cc6d0e5a2075e2f77c7586b8d4a11587693d358ee94066af5c59e8617775dc4",
+        "size": 69632
+      }
+    ]
+  },
+  "tooling": {
+    "chainsaw": {
+      "path": "/opt/dfir-tools/chainsaw/chainsaw.bin",
+      "version": "2.13.1",
+      "rules_dir": "/opt/dfir-tools/chainsaw/rules/evtx",
+      "cmd": [
+        "/opt/dfir-tools/chainsaw/chainsaw.bin",
+        "hunt",
+        "/opt/dfir-tools/chainsaw/rules/evtx",
+        "/home/nevermore/cases/intake/evtx/Logs",
+        "--jsonl",
+        "-o",
+        "outputs/jsonl/chainsaw_evtx/c8daab79-5b83-4ace-939f-846c966daae3/chainsaw.evtx.jsonl"
+      ]
+    },
+    "normalizer": {
+      "path": "adapters/chainsaw_evtx_to_findings.py"
+    },
+    "schema": {
+      "path": "contracts/findings.schema.json"
+    },
+    "validator": {
+      "path": "tools/contracts/validate_findings.py"
+    },
+    "triage": {
+      "generator": "tools/triage/gen_triage_from_findings.py"
+    },
+    "toon": {
+      "cli": "@toon-format/cli"
+    }
+  },
+  "artifacts": {
+    "request": {
+      "path": "outputs/jsonl/chainsaw_evtx/c8daab79-5b83-4ace-939f-846c966daae3/request.json",
+      "sha256": "a876a1c3a8edac453af21c3c8328617eb8b026f6545766d810720d8e542980a0",
+      "size": 939
+    },
+    "chainsaw_jsonl": {
+      "path": "outputs/jsonl/chainsaw_evtx/c8daab79-5b83-4ace-939f-846c966daae3/chainsaw.evtx.jsonl",
+      "sha256": "19fb8bce31b4a6a689db446bb13376173e429220d4170e004eada55aac0627ce",
+      "size": 582525
+    },
+    "findings_json": {
+      "path": "outputs/jsonl/chainsaw_evtx/c8daab79-5b83-4ace-939f-846c966daae3/findings.json",
+      "sha256": "94a65dea63fe02599a95db46c69f3b540d1ea75c68076e0b7275c9060988fe9f",
+      "size": 1306866
+    },
+    "triage_json": {
+      "path": "outputs/jsonl/chainsaw_evtx/c8daab79-5b83-4ace-939f-846c966daae3/triage.json",
+      "sha256": "5086c0a90bcf3e94214234b8b22a5ed47b4466398735c37a758b9849c51d4414",
+      "size": 54109
+    },
+    "findings_toon": {
+      "path": "outputs/toon/chainsaw_evtx/c8daab79-5b83-4ace-939f-846c966daae3/findings.toon",
+      "sha256": "32d70c20185c3adac5a92d308d05df61b4083ee4cad43a22f23e5270c8b87a5b",
+      "size": 1036742
+    },
+    "stdout_log": {
+      "path": "outputs/jsonl/chainsaw_evtx/c8daab79-5b83-4ace-939f-846c966daae3/stdout.log",
+      "sha256": "371c95d7c432896daf9b9da4cd5ed1a4e4519081b9bda130b67348defd1bfb6a",
+      "size": 560
+    },
+    "stderr_log": {
+      "path": "outputs/jsonl/chainsaw_evtx/c8daab79-5b83-4ace-939f-846c966daae3/stderr.log",
+      "sha256": "8d5b85be5437b6e32f46ca933bc18988b3a88f30d6357780fbda21053d4c6c80",
+      "size": 1388
+    }
+  },
+  "latest": {
+    "outputs/toon/chainsaw_evtx/LATEST": true,
+    "outputs/jsonl/chainsaw_evtx/LATEST": true
+  }
+}

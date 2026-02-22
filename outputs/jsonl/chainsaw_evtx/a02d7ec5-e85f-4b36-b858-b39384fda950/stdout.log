@@ -1,0 +1,19 @@
+INFO: starting pipeline
+  RUN_ID: a02d7ec5-e85f-4b36-b858-b39384fda950
+  TS_UTC: 2026-02-12T04:02:29Z
+  EVTX_DIR: /home/nevermore/cases/intake/evtx/Logs
+  OUT_DIR: outputs/jsonl/chainsaw_evtx/a02d7ec5-e85f-4b36-b858-b39384fda950
+  CHAINSAW_VERSION: 2.13.1
+OK: document validates
+OK: wrote outputs/jsonl/chainsaw_evtx/a02d7ec5-e85f-4b36-b858-b39384fda950/triage.json
+OK: triage validated
+✔ Encoded outputs/jsonl/chainsaw_evtx/a02d7ec5-e85f-4b36-b858-b39384fda950/findings.json → outputs/toon/chainsaw_evtx/a02d7ec5-e85f-4b36-b858-b39384fda950/findings.toon
+OK: manifest validated
+OK: pipeline complete
+  RUN_ID:        a02d7ec5-e85f-4b36-b858-b39384fda950
+  chainsaw_out:  outputs/jsonl/chainsaw_evtx/a02d7ec5-e85f-4b36-b858-b39384fda950/chainsaw.evtx.jsonl
+  findings_out:  outputs/jsonl/chainsaw_evtx/a02d7ec5-e85f-4b36-b858-b39384fda950/findings.json
+  triage_out:    outputs/jsonl/chainsaw_evtx/a02d7ec5-e85f-4b36-b858-b39384fda950/triage.json
+  toon_out:      outputs/toon/chainsaw_evtx/a02d7ec5-e85f-4b36-b858-b39384fda950/findings.toon
+  request:       outputs/jsonl/chainsaw_evtx/a02d7ec5-e85f-4b36-b858-b39384fda950/request.json
+  manifest:      outputs/jsonl/chainsaw_evtx/a02d7ec5-e85f-4b36-b858-b39384fda950/manifest.json

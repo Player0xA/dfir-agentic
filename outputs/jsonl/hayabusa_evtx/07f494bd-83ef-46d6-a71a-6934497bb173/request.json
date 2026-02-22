@@ -1,0 +1,20 @@
+{
+  "timestamp_utc": "2026-02-12T04:33:58Z",
+  "pipeline": "hayabusa_evtx",
+  "run_id": "07f494bd-83ef-46d6-a71a-6934497bb173",
+  "evtx_dir": "/home/nevermore/cases/intake/evtx/Logs",
+  "hayabusa": {
+    "bin": "/home/nevermore/dfir-agentic/tools/hayabusa/bin/hayabusa",
+    "rules_dir": "/home/nevermore/dfir-agentic/tools/hayabusa/rules",
+    "config_dir": "/home/nevermore/dfir-agentic/tools/hayabusa/rules/config",
+    "profile": "verbose",
+    "iso_utc": true,
+    "no_wizard": true,
+    "clobber": true
+  },
+  "outputs": {
+    "timeline_csv": "/home/nevermore/dfir-agentic/outputs/csv/hayabusa_evtx/07f494bd-83ef-46d6-a71a-6934497bb173/timeline.csv",
+    "findings_json": "/home/nevermore/dfir-agentic/outputs/jsonl/hayabusa_evtx/07f494bd-83ef-46d6-a71a-6934497bb173/findings.json",
+    "manifest_json": "/home/nevermore/dfir-agentic/outputs/jsonl/hayabusa_evtx/07f494bd-83ef-46d6-a71a-6934497bb173/manifest.json"
+  }
+}

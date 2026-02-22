@@ -1,0 +1,49 @@
+{
+  "run_id": "9630219c-cc8b-41a2-84f5-cbc0ef072f41",
+  "timestamp_utc": "2026-02-12T05:44:40Z",
+  "pipeline": {
+    "name": "case-merge",
+    "version": "0.1.0"
+  },
+  "status": "ok",
+  "inputs": {
+    "intake_dir": "outputs/intake/0455d047-5aae-4aa0-8ecd-83494c4394ec",
+    "auto_json": {
+      "path": "outputs/intake/0455d047-5aae-4aa0-8ecd-83494c4394ec/auto.json",
+      "sha256": "7a354d1d1a20f807c4ef0288d461379be05734fd73d8fb33330a92323289e09f",
+      "size_bytes": 746
+    },
+    "baseline_manifest": {
+      "path": "outputs/jsonl/chainsaw_evtx/06fca1cd-d46f-4e96-b993-33687e3fe59d/manifest.json",
+      "sha256": "eaed1754527d5a9651cd7b7dad459938bcbf4f726d635933c3a47dac22714e09",
+      "size_bytes": 82499
+    },
+    "baseline_findings": {
+      "path": "outputs/jsonl/chainsaw_evtx/06fca1cd-d46f-4e96-b993-33687e3fe59d/findings.json",
+      "sha256": "409739982339d135a78b0f85797885c1897c1ecdf179caf8e5a44a50af2c95d3",
+      "size_bytes": 1306866
+    },
+    "enrichment_json": {
+      "path": "outputs/intake/0455d047-5aae-4aa0-8ecd-83494c4394ec/enrichment.json",
+      "sha256": "e78fa19c8175dcb94f43449ee478e39c8909311dd87f2adaa96ab105f725ac7e",
+      "size_bytes": 920
+    },
+    "enrichment_manifest": {
+      "path": "outputs/jsonl/hayabusa_evtx/31572b89-096b-4265-9570-0eba8582838c/manifest.json",
+      "sha256": "a0f47827548970bc0953f5114f398caa572c5f5516c26210be4d7ff2011ee300",
+      "size_bytes": 82707
+    },
+    "enrichment_findings": {
+      "path": "/home/nevermore/dfir-agentic/outputs/jsonl/hayabusa_evtx/31572b89-096b-4265-9570-0eba8582838c/findings.json",
+      "sha256": "c7a6f567dd5ae22adf987491282beabcef8227b9ebdaa491ff9aea8079903a1b",
+      "size_bytes": 1560066
+    }
+  },
+  "artifacts": {
+    "case_findings_json": {
+      "path": "outputs/intake/0455d047-5aae-4aa0-8ecd-83494c4394ec/case_findings.json",
+      "sha256": "0b80b6052fe7f1bc0302a9c886cc398e2ac7284ce26f38692d985e5c1394af7b",
+      "size_bytes": 3049323
+    }
+  }
+}
