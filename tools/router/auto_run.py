@@ -116,6 +116,8 @@ def main() -> int:
             "merge": "skipped"
         }
     }
+    out_path = intake_json.parent / "auto.json"
+    out_path.write_text(json.dumps(auto_doc, indent=2), encoding="utf-8")
 
     # --- Phase: Automated Super Timeline (Plaso) ---
     if dispatch_block["status"] == "ok":
