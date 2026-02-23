@@ -16,6 +16,7 @@ DISPATCH = Path("tools/router/dispatch_intake.py")
 # NEW: optional stages
 ENRICH_DECIDER = Path("tools/enrich/decide_enrichment.py")
 ENRICH_RUNNER = Path("tools/enrich/run_hayabusa_if_needed.py")
+PLASO_RUNNER = Path("pipelines/plaso_evtx/run.sh")
 MERGE_TOOL = Path("tools/merge/merge_case_findings.py")
 
 VALIDATE_AUTO = Path("tools/contracts/validate_auto.py")
@@ -117,6 +118,21 @@ def main() -> int:
 
     # 5) Validate auto.json
     run_must([str(VALIDATE_AUTO), str(AUTO_SCHEMA), str(out_path)])
+
+    # --- Phase: Automated Super Timeline (Plaso) ---
+    if dispatch_block["status"] == "ok":
+        manifest_path = Path(dispatch_block["manifest_path"])
+        if manifest_path.is_file():
+            manifest = load_json(manifest_path)
+            evtx_dir = manifest.get("inputs", {}).get("evtx_dir")
+            if evtx_dir:
+                print("INFO: starting plaso pipeline")
+                try:
+                    # Use unique run_id for plaso to avoid collisions with baseline
+                    plaso_run_id = str(uuid.uuid4())
+                    run_must([str(PLASO_RUNNER), plaso_run_id, ts, str(evtx_dir)])
+                except Exception as e:
+                    print(f"WARNING: Plaso pipeline failed: {e}", file=sys.stderr)
 
     # 6) Optional enrichment stage
     if args.enrichment_policy == "always":

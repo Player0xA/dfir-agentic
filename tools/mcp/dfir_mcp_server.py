@@ -32,6 +32,7 @@ HAYABUSA_ROOT = PROJECT_ROOT / "tools" / "hayabusa"
 HAYABUSA_BIN = HAYABUSA_ROOT / "bin" / "hayabusa"
 HAYABUSA_RULES = HAYABUSA_ROOT / "rules"
 HAYABUSA_CONFIG = HAYABUSA_RULES / "config"
+PSORT_BIN = "/home/nevermore/bin/psort"
 
 
 TOOLS = [
@@ -98,6 +99,22 @@ TOOLS = [
             "required": ["path"],
             "properties": {
                 "path": {"type": "string", "minLength": 1}
+            }
+        }
+    },
+    {
+        "name": "dfir.query_super_timeline@1",
+        "description": "Query a Plaso .plaso storage file using psort.py with a time-slice window",
+        "inputSchema": {
+            "type": "object",
+            "additionalProperties": False,
+            "required": ["plaso_file", "start_time", "end_time"],
+            "properties": {
+                "plaso_file": {"type": "string", "minLength": 1, "description": "Path to the .plaso file"},
+                "start_time": {"type": "string", "description": "ISO8601 UTC start time (e.g., 2026-02-11T23:00:00Z)"},
+                "end_time": {"type": "string", "description": "ISO8601 UTC end time"},
+                "artifact_filter": {"type": "string", "description": "Optional Plaso filter expression (e.g. 'parser is winevtx')"},
+                "output_format": {"type": "string", "enum": ["json", "csv"], "default": "json"}
             }
         }
     }
@@ -357,6 +374,64 @@ def tool_list_dir(args: Dict[str, Any], audit: Dict[str, Path]) -> Dict[str, Any
     entries = sorted([p.name for p in path.iterdir()])
     return {"path": str(path), "entries": entries}
 
+def tool_query_super_timeline(args: Dict[str, Any], audit: Dict[str, Path]) -> Dict[str, Any]:
+    plaso_path = safe_resolve(args["plaso_file"])
+    ensure_read_allowed(plaso_path)
+    if not plaso_path.is_file():
+        raise ValueError(f"plaso_file not found: {plaso_path}")
+
+    start = args["start_time"]
+    end = args["end_time"]
+    fmt = args.get("output_format", "json")
+    filt = args.get("artifact_filter")
+
+    # Construct psort command
+    # -z UTC: treat times as UTC
+    # -o json_line: for machine readability
+    # --slice: timeframe filter
+    cmd = [PSORT_BIN, "-z", "UTC"]
+    if fmt == "json":
+        cmd.extend(["-o", "json_line"])
+    else:
+        cmd.extend(["-o", "csv"])
+
+    cmd.extend(["--slice", f"{start} {end}"])
+    
+    if filt:
+        cmd.append(filt)
+
+    cmd.append(str(plaso_path))
+
+    rc, out, err = run_cmd(cmd, cwd=PROJECT_ROOT)
+    audit_write(audit, "stdout", out)
+    audit_write(audit, "stderr", err)
+
+    if rc != 0:
+        raise RuntimeError(f"psort failed (rc={rc})")
+
+    # If JSON, try to parse at least one line to verify it worked
+    lines = out.strip().splitlines()
+    if fmt == "json":
+        preview = []
+        for line in lines[:10]: # Return first 10 for safety/brevity
+            try:
+                preview.append(json.loads(line))
+            except:
+                continue
+        return {
+            "plaso_file": str(plaso_path),
+            "window": {"start": start, "end": end},
+            "count": len(lines),
+            "events": preview
+        }
+    else:
+        return {
+            "plaso_file": str(plaso_path),
+            "window": {"start": start, "end": end},
+            "count": len(lines),
+            "raw_csv_snippet": "\n".join(lines[:20]) # First 20 lines
+        }
+
 def dispatch_tool(name: str, arguments: Dict[str, Any], audit: Dict[str, Path]) -> Dict[str, Any]:
     if name == "dfir.identify_evidence@1":
         return tool_identify_evidence(arguments, audit)
@@ -368,6 +443,8 @@ def dispatch_tool(name: str, arguments: Dict[str, Any], audit: Dict[str, Path]) 
         return tool_list_dir(arguments, audit)
     if name == "dfir.hayabusa_csv_timeline@1":
         return tool_hayabusa_csv_timeline(arguments, audit)
+    if name == "dfir.query_super_timeline@1":
+        return tool_query_super_timeline(arguments, audit)
     raise KeyError(f"unknown tool: {name}")
 
 # ----------------------------
