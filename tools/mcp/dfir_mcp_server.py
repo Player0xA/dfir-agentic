@@ -388,7 +388,7 @@ def tool_query_super_timeline(args: Dict[str, Any], audit: Dict[str, Path]) -> D
     filt = args.get("artifact_filter")
 
     # Construct psort command
-    cmd = [PSORT_BIN, "-z", "UTC"]
+    cmd = [PSORT_BIN, "--output_time_zone", "UTC"]
     if fmt == "json":
         cmd.extend(["-o", "json_line"])
     else:
