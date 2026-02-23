@@ -34,7 +34,7 @@ MCP_SERVERS = {
     },
     "win": {
         "command": [
-            "tools/mcp/mcp-windows/winforensics-mcp/venv/bin/python3",
+            "tools/mcp/mcp-windows/venv/bin/python3",
             "-u",
             "tools/mcp/mcp-windows/winforensics-mcp/winforensics_mcp/server.py"
         ],
