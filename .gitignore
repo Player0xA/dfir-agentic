@@ -14,6 +14,8 @@ cases/
 
 # Logs
 *.log
+*.evtx
+
 
 # OS
 .DS_Store
