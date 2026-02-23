@@ -43,6 +43,15 @@ MCP_SERVERS = {
             "winforensics_mcp.server"
         ],
         "cwd": PROJECT_ROOT / "tools/mcp/mcp-windows/winforensics-mcp"
+    },
+    "mem": {
+        "command": [
+            str(PROJECT_ROOT / "tools/mcp/memory/mem_forensics-mcp/venv/bin/python3"),
+            "-u",
+            "-m",
+            "mem_forensics_mcp.server"
+        ],
+        "cwd": PROJECT_ROOT / "tools/mcp/memory/mem_forensics-mcp"
     }
 }
 
@@ -89,7 +98,13 @@ def _run_mcp_lines(lines: list[str], server_key: str) -> list[dict]:
 
 
 def mcp_tools_call(name: str, arguments: dict, req_id: int = 2) -> dict:
-    server_key = "dfir" if name.startswith("dfir.") else "win"
+    if name.startswith("dfir."):
+        server_key = "dfir"
+    elif name.startswith("memory_") or name.startswith("vt_"):
+        server_key = "mem"
+    else:
+        server_key = "win"
+        
     lines = [
         json.dumps({"jsonrpc": "2.0", "id": 1, "method": "initialize", "params": {}}),
         json.dumps({"jsonrpc": "2.0", "method": "notifications/initialized"}),

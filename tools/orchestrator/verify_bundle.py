@@ -28,3 +28,6 @@ if __name__ == "__main__":
     
     # 2. Test WinForensics Server (Submodule)
     test_tool("evtx_explain_event_id", {"event_id": 4624})
+
+    # 3. Test MemForensics Server (New Submodule)
+    test_tool("memory_get_status", {})
