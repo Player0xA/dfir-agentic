@@ -283,12 +283,14 @@ def main() -> int:
             f"{mode_instructions}\n"
             f"{skills_registry}\n"
             "Hard rules:\n"
-            "- Do NOT invent evidence or claim certainty without explicit fields.\n"
+            "- CRITICAL: Do NOT invent evidence or claim certainty without explicit fields from tool returns.\n"
+            "- CRITICAL: Do NOT simulate tool outputs. You must wait for the actual tool call return.\n"
             "- Use ONLY the JSON provided or results from tool calls.\n"
             "- When you successfully extract an artifact, YOU MUST use 'dfir.update_case_notes@1' to document it.\n"
             "- Every note you write via 'dfir.update_case_notes@1' MUST conclude with a 'Next Steps' summary.\n"
             "- When your investigation is fully concluded, YOU MUST output the exact token: <promise>TASK_COMPLETE</promise>\n"
             "- Output FORMAT: (1) Executive summary, (2) suspicious clusters, (3) Next deterministic pivots.\n"
+            "- To use a tool, use the native tool calling capability OR output a JSON block like: ```json {\"tool_name\": {\"arg\": \"val\"}} ```\n"
         )
 
         user_task = args.task if args.task else "Begin investigation by running dfir.auto_run@1."
@@ -314,20 +316,37 @@ def main() -> int:
             history.append(message)
             
             if content:
-                print(f"[AI]: {content[:200]}...")
+                print(f"[AI]: {content}")
                 if "<promise>TASK_COMPLETE</promise>" in content:
                     print("[*] Completion token detected.")
                     final_summary = content
                     break
 
-            tool_calls = message.get("tool_calls")
+            tool_calls = message.get("tool_calls") or []
+            
+            # Fallback: Parse markdown JSON blocks if native tool_calls is empty
+            if not tool_calls and "```json" in content:
+                try:
+                    # Look for blocks like ```json { "tool_name": { "args": ... } } ```
+                    import re
+                    blocks = re.findall(r"```json\s*(\{.*?\})\s*```", content, re.DOTALL)
+                    for block in blocks:
+                        jb = json.loads(block)
+                        for tname, targs in jb.items():
+                            if tname.startswith("dfir."):
+                                tool_calls.append({
+                                    "id": f"call_{uuid.uuid4().hex[:8]}",
+                                    "type": "function",
+                                    "function": {"name": tname, "arguments": json.dumps(targs)}
+                                })
+                except Exception:
+                    pass
+
             if not tool_calls:
-                # If no tools and no promise, we might just be talking. 
-                # We continue loop to let AI finish if it has tokens left, or break if it's just repeating.
                 continue
 
             for tool_call in tool_calls:
-                call_id = tool_call["id"]
+                call_id = tool_call.get("id", "none")
                 function = tool_call["function"]
                 name = function["name"]
                 try:
@@ -398,11 +417,21 @@ def main() -> int:
         ]
         
         for h in history:
-            if h["role"] == "tool":
-                md.append(f"- Tool Success: `{h['name']}`")
-            elif h["role"] == "assistant" and h.get("tool_calls"):
+            role = h["role"].upper()
+            content = h.get("content") or ""
+            if role == "SYSTEM": continue
+            
+            md.append(f"### [{role}]")
+            if h.get("tool_calls"):
                 for tc in h["tool_calls"]:
-                    md.append(f"- Tool Dispatch: `{tc['function']['name']}`")
+                    md.append(f"- Proposes Tool: `{tc['function']['name']}`")
+                    md.append(f"  - Args: `{tc['function']['arguments']}`")
+            if role == "TOOL":
+                md.append(f"- Tool Result Content:")
+                md.append(f"```json\n{content}\n```")
+            else:
+                md.append(content)
+            md.append("")
 
         write_text(summary_path, "\n".join(md))
         write_json(resp_path, history) # Full audit trail

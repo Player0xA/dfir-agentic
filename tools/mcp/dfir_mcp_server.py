@@ -15,11 +15,8 @@ PROJECT_ROOT = Path.cwd()
 
 DFIR_CASE_DIR = os.environ.get("DFIR_CASE_DIR")
 
-# Evidence roots are where "identify_evidence" and "auto_run" are allowed to point.
-# Keep this conservative; expand later as needed.
 ALLOWED_EVIDENCE_ROOTS = [
-    Path("/home/nevermore/cases"),
-    PROJECT_ROOT.parent / "cases", # User external evidence
+    PROJECT_ROOT.parent / "cases", # User external evidence (e.g., ../cases)
     PROJECT_ROOT / "cases",        # optional local
 ]
 
@@ -42,7 +39,7 @@ HAYABUSA_ROOT = PROJECT_ROOT / "tools" / "hayabusa"
 HAYABUSA_BIN = HAYABUSA_ROOT / "bin" / "hayabusa"
 HAYABUSA_RULES = HAYABUSA_ROOT / "rules"
 HAYABUSA_CONFIG = HAYABUSA_RULES / "config"
-PSORT_BIN = "/home/nevermore/bin/psort"
+PSORT_BIN = os.environ.get("PSORT_BIN", "psort.py")
 
 
 TOOLS = [
