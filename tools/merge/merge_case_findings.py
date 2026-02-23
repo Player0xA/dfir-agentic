@@ -165,6 +165,7 @@ def main() -> int:
         return 2
 
     auto = load_json(auto_path)
+    intake_id = load_json(intake_dir / "intake.json").get("intake_id", "unknown") if (intake_dir / "intake.json").is_file() else "unknown"
 
     # --- baseline (required) ---
     baseline_manifest_path = Path(auto["dispatch"]["manifest_path"])
@@ -307,7 +308,7 @@ def main() -> int:
             "pipeline": {"name": "case-merge", "version": "0.1.0"},
             "inputs": inputs_block,
             "case_context": {
-                "intake_id": load_json(intake_dir / "intake.json").get("intake_id") if (intake_dir / "intake.json").is_file() else None,
+                "intake_id": intake_id,
                 "baseline_pipeline": load_json(baseline_manifest_path).get("pipeline", {}),
                 "has_enrichment": have_enrichment_ok,
                 "enrichment_status": (load_json(enrichment_path).get("result", {}).get("status") if have_enrichment_file else None),
