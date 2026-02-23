@@ -7,6 +7,10 @@ set -e
 RUN_ID="${1}"
 TS_UTC="${2}"
 EVTX_DIR="${3}"
+# Expand tilde if present
+if [[ "${EVTX_DIR}" == "~"* ]]; then
+  EVTX_DIR="${EVTX_DIR/#\~/$HOME}"
+fi
 OUT_ROOT="${4:-outputs/plaso_evtx}"
 
 L2T_BIN="/home/nevermore/bin/log2timeline"
