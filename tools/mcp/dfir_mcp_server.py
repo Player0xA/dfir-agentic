@@ -548,20 +548,24 @@ def tool_query_super_timeline(args: Dict[str, Any], audit: Dict[str, Path]) -> D
     cmd = [PSORT_BIN, "-o", "json_line", "-w", str(tmp_out), "--output_time_zone", "UTC"]
 
     # Plaso filter syntax for time range
-    # Simplified Plaso filter for maximum compatibility
-    time_filter = f'date > "{start}" AND date < "{end}"'
+    # Standardize on space-delimited (YYYY-MM-DD hh:mm:ss.######) and single quotes
+    t_start = start.replace("T", " ").replace("Z", "").strip()
+    t_end = end.replace("T", " ").replace("Z", "").strip()
+    
+    time_filter = f"date > '{t_start}' AND date < '{t_end}'"
     
     # Backend Abstraction: Constructing filter programmatically
     struct_parts = []
     if search:
-        struct_parts.append(f'message contains "{search}"')
+        # Use 'contains' with single quotes for confirmed Plaso compatibility
+        struct_parts.append(f"message contains '{search}'")
     if e_ids:
         # Note: Plaso SQL-like syntax for IN
         ids_str = ",".join(str(i) for i in e_ids)
-        struct_parts.append(f'event_identifier IN ({ids_str})')
+        struct_parts.append(f"event_identifier IN ({ids_str})")
         
     if struct_parts:
-        full_filter = f'({time_filter}) AND ({" AND ".join(struct_parts)})'
+        full_filter = f"({time_filter}) AND ({' AND '.join(struct_parts)})"
     else:
         full_filter = time_filter
 
@@ -580,7 +584,7 @@ def tool_query_super_timeline(args: Dict[str, Any], audit: Dict[str, Path]) -> D
     audit_write(audit, "stderr", err)
 
     if rc != 0:
-        raise RuntimeError(f"psort failed (rc={rc}). Stderr: {err}")
+        raise RuntimeError(f"psort failed (rc={rc}). filter='{full_filter}' Stderr: {err}")
 
     lines = out_content.strip().splitlines()
     if fmt == "json":

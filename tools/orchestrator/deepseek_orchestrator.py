@@ -475,7 +475,7 @@ def main() -> int:
             "- TREAT LARGE TOOL OUTPUTS AS DATA SOURCES, NOT CONTEXT. If a file exceeds 100KB, reading it directly WILL FAIL. You MUST use 'dfir__query_findings__v1' for surgical extraction.\n"
             "- FORENSIC SOUNDNESS: You are strictly forbidden from modifying evidence paths. Use read-only tools.\n"
             "- CONVERGENCE CONTRACT: You MUST produce a machine-readable 'root_cause_analysis.json' block in your case notes before you conclude. Reaching TASK_COMPLETE without an RCA will result in rejection.\n"
-            "- CASE ENVELOPE: I have provided absolute paths to critical resources below. Use these directly to eliminate discovery turns.\n"
+            "- CASE ENVELOPE: I have provided absolute paths to critical resources below. Use these directly. DO NOT use 'load_intake' or 'list_dir' to rediscover these paths. Re-discovery turns are a violation of efficiency protocol.\n"
             "- PLASO ABSTRACTION: Use 'dfir__query_super_timeline__v1' with structured JSON. Do NOT attempt to write raw Plaso filter strings.\n"
         )
 
@@ -655,7 +655,7 @@ def main() -> int:
                     }
                     if "error" in r:
                         h_entry["content"] = r["error"]
-                        print(f"  [-] {r['name']} failed.")
+                        print(f"  [-] {r['name']} failed: {r['error']}")
                     else:
                         h_entry["content"] = json.dumps(r["result"])
                         print(f"  [+] {r['name']} success.")

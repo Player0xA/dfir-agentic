@@ -57,10 +57,10 @@ class TestPhase8Upgrades(unittest.TestCase):
             
             cmd = mock_run.call_args[0][0]
             # Check the constructed filter string
-            filter_str = cmd[-1]
-            self.assertIn('message contains "evil.exe"', filter_str)
-            self.assertIn('event_identifier IN (4624,1102)', filter_str)
-            self.assertIn('date > "2026-01-01T00:00:00Z"', filter_str)
+            filter_str = mock_run.call_args[0][0][-1]
+            self.assertIn("message contains 'evil.exe'", filter_str)
+            self.assertIn("event_identifier IN (4624,1102)", filter_str)
+            self.assertIn("date > '2026-01-01 00:00:00'", filter_str)
 
 if __name__ == "__main__":
     unittest.main()
