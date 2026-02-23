@@ -326,6 +326,14 @@ def main() -> int:
             {"role": "system", "content": system_prompt},
             {"role": "user", "content": f"Intake ID: {intake_id}\nIntake Path: {args.intake_json}\nTask: {user_task}\n\n[CONTEXT] Auto-Detected Intake Payload:\n```json\n{intake_context}\n```"}
         ]
+        
+        # Verification Log: Write the initial request setup
+        write_json(req_path, {
+            "timestamp": ts,
+            "system_prompt": system_prompt,
+            "user_prompt": history[1]["content"],
+            "mcp_tools_exposed": mcp_tools
+        })
 
         MAX_ITERATIONS = 10
         iteration = 0
