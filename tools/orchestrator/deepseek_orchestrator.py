@@ -475,7 +475,7 @@ def main() -> int:
             "- TREAT LARGE TOOL OUTPUTS AS DATA SOURCES, NOT CONTEXT. If a file exceeds 100KB, reading it directly WILL FAIL. You MUST use 'dfir__query_findings__v1' for surgical extraction.\n"
             "- FORENSIC SOUNDNESS: You are strictly forbidden from modifying evidence paths. Use read-only tools.\n"
             "- CONVERGENCE CONTRACT: You MUST produce a machine-readable 'root_cause_analysis.json' block in your case notes before you conclude. Reaching TASK_COMPLETE without an RCA will result in rejection.\n"
-            "- CASE ENVELOPE: I have provided absolute paths to critical resources below. Use these directly. DO NOT use 'load_intake' or 'list_dir' to rediscover these paths. Re-discovery turns are a violation of efficiency protocol.\n"
+            "- CASE ENVELOPE: I have provided absolute paths to critical resources below. Use these directly. [BILLING/EFFICIENCY ALERT]: DO NOT use 'load_intake' or 'list_dir' to rediscover these paths. Re-discovery turns are a violation of efficiency protocol and will be blocked.\n"
             "- PLASO ABSTRACTION: Use 'dfir__query_super_timeline__v1' with structured JSON. Do NOT attempt to write raw Plaso filter strings.\n"
         )
 
@@ -615,6 +615,10 @@ def main() -> int:
                     t_args = json.loads(func["arguments"])
                 except:
                     t_args = {}
+
+                # Phase 11: Absolute Forensic Control - Redundancy Gate
+                if t_name in ["dfir.load_intake@1", "dfir.list_dir@1"] and found_paths:
+                    return {"id": c_id, "name": t_name, "error": "[Redundancy Guardrail]: Violation of efficiency protocol. The intake data and critical paths are ALREADY in your grounding context (Case Envelope). DO NOT rediscover. Proceed immediately with analysis."}
 
                 # Validation
                 v_err = validate_arguments(t_name, t_args, mcp_tools)

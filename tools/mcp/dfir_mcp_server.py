@@ -560,10 +560,10 @@ def tool_query_super_timeline(args: Dict[str, Any], audit: Dict[str, Path]) -> D
         # Use 'contains' with single quotes for confirmed Plaso compatibility
         struct_parts.append(f"message contains '{search}'")
     if e_ids:
-        # Note: Plaso SQL-like syntax for IN
-        ids_str = ",".join(str(i) for i in e_ids)
-        struct_parts.append(f"event_identifier IN ({ids_str})")
-        
+        # Note: Older Plaso SQL-like syntax rejects IN. Expand to OR chain.
+        ids_parts = [f"event_identifier == {i}" for i in e_ids]
+        struct_parts.append(f"({' OR '.join(ids_parts)})")
+    
     if struct_parts:
         full_filter = f"({time_filter}) AND ({' AND '.join(struct_parts)})"
     else:
