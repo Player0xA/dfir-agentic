@@ -13,7 +13,7 @@ if [[ "${EVTX_DIR}" == "~"* ]]; then
 fi
 OUT_ROOT="${4:-outputs/plaso_evtx}"
 
-L2T_BIN="/home/nevermore/bin/log2timeline"
+L2T_BIN="${L2T_BIN:-log2timeline.py}"
 PLASO_DIR="${OUT_ROOT}/${RUN_ID}"
 PLASO_FILE="${PLASO_DIR}/case.plaso"
 REQUEST_JSON="${PLASO_DIR}/request.json"
