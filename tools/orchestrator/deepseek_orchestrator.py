@@ -24,6 +24,7 @@ import re
 import subprocess
 import sys
 import uuid
+import logging
 from pathlib import Path
 from typing import Any, Dict, Optional
 from urllib.request import Request, urlopen
@@ -56,9 +57,71 @@ MCP_SERVERS = {
     }
 }
 
+AUTO_APPROVE_TOOLS = [
+    "dfir.read_json@1",
+    "dfir.read_text@1",
+    "dfir.query_findings@1",
+    "dfir.list_dir@1",
+    "dfir.load_skill@1",
+    "dfir.query_super_timeline@1"
+]
+
+def validate_arguments(name: str, arguments: dict, mcp_tools: list[dict]) -> Optional[str]:
+    """
+    Validates arguments against the tool's inputSchema using jsonschema if available.
+    Returns None if valid, or an error string if invalid.
+    """
+    tool_def = next((t for t in mcp_tools if t["name"] == name), None)
+    if not tool_def:
+        return f"Tool '{name}' not found in registry."
+    
+    schema = tool_def.get("inputSchema")
+    if not schema:
+        return None # No schema to validate against
+        
+    try:
+        import jsonschema
+        jsonschema.validate(instance=arguments, schema=schema)
+        return None
+    except ImportError:
+        # Fallback: very basic check for required fields if jsonschema is missing
+        required = schema.get("required", [])
+        missing = [r for r in required if r not in arguments]
+        if missing:
+            return f"Missing required arguments: {', '.join(missing)}"
+        return None
+    except Exception as e:
+        return f"Validation error for {name}: {str(e)}"
+
+def compact_history(history: list[dict]):
+    """
+    Finds if the assistant just called 'update_case_notes'.
+    If so, it prunes previous large tool outputs that have already been 'synthesized'.
+    """
+    last_assistant = next((m for m in reversed(history) if m["role"] == "assistant"), None)
+    if not last_assistant:
+        return
+
+    calls = last_assistant.get("tool_calls", [])
+    has_notes = any(desanitize_tool_name(c["function"]["name"]) == "dfir.update_case_notes@1" for c in calls)
+    
+    if has_notes:
+        # Prune all previous TOOL messages that are > 1024 bytes
+        # We start from the beginning up to the message before last_assistant
+        idx_last_assistant = 0
+        for i, m in enumerate(history):
+            if m is last_assistant:
+                idx_last_assistant = i
+                break
+        
+        for i in range(idx_last_assistant):
+            m = history[i]
+            if m["role"] == "tool" and len(m.get("content", "")) > 1024:
+                m["content"] = f"[COMPACTED: Content summarized in case notes. Use surgical query tools if you need to re-read specific fields.]"
+
 
 def _now_utc_iso() -> str:
-    return dt.datetime.utcnow().replace(microsecond=0).isoformat() + "Z"
+    return dt.datetime.now(dt.timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z")
 
 
 def _run_mcp_lines(lines: list[str], server_key: str) -> list[dict]:
@@ -355,6 +418,10 @@ def main() -> int:
             "- Always start by reviewing 'case_summary.md' using 'dfir__read_text__v1'. It contains the 'Map' of the case.\n"
             "- Use 'finding_id' from the summary to surgically query for full evidence with 'dfir__query_findings__v1'.\n"
             "- If primary detections are sparse or you need to find root cause, you MUST pivot to the Super Timeline using 'dfir__query_super_timeline__v1'.\n"
+            "\n--- PRODUCTION HARDENING (V5) ---\n"
+            "- CONVERGENCE CONTRACT: You MUST produce a 'root_cause_analysis.json' file using 'dfir__update_case_notes__v1' before you conclude with TASK_COMPLETE.\n"
+            "- PROGRESSIVE SKILLS: Detailed manuals for complex filters are moved to Skills. Use 'dfir__load_skill__v1' to read them if needed.\n"
+            "- CONTEXT COMPACTION: Your raw tool outputs will be programmatically pruned once you synthesize them into case notes. Your 'Case Notes' are your permanent memory.\n"
         )
 
         user_task = args.task if args.task else "Begin investigation by running dfir.auto_run@1."
@@ -474,35 +541,49 @@ def main() -> int:
                     arguments = {}
                     print(f"  [-] Failed to parse arguments for {name}: {e}")
 
-                print(f"[*] Executing Tool: {name}...")
-                
+                # Local Validation Gate
+                val_error = validate_arguments(name, arguments, mcp_tools)
+                if val_error:
+                    error_msg = f"[Local Validation Error]: {val_error}. Please correct the parameters and try again."
+                    print(f"  [-] Validation Failed: {val_error}")
+                    history.append({
+                        "role": "tool",
+                        "tool_call_id": call_id,
+                        "name": name,
+                        "content": error_msg
+                    })
+                    continue
+
                 # Structured Mode Interceptor
                 if args.mode == "structured":
-                    print(f"\n[AI PROPOSES TOOL]: {name}")
-                    print(f"[ARGUMENTS]: {json.dumps(arguments, indent=2)}")
-                    choice = input("Approve execution? [y/N/modify]: ").strip().lower()
-                    
-                    if choice == 'y':
-                        pass # Proceed to execution
-                    elif choice == 'modify':
-                        feedback = input("Provide your correction: ")
-                        error_msg = f"[Human Intercept]: Denied. Suggestion: {feedback}"
-                        history.append({
-                            "role": "tool",
-                            "tool_call_id": call_id,
-                            "name": name,
-                            "content": error_msg
-                        })
-                        continue
+                    if name in AUTO_APPROVE_TOOLS:
+                        print(f"[*] Safe-Pass: Auto-approving {name}")
                     else:
-                        print("  [-] Execution denied by human.")
-                        history.append({
-                            "role": "tool",
-                            "tool_call_id": call_id,
-                            "name": name,
-                            "content": "[Human Intercept]: Execution denied by lead investigator."
-                        })
-                        continue
+                        print(f"\n[AI PROPOSES TOOL]: {name}")
+                        print(f"[ARGUMENTS]: {json.dumps(arguments, indent=2)}")
+                        choice = input("Approve execution? [y/N/modify]: ").strip().lower()
+                        
+                        if choice == 'y':
+                            pass # Proceed to execution
+                        elif choice == 'modify':
+                            feedback = input("Provide your correction: ")
+                            error_msg = f"[Human Intercept]: Denied. Suggestion: {feedback}"
+                            history.append({
+                                "role": "tool",
+                                "tool_call_id": call_id,
+                                "name": name,
+                                "content": error_msg
+                            })
+                            continue
+                        else:
+                            print("  [-] Execution denied by human.")
+                            history.append({
+                                "role": "tool",
+                                "tool_call_id": call_id,
+                                "name": name,
+                                "content": "[Human Intercept]: Execution denied by lead investigator."
+                            })
+                            continue
 
                 try:
                     result = mcp_tools_call(name, arguments)
@@ -513,6 +594,8 @@ def main() -> int:
                         "content": json.dumps(result)
                     })
                     print(f"  [+] Success.")
+                    # V5 Hardening: Active Compaction
+                    compact_history(history)
                 except Exception as e:
                     error_msg = f"[System Feedback]: Tool execution failed with error: {str(e)}. Review your loaded Skills, correct the syntax, and try again."
                     print(f"  [-] Failure: {str(e)}")

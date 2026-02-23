@@ -30,7 +30,7 @@ class TestDualModeOrchestrator(unittest.TestCase):
                     "message": {
                         "role": "assistant",
                         "content": "Proposing auto_run.",
-                        "tool_calls": [{"id": "c1", "function": {"name": "dfir__auto_run__v1", "arguments": "{}"}}]
+                        "tool_calls": [{"id": "c1", "function": {"name": "dfir__auto_run__v1", "arguments": "{\"intake_json\": \"outputs/intake/test.json\"}"}}]
                     }
                 }]
             },
@@ -50,7 +50,7 @@ class TestDualModeOrchestrator(unittest.TestCase):
             res = orch.main()
             self.assertEqual(res, 0)
         
-        mock_mcp.assert_called_with("dfir.auto_run@1", {})
+        mock_mcp.assert_called_with("dfir.auto_run@1", {"intake_json": "outputs/intake/test.json"})
         print("[SUCCESS] Structured Mode: Human Approval verified.")
 
     @patch('tools.orchestrator.deepseek_orchestrator.deepseek_chat')
@@ -107,7 +107,7 @@ class TestDualModeOrchestrator(unittest.TestCase):
                     "message": {
                         "role": "assistant",
                         "content": "Running auto_run autonomously.",
-                        "tool_calls": [{"id": "c1", "function": {"name": "dfir__auto_run__v1", "arguments": "{}"}}]
+                        "tool_calls": [{"id": "c1", "function": {"name": "dfir__auto_run__v1", "arguments": "{\"intake_json\": \"outputs/intake/test.json\"}"}}]
                     }
                 }]
             },
