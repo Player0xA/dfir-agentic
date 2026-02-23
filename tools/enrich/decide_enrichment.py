@@ -5,6 +5,8 @@ import sys
 import uuid
 from datetime import datetime, timezone
 from pathlib import Path
+sys.path.append(str(Path(__file__).parent))
+import policy_engine
 
 ENRICHMENT_ID = "hayabusa_evtx"
 PIPELINE_SCRIPT = "pipelines/hayabusa_evtx/run.sh"
@@ -83,11 +85,12 @@ def main() -> int:
         count = 0
         source = "default:0"
 
-    tier = "quick"
-    if count >= int(args.threshold_detections):
-        tier = "deep"
-    should_run = True
-    reason = f"baseline count={count} threshold={args.threshold_detections} tier={tier}"
+    # Delegate to the Structured Policy Engine
+    decision = policy_engine.evaluate(triage, threshold_detections=args.threshold_detections)
+    
+    tier = decision["tier"]
+    should_run = decision["should_run"]
+    reason = decision["reason"]
 
     plan = {
         "plan_id": str(uuid.uuid4()),
