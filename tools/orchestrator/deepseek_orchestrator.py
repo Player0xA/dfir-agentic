@@ -339,6 +339,9 @@ def main() -> int:
                                     "type": "function",
                                     "function": {"name": tname, "arguments": json.dumps(targs)}
                                 })
+                    
+                    if tool_calls:
+                        message["tool_calls"] = tool_calls
                 except Exception:
                     pass
 
