@@ -155,7 +155,7 @@ TOOLS = [
     },
     {
         "name": "dfir.query_super_timeline@1",
-        "description": "Query a Plaso .plaso storage file using psort.py with a time-slice window",
+        "description": "Query a Plaso .plaso storage file with a structured filter (Time + Search Term + Event IDs).",
         "inputSchema": {
             "type": "object",
             "additionalProperties": False,
@@ -164,7 +164,8 @@ TOOLS = [
                 "plaso_file": {"type": "string", "minLength": 1, "description": "Path to the .plaso file"},
                 "start_time": {"type": "string", "description": "ISO8601 UTC start time (e.g., 2026-02-11T23:00:00Z)"},
                 "end_time": {"type": "string", "description": "ISO8601 UTC end time"},
-                "artifact_filter": {"type": "string", "description": "Optional Plaso filter expression (e.g. 'parser is winevtx')"},
+                "search_term": {"type": "string", "description": "Keyword to search in message field (e.g. 'mimikatz', 'pypykatz')"},
+                "event_ids": {"type": "array", "items": {"type": "integer"}, "description": "List of Event IDs (e.g. [4624, 1102])"},
                 "output_format": {"type": "string", "enum": ["json", "csv"], "default": "json"}
             }
         }
@@ -531,7 +532,9 @@ def tool_query_super_timeline(args: Dict[str, Any], audit: Dict[str, Path]) -> D
     start = args["start_time"]
     end = args["end_time"]
     fmt = args.get("output_format", "json")
-    filt = args.get("artifact_filter")
+    
+    search = args.get("search_term")
+    e_ids = args.get("event_ids")
 
     # psort -o json_line requires -w (output file)
     run_id = str(uuid.uuid4())
@@ -545,14 +548,20 @@ def tool_query_super_timeline(args: Dict[str, Any], audit: Dict[str, Path]) -> D
     cmd = [PSORT_BIN, "-o", "json_line", "-w", str(tmp_out), "--output_time_zone", "UTC"]
 
     # Plaso filter syntax for time range
-    # Use ISO8601 with offset as per help example
-    t_start = start.replace("Z", "+00:00")
-    t_end = end.replace("Z", "+00:00")
-    
     # Simplified Plaso filter for maximum compatibility
     time_filter = f'date > "{start}" AND date < "{end}"'
-    if filt:
-        full_filter = f'({time_filter}) AND ({filt})'
+    
+    # Backend Abstraction: Constructing filter programmatically
+    struct_parts = []
+    if search:
+        struct_parts.append(f'message contains "{search}"')
+    if e_ids:
+        # Note: Plaso SQL-like syntax for IN
+        ids_str = ",".join(str(i) for i in e_ids)
+        struct_parts.append(f'event_identifier IN ({ids_str})')
+        
+    if struct_parts:
+        full_filter = f'({time_filter}) AND ({" AND ".join(struct_parts)})'
     else:
         full_filter = time_filter
 

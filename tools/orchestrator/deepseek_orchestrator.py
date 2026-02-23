@@ -379,11 +379,12 @@ def main() -> int:
         from tools.mcp.dfir_mcp_server import tool_list_dir, tool_read_text, tool_query_findings
         res = tool_list_dir({"path": intake_dir}, {})
         if "entries" in res:
-            dir_listing = [e["name"] for e in res["entries"]]
+            # Fix: Handle both list of dicts or list of strings
+            dir_listing = [e["name"] if isinstance(e, dict) else e for e in res["entries"]]
             
         # Prioritize major artifacts
-        for entry in res.get("entries", []):
-            ename = entry["name"]
+        for e in res.get("entries", []):
+            ename = e["name"] if isinstance(e, dict) else e
             epath = os.path.join(intake_dir, ename)
             if ename == "case_summary.md":
                 found_paths["Summary"] = epath
@@ -403,6 +404,23 @@ def main() -> int:
                 found_paths["Timeline (Plaso)"] = epath
             elif ename == "auto.json":
                 found_paths["Auto Enrichment"] = epath
+        
+        # V8: Executable Forensic Memory (CLAUDE.md)
+        claude_md_path = os.path.join(intake_dir, "CLAUDE.md")
+        claude_content = (
+            "# Forensic Project Memory (SIFT Workstation)\n\n"
+            "## Guardrails & Constraints\n"
+            "- **100KB Limit**: Treat outputs > 100KB as data sources, not context. Use surgical query tools.\n"
+            "- **Forensic Soundness**: Use read-only tools. Never modify original evidence paths.\n"
+            "- **Convergence Contract**: You MUST produce `root_cause_analysis.json` before exiting.\n\n"
+            "## Case Envelope (Absolute Paths)\n"
+        )
+        for label, path in found_paths.items():
+            claude_content += f"- {label}: `{path}`\n"
+        
+        with open(claude_md_path, "w") as f:
+            f.write(claude_content)
+        found_paths["Project Memory"] = claude_md_path
 
     except Exception as e:
         print(f"DEBUG: Resource discovery failed: {e}")
@@ -453,18 +471,12 @@ def main() -> int:
             "- When your investigation is fully concluded, YOU MUST output the exact token: <promise>TASK_COMPLETE</promise>\n"
             "- Output FORMAT: (1) Executive summary, (2) suspicious clusters, (3) Next deterministic pivots.\n"
             "- To use a tool, use the native tool calling capability OR output a JSON block like: ```json {\"dfir__tool_name__v1\": {\"arg\": \"val\"}} ```\n\n"
-            "--- PROGRESSIVE DISCLOSURE PROTOCOL ---\n"
-            "- TREAT LARGE TOOL OUTPUTS AS DATA SOURCES, NOT CONTEXT. Scaling requires surgical precision.\n"
-            "- If a file exceeds 100KB, reading it directly WILL FAIL (Ralph Wiggum Guardrail). You MUST use 'dfir__query_findings__v1' for surgical extraction.\n"
-            "- FORMAT ENFORCEMENT: 'dfir__read_json__v1' is strictly for valid JSON. For Markdown (.md), text (.txt), or Logs (.log), you MUST use 'dfir__read_text__v1'.\n"
-            "- Always start by reviewing 'case_summary.md' using 'dfir__read_text__v1'. It contains the 'Map' of the case.\n"
-            "- Use 'finding_id' from the summary to surgically query for full evidence with 'dfir__query_findings__v1'.\n"
-            "- If primary detections are sparse or you need to find root cause, you MUST pivot to the Super Timeline using 'dfir__query_super_timeline__v1'.\n"
-            "\n--- ADVANCED AGENTIC LOGIC (V6) ---\n"
-            "- CASE ENVELOPE: I have provided absolute paths to critical resources (Findings, Timeline) below. Use them directly to avoid 'ls' turns.\n"
-            "- TODO PLANNER: You MUST maintain a 'checklist' in your notes. Update it before shifting tactics.\n"
-            "- TURN EFFICIENCY: Call multiple tools in a single response if they are related (e.g., querying 3 different finding IDs).\n"
+            "--- FORENSIC PROJECT MEMORY & GUARDRAILS (V8) ---\n"
+            "- TREAT LARGE TOOL OUTPUTS AS DATA SOURCES, NOT CONTEXT. If a file exceeds 100KB, reading it directly WILL FAIL. You MUST use 'dfir__query_findings__v1' for surgical extraction.\n"
+            "- FORENSIC SOUNDNESS: You are strictly forbidden from modifying evidence paths. Use read-only tools.\n"
             "- CONVERGENCE CONTRACT: You MUST produce a machine-readable 'root_cause_analysis.json' block in your case notes before you conclude. Reaching TASK_COMPLETE without an RCA will result in rejection.\n"
+            "- CASE ENVELOPE: I have provided absolute paths to critical resources below. Use these directly to eliminate discovery turns.\n"
+            "- PLASO ABSTRACTION: Use 'dfir__query_super_timeline__v1' with structured JSON. Do NOT attempt to write raw Plaso filter strings.\n"
         )
 
         user_task = args.task if args.task else "Begin investigation by running dfir.auto_run@1."
@@ -607,7 +619,6 @@ def main() -> int:
                 # Validation
                 v_err = validate_arguments(t_name, t_args, mcp_tools)
                 if v_err:
-                    print(f"DEBUG VAL ERROR FOR {t_name}: {v_err}")
                     return {"id": c_id, "name": t_name, "error": f"[Local Validation Error]: {v_err}"}
 
                 # Interceptor (if structured)
