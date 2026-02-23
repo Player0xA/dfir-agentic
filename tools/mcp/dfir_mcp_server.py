@@ -491,12 +491,12 @@ def tool_query_findings(args: Dict[str, Any], audit: Dict[str, Path]) -> Dict[st
             continue
         
         # Filter by Severity
-        if severity and (f.get("finding") or {}).get("severity", "").lower() != severity.lower():
+        if severity and f.get("severity", "").lower() != severity.lower():
             continue
             
         # Filter by Tactic
         if tactic:
-            tags = (f.get("finding") or {}).get("mitre_tags") or []
+            tags = f.get("tactic_tags") or f.get("mitre_tags") or []
             if not any(tactic.lower() in t.lower() for t in tags):
                 continue
                 
@@ -535,12 +535,12 @@ def tool_query_findings(args: Dict[str, Any], audit: Dict[str, Path]) -> Dict[st
             continue
         
         # Filter by Severity
-        if severity and (f.get("finding") or {}).get("severity", "").lower() != severity.lower():
+        if severity and f.get("severity", "").lower() != severity.lower():
             continue
             
         # Filter by Tactic
         if tactic:
-            tags = (f.get("finding") or {}).get("mitre_tags") or []
+            tags = f.get("tactic_tags") or f.get("mitre_tags") or []
             if not any(tactic.lower() in t.lower() for t in tags):
                 continue
                 

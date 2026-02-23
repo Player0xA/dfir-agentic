@@ -41,7 +41,8 @@ cat <<EOF > "${REQUEST_JSON}"
 EOF
 
 # 2. Run log2timeline
-"${L2T_BIN}" --storage-file "${PLASO_FILE}" "${EVTX_DIR}"
+LOG_FILE="${PLASO_DIR}/plaso.log"
+"${L2T_BIN}" --logfile "${LOG_FILE}" --storage-file "${PLASO_FILE}" "${EVTX_DIR}"
 
 # 3. Generate Manifest
 python3 - <<PY > "${MANIFEST_JSON}"

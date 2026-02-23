@@ -326,7 +326,7 @@ def main() -> int:
     findings_by_severity: Dict[str, List[Dict[str, Any]]] = {s: [] for s in severity_order}
     
     for f in merged:
-        sev = (f.get("finding") or {}).get("severity", "informational").lower()
+        sev = f.get("severity", "informational").lower()
         if sev not in counts:
             sev = "informational"
         counts[sev] += 1
@@ -343,7 +343,24 @@ def main() -> int:
     for s in severity_order:
         if counts[s] > 0:
             md_lines.append(f"- **{s.upper()}**: {counts[s]}")
-    
+            
+    if counts.get("critical", 0) == 0 and counts.get("high", 0) == 0:
+        md_lines.extend([
+            "",
+            "> [!NOTE]",
+            "> **GROUND TRUTH**: There are NO Critical or High severity findings in this dataset. Do not waste iterations searching for them."
+        ])
+
+    plaso_path = intake_dir.parent.parent / "plaso_evtx" / f"{intake_id}-plaso" / "case.plaso"
+    if plaso_path.is_file():
+        md_lines.extend([
+            "",
+            "## Super Timeline Available",
+            "A Plaso Super Timeline was automatically generated for this case.",
+            f"Path: `{plaso_path.resolve()}`",
+            "If alerts are sparse or you need to find the root cause, pivot to `dfir.query_super_timeline@1` with this path."
+        ])
+
     md_lines.extend([
         "",
         "## Top 15 High-Severity Findings (The Map)",
@@ -361,7 +378,7 @@ def main() -> int:
     top_list = top_list[:15]
 
     for f in top_list:
-        sev = (f.get("finding") or {}).get("severity", "informational").upper()
+        sev = f.get("severity", "informational").upper()
         tool = (f.get("source") or {}).get("tool", "unknown")
         rule = (f.get("source") or {}).get("rule_id", "unknown")
         fid = f.get("finding_id", "unknown")

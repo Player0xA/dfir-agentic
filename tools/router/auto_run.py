@@ -129,8 +129,8 @@ def main() -> int:
                 print("INFO: starting plaso pipeline")
                 auto_doc["stages"]["plaso"] = "running"
                 try:
-                    # Use unique run_id for plaso to avoid collisions with baseline
-                    plaso_run_id = str(uuid.uuid4())
+                    # Use deterministic run_id for plaso so the Map can find it
+                    plaso_run_id = f"{intake_id}-plaso"
                     run_must([str(PLASO_RUNNER), plaso_run_id, ts, str(evtx_dir)])
                     auto_doc["stages"]["plaso"] = "ok"
                 except Exception as e:

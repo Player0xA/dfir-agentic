@@ -135,12 +135,12 @@ class TestDualModeOrchestrator(unittest.TestCase):
         # Scenario: Verify the MCP tool logic for query_findings (internal test)
         from tools.mcp.dfir_mcp_server import tool_query_findings
         
-        # Create a mock findings file
+        # Create a mock findings file (Unified Schema Format)
         findings_doc = {
             "findings": [
-                {"finding_id": "f1", "finding": {"severity": "critical", "mitre_tags": ["T1547"]}},
-                {"finding_id": "f2", "finding": {"severity": "high", "mitre_tags": ["T1059"]}},
-                {"finding_id": "f3", "finding": {"severity": "critical", "mitre_tags": ["T1003"]}}
+                {"finding_id": "f1", "severity": "critical", "tactic_tags": ["T1547"]},
+                {"finding_id": "f2", "severity": "high", "tactic_tags": ["T1059"]},
+                {"finding_id": "f3", "severity": "critical", "tactic_tags": ["T1003"]}
             ]
         }
         f_path = "/tmp/test_findings.json"

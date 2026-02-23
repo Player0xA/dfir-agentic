@@ -354,6 +354,7 @@ def main() -> int:
             "- FORMAT ENFORCEMENT: 'dfir__read_json__v1' is strictly for valid JSON. For Markdown (.md), text (.txt), or Logs (.log), you MUST use 'dfir__read_text__v1'.\n"
             "- Always start by reviewing 'case_summary.md' using 'dfir__read_text__v1'. It contains the 'Map' of the case.\n"
             "- Use 'finding_id' from the summary to surgically query for full evidence with 'dfir__query_findings__v1'.\n"
+            "- If primary detections are sparse or you need to find root cause, you MUST pivot to the Super Timeline using 'dfir__query_super_timeline__v1'.\n"
         )
 
         user_task = args.task if args.task else "Begin investigation by running dfir.auto_run@1."
