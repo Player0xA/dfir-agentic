@@ -69,7 +69,6 @@ def _run_mcp_lines(lines: list[str], server_key: str) -> list[dict]:
         check=False,
     )
     out = p.stdout.decode("utf-8", errors="replace").strip().splitlines()
-    # stderr is intentionally not treated as failure: tools may log to stderr.
     objs = []
     for line in out:
         line = line.strip()
@@ -78,8 +77,13 @@ def _run_mcp_lines(lines: list[str], server_key: str) -> list[dict]:
         try:
             objs.append(json.loads(line))
         except json.JSONDecodeError:
-            # If MCP ever prints non-JSON, treat as hard failure.
-            raise RuntimeError(f"MCP emitted non-JSON line: {line[:200]}")
+            err = p.stderr.decode("utf-8", errors="replace")
+            raise RuntimeError(f"MCP emitted non-JSON line: {line[:200]}\nSTDERR: {err}")
+    
+    if not objs:
+        err = p.stderr.decode("utf-8", errors="replace")
+        raise RuntimeError(f"MCP server '{server_key}' returned no response.\nSTDERR: {err}")
+            
     return objs
 
 
@@ -87,6 +91,7 @@ def mcp_tools_call(name: str, arguments: dict, req_id: int = 2) -> dict:
     server_key = "dfir" if name.startswith("dfir.") else "win"
     lines = [
         json.dumps({"jsonrpc": "2.0", "id": 1, "method": "initialize", "params": {}}),
+        json.dumps({"jsonrpc": "2.0", "method": "notifications/initialized"}),
         json.dumps({"jsonrpc": "2.0", "id": req_id, "method": "tools/call", "params": {"name": name, "arguments": arguments}}),
     ]
     objs = _run_mcp_lines(lines, server_key)
