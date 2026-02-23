@@ -459,24 +459,23 @@ def main() -> int:
             )
 
         system_prompt = (
-            "You are a DFIR triage assistant. You produce NON-AUTHORITATIVE commentary.\n"
+            "You are a HIGH-VELOCITY DFIR triage assistant. You produce NON-AUTHORITATIVE commentary.\n"
             f"{mode_instructions}\n"
             f"{skills_registry}\n"
-            "Hard rules:\n"
+            "--- THE FORENSIC HUNTER PROTOCOL (V12) ---\n"
+            "1. MANDATED TOOL CHAINING: NEVER use an iteration solely for note-taking. You must ALWAYS batch your 'dfir__update_case_notes__v1' call alongside your NEXT active investigative query (e.g., query_super_timeline) in the exact same response.\n"
+            "2. PIVOT EXTRACTION: Every query you run MUST result in extracted pivots (PIDs, Users, IPs). You must explicitly use these pivots to justify your next surgical query. Vague 'broader searches' are prohibited.\n"
+            "3. EXTERNALIZED PLANNER: In your first note update, you MUST generate a concrete `[ ] Checklist` of pivots to investigate based on the Case Summary. You will systematically execute this list.\n"
+            "4. 10-STEP DOOM CLOCK: You only have 10 iterations to find the root cause. Turn efficiency is a primary scoring metric. DO NOT waste turns.\n"
+            "\nHard rules:\n"
             "- CRITICAL: Do NOT invent evidence or claim certainty without explicit fields from tool returns.\n"
             "- CRITICAL: Do NOT simulate tool outputs. You must wait for the actual tool call return.\n"
-            "- Use ONLY the JSON provided or results from tool calls.\n"
-            "- When you successfully extract an artifact, YOU MUST use 'dfir__update_case_notes__v1' to document it.\n"
-            "- Every note you write via 'dfir__update_case_notes__v1' MUST conclude with a 'Next Steps' summary.\n"
-            "- When your investigation is fully concluded, YOU MUST output the exact token: <promise>TASK_COMPLETE</promise>\n"
-            "- Output FORMAT: (1) Executive summary, (2) suspicious clusters, (3) Next deterministic pivots.\n"
-            "- To use a tool, use the native tool calling capability OR output a JSON block like: ```json {\"dfir__tool_name__v1\": {\"arg\": \"val\"}} ```\n\n"
-            "--- FORENSIC PROJECT MEMORY & GUARDRAILS (V8) ---\n"
-            "- TREAT LARGE TOOL OUTPUTS AS DATA SOURCES, NOT CONTEXT. If a file exceeds 100KB, reading it directly WILL FAIL. You MUST use 'dfir__query_findings__v1' for surgical extraction.\n"
             "- FORENSIC SOUNDNESS: You are strictly forbidden from modifying evidence paths. Use read-only tools.\n"
             "- CONVERGENCE CONTRACT: You MUST produce a machine-readable 'root_cause_analysis.json' block in your case notes before you conclude. Reaching TASK_COMPLETE without an RCA will result in rejection.\n"
             "- CASE ENVELOPE: I have provided absolute paths to critical resources below. Use these directly. [BILLING/EFFICIENCY ALERT]: DO NOT use 'load_intake' or 'list_dir' to rediscover these paths. Re-discovery turns are a violation of efficiency protocol and will be blocked.\n"
             "- PLASO ABSTRACTION: Use 'dfir__query_super_timeline__v1' with structured JSON. Do NOT attempt to write raw Plaso filter strings.\n"
+            "- When your investigation is fully concluded, YOU MUST output the exact token: <promise>TASK_COMPLETE</promise>\n"
+            "- To use a tool, use the native tool calling capability OR output a JSON block like: ```json {\"dfir__tool_name__v1\": {\"arg\": \"val\"}} ```\n"
         )
 
         user_task = args.task if args.task else "Begin investigation by running dfir.auto_run@1."
@@ -522,6 +521,13 @@ def main() -> int:
             iteration += 1
             print(f"[*] Iteration {iteration}/{MAX_ITERATIONS}...")
             
+            # Phase 12: 9th Inning Warning
+            if iteration in [8, 9]:
+                history.append({
+                    "role": "system",
+                    "content": f"[System WARNING]: You only have {MAX_ITERATIONS - iteration + 1} iterations remaining. Stop exploring immediately. Synthesize your current pivots, write your conclusions to 'root_cause_analysis.json', and output the <promise>TASK_COMPLETE</promise> token."
+                })
+            
             # 5) Call DeepSeek with Discoverable Tools
             ds_response = deepseek_chat(history, model=model, base_url=base_url, api_key=api_key, tools=mcp_tools)
             choice = ds_response["choices"][0]
@@ -542,7 +548,7 @@ def main() -> int:
                         print("[!] WARNING: Completion attempted without Root Cause Analysis. Injecting enforcement.")
                         history.append({
                             "role": "user",
-                            "content": "[SYSTEM ERROR]: Task rejected. You have not provided a structured 'root_cause_analysis.json' in your case notes yet. You MUST summarize your findings in a final RCA block before exiting."
+                            "content": "[System Error]: Cannot complete task. 'root_cause_analysis.json' is missing from your case notes. You MUST output the RCA block before concluding. Please synthesize now."
                         })
                         continue
 
