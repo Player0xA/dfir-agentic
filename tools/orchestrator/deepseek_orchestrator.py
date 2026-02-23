@@ -39,7 +39,8 @@ MCP_SERVERS = {
         "command": [
             str(PROJECT_ROOT / "tools/mcp/mcp-windows/venv/bin/python3"),
             "-u",
-            str(PROJECT_ROOT / "tools/mcp/mcp-windows/winforensics-mcp/winforensics_mcp/server.py")
+            "-m",
+            "winforensics_mcp.server"
         ],
         "cwd": PROJECT_ROOT / "tools/mcp/mcp-windows/winforensics-mcp"
     }
