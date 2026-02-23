@@ -12,6 +12,7 @@ from typing import Any, Dict, Optional, List, Tuple
 # Policy (v0.1)
 # ----------------------------
 PROJECT_ROOT = Path.cwd()
+DEFAULT_MAX_BYTES = 100000 # 100KB "Ralph Wiggum" Guardrail
 
 DFIR_CASE_DIR = os.environ.get("DFIR_CASE_DIR")
 
@@ -432,10 +433,10 @@ def tool_hayabusa_csv_timeline(args: Dict[str, Any], audit: Dict[str, Path]) -> 
 
 
 def tool_read_json(args: Dict[str, Any], audit: Dict[str, Path]) -> Dict[str, Any]:
-    # Default 64KB, Hard Limit 100KB (Ralph Wiggum Guardrail)
-    max_bytes = int(args.get("max_bytes") or 65536)
-    if max_bytes > 100000:
-        max_bytes = 100000
+    # Synchronized 100KB Guardrail
+    max_bytes = int(args.get("max_bytes") or DEFAULT_MAX_BYTES)
+    if max_bytes > DEFAULT_MAX_BYTES:
+        max_bytes = DEFAULT_MAX_BYTES
 
     path = safe_resolve(args["path"])
     ensure_read_allowed(path)
@@ -452,10 +453,10 @@ def tool_read_json(args: Dict[str, Any], audit: Dict[str, Path]) -> Dict[str, An
 
 
 def tool_read_text(args: Dict[str, Any], audit: Dict[str, Path]) -> Dict[str, Any]:
-    # Default 100KB, Hard Limit 100KB
-    max_bytes = int(args.get("max_bytes") or 100000)
-    if max_bytes > 100000:
-        max_bytes = 100000
+    # Synchronized 100KB Guardrail
+    max_bytes = int(args.get("max_bytes") or DEFAULT_MAX_BYTES)
+    if max_bytes > DEFAULT_MAX_BYTES:
+        max_bytes = DEFAULT_MAX_BYTES
 
     path = safe_resolve(args["path"])
     ensure_read_allowed(path)
@@ -468,48 +469,6 @@ def tool_read_text(args: Dict[str, Any], audit: Dict[str, Path]) -> Dict[str, An
     return {"path": str(path), "value": content}
 
 
-def tool_query_findings(args: Dict[str, Any], audit: Dict[str, Path]) -> Dict[str, Any]:
-    path = safe_resolve(args["path"])
-    ensure_read_allowed(path)
-    
-    if not path.is_file():
-        raise ValueError(f"file not found: {path}")
-
-    # Load full file - this is done in memory by the TOOL, keeping it out of LLM context
-    doc = json.loads(path.read_text(encoding="utf-8"))
-    findings = doc.get("findings", [])
-    
-    finding_id = args.get("finding_id")
-    severity = args.get("severity")
-    tactic = args.get("mitre_tactic")
-    limit = int(args.get("limit") or 10)
-
-    filtered = []
-    for f in findings:
-        # Filter by ID
-        if finding_id and f.get("finding_id") != finding_id:
-            continue
-        
-        # Filter by Severity
-        if severity and (f.get("severity") or "informational").lower() != severity.lower():
-            continue
-            
-        # Filter by Tactic
-        if tactic:
-            tags = f.get("tactic_tags") or f.get("mitre_tags") or []
-            if not any(tactic.lower() in t.lower() for t in tags):
-                continue
-                
-        filtered.append(f)
-        if len(filtered) >= limit:
-            break
-            
-    return {
-        "path": str(path),
-        "total_matched": len(filtered),
-        "results": filtered,
-        "note": "Use finding_id for surgical extraction of a single high-fidelity finding."
-    }
 
 
 def tool_query_findings(args: Dict[str, Any], audit: Dict[str, Path]) -> Dict[str, Any]:

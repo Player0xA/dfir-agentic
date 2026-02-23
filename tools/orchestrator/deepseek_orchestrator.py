@@ -106,8 +106,7 @@ def compact_history(history: list[dict]):
     has_notes = any(desanitize_tool_name(c["function"]["name"]) == "dfir.update_case_notes@1" for c in calls)
     
     if has_notes:
-        # Prune all previous TOOL messages that are > 1024 bytes
-        # We start from the beginning up to the message before last_assistant
+        # Synchronized 100KB Compaction
         idx_last_assistant = 0
         for i, m in enumerate(history):
             if m is last_assistant:
@@ -116,8 +115,25 @@ def compact_history(history: list[dict]):
         
         for i in range(idx_last_assistant):
             m = history[i]
-            if m["role"] == "tool" and len(m.get("content", "")) > 1024:
-                m["content"] = f"[COMPACTED: Content summarized in case notes. Use surgical query tools if you need to re-read specific fields.]"
+            if m["role"] == "tool" and len(m.get("content", "")) > 100000:
+                m["content"] = "[COMPACTED: Content summarized in case notes. Use surgical query tools if you need to re-read specific fields.]"
+
+def check_for_rca(history: list[dict]) -> bool:
+    """
+    Checks if a machine-readable root_cause_analysis.json block exists in any update_case_notes calls.
+    """
+    for m in reversed(history):
+        if m["role"] == "assistant" and "tool_calls" in m:
+            for tc in m["tool_calls"]:
+                if desanitize_tool_name(tc["function"]["name"]) == "dfir.update_case_notes@1":
+                    try:
+                        args = json.loads(tc["function"]["arguments"])
+                        notes = args.get("notes", "")
+                        if "root_cause_analysis.json" in notes.lower() or "root_cause_analysis" in notes.lower():
+                            return True
+                    except Exception:
+                        continue
+    return False
 
 
 def _now_utc_iso() -> str:
@@ -205,7 +221,7 @@ def mcp_tools_call(name: str, arguments: dict, req_id: int = 3) -> dict:
     raise RuntimeError("MCP tools/call: missing response")
 
 
-def mcp_read_json(path: str, json_pointer: Optional[str] = None, max_bytes: int = 1048576) -> dict:
+def mcp_read_json(path: str, json_pointer: Optional[str] = None, max_bytes: int = 100000) -> dict:
     args: Dict[str, Any] = {"path": path, "max_bytes": max_bytes}
     if json_pointer is not None:
         args["json_pointer"] = json_pointer
@@ -349,23 +365,34 @@ def main() -> int:
     intake_id = intake.get("intake_id", "unknown")
     os.environ["DFIR_CASE_ID"] = intake_id
 
-    # Discovery Grounding: List the intake directory and include situational map
+    # Discovery Grounding (Case Envelope Implementation)
     dir_listing = []
+    found_paths = {}
     case_summary_md = ""
     try:
-        from tools.mcp.dfir_mcp_server import tool_list_dir, tool_read_json
+        from tools.mcp.dfir_mcp_server import tool_list_dir, tool_read_text
         res = tool_list_dir({"path": intake_dir}, {})
         if "entries" in res:
             dir_listing = [e["name"] for e in res["entries"]]
             
-        if "case_summary.md" in dir_listing:
-            # BUGFIX: Use tool_read_text for Markdown, not tool_read_json
-            from tools.mcp.dfir_mcp_server import tool_read_text
-            summary_res = tool_read_text({"path": os.path.join(intake_dir, "case_summary.md"), "max_bytes": 10000}, {})
-            if "value" in summary_res:
-                case_summary_md = summary_res["value"]
-    except Exception:
-        # Fallback to os.listdir if MCP tool call internally fails
+        # Prioritize major artifacts
+        for entry in res.get("entries", []):
+            ename = entry["name"]
+            epath = os.path.join(intake_dir, ename)
+            if ename == "case_summary.md":
+                found_paths["Summary"] = epath
+                summary_res = tool_read_text({"path": epath, "max_bytes": 100000}, {})
+                if "value" in summary_res:
+                    case_summary_md = summary_res["value"]
+            elif ename == "case_findings.json":
+                found_paths["Findings"] = epath
+            elif ename.endswith(".plaso"):
+                found_paths["Timeline (Plaso)"] = epath
+            elif ename == "auto.json":
+                found_paths["Auto Enrichment"] = epath
+
+    except Exception as e:
+        print(f"DEBUG: Resource discovery failed: {e}")
         dir_listing = os.listdir(intake_dir)
 
     out_dir = os.path.join(intake_dir, "orchestrator", ai_id)
@@ -418,10 +445,11 @@ def main() -> int:
             "- Always start by reviewing 'case_summary.md' using 'dfir__read_text__v1'. It contains the 'Map' of the case.\n"
             "- Use 'finding_id' from the summary to surgically query for full evidence with 'dfir__query_findings__v1'.\n"
             "- If primary detections are sparse or you need to find root cause, you MUST pivot to the Super Timeline using 'dfir__query_super_timeline__v1'.\n"
-            "\n--- PRODUCTION HARDENING (V5) ---\n"
-            "- CONVERGENCE CONTRACT: You MUST produce a 'root_cause_analysis.json' file using 'dfir__update_case_notes__v1' before you conclude with TASK_COMPLETE.\n"
-            "- PROGRESSIVE SKILLS: Detailed manuals for complex filters are moved to Skills. Use 'dfir__load_skill__v1' to read them if needed.\n"
-            "- CONTEXT COMPACTION: Your raw tool outputs will be programmatically pruned once you synthesize them into case notes. Your 'Case Notes' are your permanent memory.\n"
+            "\n--- ADVANCED AGENTIC LOGIC (V6) ---\n"
+            "- CASE ENVELOPE: I have provided absolute paths to critical resources (Findings, Timeline) below. Use them directly to avoid 'ls' turns.\n"
+            "- TODO PLANNER: You MUST maintain a 'checklist' in your notes. Update it before shifting tactics.\n"
+            "- TURN EFFICIENCY: Call multiple tools in a single response if they are related (e.g., querying 3 different finding IDs).\n"
+            "- CONVERGENCE CONTRACT: You MUST produce a machine-readable 'root_cause_analysis.json' block in your case notes before you conclude. Reaching TASK_COMPLETE without an RCA will result in rejection.\n"
         )
 
         user_task = args.task if args.task else "Begin investigation by running dfir.auto_run@1."
@@ -431,6 +459,12 @@ def main() -> int:
         
         # Grounding context construction
         context_payload = f"Intake ID: {intake_id}\nIntake Path: {args.intake_json}\nTask: {user_task}\n"
+        
+        if found_paths:
+            context_payload += "\n[KNOWLEDGE] Primary Evidence Paths (Case Envelope):\n"
+            for label, fpath in found_paths.items():
+                context_payload += f"- {label}: {fpath}\n"
+
         context_payload += f"\n[CONTEXT] Auto-Detected Intake Payload:\n```json\n{intake_context}\n```\n"
         context_payload += f"\n[CONTEXT] Case Output Directory Listing ({intake_dir}):\n- " + "\n- ".join(dir_listing)
         
@@ -469,9 +503,18 @@ def main() -> int:
             if content:
                 print(f"[AI]: {content}")
                 if "<promise>TASK_COMPLETE</promise>" in content:
-                    print("[*] Completion token detected.")
-                    final_summary = content
-                    break
+                    # Convergence Contract Enforcement
+                    if check_for_rca(history):
+                        print("[*] Completion token detected and RCA validated.")
+                        final_summary = content
+                        break
+                    else:
+                        print("[!] WARNING: Completion attempted without Root Cause Analysis. Injecting enforcement.")
+                        history.append({
+                            "role": "user",
+                            "content": "[SYSTEM ERROR]: Task rejected. You have not provided a structured 'root_cause_analysis.json' in your case notes yet. You MUST summarize your findings in a final RCA block before exiting."
+                        })
+                        continue
 
             tool_calls = message.get("tool_calls") or []
             
