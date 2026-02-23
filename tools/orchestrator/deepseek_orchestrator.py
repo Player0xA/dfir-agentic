@@ -226,6 +226,8 @@ def _get_skills_registry() -> str:
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--intake-json", required=True, help="Path to outputs/intake/<id>/intake.json")
+    ap.add_argument("--mode", choices=["structured", "autonomous"], default="structured", help="Execution mode")
+    ap.add_argument("--task", help="Optional specific task description to guide the investigation")
     args = ap.parse_args()
 
     api_key = os.environ.get("DEEPSEEK_API_KEY", "").strip()
@@ -259,8 +261,26 @@ def main() -> int:
         # Pre-calculate skills registry
         skills_registry = _get_skills_registry()
 
+        mode_instructions = ""
+        if args.mode == "autonomous":
+            mode_instructions = (
+                "You are an autonomous DFIR agent. You will not receive human feedback. "
+                "You must execute this investigation end-to-end. If a tool command fails, "
+                "read the error message, consult your loaded Skills, and retry with corrected syntax. "
+                "When you have found the root cause, write your final findings to progress.md "
+                "and output exactly <promise>TASK_COMPLETE</promise> to conclude the investigation."
+            )
+        else:
+            mode_instructions = (
+                "You are an interactive DFIR assistant. Before performing any deep analysis, "
+                "you must formulate a plan and propose the tool you want to use. "
+                "Wait for the lead investigator to approve your tool calls. "
+                "If the investigator corrects you, adjust your command immediately."
+            )
+
         system_prompt = (
             "You are a DFIR triage assistant. You produce NON-AUTHORITATIVE commentary.\n"
+            f"{mode_instructions}\n"
             f"{skills_registry}\n"
             "Hard rules:\n"
             "- Do NOT invent evidence or claim certainty without explicit fields.\n"
@@ -271,9 +291,10 @@ def main() -> int:
             "- Output FORMAT: (1) Executive summary, (2) suspicious clusters, (3) Next deterministic pivots.\n"
         )
 
+        user_task = args.task if args.task else "Begin investigation by running dfir.auto_run@1."
         history = [
             {"role": "system", "content": system_prompt},
-            {"role": "user", "content": f"Intake ID: {intake_id}\nIntake Path: {args.intake_json}\nBegin investigation by running dfir.auto_run@1."}
+            {"role": "user", "content": f"Intake ID: {intake_id}\nIntake Path: {args.intake_json}\nTask: {user_task}"}
         ]
 
         MAX_ITERATIONS = 10
@@ -316,6 +337,35 @@ def main() -> int:
                     print(f"  [-] Failed to parse arguments for {name}: {e}")
 
                 print(f"[*] Executing Tool: {name}...")
+                
+                # Structured Mode Interceptor
+                if args.mode == "structured":
+                    print(f"\n[AI PROPOSES TOOL]: {name}")
+                    print(f"[ARGUMENTS]: {json.dumps(arguments, indent=2)}")
+                    choice = input("Approve execution? [y/N/modify]: ").strip().lower()
+                    
+                    if choice == 'y':
+                        pass # Proceed to execution
+                    elif choice == 'modify':
+                        feedback = input("Provide your correction: ")
+                        error_msg = f"[Human Intercept]: Denied. Suggestion: {feedback}"
+                        history.append({
+                            "role": "tool",
+                            "tool_call_id": call_id,
+                            "name": name,
+                            "content": error_msg
+                        })
+                        continue
+                    else:
+                        print("  [-] Execution denied by human.")
+                        history.append({
+                            "role": "tool",
+                            "tool_call_id": call_id,
+                            "name": name,
+                            "content": "[Human Intercept]: Execution denied by lead investigator."
+                        })
+                        continue
+
                 try:
                     result = mcp_tools_call(name, arguments)
                     history.append({
