@@ -98,7 +98,19 @@ def _run_mcp_lines(lines: list[str], server_key: str) -> list[dict]:
     return objs
 
 
-def mcp_tools_call(name: str, arguments: dict, req_id: int = 2) -> dict:
+def mcp_list_tools(server_key: str = "dfir") -> list[dict]:
+    lines = [
+        json.dumps({"jsonrpc": "2.0", "id": 1, "method": "initialize", "params": {}}),
+        json.dumps({"jsonrpc": "2.0", "id": 2, "method": "tools/list", "params": {}}),
+    ]
+    objs = _run_mcp_lines(lines, server_key)
+    for o in objs:
+        if o.get("id") == 2:
+            return o["result"].get("tools", [])
+    return []
+
+
+def mcp_tools_call(name: str, arguments: dict, req_id: int = 3) -> dict:
     if name.startswith("dfir."):
         server_key = "dfir"
     elif name.startswith("memory_") or name.startswith("vt_"):
@@ -143,11 +155,7 @@ def mcp_read_json(path: str, json_pointer: Optional[str] = None, max_bytes: int 
     return raw
 
 
-def deepseek_chat(messages: list[dict], model: str, base_url: str, api_key: str, timeout_s: int = 60) -> dict:
-    """
-    Calls DeepSeek chat completions.
-    Docs: POST https://api.deepseek.com/chat/completions (OpenAI-compatible shape).
-    """
+def deepseek_chat(messages: list[dict], model: str, base_url: str, api_key: str, tools: Optional[list[dict]] = None, timeout_s: int = 60) -> dict:
     url = base_url.rstrip("/") + "/chat/completions"
     body = {
         "model": model,
@@ -155,6 +163,19 @@ def deepseek_chat(messages: list[dict], model: str, base_url: str, api_key: str,
         "temperature": 0.2,
         "max_tokens": 1024,
     }
+    if tools:
+        # Convert MCP tools to OpenAI function calling format
+        openai_tools = []
+        for t in tools:
+            openai_tools.append({
+                "type": "function",
+                "function": {
+                    "name": t["name"],
+                    "description": t["description"],
+                    "parameters": t["inputSchema"]
+                }
+            })
+        body["tools"] = openai_tools
     # Check if we have tool calls in the last assistant message
     # DeepSeek API (like OpenAI) uses 'tool_choice' or 'tools' list
     # For now, we manually handle tool calls if they appear in content or as attributes
@@ -258,7 +279,10 @@ def main() -> int:
     summary_path = os.path.join(out_dir, "summary.md")
 
     try:
-        # Pre-calculate skills registry
+        # 1) Tool Discovery (New Production Invariant)
+        mcp_tools = mcp_list_tools("dfir")
+        
+        # 2) Pre-calculate skills registry
         skills_registry = _get_skills_registry()
 
         mode_instructions = ""
@@ -294,9 +318,13 @@ def main() -> int:
         )
 
         user_task = args.task if args.task else "Begin investigation by running dfir.auto_run@1."
+        
+        # Intake Injection (Grounding)
+        intake_context = json.dumps(intake, indent=2)
+        
         history = [
             {"role": "system", "content": system_prompt},
-            {"role": "user", "content": f"Intake ID: {intake_id}\nIntake Path: {args.intake_json}\nTask: {user_task}"}
+            {"role": "user", "content": f"Intake ID: {intake_id}\nIntake Path: {args.intake_json}\nTask: {user_task}\n\n[CONTEXT] Auto-Detected Intake Payload:\n```json\n{intake_context}\n```"}
         ]
 
         MAX_ITERATIONS = 10
@@ -307,8 +335,8 @@ def main() -> int:
             iteration += 1
             print(f"[*] Iteration {iteration}/{MAX_ITERATIONS}...")
             
-            # 5) Call DeepSeek
-            ds_response = deepseek_chat(history, model=model, base_url=base_url, api_key=api_key)
+            # 5) Call DeepSeek with Discoverable Tools
+            ds_response = deepseek_chat(history, model=model, base_url=base_url, api_key=api_key, tools=mcp_tools)
             choice = ds_response["choices"][0]
             message = choice["message"]
             content = message.get("content") or ""
@@ -324,10 +352,9 @@ def main() -> int:
 
             tool_calls = message.get("tool_calls") or []
             
-            # Fallback: Parse markdown JSON blocks if native tool_calls is empty
+            # Fallback 1: Parse normal markdown JSON blocks if native tool_calls is empty
             if not tool_calls and "```json" in content:
                 try:
-                    # Look for blocks like ```json { "tool_name": { "args": ... } } ```
                     import re
                     blocks = re.findall(r"```json\s*(\{.*?\})\s*```", content, re.DOTALL)
                     for block in blocks:
@@ -339,11 +366,42 @@ def main() -> int:
                                     "type": "function",
                                     "function": {"name": tname, "arguments": json.dumps(targs)}
                                 })
-                    
-                    if tool_calls:
-                        message["tool_calls"] = tool_calls
                 except Exception:
                     pass
+
+            # Fallback 2: Parse DeepSeek native <｜DSML｜> tags
+            if not tool_calls and "<｜DSML｜invoke" in content:
+                try:
+                    import re
+                    # Look for <｜DSML｜invoke name="tool_name">...</｜DSML｜invoke>
+                    invokes = re.findall(r"<｜DSML｜invoke name=\"(.*?)\">(.*?)</｜DSML｜invoke>", content, re.DOTALL)
+                    for tname, inner_content in invokes:
+                        args_dict = {}
+                        # Extract parameters <｜DSML｜parameter name="arg_name">arg_value</｜DSML｜parameter>
+                        params = re.findall(r"<｜DSML｜parameter name=\"(.*?)\".*?>(.*?)</｜DSML｜parameter>", inner_content, re.DOTALL)
+                        for pname, pval in params:
+                            args_dict[pname] = pval.strip()
+
+                        # In case the model decided to just dump JSON as a string payload instead of discrete XML arguments
+                        if not args_dict:
+                            json_attempts = re.findall(r"(\{.*?\})", inner_content, re.DOTALL)
+                            if json_attempts:
+                                try:
+                                    args_dict = json.loads(json_attempts[0])
+                                except Exception:
+                                    pass
+
+                        tool_calls.append({
+                            "id": f"call_{uuid.uuid4().hex[:8]}",
+                            "type": "function",
+                            "function": {"name": tname, "arguments": json.dumps(args_dict)}
+                        })
+                except Exception:
+                    pass
+
+            if tool_calls:
+                message["tool_calls"] = tool_calls
+
 
             if not tool_calls:
                 continue

@@ -81,6 +81,18 @@ TOOLS = [
             }
         }
     },
+    {
+        "name": "dfir.load_intake@1",
+        "description": "Alias for read_json to read the intake.json file when starting an investigation.",
+        "inputSchema": {
+            "type": "object",
+            "additionalProperties": False,
+            "required": ["path"],
+            "properties": {
+                "path": {"type": "string", "minLength": 1, "description": "Path to the intake.json file"}
+            }
+        }
+    },
         {
         "name": "dfir.hayabusa_csv_timeline@1",
         "description": "Run Hayabusa csv-timeline deterministically on an EVTX directory and write outputs/csv/hayabusa_evtx/<run_id>/timeline.csv",
@@ -537,7 +549,7 @@ def dispatch_tool(name: str, arguments: Dict[str, Any], audit: Dict[str, Path]) 
         return tool_identify_evidence(arguments, audit)
     if name == "dfir.auto_run@1":
         return tool_auto_run(arguments, audit)
-    if name == "dfir.read_json@1":
+    if name in ("dfir.read_json@1", "dfir.load_intake@1"):
         return tool_read_json(arguments, audit)
     if name == "dfir.list_dir@1":
         return tool_list_dir(arguments, audit)
