@@ -387,17 +387,18 @@ def tool_query_super_timeline(args: Dict[str, Any], audit: Dict[str, Path]) -> D
     fmt = args.get("output_format", "json")
     filt = args.get("artifact_filter")
 
+    # psort -o json_line requires -w (output file)
+    run_id = str(uuid.uuid4())
+    tmp_out = PROJECT_ROOT / f"tmp_psort_{run_id}.{fmt}"
+
     # Construct psort command
-    cmd = [PSORT_BIN, "--output_time_zone", "UTC"]
-    if fmt == "json":
-        cmd.extend(["-o", "json_line"])
-    else:
-        cmd.extend(["-o", "csv"])
+    # Ordering: binary, output options, storage file, filter
+    cmd = [PSORT_BIN, "-o", "json_line", "-w", str(tmp_out), "--output_time_zone", "UTC"]
 
     # Plaso filter syntax for time range
-    # Use DATETIME() indicator as recommended by newer Plaso versions
-    t_start = start.replace("T", " ").replace("Z", "")
-    t_end = end.replace("T", " ").replace("Z", "")
+    # Use ISO8601 with offset as per help example
+    t_start = start.replace("Z", "+00:00")
+    t_end = end.replace("Z", "+00:00")
     
     time_filter = f"timestamp > DATETIME('{t_start}') AND timestamp < DATETIME('{t_end}')"
     if filt:
@@ -405,11 +406,6 @@ def tool_query_super_timeline(args: Dict[str, Any], audit: Dict[str, Path]) -> D
     else:
         full_filter = time_filter
 
-    # psort -o json_line requires -w (output file)
-    run_id = str(uuid.uuid4())
-    tmp_out = PROJECT_ROOT / f"tmp_psort_{run_id}.{fmt}"
-    
-    cmd.extend(["-w", str(tmp_out)])
     cmd.append(str(plaso_path))
     cmd.append(full_filter)
 
