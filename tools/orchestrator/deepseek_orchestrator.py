@@ -155,6 +155,20 @@ def mcp_read_json(path: str, json_pointer: Optional[str] = None, max_bytes: int 
     return raw
 
 
+def sanitize_tool_name(name: str) -> str:
+    """DeepSeek/OpenAI requires ^[a-zA-Z0-9_-]+$. Mapping dfir.foo@1 -> dfir__foo__v1."""
+    return name.replace(".", "__").replace("@", "__v")
+
+
+def desanitize_tool_name(name: str) -> str:
+    """Mapping dfir__foo__v1 -> dfir.foo@1 for MCP dispatch."""
+    if "__v" in name:
+        name = name.replace("__v", "@")
+    if "__" in name:
+        name = name.replace("__", ".")
+    return name
+
+
 def deepseek_chat(messages: list[dict], model: str, base_url: str, api_key: str, tools: Optional[list[dict]] = None, timeout_s: int = 60) -> dict:
     url = base_url.rstrip("/") + "/chat/completions"
     body = {
@@ -164,13 +178,13 @@ def deepseek_chat(messages: list[dict], model: str, base_url: str, api_key: str,
         "max_tokens": 1024,
     }
     if tools:
-        # Convert MCP tools to OpenAI function calling format
+        # Convert MCP tools to OpenAI function calling format with sanitized names
         openai_tools = []
         for t in tools:
             openai_tools.append({
                 "type": "function",
                 "function": {
-                    "name": t["name"],
+                    "name": sanitize_tool_name(t["name"]),
                     "description": t["description"],
                     "parameters": t["inputSchema"]
                 }
@@ -240,7 +254,7 @@ def _get_skills_registry() -> str:
         return ""
 
     header = "\nAVAILABLE SKILLS (Progressive Disclosure):\n"
-    footer = "\nTo load the full instructions for a skill (or its supporting files), use dfir.load_skill@1(skill_name='name', file_name=None).\n"
+    footer = "\nTo load the full instructions for a skill (or its supporting files), use dfir__load_skill__v1(skill_name='name', file_name=None).\n"
     return header + "\n".join(registry) + footer
 
 
@@ -310,11 +324,11 @@ def main() -> int:
             "- CRITICAL: Do NOT invent evidence or claim certainty without explicit fields from tool returns.\n"
             "- CRITICAL: Do NOT simulate tool outputs. You must wait for the actual tool call return.\n"
             "- Use ONLY the JSON provided or results from tool calls.\n"
-            "- When you successfully extract an artifact, YOU MUST use 'dfir.update_case_notes@1' to document it.\n"
-            "- Every note you write via 'dfir.update_case_notes@1' MUST conclude with a 'Next Steps' summary.\n"
+            "- When you successfully extract an artifact, YOU MUST use 'dfir__update_case_notes__v1' to document it.\n"
+            "- Every note you write via 'dfir__update_case_notes__v1' MUST conclude with a 'Next Steps' summary.\n"
             "- When your investigation is fully concluded, YOU MUST output the exact token: <promise>TASK_COMPLETE</promise>\n"
             "- Output FORMAT: (1) Executive summary, (2) suspicious clusters, (3) Next deterministic pivots.\n"
-            "- To use a tool, use the native tool calling capability OR output a JSON block like: ```json {\"tool_name\": {\"arg\": \"val\"}} ```\n"
+            "- To use a tool, use the native tool calling capability OR output a JSON block like: ```json {\"dfir__tool_name__v1\": {\"arg\": \"val\"}} ```\n"
         )
 
         user_task = args.task if args.task else "Begin investigation by running dfir.auto_run@1."
@@ -417,7 +431,9 @@ def main() -> int:
             for tool_call in tool_calls:
                 call_id = tool_call.get("id", "none")
                 function = tool_call["function"]
-                name = function["name"]
+                sanitized_name = function["name"]
+                name = desanitize_tool_name(sanitized_name)
+                
                 try:
                     arguments = json.loads(function["arguments"])
                 except Exception as e:

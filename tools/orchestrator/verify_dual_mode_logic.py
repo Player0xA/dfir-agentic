@@ -30,7 +30,7 @@ class TestDualModeOrchestrator(unittest.TestCase):
                     "message": {
                         "role": "assistant",
                         "content": "Proposing auto_run.",
-                        "tool_calls": [{"id": "c1", "function": {"name": "dfir.auto_run@1", "arguments": "{}"}}]
+                        "tool_calls": [{"id": "c1", "function": {"name": "dfir__auto_run__v1", "arguments": "{}"}}]
                     }
                 }]
             },
@@ -107,7 +107,7 @@ class TestDualModeOrchestrator(unittest.TestCase):
                     "message": {
                         "role": "assistant",
                         "content": "Running auto_run autonomously.",
-                        "tool_calls": [{"id": "c1", "function": {"name": "dfir.auto_run@1", "arguments": "{}"}}]
+                        "tool_calls": [{"id": "c1", "function": {"name": "dfir__auto_run__v1", "arguments": "{}"}}]
                     }
                 }]
             },
