@@ -84,6 +84,19 @@ TOOLS = [
         }
     },
     {
+        "name": "dfir.read_text@1",
+        "description": "Read a text, log, or markdown file under outputs/ or contracts/, bounded by max_bytes (default 100KB, hard limit 100KB).",
+        "inputSchema": {
+            "type": "object",
+            "additionalProperties": False,
+            "required": ["path"],
+            "properties": {
+                "path": {"type": "string", "minLength": 1},
+                "max_bytes": {"type": "integer", "minimum": 1, "maximum": 100000}
+            }
+        }
+    },
+    {
         "name": "dfir.query_findings@1",
         "description": "Surgically query the monolithic case_findings.json file without loading it all. Filter by ID, severity, or tactic.",
         "inputSchema": {
@@ -419,7 +432,7 @@ def tool_hayabusa_csv_timeline(args: Dict[str, Any], audit: Dict[str, Path]) -> 
 
 
 def tool_read_json(args: Dict[str, Any], audit: Dict[str, Path]) -> Dict[str, Any]:
-    # Default 64KB, Hard Limit 100KB
+    # Default 64KB, Hard Limit 100KB (Ralph Wiggum Guardrail)
     max_bytes = int(args.get("max_bytes") or 65536)
     if max_bytes > 100000:
         max_bytes = 100000
@@ -436,6 +449,67 @@ def tool_read_json(args: Dict[str, Any], audit: Dict[str, Path]) -> Dict[str, An
     value = json_pointer_get(doc, ptr)
 
     return {"path": str(path), "json_pointer": ptr, "value": value}
+
+
+def tool_read_text(args: Dict[str, Any], audit: Dict[str, Path]) -> Dict[str, Any]:
+    # Default 100KB, Hard Limit 100KB
+    max_bytes = int(args.get("max_bytes") or 100000)
+    if max_bytes > 100000:
+        max_bytes = 100000
+
+    path = safe_resolve(args["path"])
+    ensure_read_allowed(path)
+
+    st = path.stat()
+    if st.st_size > max_bytes:
+        raise ValueError(f"read_text failed: file too large ({st.st_size} bytes) > max_bytes ({max_bytes}). Treat large logs as data sources, not context.")
+
+    content = path.read_text(encoding="utf-8")
+    return {"path": str(path), "value": content}
+
+
+def tool_query_findings(args: Dict[str, Any], audit: Dict[str, Path]) -> Dict[str, Any]:
+    path = safe_resolve(args["path"])
+    ensure_read_allowed(path)
+    
+    if not path.is_file():
+        raise ValueError(f"file not found: {path}")
+
+    # Load full file - this is done in memory by the TOOL, keeping it out of LLM context
+    doc = json.loads(path.read_text(encoding="utf-8"))
+    findings = doc.get("findings", [])
+    
+    finding_id = args.get("finding_id")
+    severity = args.get("severity")
+    tactic = args.get("mitre_tactic")
+    limit = int(args.get("limit") or 10)
+
+    filtered = []
+    for f in findings:
+        # Filter by ID
+        if finding_id and f.get("finding_id") != finding_id:
+            continue
+        
+        # Filter by Severity
+        if severity and (f.get("finding") or {}).get("severity", "").lower() != severity.lower():
+            continue
+            
+        # Filter by Tactic
+        if tactic:
+            tags = (f.get("finding") or {}).get("mitre_tags") or []
+            if not any(tactic.lower() in t.lower() for t in tags):
+                continue
+                
+        filtered.append(f)
+        if len(filtered) >= limit:
+            break
+            
+    return {
+        "path": str(path),
+        "total_matched": len(filtered),
+        "results": filtered,
+        "note": "Use finding_id for surgical extraction of a single high-fidelity finding."
+    }
 
 
 def tool_query_findings(args: Dict[str, Any], audit: Dict[str, Path]) -> Dict[str, Any]:
@@ -617,6 +691,10 @@ def dispatch_tool(name: str, arguments: Dict[str, Any], audit: Dict[str, Path]) 
         return tool_auto_run(arguments, audit)
     if name in ("dfir.read_json@1", "dfir.load_intake@1"):
         return tool_read_json(arguments, audit)
+    if name == "dfir.read_text@1":
+        return tool_read_text(arguments, audit)
+    if name == "dfir.query_findings@1":
+        return tool_query_findings(arguments, audit)
     if name == "dfir.list_dir@1":
         return tool_list_dir(arguments, audit)
     if name == "dfir.hayabusa_csv_timeline@1":

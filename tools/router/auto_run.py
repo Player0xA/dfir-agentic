@@ -176,8 +176,7 @@ def main() -> int:
         except Exception as e:
             auto_doc["stages"]["merge"] = f"error: {e}"
 
-    # 8) Final write of auto.json
-    out_path = intake_json.parent / "auto.json"
+    # 8) Final write of auto.json (full state)
     out_path.write_text(json.dumps(auto_doc, indent=2), encoding="utf-8")
     print(f"OK: wrote {out_path}")
 

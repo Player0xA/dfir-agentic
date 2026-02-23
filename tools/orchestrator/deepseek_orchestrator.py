@@ -296,7 +296,9 @@ def main() -> int:
             dir_listing = [e["name"] for e in res["entries"]]
             
         if "case_summary.md" in dir_listing:
-            summary_res = tool_read_json({"path": os.path.join(intake_dir, "case_summary.md"), "max_bytes": 10000}, {})
+            # BUGFIX: Use tool_read_text for Markdown, not tool_read_json
+            from tools.mcp.dfir_mcp_server import tool_read_text
+            summary_res = tool_read_text({"path": os.path.join(intake_dir, "case_summary.md"), "max_bytes": 10000}, {})
             if "value" in summary_res:
                 case_summary_md = summary_res["value"]
     except Exception:
@@ -347,9 +349,10 @@ def main() -> int:
             "- Output FORMAT: (1) Executive summary, (2) suspicious clusters, (3) Next deterministic pivots.\n"
             "- To use a tool, use the native tool calling capability OR output a JSON block like: ```json {\"dfir__tool_name__v1\": {\"arg\": \"val\"}} ```\n\n"
             "--- PROGRESSIVE DISCLOSURE PROTOCOL ---\n"
-            "- TREAT LARGE TOOL OUTPUTS AS DATA SOURCES, NOT CONTEXT.\n"
-            "- If a file exceeds 100KB, reading it directly WILL FAIL. You MUST use 'dfir__query_findings__v1' for surgical extraction.\n"
-            "- Always start by reviewing 'case_summary.md' if available. It contains the 'Map' of the case.\n"
+            "- TREAT LARGE TOOL OUTPUTS AS DATA SOURCES, NOT CONTEXT. Scaling requires surgical precision.\n"
+            "- If a file exceeds 100KB, reading it directly WILL FAIL (Ralph Wiggum Guardrail). You MUST use 'dfir__query_findings__v1' for surgical extraction.\n"
+            "- FORMAT ENFORCEMENT: 'dfir__read_json__v1' is strictly for valid JSON. For Markdown (.md), text (.txt), or Logs (.log), you MUST use 'dfir__read_text__v1'.\n"
+            "- Always start by reviewing 'case_summary.md' using 'dfir__read_text__v1'. It contains the 'Map' of the case.\n"
             "- Use 'finding_id' from the summary to surgically query for full evidence with 'dfir__query_findings__v1'.\n"
         )
 

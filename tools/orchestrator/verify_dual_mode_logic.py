@@ -163,5 +163,32 @@ class TestDualModeOrchestrator(unittest.TestCase):
         self.assertEqual(len(res["results"]), 1)
         print("[SUCCESS] Query Tool: Tactic Filter verified.")
 
+    def test_surgical_guardrails(self):
+        from tools.mcp.dfir_mcp_server import tool_read_json, tool_read_text
+        
+        # 1. Ralph Wiggum Guardrail (JSON)
+        f_path = "/tmp/guardrail_test.json"
+        with open(f_path, "w") as f:
+            f.write('{"test": "' + "A" * 150000 + '"}') # ~150KB
+            
+        with self.assertRaises(ValueError) as cm:
+            tool_read_json({"path": f_path}, {})
+        self.assertIn("file too large", str(cm.exception))
+        print("[SUCCESS] Guardrail: 100KB JSON limit verified (Ralph Wiggum).")
+        
+        # 2. Multi-Format support (read_text)
+        md_path = "/tmp/test.md"
+        with open(md_path, "w") as f:
+            f.write("# Forensic Map\n- Critical Alert 1")
+            
+        # read_json should fail on MD due to json.loads
+        with self.assertRaises(Exception):
+            tool_read_json({"path": md_path}, {})
+            
+        # read_text should succeed
+        res = tool_read_text({"path": md_path}, {})
+        self.assertIn("Forensic Map", res["value"])
+        print("[SUCCESS] Multi-Format: read_text for MD verified.")
+
 if __name__ == "__main__":
     unittest.main()
