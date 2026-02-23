@@ -1,10 +1,10 @@
 {
-  "plan_id": "44882d62-e99b-4aa3-a71d-2c71c40409a1",
-  "timestamp_utc": "2026-02-22T23:36:51Z",
+  "plan_id": "65a8ac3a-3113-44c5-baa5-03e11686388b",
+  "timestamp_utc": "2026-02-23T00:19:54Z",
   "agent_id": "windows_evtx_agent",
   "baseline": {
     "auto_json": "outputs/intake/0455d047-5aae-4aa0-8ecd-83494c4394ec/auto.json",
-    "baseline_manifest_path": "outputs/jsonl/chainsaw_evtx/f5ab3732-4540-4dc2-825a-fecc50075c51/manifest.json",
+    "baseline_manifest_path": "outputs/jsonl/chainsaw_evtx/0d4ce468-7a24-4cc2-b5aa-b7d5842521dc/manifest.json",
     "evtx_dir": "/home/nevermore/cases/intake/evtx/Logs"
   },
   "enrichment": {
@@ -17,7 +17,7 @@
   },
   "decision": {
     "should_run": true,
-    "reason": "baseline count=339 threshold=50 tier=deep",
+    "reason": "Escalation Rule: Critical/High severity findings present ({'critical': 1, 'high': 2, 'informational': 336}).",
     "policy": {
       "mode": "agent_decision"
     }
