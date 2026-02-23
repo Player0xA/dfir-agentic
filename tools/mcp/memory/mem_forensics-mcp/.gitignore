@@ -1,0 +1,14 @@
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+*.egg-info/
+dist/
+build/
+.pytest_cache/
+
+# Rust build artifacts
+engines/memoxide-src/target/
+
+# ISF symbol files (large, downloaded per-image)
+symbols/
