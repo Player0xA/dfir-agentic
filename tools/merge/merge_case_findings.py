@@ -326,7 +326,7 @@ def main() -> int:
     findings_by_severity: Dict[str, List[Dict[str, Any]]] = {s: [] for s in severity_order}
     
     for f in merged:
-        sev = f.get("severity", "informational").lower()
+        sev = (f.get("severity") or "informational").lower()
         if sev not in counts:
             sev = "informational"
         counts[sev] += 1
@@ -378,7 +378,7 @@ def main() -> int:
     top_list = top_list[:15]
 
     for f in top_list:
-        sev = f.get("severity", "informational").upper()
+        sev = (f.get("severity") or "informational").upper()
         tool = (f.get("source") or {}).get("tool", "unknown")
         rule = (f.get("source") or {}).get("rule_id", "unknown")
         fid = f.get("finding_id", "unknown")

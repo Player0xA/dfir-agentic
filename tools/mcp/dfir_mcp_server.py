@@ -491,7 +491,7 @@ def tool_query_findings(args: Dict[str, Any], audit: Dict[str, Path]) -> Dict[st
             continue
         
         # Filter by Severity
-        if severity and f.get("severity", "").lower() != severity.lower():
+        if severity and (f.get("severity") or "informational").lower() != severity.lower():
             continue
             
         # Filter by Tactic
@@ -535,7 +535,7 @@ def tool_query_findings(args: Dict[str, Any], audit: Dict[str, Path]) -> Dict[st
             continue
         
         # Filter by Severity
-        if severity and f.get("severity", "").lower() != severity.lower():
+        if severity and (f.get("severity") or "informational").lower() != severity.lower():
             continue
             
         # Filter by Tactic
