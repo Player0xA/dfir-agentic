@@ -1,6 +1,6 @@
 {
-  "auto_id": "2db6707b-df8e-4ef0-98e4-8f90cc2d674b",
-  "timestamp_utc": "2026-02-22T23:36:46Z",
+  "auto_id": "2cad713a-468b-4e89-a219-75314cf5f8be",
+  "timestamp_utc": "2026-02-23T00:19:49Z",
   "intake": {
     "intake_id": "0455d047-5aae-4aa0-8ecd-83494c4394ec",
     "intake_json": "outputs/intake/0455d047-5aae-4aa0-8ecd-83494c4394ec/intake.json"
@@ -17,7 +17,7 @@
   "dispatch": {
     "status": "ok",
     "dispatch_json": "outputs/intake/0455d047-5aae-4aa0-8ecd-83494c4394ec/dispatch.json",
-    "run_id": "f5ab3732-4540-4dc2-825a-fecc50075c51",
-    "manifest_path": "outputs/jsonl/chainsaw_evtx/f5ab3732-4540-4dc2-825a-fecc50075c51/manifest.json"
+    "run_id": "0d4ce468-7a24-4cc2-b5aa-b7d5842521dc",
+    "manifest_path": "outputs/jsonl/chainsaw_evtx/0d4ce468-7a24-4cc2-b5aa-b7d5842521dc/manifest.json"
   }
 }
