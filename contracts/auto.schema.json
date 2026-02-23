@@ -4,7 +4,15 @@
   "title": "DFIR Autonomous Execution Record",
   "type": "object",
   "additionalProperties": false,
-  "required": ["auto_id", "timestamp_utc", "intake", "selection", "enforcement", "dispatch"],
+  "required": [
+    "auto_id",
+    "timestamp_utc",
+    "intake",
+    "selection",
+    "enforcement",
+    "dispatch",
+    "stages"
+  ],
   "properties": {
     "auto_id": {
       "type": "string",
@@ -17,45 +25,122 @@
     "intake": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["intake_id", "intake_json"],
+      "required": [
+        "intake_id",
+        "intake_json"
+      ],
       "properties": {
         "intake_id": {
           "type": "string",
           "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
         },
-        "intake_json": { "type": "string", "minLength": 1 }
+        "intake_json": {
+          "type": "string",
+          "minLength": 1
+        }
       }
     },
     "selection": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["selected_agent", "kind"],
+      "required": [
+        "selected_agent",
+        "kind"
+      ],
       "properties": {
-        "selected_agent": { "type": "string", "minLength": 1 },
-        "kind": { "type": "string", "minLength": 1 }
+        "selected_agent": {
+          "type": "string",
+          "minLength": 1
+        },
+        "kind": {
+          "type": "string",
+          "minLength": 1
+        }
       }
     },
     "enforcement": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["allowed", "action", "details"],
+      "required": [
+        "allowed",
+        "action",
+        "details"
+      ],
       "properties": {
-        "allowed": { "type": "boolean" },
-        "action": { "type": "string", "enum": ["dispatch_pipeline", "skip"] },
-        "details": { "type": "string", "minLength": 1 }
+        "allowed": {
+          "type": "boolean"
+        },
+        "action": {
+          "type": "string",
+          "enum": [
+            "dispatch_pipeline",
+            "skip"
+          ]
+        },
+        "details": {
+          "type": "string",
+          "minLength": 1
+        }
       }
     },
     "dispatch": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["status", "dispatch_json", "run_id", "manifest_path"],
+      "required": [
+        "status",
+        "dispatch_json",
+        "run_id",
+        "manifest_path"
+      ],
       "properties": {
-        "status": { "type": "string", "enum": ["ok", "skipped", "denied", "error"] },
-        "dispatch_json": { "type": ["string", "null"] },
-        "run_id": { "type": ["string", "null"] },
-        "manifest_path": { "type": ["string", "null"] }
+        "status": {
+          "type": "string",
+          "enum": [
+            "ok",
+            "skipped",
+            "denied",
+            "error"
+          ]
+        },
+        "dispatch_json": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "run_id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "manifest_path": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "stages": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "plaso",
+        "enrichment",
+        "merge"
+      ],
+      "properties": {
+        "plaso": {
+          "type": "string"
+        },
+        "enrichment": {
+          "type": "string"
+        },
+        "merge": {
+          "type": "string"
+        }
       }
     }
   }
 }
-
