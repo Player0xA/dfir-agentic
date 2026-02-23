@@ -549,9 +549,10 @@ def tool_query_super_timeline(args: Dict[str, Any], audit: Dict[str, Path]) -> D
     t_start = start.replace("Z", "+00:00")
     t_end = end.replace("Z", "+00:00")
     
-    time_filter = f"timestamp > DATETIME('{t_start}') AND timestamp < DATETIME('{t_end}')"
+    # Simplified Plaso filter for maximum compatibility
+    time_filter = f'date > "{start}" AND date < "{end}"'
     if filt:
-        full_filter = f"({time_filter}) AND ({filt})"
+        full_filter = f'({time_filter}) AND ({filt})'
     else:
         full_filter = time_filter
 

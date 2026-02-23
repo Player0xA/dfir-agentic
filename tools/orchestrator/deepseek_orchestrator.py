@@ -29,8 +29,12 @@ from pathlib import Path
 from typing import Any, Dict, Optional
 from urllib.request import Request, urlopen
 from urllib.error import HTTPError, URLError
+import concurrent.futures
 
 PROJECT_ROOT = Path(__file__).parent.parent.parent.absolute()
+# V7: Robust Path Hydration
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
 
 MCP_SERVERS = {
     "dfir": {
@@ -369,8 +373,10 @@ def main() -> int:
     dir_listing = []
     found_paths = {}
     case_summary_md = ""
+    primary_finding_context = ""
+    
     try:
-        from tools.mcp.dfir_mcp_server import tool_list_dir, tool_read_text
+        from tools.mcp.dfir_mcp_server import tool_list_dir, tool_read_text, tool_query_findings
         res = tool_list_dir({"path": intake_dir}, {})
         if "entries" in res:
             dir_listing = [e["name"] for e in res["entries"]]
@@ -386,6 +392,13 @@ def main() -> int:
                     case_summary_md = summary_res["value"]
             elif ename == "case_findings.json":
                 found_paths["Findings"] = epath
+                # V7: Primary Finding Grounding (Turn 0)
+                try:
+                    pfind = tool_query_findings({"path": epath, "severity": "critical", "limit": 1}, {})
+                    if pfind.get("results"):
+                        primary_finding_context = json.dumps(pfind["results"][0], indent=2)
+                except:
+                    pass
             elif ename.endswith(".plaso"):
                 found_paths["Timeline (Plaso)"] = epath
             elif ename == "auto.json":
@@ -393,7 +406,9 @@ def main() -> int:
 
     except Exception as e:
         print(f"DEBUG: Resource discovery failed: {e}")
-        dir_listing = os.listdir(intake_dir)
+        # Fallback path logic
+        if not dir_listing and os.path.exists(intake_dir):
+            dir_listing = os.listdir(intake_dir)
 
     out_dir = os.path.join(intake_dir, "orchestrator", ai_id)
     req_path = os.path.join(out_dir, "request.json")
@@ -470,6 +485,9 @@ def main() -> int:
         
         if case_summary_md:
             context_payload += f"\n\n[CONTEXT] SITUATIONAL AWARENESS MAP (case_summary.md):\n```markdown\n{case_summary_md}\n```"
+
+        if primary_finding_context:
+            context_payload += f"\n\n[GROUNDING] Primary Critical Finding (Investigation Focus):\n```json\n{primary_finding_context}\n```"
 
         history = [
             {"role": "system", "content": system_prompt},
@@ -572,82 +590,67 @@ def main() -> int:
             if not tool_calls:
                 continue
 
-            for tool_call in tool_calls:
-                call_id = tool_call.get("id", "none")
-                function = tool_call["function"]
-                sanitized_name = function["name"]
-                name = desanitize_tool_name(sanitized_name)
+                # V7: Parallel Tool Execution (Async Turns)
+                # We collect all tool calls and run them in parallel if possible.
+                # However, to preserve 'structured' mode logic (interception), we still process them.
                 
-                try:
-                    arguments = json.loads(function["arguments"])
-                except Exception as e:
-                    arguments = {}
-                    print(f"  [-] Failed to parse arguments for {name}: {e}")
+                def execute_one(tc):
+                    c_id = tc.get("id", "none")
+                    func = tc["function"]
+                    s_name = func["name"]
+                    t_name = desanitize_tool_name(s_name)
+                    try:
+                        t_args = json.loads(func["arguments"])
+                    except:
+                        t_args = {}
 
-                # Local Validation Gate
-                val_error = validate_arguments(name, arguments, mcp_tools)
-                if val_error:
-                    error_msg = f"[Local Validation Error]: {val_error}. Please correct the parameters and try again."
-                    print(f"  [-] Validation Failed: {val_error}")
-                    history.append({
-                        "role": "tool",
-                        "tool_call_id": call_id,
-                        "name": name,
-                        "content": error_msg
-                    })
-                    continue
+                    # Validation
+                    v_err = validate_arguments(t_name, t_args, mcp_tools)
+                    if v_err:
+                        return {"id": c_id, "name": t_name, "error": f"[Local Validation Error]: {v_err}"}
 
-                # Structured Mode Interceptor
-                if args.mode == "structured":
-                    if name in AUTO_APPROVE_TOOLS:
-                        print(f"[*] Safe-Pass: Auto-approving {name}")
-                    else:
-                        print(f"\n[AI PROPOSES TOOL]: {name}")
-                        print(f"[ARGUMENTS]: {json.dumps(arguments, indent=2)}")
-                        choice = input("Approve execution? [y/N/modify]: ").strip().lower()
+                    # Interceptor (if structured)
+                    if args.mode == "structured" and t_name not in AUTO_APPROVE_TOOLS:
+                        print(f"\n[AI PROPOSES TOOL]: {t_name}")
+                        print(f"[ARGUMENTS]: {json.dumps(t_args, indent=2)}")
+                        ch = input("Approve execution? [y/N/modify]: ").strip().lower()
+                        if ch == 'modify':
+                            fb = input("Provide your correction: ")
+                            return {"id": c_id, "name": t_name, "error": f"[Human Intercept]: Denied. Suggestion: {fb}"}
+                        elif ch != 'y':
+                            return {"id": c_id, "name": t_name, "error": "[Human Intercept]: Execution denied by lead investigator."}
+
+                    # Execution
+                    try:
+                        if t_name in AUTO_APPROVE_TOOLS:
+                            print(f"[*] Safe-Pass: Auto-approving {t_name}")
                         
-                        if choice == 'y':
-                            pass # Proceed to execution
-                        elif choice == 'modify':
-                            feedback = input("Provide your correction: ")
-                            error_msg = f"[Human Intercept]: Denied. Suggestion: {feedback}"
-                            history.append({
-                                "role": "tool",
-                                "tool_call_id": call_id,
-                                "name": name,
-                                "content": error_msg
-                            })
-                            continue
-                        else:
-                            print("  [-] Execution denied by human.")
-                            history.append({
-                                "role": "tool",
-                                "tool_call_id": call_id,
-                                "name": name,
-                                "content": "[Human Intercept]: Execution denied by lead investigator."
-                            })
-                            continue
+                        res = mcp_tools_call(t_name, t_args)
+                        return {"id": c_id, "name": t_name, "result": res}
+                    except Exception as ex:
+                        return {"id": c_id, "name": t_name, "error": f"[System Feedback]: Tool execution failed: {str(ex)}"}
 
-                try:
-                    result = mcp_tools_call(name, arguments)
-                    history.append({
-                        "role": "tool",
-                        "tool_call_id": call_id,
-                        "name": name,
-                        "content": json.dumps(result)
-                    })
-                    print(f"  [+] Success.")
-                    # V5 Hardening: Active Compaction
-                    compact_history(history)
-                except Exception as e:
-                    error_msg = f"[System Feedback]: Tool execution failed with error: {str(e)}. Review your loaded Skills, correct the syntax, and try again."
-                    print(f"  [-] Failure: {str(e)}")
-                    history.append({
-                        "role": "tool",
-                        "tool_call_id": call_id,
-                        "name": name,
-                        "content": error_msg
-                    })
+                # Run parallelized
+                with concurrent.futures.ThreadPoolExecutor(max_workers=5) as executor:
+                    futures = [executor.submit(execute_one, tc) for tc in tool_calls]
+                    for future in concurrent.futures.as_completed(futures):
+                        r = future.result()
+                        h_entry = {
+                            "role": "tool",
+                            "tool_call_id": r["id"],
+                            "name": r["name"],
+                        }
+                        if "error" in r:
+                            h_entry["content"] = r["error"]
+                            print(f"  [-] {r['name']} failed.")
+                        else:
+                            h_entry["content"] = json.dumps(r["result"])
+                            print(f"  [+] {r['name']} success.")
+                        
+                        history.append(h_entry)
+                
+                # V7: Active Compaction
+                compact_history(history)
 
         # 6) Write summary.md (commentary artifact)
         md = [
