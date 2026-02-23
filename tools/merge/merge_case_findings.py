@@ -318,6 +318,63 @@ def main() -> int:
         "requests": reqs,
     }
 
+    # --- Step 2: Generate the Markdown Index (The Map) ---
+    severity_order = ["critical", "high", "medium", "low", "informational"]
+    counts = {s: 0 for s in severity_order}
+    
+    findings_by_severity: Dict[str, List[Dict[str, Any]]] = {s: [] for s in severity_order}
+    
+    for f in merged:
+        sev = (f.get("finding") or {}).get("severity", "informational").lower()
+        if sev not in counts:
+            sev = "informational"
+        counts[sev] += 1
+        findings_by_severity[sev].append(f)
+
+    # Build Map
+    md_lines = [
+        f"# Case Investigation Summary: {intake_id}",
+        f"**Timestamp**: {case_doc['run_metadata']['timestamp_utc']}",
+        "",
+        "## Situational Awareness (Metrics)",
+    ]
+    
+    for s in severity_order:
+        if counts[s] > 0:
+            md_lines.append(f"- **{s.upper()}**: {counts[s]}")
+    
+    md_lines.extend([
+        "",
+        "## Top 15 High-Severity Findings (The Map)",
+        "Use `dfir.query_findings@1` with the `finding_id` to surgically extract full evidence.",
+        "",
+        "| Severity | Tool | Rule | Finding ID |",
+        "| :--- | :--- | :--- | :--- |"
+    ])
+
+    top_list = []
+    for s in severity_order:
+        top_list.extend(findings_by_severity[s])
+        if len(top_list) >= 15:
+            break
+    top_list = top_list[:15]
+
+    for f in top_list:
+        sev = (f.get("finding") or {}).get("severity", "informational").upper()
+        tool = (f.get("source") or {}).get("tool", "unknown")
+        rule = (f.get("source") or {}).get("rule_id", "unknown")
+        fid = f.get("finding_id", "unknown")
+        md_lines.append(f"| {sev} | {tool} | {rule} | `{fid}` |")
+
+    md_lines.extend([
+        "",
+        "> [!IMPORTANT]",
+        "> Treat large tool outputs as data sources, not context. Do NOT read `case_findings.json` directly if it exceeds 100KB."
+    ])
+
+    out_case_summary_md = intake_dir / "case_summary.md"
+    out_case_summary_md.write_text("\n".join(md_lines), encoding="utf-8")
+
     out_case_findings = intake_dir / "case_findings.json"
     write_json(out_case_findings, case_doc)
 
@@ -329,6 +386,7 @@ def main() -> int:
         "inputs": case_doc["run_metadata"]["inputs"],
         "artifacts": {
             "case_findings_json": file_meta(out_case_findings),
+            "case_summary_md": file_meta(out_case_summary_md),
         },
     }
     out_case_manifest = intake_dir / "case_manifest.json"
@@ -337,6 +395,7 @@ def main() -> int:
     validate_findings(out_case_findings)
 
     print(f"OK: wrote {out_case_findings}")
+    print(f"OK: wrote {out_case_summary_md}")
     print(f"OK: wrote {out_case_manifest}")
     return 0
 

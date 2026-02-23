@@ -130,5 +130,38 @@ class TestDualModeOrchestrator(unittest.TestCase):
         self.assertTrue(any(call.args[0] == "dfir.auto_run@1" for call in mock_mcp.call_args_list))
         print("[SUCCESS] Autonomous Mode: No Human Input required verified.")
 
+    @patch('tools.orchestrator.deepseek_orchestrator.mcp_tools_call')
+    def test_query_findings_logic(self, mock_mcp):
+        # Scenario: Verify the MCP tool logic for query_findings (internal test)
+        from tools.mcp.dfir_mcp_server import tool_query_findings
+        
+        # Create a mock findings file
+        findings_doc = {
+            "findings": [
+                {"finding_id": "f1", "finding": {"severity": "critical", "mitre_tags": ["T1547"]}},
+                {"finding_id": "f2", "finding": {"severity": "high", "mitre_tags": ["T1059"]}},
+                {"finding_id": "f3", "finding": {"severity": "critical", "mitre_tags": ["T1003"]}}
+            ]
+        }
+        f_path = "/tmp/test_findings.json"
+        with open(f_path, "w") as f:
+            json.dump(findings_doc, f)
+            
+        # Test Severity Filter
+        res = tool_query_findings({"path": f_path, "severity": "critical"}, {})
+        self.assertEqual(len(res["results"]), 2)
+        print("[SUCCESS] Query Tool: Severity Filter verified.")
+        
+        # Test ID Filter
+        res = tool_query_findings({"path": f_path, "finding_id": "f2"}, {})
+        self.assertEqual(len(res["results"]), 1)
+        self.assertEqual(res["results"][0]["finding_id"], "f2")
+        print("[SUCCESS] Query Tool: ID Filter verified.")
+
+        # Test Tactic Filter
+        res = tool_query_findings({"path": f_path, "mitre_tactic": "T1547"}, {})
+        self.assertEqual(len(res["results"]), 1)
+        print("[SUCCESS] Query Tool: Tactic Filter verified.")
+
 if __name__ == "__main__":
     unittest.main()

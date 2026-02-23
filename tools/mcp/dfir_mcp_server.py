@@ -29,9 +29,11 @@ ALLOWED_READ_ROOTS = [
 if DFIR_CASE_DIR:
     CASE_PATH = Path(DFIR_CASE_DIR).resolve()
     ALLOWED_EVIDENCE_ROOTS.append(CASE_PATH)
+    ALLOWED_READ_ROOTS.extend(ALLOWED_EVIDENCE_ROOTS) # Allow reading from evidence roots
     ALLOWED_READ_ROOTS.append(CASE_PATH)
     AUDIT_ROOT = CASE_PATH / "mcp_runs"
 else:
+    ALLOWED_READ_ROOTS.extend(ALLOWED_EVIDENCE_ROOTS) # Allow reading from evidence roots
     AUDIT_ROOT = PROJECT_ROOT / "outputs" / "mcp_runs"
 
 
@@ -69,7 +71,7 @@ TOOLS = [
     },
     {
         "name": "dfir.read_json@1",
-        "description": "Read a JSON file under outputs/ or contracts/ with optional JSON Pointer, bounded by max_bytes",
+        "description": "Read a JSON file under outputs/ or contracts/ with optional JSON Pointer, bounded by max_bytes (default 64KB, hard limit 100KB).",
         "inputSchema": {
             "type": "object",
             "additionalProperties": False,
@@ -77,7 +79,23 @@ TOOLS = [
             "properties": {
                 "path": {"type": "string", "minLength": 1},
                 "json_pointer": {"type": ["string", "null"]},
-                "max_bytes": {"type": "integer", "minimum": 1, "maximum": 1048576}
+                "max_bytes": {"type": "integer", "minimum": 1, "maximum": 100000}
+            }
+        }
+    },
+    {
+        "name": "dfir.query_findings@1",
+        "description": "Surgically query the monolithic case_findings.json file without loading it all. Filter by ID, severity, or tactic.",
+        "inputSchema": {
+            "type": "object",
+            "additionalProperties": False,
+            "required": ["path"],
+            "properties": {
+                "path": {"type": "string", "description": "Path to case_findings.json"},
+                "finding_id": {"type": "string", "description": "Extract a specific finding by its UUID"},
+                "severity": {"type": "string", "enum": ["critical", "high", "medium", "low", "informational"]},
+                "mitre_tactic": {"type": "string", "description": "e.g. T1547"},
+                "limit": {"type": "integer", "default": 10}
             }
         }
     },
@@ -401,19 +419,67 @@ def tool_hayabusa_csv_timeline(args: Dict[str, Any], audit: Dict[str, Path]) -> 
 
 
 def tool_read_json(args: Dict[str, Any], audit: Dict[str, Path]) -> Dict[str, Any]:
+    # Default 64KB, Hard Limit 100KB
     max_bytes = int(args.get("max_bytes") or 65536)
+    if max_bytes > 100000:
+        max_bytes = 100000
+
     path = safe_resolve(args["path"])
     ensure_read_allowed(path)
 
     st = path.stat()
     if st.st_size > max_bytes:
-        raise ValueError(f"file too large ({st.st_size} bytes) > max_bytes ({max_bytes})")
+        raise ValueError(f"file too large ({st.st_size} bytes) > max_bytes ({max_bytes}). Use surgical query tools for large files.")
 
     doc = json.loads(path.read_text(encoding="utf-8"))
     ptr = args.get("json_pointer")
     value = json_pointer_get(doc, ptr)
 
     return {"path": str(path), "json_pointer": ptr, "value": value}
+
+
+def tool_query_findings(args: Dict[str, Any], audit: Dict[str, Path]) -> Dict[str, Any]:
+    path = safe_resolve(args["path"])
+    ensure_read_allowed(path)
+    
+    if not path.is_file():
+        raise ValueError(f"file not found: {path}")
+
+    # Load full file - this is done in memory by the TOOL, keeping it out of LLM context
+    doc = json.loads(path.read_text(encoding="utf-8"))
+    findings = doc.get("findings", [])
+    
+    finding_id = args.get("finding_id")
+    severity = args.get("severity")
+    tactic = args.get("mitre_tactic")
+    limit = int(args.get("limit") or 10)
+
+    filtered = []
+    for f in findings:
+        # Filter by ID
+        if finding_id and f.get("finding_id") != finding_id:
+            continue
+        
+        # Filter by Severity
+        if severity and (f.get("finding") or {}).get("severity", "").lower() != severity.lower():
+            continue
+            
+        # Filter by Tactic
+        if tactic:
+            tags = (f.get("finding") or {}).get("mitre_tags") or []
+            if not any(tactic.lower() in t.lower() for t in tags):
+                continue
+                
+        filtered.append(f)
+        if len(filtered) >= limit:
+            break
+            
+    return {
+        "path": str(path),
+        "total_matched": len(filtered),
+        "results": filtered,
+        "note": "Use finding_id for surgical extraction of a single high-fidelity finding."
+    }
 
 def tool_list_dir(args: Dict[str, Any], audit: Dict[str, Path]) -> Dict[str, Any]:
     path = safe_resolve(args["path"])
@@ -557,6 +623,8 @@ def dispatch_tool(name: str, arguments: Dict[str, Any], audit: Dict[str, Path]) 
         return tool_hayabusa_csv_timeline(arguments, audit)
     if name == "dfir.query_super_timeline@1":
         return tool_query_super_timeline(arguments, audit)
+    if name == "dfir.query_findings@1":
+        return tool_query_findings(arguments, audit)
     if name == "dfir.load_skill@1":
         return tool_load_skill(arguments, audit)
     if name == "dfir.update_case_notes@1":

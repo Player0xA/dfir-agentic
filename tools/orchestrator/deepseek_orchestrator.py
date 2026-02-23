@@ -286,6 +286,23 @@ def main() -> int:
     intake_id = intake.get("intake_id", "unknown")
     os.environ["DFIR_CASE_ID"] = intake_id
 
+    # Discovery Grounding: List the intake directory and include situational map
+    dir_listing = []
+    case_summary_md = ""
+    try:
+        from tools.mcp.dfir_mcp_server import tool_list_dir, tool_read_json
+        res = tool_list_dir({"path": intake_dir}, {})
+        if "entries" in res:
+            dir_listing = [e["name"] for e in res["entries"]]
+            
+        if "case_summary.md" in dir_listing:
+            summary_res = tool_read_json({"path": os.path.join(intake_dir, "case_summary.md"), "max_bytes": 10000}, {})
+            if "value" in summary_res:
+                case_summary_md = summary_res["value"]
+    except Exception:
+        # Fallback to os.listdir if MCP tool call internally fails
+        dir_listing = os.listdir(intake_dir)
+
     out_dir = os.path.join(intake_dir, "orchestrator", ai_id)
     req_path = os.path.join(out_dir, "request.json")
     resp_path = os.path.join(out_dir, "response.json")
@@ -328,7 +345,12 @@ def main() -> int:
             "- Every note you write via 'dfir__update_case_notes__v1' MUST conclude with a 'Next Steps' summary.\n"
             "- When your investigation is fully concluded, YOU MUST output the exact token: <promise>TASK_COMPLETE</promise>\n"
             "- Output FORMAT: (1) Executive summary, (2) suspicious clusters, (3) Next deterministic pivots.\n"
-            "- To use a tool, use the native tool calling capability OR output a JSON block like: ```json {\"dfir__tool_name__v1\": {\"arg\": \"val\"}} ```\n"
+            "- To use a tool, use the native tool calling capability OR output a JSON block like: ```json {\"dfir__tool_name__v1\": {\"arg\": \"val\"}} ```\n\n"
+            "--- PROGRESSIVE DISCLOSURE PROTOCOL ---\n"
+            "- TREAT LARGE TOOL OUTPUTS AS DATA SOURCES, NOT CONTEXT.\n"
+            "- If a file exceeds 100KB, reading it directly WILL FAIL. You MUST use 'dfir__query_findings__v1' for surgical extraction.\n"
+            "- Always start by reviewing 'case_summary.md' if available. It contains the 'Map' of the case.\n"
+            "- Use 'finding_id' from the summary to surgically query for full evidence with 'dfir__query_findings__v1'.\n"
         )
 
         user_task = args.task if args.task else "Begin investigation by running dfir.auto_run@1."
@@ -336,9 +358,17 @@ def main() -> int:
         # Intake Injection (Grounding)
         intake_context = json.dumps(intake, indent=2)
         
+        # Grounding context construction
+        context_payload = f"Intake ID: {intake_id}\nIntake Path: {args.intake_json}\nTask: {user_task}\n"
+        context_payload += f"\n[CONTEXT] Auto-Detected Intake Payload:\n```json\n{intake_context}\n```\n"
+        context_payload += f"\n[CONTEXT] Case Output Directory Listing ({intake_dir}):\n- " + "\n- ".join(dir_listing)
+        
+        if case_summary_md:
+            context_payload += f"\n\n[CONTEXT] SITUATIONAL AWARENESS MAP (case_summary.md):\n```markdown\n{case_summary_md}\n```"
+
         history = [
             {"role": "system", "content": system_prompt},
-            {"role": "user", "content": f"Intake ID: {intake_id}\nIntake Path: {args.intake_json}\nTask: {user_task}\n\n[CONTEXT] Auto-Detected Intake Payload:\n```json\n{intake_context}\n```"}
+            {"role": "user", "content": context_payload}
         ]
         
         # Verification Log: Write the initial request setup

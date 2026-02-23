@@ -102,22 +102,20 @@ def main() -> int:
     elif enforcement["action"] == "dispatch_pipeline" and not enforcement["allowed"]:
         dispatch_block = {"status": "denied", "dispatch_json": None, "run_id": None, "manifest_path": None}
 
-    # 4) Write auto.json next to intake.json
+    # 4) Initialize auto_doc
     auto_doc = {
         "auto_id": auto_id,
         "timestamp_utc": ts,
         "intake": {"intake_id": intake_id, "intake_json": str(intake_json)},
         "selection": {"selected_agent": agent_id, "kind": kind},
         "enforcement": enforcement,
-        "dispatch": dispatch_block
+        "dispatch": dispatch_block,
+        "stages": {
+            "plaso": "skipped",
+            "enrichment": "skipped",
+            "merge": "skipped"
+        }
     }
-
-    out_path = intake_json.parent / "auto.json"
-    out_path.write_text(json.dumps(auto_doc, indent=2), encoding="utf-8")
-    print(f"OK: wrote {out_path}")
-
-    # 5) Validate auto.json
-    run_must([str(VALIDATE_AUTO), str(AUTO_SCHEMA), str(out_path)])
 
     # --- Phase: Automated Super Timeline (Plaso) ---
     if dispatch_block["status"] == "ok":
@@ -127,17 +125,21 @@ def main() -> int:
             evtx_dir = manifest.get("inputs", {}).get("evtx_dir")
             if evtx_dir:
                 print("INFO: starting plaso pipeline")
+                auto_doc["stages"]["plaso"] = "running"
                 try:
                     # Use unique run_id for plaso to avoid collisions with baseline
                     plaso_run_id = str(uuid.uuid4())
                     run_must([str(PLASO_RUNNER), plaso_run_id, ts, str(evtx_dir)])
+                    auto_doc["stages"]["plaso"] = "ok"
                 except Exception as e:
                     print(f"WARNING: Plaso pipeline failed: {e}", file=sys.stderr)
+                    auto_doc["stages"]["plaso"] = f"error: {e}"
 
     # 6) Optional enrichment stage
     if args.enrichment_policy == "always":
-        plan_json = out_path.parent / "enrichment_plan.json"
-        enrich_json = out_path.parent / "enrichment.json"
+        plan_json = intake_json.parent / "enrichment_plan.json"
+        enrich_json = intake_json.parent / "enrichment.json"
+        auto_doc["stages"]["enrichment"] = "running"
 
         if not ENRICH_DECIDER.is_file():
             print(f"FAIL: enrichment decider not found: {ENRICH_DECIDER}", file=sys.stderr)
@@ -151,17 +153,34 @@ def main() -> int:
             return 2
             
         # Run
-        run_must([str(ENRICH_RUNNER), "--plan-json", str(plan_json), "--out-json", str(enrich_json)])
+        try:
+            run_must([str(ENRICH_RUNNER), "--plan-json", str(plan_json), "--out-json", str(enrich_json)])
+            auto_doc["stages"]["enrichment"] = "ok"
+        except Exception as e:
+            auto_doc["stages"]["enrichment"] = f"error: {e}"
 
     # 7) Optional merge stage
     if args.run_merge:
+        auto_doc["stages"]["merge"] = "running"
         if not MERGE_TOOL.is_file():
             print(f"FAIL: merge tool not found: {MERGE_TOOL}", file=sys.stderr)
             return 2
         cmd = [str(MERGE_TOOL), "--intake-dir", str(intake_json.parent)]
         if args.merge_dedupe:
             cmd.append("--dedupe")
-        run_must(cmd)
+        try:
+            run_must(cmd)
+            auto_doc["stages"]["merge"] = "ok"
+        except Exception as e:
+            auto_doc["stages"]["merge"] = f"error: {e}"
+
+    # 8) Final write of auto.json
+    out_path = intake_json.parent / "auto.json"
+    out_path.write_text(json.dumps(auto_doc, indent=2), encoding="utf-8")
+    print(f"OK: wrote {out_path}")
+
+    # 9) Validate auto.json
+    run_must([str(VALIDATE_AUTO), str(AUTO_SCHEMA), str(out_path)])
 
     return 0
 
