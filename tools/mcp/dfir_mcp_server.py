@@ -13,6 +13,8 @@ from typing import Any, Dict, Optional, List, Tuple
 # ----------------------------
 PROJECT_ROOT = Path.cwd()
 
+DFIR_CASE_DIR = os.environ.get("DFIR_CASE_DIR")
+
 # Evidence roots are where "identify_evidence" and "auto_run" are allowed to point.
 # Keep this conservative; expand later as needed.
 ALLOWED_EVIDENCE_ROOTS = [
@@ -26,7 +28,14 @@ ALLOWED_READ_ROOTS = [
     PROJECT_ROOT / "contracts",
 ]
 
-AUDIT_ROOT = PROJECT_ROOT / "outputs" / "mcp_runs"
+if DFIR_CASE_DIR:
+    CASE_PATH = Path(DFIR_CASE_DIR).resolve()
+    ALLOWED_EVIDENCE_ROOTS.append(CASE_PATH)
+    ALLOWED_READ_ROOTS.append(CASE_PATH)
+    AUDIT_ROOT = CASE_PATH / "mcp_runs"
+else:
+    AUDIT_ROOT = PROJECT_ROOT / "outputs" / "mcp_runs"
+
 
 HAYABUSA_ROOT = PROJECT_ROOT / "tools" / "hayabusa"
 HAYABUSA_BIN = HAYABUSA_ROOT / "bin" / "hayabusa"
@@ -115,6 +124,19 @@ TOOLS = [
                 "end_time": {"type": "string", "description": "ISO8601 UTC end time"},
                 "artifact_filter": {"type": "string", "description": "Optional Plaso filter expression (e.g. 'parser is winevtx')"},
                 "output_format": {"type": "string", "enum": ["json", "csv"], "default": "json"}
+            }
+        }
+    },
+    {
+        "name": "dfir.load_skill@1",
+        "description": "Load detailed instructions for a specific forensic skill. Returns markdown.",
+        "inputSchema": {
+            "type": "object",
+            "additionalProperties": False,
+            "required": ["skill_name"],
+            "properties": {
+                "skill_name": {"type": "string", "minLength": 1, "description": "e.g., 'analyzing-timeline'"},
+                "file_name": {"type": "string", "description": "Optional specific file to load (e.g., 'psort_cheatsheet.md')"}
             }
         }
     }
@@ -312,7 +334,10 @@ def tool_hayabusa_csv_timeline(args: Dict[str, Any], audit: Dict[str, Path]) -> 
             raise RuntimeError(f"hayabusa config missing/empty: {f}")
 
     run_id = str(uuid.uuid4())
-    out_dir = PROJECT_ROOT / "outputs" / "csv" / "hayabusa_evtx" / run_id
+    if DFIR_CASE_DIR:
+        out_dir = Path(DFIR_CASE_DIR) / "hayabusa_evtx" / run_id
+    else:
+        out_dir = PROJECT_ROOT / "outputs" / "csv" / "hayabusa_evtx" / run_id
     mkdirp(out_dir)
 
     profile = str(args.get("profile") or "verbose")
@@ -389,7 +414,10 @@ def tool_query_super_timeline(args: Dict[str, Any], audit: Dict[str, Path]) -> D
 
     # psort -o json_line requires -w (output file)
     run_id = str(uuid.uuid4())
-    tmp_out = PROJECT_ROOT / f"tmp_psort_{run_id}.{fmt}"
+    if DFIR_CASE_DIR:
+        tmp_out = Path(DFIR_CASE_DIR) / f"tmp_psort_{run_id}.{fmt}"
+    else:
+        tmp_out = PROJECT_ROOT / f"tmp_psort_{run_id}.{fmt}"
 
     # Construct psort command
     # Ordering: binary, output options, storage file, filter
@@ -445,6 +473,38 @@ def tool_query_super_timeline(args: Dict[str, Any], audit: Dict[str, Path]) -> D
             "raw_csv_snippet": "\n".join(lines[:20]) # First 20 lines
         }
 
+def tool_load_skill(args: Dict[str, Any], audit: Dict[str, Path]) -> Dict[str, Any]:
+    skill_name = args["skill_name"]
+    file_name = args.get("file_name") or "SKILL.md"
+    
+    # Path validation: must be in .skills/
+    skill_dir = PROJECT_ROOT / ".skills" / skill_name
+    target_file = (skill_dir / file_name).resolve()
+    
+    # Security check: must be inside .skills directory
+    skills_root = (PROJECT_ROOT / ".skills").resolve()
+    try:
+        target_file.relative_to(skills_root)
+    except ValueError:
+        raise PermissionError(f"Access denied: {target_file} is outside .skills root")
+
+    if not target_file.is_file():
+        raise FileNotFoundError(f"Skill file not found: {target_file}")
+
+    content = target_file.read_text(encoding="utf-8")
+    
+    # If reading SKILL.md, strip YAML frontmatter
+    if file_name == "SKILL.md":
+        import re
+        # Match content between triple-dashes at the start of the file
+        content = re.sub(r'^---\s*\n.*?\n---\s*\n', '', content, flags=re.DOTALL)
+
+    return {
+        "skill_name": skill_name,
+        "file_name": file_name,
+        "content": content.strip()
+    }
+
 def dispatch_tool(name: str, arguments: Dict[str, Any], audit: Dict[str, Path]) -> Dict[str, Any]:
     if name == "dfir.identify_evidence@1":
         return tool_identify_evidence(arguments, audit)
@@ -458,6 +518,8 @@ def dispatch_tool(name: str, arguments: Dict[str, Any], audit: Dict[str, Path]) 
         return tool_hayabusa_csv_timeline(arguments, audit)
     if name == "dfir.query_super_timeline@1":
         return tool_query_super_timeline(arguments, audit)
+    if name == "dfir.load_skill@1":
+        return tool_load_skill(arguments, audit)
     raise KeyError(f"unknown tool: {name}")
 
 # ----------------------------

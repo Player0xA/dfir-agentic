@@ -20,6 +20,7 @@ import argparse
 import datetime as dt
 import json
 import os
+import re
 import subprocess
 import sys
 import uuid
@@ -105,6 +106,15 @@ def mcp_tools_call(name: str, arguments: dict, req_id: int = 2) -> dict:
     else:
         server_key = "win"
         
+    case_dir = os.environ.get("DFIR_CASE_DIR")
+    if case_dir and server_key != "dfir":
+        for k in ["output_dir", "dump_dir", "output_path"]:
+            if k in arguments and isinstance(arguments[k], str):
+                if not os.path.isabs(arguments[k]):
+                    arguments[k] = os.path.join(case_dir, arguments[k])
+            elif "dump" in name and k == "output_dir" and "output_dir" not in arguments:
+                arguments["output_dir"] = case_dir
+
     lines = [
         json.dumps({"jsonrpc": "2.0", "id": 1, "method": "initialize", "params": {}}),
         json.dumps({"jsonrpc": "2.0", "method": "notifications/initialized"}),
@@ -180,12 +190,53 @@ def write_text(path: str, text: str) -> None:
         f.write(text)
 
 
+def _get_skills_registry() -> str:
+    """Scans .skills/ for SKILL.md files and parses YAML metadata."""
+    registry = []
+    skills_root = PROJECT_ROOT / ".skills"
+    if not skills_root.is_dir():
+        return ""
+
+    for skill_dir in skills_root.iterdir():
+        if not skill_dir.is_dir():
+            continue
+        skill_file = skill_dir / "SKILL.md"
+        if not skill_file.is_file():
+            continue
+
+        try:
+            content = skill_file.read_text(encoding="utf-8")
+            # Quick YAML parser (regex) to avoid heavy dependencies
+            # Extracts 'name: ...' and 'description: ...'
+            name_match = re.search(r'^name:\s*(.+)$', content, re.MULTILINE)
+            desc_match = re.search(r'^description:\s*(.+)$', content, re.MULTILINE)
+            
+            if name_match and desc_match:
+                name = name_match.group(1).strip()
+                desc = desc_match.group(1).strip()
+                registry.append(f"- {name}: {desc}")
+        except Exception as e:
+            print(f"DEBUG: Failed to parse skill {skill_file.name}: {e}")
+
+    if not registry:
+        return ""
+
+    header = "\nAVAILABLE SKILLS (Progressive Disclosure):\n"
+    footer = "\nTo load the full instructions for a skill (or its supporting files), use dfir.load_skill@1(skill_name='name', file_name=None).\n"
+    return header + "\n".join(registry) + footer
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--intake-json", required=True, help="Path to outputs/intake/<id>/intake.json")
     args = ap.parse_args()
 
     api_key = os.environ.get("DEEPSEEK_API_KEY", "").strip()
+    
+    intake_abs = os.path.abspath(args.intake_json)
+    intake_dir = os.path.dirname(intake_abs)
+    os.environ["DFIR_CASE_DIR"] = intake_dir
+
     if not api_key:
         print("FAIL: DEEPSEEK_API_KEY not set", file=sys.stderr)
         return 2
@@ -199,8 +250,9 @@ def main() -> int:
     # Read intake (bounded)
     intake = mcp_read_json(args.intake_json)["value"]
     intake_id = intake.get("intake_id", "unknown")
+    os.environ["DFIR_CASE_ID"] = intake_id
 
-    out_dir = os.path.join("outputs", "ai", "orchestrator", intake_id, ai_id)
+    out_dir = os.path.join(intake_dir, "orchestrator", ai_id)
     req_path = os.path.join(out_dir, "request.json")
     resp_path = os.path.join(out_dir, "response.json")
     err_path = os.path.join(out_dir, "error.json")
@@ -233,10 +285,13 @@ def main() -> int:
         # findings = mcp_read_json(findings_path)["value"]
 
         # 4) Build a strict “commentary-only” prompt
+        skills_registry = _get_skills_registry()
+        
         system = {
             "role": "system",
             "content": (
                 "You are a DFIR triage assistant. You produce NON-AUTHORITATIVE commentary.\n"
+                f"{skills_registry}\n"
                 "Hard rules:\n"
                 "- Do NOT invent evidence or claim certainty without explicit fields.\n"
                 "- Use only the JSON provided.\n"
