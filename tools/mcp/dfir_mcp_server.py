@@ -19,7 +19,8 @@ DFIR_CASE_DIR = os.environ.get("DFIR_CASE_DIR")
 # Keep this conservative; expand later as needed.
 ALLOWED_EVIDENCE_ROOTS = [
     Path("/home/nevermore/cases"),
-    PROJECT_ROOT / "cases",  # optional local
+    PROJECT_ROOT.parent / "cases", # User external evidence
+    PROJECT_ROOT / "cases",        # optional local
 ]
 
 # Read-only roots for read_json/list_dir tools
