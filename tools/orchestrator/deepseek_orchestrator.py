@@ -23,22 +23,25 @@ import os
 import subprocess
 import sys
 import uuid
+from pathlib import Path
 from typing import Any, Dict, Optional
 from urllib.request import Request, urlopen
 from urllib.error import HTTPError, URLError
 
+PROJECT_ROOT = Path(__file__).parent.parent.parent.absolute()
 
 MCP_SERVERS = {
     "dfir": {
-        "command": ["python3", "-u", "tools/mcp/dfir_mcp_server.py"],
+        "command": ["python3", "-u", str(PROJECT_ROOT / "tools/mcp/dfir_mcp_server.py")],
+        "cwd": PROJECT_ROOT
     },
     "win": {
         "command": [
-            "tools/mcp/mcp-windows/venv/bin/python3",
+            str(PROJECT_ROOT / "tools/mcp/mcp-windows/venv/bin/python3"),
             "-u",
-            "tools/mcp/mcp-windows/winforensics-mcp/winforensics_mcp/server.py"
+            str(PROJECT_ROOT / "tools/mcp/mcp-windows/winforensics-mcp/winforensics_mcp/server.py")
         ],
-        "cwd": "tools/mcp/mcp-windows/winforensics-mcp"
+        "cwd": PROJECT_ROOT / "tools/mcp/mcp-windows/winforensics-mcp"
     }
 }
 
