@@ -28,21 +28,38 @@ from urllib.request import Request, urlopen
 from urllib.error import HTTPError, URLError
 
 
-MCP_SERVER = "tools/mcp/dfir_mcp_server.py"
+MCP_SERVERS = {
+    "dfir": {
+        "command": ["python3", "-u", "tools/mcp/dfir_mcp_server.py"],
+    },
+    "win": {
+        "command": [
+            "tools/mcp/memory/winforensics-mcp/venv/bin/python3",
+            "-u",
+            "tools/mcp/memory/winforensics-mcp/winforensics_mcp/server.py"
+        ],
+        "cwd": "tools/mcp/memory/winforensics-mcp"
+    }
+}
 
 
 def _now_utc_iso() -> str:
     return dt.datetime.utcnow().replace(microsecond=0).isoformat() + "Z"
 
 
-def _run_mcp_lines(lines: list[str]) -> list[dict]:
+def _run_mcp_lines(lines: list[str], server_key: str) -> list[dict]:
     """
-    Runs the MCP server once with the provided JSON-RPC lines over stdin.
+    Runs the specified MCP server once with the provided JSON-RPC lines over stdin.
     Returns parsed JSON objects from stdout lines.
     """
+    config = MCP_SERVERS[server_key]
+    cmd = config["command"]
+    cwd = config.get("cwd")
+
     payload = "\n".join(lines) + "\n"
     p = subprocess.run(
-        ["python3", "-u", MCP_SERVER],
+        cmd,
+        cwd=cwd,
         input=payload.encode("utf-8"),
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
@@ -64,11 +81,12 @@ def _run_mcp_lines(lines: list[str]) -> list[dict]:
 
 
 def mcp_tools_call(name: str, arguments: dict, req_id: int = 2) -> dict:
+    server_key = "dfir" if name.startswith("dfir.") else "win"
     lines = [
         json.dumps({"jsonrpc": "2.0", "id": 1, "method": "initialize", "params": {}}),
         json.dumps({"jsonrpc": "2.0", "id": req_id, "method": "tools/call", "params": {"name": name, "arguments": arguments}}),
     ]
-    objs = _run_mcp_lines(lines)
+    objs = _run_mcp_lines(lines, server_key)
     # Find response matching req_id
     for o in objs:
         if o.get("id") == req_id:
