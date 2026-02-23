@@ -1,0 +1,25 @@
+{
+  "jsonrpc": "2.0",
+  "id": 3,
+  "result": {
+    "call_id": "35da44cd-a64e-4c75-bd50-8c20d608cafe",
+    "result": {
+      "path": "/home/nevermore/dfir-agentic/outputs/intake/5af5825a-abf0-4403-ba1c-7972269ee0bb/dispatch.json",
+      "json_pointer": null,
+      "value": {
+        "intake_id": "5af5825a-abf0-4403-ba1c-7972269ee0bb",
+        "timestamp_utc": "2026-02-23T18:39:50Z",
+        "decision": {
+          "recommended_pipeline": "chainsaw_evtx",
+          "evidence_path": "../cases/intake",
+          "status": "dispatch"
+        },
+        "result": {
+          "ok": true,
+          "run_id": "f3370c9a-a198-4f92-828f-0ab89d23aea3",
+          "manifest_path": "outputs/jsonl/chainsaw_evtx/f3370c9a-a198-4f92-828f-0ab89d23aea3/manifest.json"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "jsonrpc": "2.0",
+  "id": 3,
+  "result": {
+    "call_id": "a44689b0-3750-44cf-8cd3-8ebcad53f823",
+    "result": {
+      "path": "/home/nevermore/dfir-agentic/outputs/intake/5af5825a-abf0-4403-ba1c-7972269ee0bb/case_summary.md",
+      "value": "# Case Investigation Summary: 5af5825a-abf0-4403-ba1c-7972269ee0bb\n**Timestamp**: 2026-02-23T18:40:13Z\n\n## Situational Awareness (Metrics)\n- **INFORMATIONAL**: 1080\n\n## Top 15 High-Severity Findings (The Map)\nUse `dfir.query_findings@1` with the `finding_id` to surgically extract full evidence.\n\n| Severity | Tool | Rule | Finding ID |\n| :--- | :--- | :--- | :--- |\n| INFORMATIONAL | chainsaw | RAWREF:chainsaw.evtx.jsonl:line:1 | `F-f3370c9a-000001` |\n| INFORMATIONAL | chainsaw | RAWREF:chainsaw.evtx.jsonl:line:2 | `F-f3370c9a-000002` |\n| INFORMATIONAL | chainsaw | RAWREF:chainsaw.evtx.jsonl:line:3 | `F-f3370c9a-000003` |\n| INFORMATIONAL | chainsaw | RAWREF:chainsaw.evtx.jsonl:line:4 | `F-f3370c9a-000004` |\n| INFORMATIONAL | chainsaw | RAWREF:chainsaw.evtx.jsonl:line:5 | `F-f3370c9a-000005` |\n| INFORMATIONAL | chainsaw | RAWREF:chainsaw.evtx.jsonl:line:6 | `F-f3370c9a-000006` |\n| INFORMATIONAL | chainsaw | RAWREF:chainsaw.evtx.jsonl:line:7 | `F-f3370c9a-000007` |\n| INFORMATIONAL | chainsaw | RAWREF:chainsaw.evtx.jsonl:line:8 | `F-f3370c9a-000008` |\n| INFORMATIONAL | chainsaw | RAWREF:chainsaw.evtx.jsonl:line:9 | `F-f3370c9a-000009` |\n| INFORMATIONAL | chainsaw | RAWREF:chainsaw.evtx.jsonl:line:10 | `F-f3370c9a-000010` |\n| INFORMATIONAL | chainsaw | RAWREF:chainsaw.evtx.jsonl:line:11 | `F-f3370c9a-000011` |\n| INFORMATIONAL | chainsaw | RAWREF:chainsaw.evtx.jsonl:line:12 | `F-f3370c9a-000012` |\n| INFORMATIONAL | chainsaw | RAWREF:chainsaw.evtx.jsonl:line:13 | `F-f3370c9a-000013` |\n| INFORMATIONAL | chainsaw | RAWREF:chainsaw.evtx.jsonl:line:14 | `F-f3370c9a-000014` |\n| INFORMATIONAL | chainsaw | RAWREF:chainsaw.evtx.jsonl:line:15 | `F-f3370c9a-000015` |\n\n> [!IMPORTANT]\n> Treat large tool outputs as data sources, not context. Do NOT read `case_findings.json` directly if it exceeds 100KB."
+    }
+  }
+}

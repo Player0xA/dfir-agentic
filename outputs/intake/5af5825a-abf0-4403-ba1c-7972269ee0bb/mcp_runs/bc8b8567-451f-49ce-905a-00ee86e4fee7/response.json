@@ -1,0 +1,30 @@
+{
+  "jsonrpc": "2.0",
+  "id": 3,
+  "result": {
+    "call_id": "bc8b8567-451f-49ce-905a-00ee86e4fee7",
+    "result": {
+      "path": "/home/nevermore/dfir-agentic/outputs/intake/5af5825a-abf0-4403-ba1c-7972269ee0bb/intake.json",
+      "json_pointer": null,
+      "value": {
+        "intake_id": "5af5825a-abf0-4403-ba1c-7972269ee0bb",
+        "timestamp_utc": "2026-02-23T18:39:50Z",
+        "inputs": {
+          "paths": [
+            "../cases/intake"
+          ]
+        },
+        "classification": {
+          "kind": "windows_evtx_dir",
+          "confidence": "high",
+          "recommended_pipeline": "chainsaw_evtx"
+        },
+        "signals": [
+          "intake:dir_contains_evtx_count:335",
+          "intake:dir_contains_evt_count:0",
+          "intake:security_evtx_present"
+        ]
+      }
+    }
+  }
+}

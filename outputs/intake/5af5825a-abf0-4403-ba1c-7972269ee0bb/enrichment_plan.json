@@ -1,0 +1,25 @@
+{
+  "plan_id": "190595fd-4763-4182-973d-a52951fb76a2",
+  "timestamp_utc": "2026-02-23T18:40:07Z",
+  "agent_id": "windows_evtx_agent",
+  "baseline": {
+    "auto_json": "outputs/intake/5af5825a-abf0-4403-ba1c-7972269ee0bb/auto.json",
+    "baseline_manifest_path": "outputs/jsonl/chainsaw_evtx/f3370c9a-a198-4f92-828f-0ab89d23aea3/manifest.json",
+    "evtx_dir": "../cases/intake"
+  },
+  "enrichment": {
+    "enrichment_id": "hayabusa_evtx",
+    "pipeline_script": "pipelines/hayabusa_evtx/run.sh",
+    "args": [
+      "../cases/intake"
+    ],
+    "tier": "deep"
+  },
+  "decision": {
+    "should_run": true,
+    "reason": "Escalation Rule: Critical/High severity findings present ({'critical': 1, 'high': 2, 'informational': 336}).",
+    "policy": {
+      "mode": "agent_decision"
+    }
+  }
+}

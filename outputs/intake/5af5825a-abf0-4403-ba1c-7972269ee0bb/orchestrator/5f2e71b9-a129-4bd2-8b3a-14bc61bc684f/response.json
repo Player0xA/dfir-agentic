@@ -1,0 +1,220 @@
+[
+  {
+    "role": "system",
+    "content": "You are a DFIR triage assistant. You produce NON-AUTHORITATIVE commentary.\nYou are an interactive DFIR assistant. Before performing any deep analysis, you must formulate a plan and propose the tool you want to use. Wait for the lead investigator to approve your tool calls. If the investigator corrects you, adjust your command immediately.\n\nAVAILABLE SKILLS (Progressive Disclosure):\n- parsing-registry: Use this skill when investigating persistence mechanisms, user activity, or system configuration within Windows Registry hives.\n- analyzing-timeline: Use this skill when you need to query the Plaso Super Timeline to correlate file system events, find file creation times, or verify execution artifacts within a specific time window.\n- performing-memory-forensics: Use this skill when investigating active memory dumps (RAM/vmem), detecting injected code, analyzing running processes, or finding hidden network connections.\nTo load the full instructions for a skill (or its supporting files), use dfir__load_skill__v1(skill_name='name', file_name=None).\n\nHard rules:\n- CRITICAL: Do NOT invent evidence or claim certainty without explicit fields from tool returns.\n- CRITICAL: Do NOT simulate tool outputs. You must wait for the actual tool call return.\n- Use ONLY the JSON provided or results from tool calls.\n- When you successfully extract an artifact, YOU MUST use 'dfir__update_case_notes__v1' to document it.\n- Every note you write via 'dfir__update_case_notes__v1' MUST conclude with a 'Next Steps' summary.\n- When your investigation is fully concluded, YOU MUST output the exact token: <promise>TASK_COMPLETE</promise>\n- Output FORMAT: (1) Executive summary, (2) suspicious clusters, (3) Next deterministic pivots.\n- To use a tool, use the native tool calling capability OR output a JSON block like: ```json {\"dfir__tool_name__v1\": {\"arg\": \"val\"}} ```\n\n--- PROGRESSIVE DISCLOSURE PROTOCOL ---\n- TREAT LARGE TOOL OUTPUTS AS DATA SOURCES, NOT CONTEXT. Scaling requires surgical precision.\n- If a file exceeds 100KB, reading it directly WILL FAIL (Ralph Wiggum Guardrail). You MUST use 'dfir__query_findings__v1' for surgical extraction.\n- FORMAT ENFORCEMENT: 'dfir__read_json__v1' is strictly for valid JSON. For Markdown (.md), text (.txt), or Logs (.log), you MUST use 'dfir__read_text__v1'.\n- Always start by reviewing 'case_summary.md' using 'dfir__read_text__v1'. It contains the 'Map' of the case.\n- Use 'finding_id' from the summary to surgically query for full evidence with 'dfir__query_findings__v1'.\n"
+  },
+  {
+    "role": "user",
+    "content": "Intake ID: 5af5825a-abf0-4403-ba1c-7972269ee0bb\nIntake Path: outputs/intake/5af5825a-abf0-4403-ba1c-7972269ee0bb/intake.json\nTask: Identify the root cause of the critical alerts\n\n[CONTEXT] Auto-Detected Intake Payload:\n```json\n{\n  \"intake_id\": \"5af5825a-abf0-4403-ba1c-7972269ee0bb\",\n  \"timestamp_utc\": \"2026-02-23T18:39:50Z\",\n  \"inputs\": {\n    \"paths\": [\n      \"../cases/intake\"\n    ]\n  },\n  \"classification\": {\n    \"kind\": \"windows_evtx_dir\",\n    \"confidence\": \"high\",\n    \"recommended_pipeline\": \"chainsaw_evtx\"\n  },\n  \"signals\": [\n    \"intake:dir_contains_evtx_count:335\",\n    \"intake:dir_contains_evt_count:0\",\n    \"intake:security_evtx_present\"\n  ]\n}\n```\n\n[CONTEXT] Case Output Directory Listing (/home/nevermore/dfir-agentic/outputs/intake/5af5825a-abf0-4403-ba1c-7972269ee0bb):\n- enrichment.json\n- enrichment_plan.json\n- intake.json\n- case_findings.json\n- auto.json\n- dispatch.json\n- case_summary.md\n- case_manifest.json\n- mcp_runs"
+  },
+  {
+    "role": "assistant",
+    "content": "I'll start by reviewing the case summary to understand the investigation context and then proceed with identifying the root cause of the critical alerts.",
+    "tool_calls": [
+      {
+        "index": 0,
+        "id": "call_00_l6KJJEHJg8MU3VnvjvmJouCA",
+        "type": "function",
+        "function": {
+          "name": "dfir__read_text__v1",
+          "arguments": "{\"path\": \"outputs/intake/5af5825a-abf0-4403-ba1c-7972269ee0bb/case_summary.md\"}"
+        }
+      }
+    ]
+  },
+  {
+    "role": "tool",
+    "tool_call_id": "call_00_l6KJJEHJg8MU3VnvjvmJouCA",
+    "name": "dfir.read_text@1",
+    "content": "{\"call_id\": \"a44689b0-3750-44cf-8cd3-8ebcad53f823\", \"result\": {\"path\": \"/home/nevermore/dfir-agentic/outputs/intake/5af5825a-abf0-4403-ba1c-7972269ee0bb/case_summary.md\", \"value\": \"# Case Investigation Summary: 5af5825a-abf0-4403-ba1c-7972269ee0bb\\n**Timestamp**: 2026-02-23T18:40:13Z\\n\\n## Situational Awareness (Metrics)\\n- **INFORMATIONAL**: 1080\\n\\n## Top 15 High-Severity Findings (The Map)\\nUse `dfir.query_findings@1` with the `finding_id` to surgically extract full evidence.\\n\\n| Severity | Tool | Rule | Finding ID |\\n| :--- | :--- | :--- | :--- |\\n| INFORMATIONAL | chainsaw | RAWREF:chainsaw.evtx.jsonl:line:1 | `F-f3370c9a-000001` |\\n| INFORMATIONAL | chainsaw | RAWREF:chainsaw.evtx.jsonl:line:2 | `F-f3370c9a-000002` |\\n| INFORMATIONAL | chainsaw | RAWREF:chainsaw.evtx.jsonl:line:3 | `F-f3370c9a-000003` |\\n| INFORMATIONAL | chainsaw | RAWREF:chainsaw.evtx.jsonl:line:4 | `F-f3370c9a-000004` |\\n| INFORMATIONAL | chainsaw | RAWREF:chainsaw.evtx.jsonl:line:5 | `F-f3370c9a-000005` |\\n| INFORMATIONAL | chainsaw | RAWREF:chainsaw.evtx.jsonl:line:6 | `F-f3370c9a-000006` |\\n| INFORMATIONAL | chainsaw | RAWREF:chainsaw.evtx.jsonl:line:7 | `F-f3370c9a-000007` |\\n| INFORMATIONAL | chainsaw | RAWREF:chainsaw.evtx.jsonl:line:8 | `F-f3370c9a-000008` |\\n| INFORMATIONAL | chainsaw | RAWREF:chainsaw.evtx.jsonl:line:9 | `F-f3370c9a-000009` |\\n| INFORMATIONAL | chainsaw | RAWREF:chainsaw.evtx.jsonl:line:10 | `F-f3370c9a-000010` |\\n| INFORMATIONAL | chainsaw | RAWREF:chainsaw.evtx.jsonl:line:11 | `F-f3370c9a-000011` |\\n| INFORMATIONAL | chainsaw | RAWREF:chainsaw.evtx.jsonl:line:12 | `F-f3370c9a-000012` |\\n| INFORMATIONAL | chainsaw | RAWREF:chainsaw.evtx.jsonl:line:13 | `F-f3370c9a-000013` |\\n| INFORMATIONAL | chainsaw | RAWREF:chainsaw.evtx.jsonl:line:14 | `F-f3370c9a-000014` |\\n| INFORMATIONAL | chainsaw | RAWREF:chainsaw.evtx.jsonl:line:15 | `F-f3370c9a-000015` |\\n\\n> [!IMPORTANT]\\n> Treat large tool outputs as data sources, not context. Do NOT read `case_findings.json` directly if it exceeds 100KB.\"}}"
+  },
+  {
+    "role": "assistant",
+    "content": "I notice that the case summary shows only INFORMATIONAL findings, but the task is to identify the root cause of critical alerts. Let me check the intake.json to understand what alerts were detected, and then examine the case_findings.json to see if there are any critical findings that might not be showing in the summary.",
+    "tool_calls": [
+      {
+        "index": 0,
+        "id": "call_00_ai1hW9NAcZET3nQ47irswg6C",
+        "type": "function",
+        "function": {
+          "name": "dfir__load_intake__v1",
+          "arguments": "{\"path\": \"outputs/intake/5af5825a-abf0-4403-ba1c-7972269ee0bb/intake.json\"}"
+        }
+      }
+    ]
+  },
+  {
+    "role": "tool",
+    "tool_call_id": "call_00_ai1hW9NAcZET3nQ47irswg6C",
+    "name": "dfir.load_intake@1",
+    "content": "{\"call_id\": \"bc8b8567-451f-49ce-905a-00ee86e4fee7\", \"result\": {\"path\": \"/home/nevermore/dfir-agentic/outputs/intake/5af5825a-abf0-4403-ba1c-7972269ee0bb/intake.json\", \"json_pointer\": null, \"value\": {\"intake_id\": \"5af5825a-abf0-4403-ba1c-7972269ee0bb\", \"timestamp_utc\": \"2026-02-23T18:39:50Z\", \"inputs\": {\"paths\": [\"../cases/intake\"]}, \"classification\": {\"kind\": \"windows_evtx_dir\", \"confidence\": \"high\", \"recommended_pipeline\": \"chainsaw_evtx\"}, \"signals\": [\"intake:dir_contains_evtx_count:335\", \"intake:dir_contains_evt_count:0\", \"intake:security_evtx_present\"]}}}"
+  },
+  {
+    "role": "assistant",
+    "content": "Now let me check the auto.json to see what automated analysis was performed and what critical alerts might have been detected:",
+    "tool_calls": [
+      {
+        "index": 0,
+        "id": "call_00_vCidx1Zd3pBHZaMGhwnEZExa",
+        "type": "function",
+        "function": {
+          "name": "dfir__read_json__v1",
+          "arguments": "{\"path\": \"outputs/intake/5af5825a-abf0-4403-ba1c-7972269ee0bb/auto.json\"}"
+        }
+      }
+    ]
+  },
+  {
+    "role": "tool",
+    "tool_call_id": "call_00_vCidx1Zd3pBHZaMGhwnEZExa",
+    "name": "dfir.read_json@1",
+    "content": "{\"call_id\": \"14b01440-2bea-49b4-9adf-2ce821f5dfc9\", \"result\": {\"path\": \"/home/nevermore/dfir-agentic/outputs/intake/5af5825a-abf0-4403-ba1c-7972269ee0bb/auto.json\", \"json_pointer\": null, \"value\": {\"auto_id\": \"3ab394b6-7e18-4a62-a0ce-03a725691288\", \"timestamp_utc\": \"2026-02-23T18:39:50Z\", \"intake\": {\"intake_id\": \"5af5825a-abf0-4403-ba1c-7972269ee0bb\", \"intake_json\": \"outputs/intake/5af5825a-abf0-4403-ba1c-7972269ee0bb/intake.json\"}, \"selection\": {\"selected_agent\": \"windows_evtx_agent\", \"kind\": \"windows_evtx_dir\"}, \"enforcement\": {\"allowed\": true, \"action\": \"dispatch_pipeline\", \"details\": \"ALLOW\"}, \"dispatch\": {\"status\": \"ok\", \"dispatch_json\": \"outputs/intake/5af5825a-abf0-4403-ba1c-7972269ee0bb/dispatch.json\", \"run_id\": \"f3370c9a-a198-4f92-828f-0ab89d23aea3\", \"manifest_path\": \"outputs/jsonl/chainsaw_evtx/f3370c9a-a198-4f92-828f-0ab89d23aea3/manifest.json\"}, \"stages\": {\"plaso\": \"ok\", \"enrichment\": \"ok\", \"merge\": \"ok\"}}}}"
+  },
+  {
+    "role": "assistant",
+    "content": "Let me check the dispatch.json to understand what pipeline was run:",
+    "tool_calls": [
+      {
+        "index": 0,
+        "id": "call_00_ip665B6QO8IV6nzAkWTxDgXd",
+        "type": "function",
+        "function": {
+          "name": "dfir__read_json__v1",
+          "arguments": "{\"path\": \"outputs/intake/5af5825a-abf0-4403-ba1c-7972269ee0bb/dispatch.json\"}"
+        }
+      }
+    ]
+  },
+  {
+    "role": "tool",
+    "tool_call_id": "call_00_ip665B6QO8IV6nzAkWTxDgXd",
+    "name": "dfir.read_json@1",
+    "content": "{\"call_id\": \"35da44cd-a64e-4c75-bd50-8c20d608cafe\", \"result\": {\"path\": \"/home/nevermore/dfir-agentic/outputs/intake/5af5825a-abf0-4403-ba1c-7972269ee0bb/dispatch.json\", \"json_pointer\": null, \"value\": {\"intake_id\": \"5af5825a-abf0-4403-ba1c-7972269ee0bb\", \"timestamp_utc\": \"2026-02-23T18:39:50Z\", \"decision\": {\"recommended_pipeline\": \"chainsaw_evtx\", \"evidence_path\": \"../cases/intake\", \"status\": \"dispatch\"}, \"result\": {\"ok\": true, \"run_id\": \"f3370c9a-a198-4f92-828f-0ab89d23aea3\", \"manifest_path\": \"outputs/jsonl/chainsaw_evtx/f3370c9a-a198-4f92-828f-0ab89d23aea3/manifest.json\"}}}}"
+  },
+  {
+    "role": "assistant",
+    "content": "Now I need to query the case_findings.json to look for any critical alerts. Since the summary only shows informational findings, I should query specifically for higher severity findings:",
+    "tool_calls": [
+      {
+        "index": 0,
+        "id": "call_00_7DMAhjrBifeMJuTjVo6gt8No",
+        "type": "function",
+        "function": {
+          "name": "dfir__query_findings__v1",
+          "arguments": "{\"path\": \"outputs/intake/5af5825a-abf0-4403-ba1c-7972269ee0bb/case_findings.json\", \"severity\": \"critical\"}"
+        }
+      }
+    ]
+  },
+  {
+    "role": "tool",
+    "tool_call_id": "call_00_7DMAhjrBifeMJuTjVo6gt8No",
+    "name": "dfir.query_findings@1",
+    "content": "{\"call_id\": \"415e9fd9-f91c-4e7e-b5f9-a40d78046325\", \"result\": {\"path\": \"/home/nevermore/dfir-agentic/outputs/intake/5af5825a-abf0-4403-ba1c-7972269ee0bb/case_findings.json\", \"total_matched\": 0, \"results\": [], \"note\": \"Use finding_id for surgical extraction of a single high-fidelity finding.\"}}"
+  },
+  {
+    "role": "assistant",
+    "content": "Let me check for high severity findings:",
+    "tool_calls": [
+      {
+        "index": 0,
+        "id": "call_00_oYOHtv8H6tF6ObP97zpQrB0N",
+        "type": "function",
+        "function": {
+          "name": "dfir__query_findings__v1",
+          "arguments": "{\"path\": \"outputs/intake/5af5825a-abf0-4403-ba1c-7972269ee0bb/case_findings.json\", \"severity\": \"high\"}"
+        }
+      }
+    ]
+  },
+  {
+    "role": "tool",
+    "tool_call_id": "call_00_oYOHtv8H6tF6ObP97zpQrB0N",
+    "name": "dfir.query_findings@1",
+    "content": "{\"call_id\": \"3a7db5e8-807d-42cc-80fc-e6f8015ae9a2\", \"result\": {\"path\": \"/home/nevermore/dfir-agentic/outputs/intake/5af5825a-abf0-4403-ba1c-7972269ee0bb/case_findings.json\", \"total_matched\": 0, \"results\": [], \"note\": \"Use finding_id for surgical extraction of a single high-fidelity finding.\"}}"
+  },
+  {
+    "role": "assistant",
+    "content": "Let me check for medium severity findings:",
+    "tool_calls": [
+      {
+        "index": 0,
+        "id": "call_00_I8j2zLt0jpos9oSsGSVXpCvI",
+        "type": "function",
+        "function": {
+          "name": "dfir__query_findings__v1",
+          "arguments": "{\"path\": \"outputs/intake/5af5825a-abf0-4403-ba1c-7972269ee0bb/case_findings.json\", \"severity\": \"medium\"}"
+        }
+      }
+    ]
+  },
+  {
+    "role": "tool",
+    "tool_call_id": "call_00_I8j2zLt0jpos9oSsGSVXpCvI",
+    "name": "dfir.query_findings@1",
+    "content": "{\"call_id\": \"8af1c691-6367-4fd6-8595-9fc51ab0bae2\", \"result\": {\"path\": \"/home/nevermore/dfir-agentic/outputs/intake/5af5825a-abf0-4403-ba1c-7972269ee0bb/case_findings.json\", \"total_matched\": 0, \"results\": [], \"note\": \"Use finding_id for surgical extraction of a single high-fidelity finding.\"}}"
+  },
+  {
+    "role": "assistant",
+    "content": "Let me check for low severity findings:",
+    "tool_calls": [
+      {
+        "index": 0,
+        "id": "call_00_spFMT4e74vf9K24wJSxjVgVE",
+        "type": "function",
+        "function": {
+          "name": "dfir__query_findings__v1",
+          "arguments": "{\"path\": \"outputs/intake/5af5825a-abf0-4403-ba1c-7972269ee0bb/case_findings.json\", \"severity\": \"low\"}"
+        }
+      }
+    ]
+  },
+  {
+    "role": "tool",
+    "tool_call_id": "call_00_spFMT4e74vf9K24wJSxjVgVE",
+    "name": "dfir.query_findings@1",
+    "content": "{\"call_id\": \"db48421b-c5cd-4a16-82b5-63152e9d1533\", \"result\": {\"path\": \"/home/nevermore/dfir-agentic/outputs/intake/5af5825a-abf0-4403-ba1c-7972269ee0bb/case_findings.json\", \"total_matched\": 0, \"results\": [], \"note\": \"Use finding_id for surgical extraction of a single high-fidelity finding.\"}}"
+  },
+  {
+    "role": "assistant",
+    "content": "It appears there are only informational findings. Let me examine one of the informational findings to understand what was detected:",
+    "tool_calls": [
+      {
+        "index": 0,
+        "id": "call_00_bY9XFldH87EEKPUEO1yockIb",
+        "type": "function",
+        "function": {
+          "name": "dfir__query_findings__v1",
+          "arguments": "{\"path\": \"outputs/intake/5af5825a-abf0-4403-ba1c-7972269ee0bb/case_findings.json\", \"finding_id\": \"F-f3370c9a-000001\"}"
+        }
+      }
+    ]
+  },
+  {
+    "role": "tool",
+    "tool_call_id": "call_00_bY9XFldH87EEKPUEO1yockIb",
+    "name": "dfir.query_findings@1",
+    "content": "{\"call_id\": \"90809062-7831-4a87-9c73-965df6735f41\", \"result\": {\"path\": \"/home/nevermore/dfir-agentic/outputs/intake/5af5825a-abf0-4403-ba1c-7972269ee0bb/case_findings.json\", \"total_matched\": 1, \"results\": [{\"finding_id\": \"F-f3370c9a-000001\", \"category\": \"unknown\", \"summary\": \"User Profile Disk - Registry file loaded\", \"confidence\": null, \"severity\": \"informational\", \"source\": {\"tool\": \"chainsaw\", \"rule_id\": \"RAWREF:chainsaw.evtx.jsonl:line:1\", \"rule_title\": \"User Profile Disk - Registry file loaded\"}, \"evidence\": {\"event_refs\": [\"chainsaw.evtx.jsonl:line:1\"], \"artifacts\": [], \"timestamps\": {\"first_seen\": \"2026-01-14T12:51:49.560663+00:00\", \"last_seen\": \"2026-01-14T12:51:49.560663+00:00\"}, \"raw\": {\"group\": \"Microsoft RDS Events - User Profile Disk\", \"kind\": \"individual\", \"document\": {\"kind\": \"evtx\", \"path\": \"../cases/intake/evtx/Logs/Microsoft-Windows-User Profile Service%254Operational.evtx\", \"data\": {\"Event\": {\"EventData\": {\"File\": \"C:\\\\Users\\\\informatica\\\\ntuser.dat\", \"Key\": \"S-1-5-21-1841095656-2843128008-524542198-3682\"}, \"System\": {\"EventID\": 5, \"Level\": 4, \"Provider_attributes\": {\"Name\": \"Microsoft-Windows-User Profiles Service\", \"Guid\": \"89B1E9F0-5AFF-44A6-9B44-0A07A7CE5845\"}, \"Version\": 0, \"Task\": 0, \"Opcode\": 0, \"TimeCreated_attributes\": {\"SystemTime\": \"2026-01-14T12:51:49.560663Z\"}, \"Execution_attributes\": {\"ProcessID\": 1444, \"ThreadID\": 1732}, \"Correlation\": null, \"Keywords\": \"0x4000000000000000\", \"Security_attributes\": {\"UserID\": \"S-1-5-18\"}, \"EventRecordID\": 6636, \"Channel\": \"Microsoft-Windows-User Profile Service/Operational\", \"Computer\": \"SQLSERVER.Mills.local\"}}, \"Event_attributes\": {\"xmlns\": \"http://schemas.microsoft.com/win/2004/08/events/event\"}}}, \"name\": \"User Profile Disk - Registry file loaded\", \"timestamp\": \"2026-01-14T12:51:49.560663+00:00\", \"authors\": [\"Catarina de Faria\"], \"level\": \"info\", \"source\": \"chainsaw\", \"status\": \"stable\"}}, \"raw_refs\": [\"chainsaw.evtx.jsonl:line:1\"], \"provenance\": {\"origin\": \"baseline\", \"manifest_path\": \"outputs/jsonl/chainsaw_evtx/f3370c9a-a198-4f92-828f-0ab89d23aea3/manifest.json\"}}], \"note\": \"Use finding_id for surgical extraction of a single high-fidelity finding.\"}}"
+  },
+  {
+    "role": "assistant",
+    "content": "Let me check a few more findings to get a better understanding of what's in the EVTX logs:",
+    "tool_calls": [
+      {
+        "index": 0,
+        "id": "call_00_cwH1XT8C0pDWvOt2ZimWWz4T",
+        "type": "function",
+        "function": {
+          "name": "dfir__query_findings__v1",
+          "arguments": "{\"path\": \"outputs/intake/5af5825a-abf0-4403-ba1c-7972269ee0bb/case_findings.json\", \"finding_id\": \"F-f3370c9a-000002\"}"
+        }
+      }
+    ]
+  },
+  {
+    "role": "tool",
+    "tool_call_id": "call_00_cwH1XT8C0pDWvOt2ZimWWz4T",
+    "name": "dfir.query_findings@1",
+    "content": "{\"call_id\": \"ef153132-2d41-4e96-8700-0f23624a9c08\", \"result\": {\"path\": \"/home/nevermore/dfir-agentic/outputs/intake/5af5825a-abf0-4403-ba1c-7972269ee0bb/case_findings.json\", \"total_matched\": 1, \"results\": [{\"finding_id\": \"F-f3370c9a-000002\", \"category\": \"unknown\", \"summary\": \"User Profile Disk - Registry file loaded\", \"confidence\": null, \"severity\": \"informational\", \"source\": {\"tool\": \"chainsaw\", \"rule_id\": \"RAWREF:chainsaw.evtx.jsonl:line:2\", \"rule_title\": \"User Profile Disk - Registry file loaded\"}, \"evidence\": {\"event_refs\": [\"chainsaw.evtx.jsonl:line:2\"], \"artifacts\": [], \"timestamps\": {\"first_seen\": \"2026-01-14T12:51:49.648018+00:00\", \"last_seen\": \"2026-01-14T12:51:49.648018+00:00\"}, \"raw\": {\"group\": \"Microsoft RDS Events - User Profile Disk\", \"kind\": \"individual\", \"document\": {\"kind\": \"evtx\", \"path\": \"../cases/intake/evtx/Logs/Microsoft-Windows-User Profile Service%254Operational.evtx\", \"data\": {\"Event\": {\"EventData\": {\"File\": \"C:\\\\Users\\\\informatica\\\\AppData\\\\Local\\\\Microsoft\\\\Windows\\\\\\\\UsrClass.dat\", \"Key\": \"S-1-5-21-1841095656-2843128008-524542198-3682_Classes\"}, \"System\": {\"EventID\": 5, \"Level\": 4, \"Provider_attributes\": {\"Name\": \"Microsoft-Windows-User Profiles Service\", \"Guid\": \"89B1E9F0-5AFF-44A6-9B44-0A07A7CE5845\"}, \"Version\": 0, \"Task\": 0, \"Opcode\": 0, \"TimeCreated_attributes\": {\"SystemTime\": \"2026-01-14T12:51:49.648018Z\"}, \"Execution_attributes\": {\"ProcessID\": 1444, \"ThreadID\": 1732}, \"Correlation\": null, \"Keywords\": \"0x4000000000000000\", \"Security_attributes\": {\"UserID\": \"S-1-5-18\"}, \"EventRecordID\": 6638, \"Channel\": \"Microsoft-Windows-User Profile Service/Operational\", \"Computer\": \"SQLSERVER.Mills.local\"}}, \"Event_attributes\": {\"xmlns\": \"http://schemas.microsoft.com/win/2004/08/events/event\"}}}, \"name\": \"User Profile Disk - Registry file loaded\", \"timestamp\": \"2026-01-14T12:51:49.648018+00:00\", \"authors\": [\"Catarina de Faria\"], \"level\": \"info\", \"source\": \"chainsaw\", \"status\": \"stable\"}}, \"raw_refs\": [\"chainsaw.evtx.jsonl:line:2\"], \"provenance\": {\"origin\": \"baseline\", \"manifest_path\": \"outputs/jsonl/chainsaw_evtx/f3370c9a-a198-4f92-828f-0ab89d23aea3/manifest.json\"}}], \"note\": \"Use finding_id for surgical extraction of a single high-fidelity finding.\"}}"
+  }
+]

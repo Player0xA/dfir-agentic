@@ -1,0 +1,14 @@
+{
+  "timestamp_utc": "2026-02-23T18:40:21Z",
+  "rpc": {
+    "jsonrpc": "2.0",
+    "id": 3,
+    "method": "tools/call",
+    "params": {
+      "name": "dfir.read_text@1",
+      "arguments": {
+        "path": "outputs/intake/5af5825a-abf0-4403-ba1c-7972269ee0bb/case_summary.md"
+      }
+    }
+  }
+}

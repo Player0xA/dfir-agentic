@@ -1,0 +1,13 @@
+{
+  "jsonrpc": "2.0",
+  "id": 3,
+  "result": {
+    "call_id": "db48421b-c5cd-4a16-82b5-63152e9d1533",
+    "result": {
+      "path": "/home/nevermore/dfir-agentic/outputs/intake/5af5825a-abf0-4403-ba1c-7972269ee0bb/case_findings.json",
+      "total_matched": 0,
+      "results": [],
+      "note": "Use finding_id for surgical extraction of a single high-fidelity finding."
+    }
+  }
+}
