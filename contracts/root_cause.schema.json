@@ -1,0 +1,86 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "RootCauseAnalysis",
+    "type": "object",
+    "properties": {
+        "summary": {
+            "type": "string",
+            "description": "Executive summary of the investigation."
+        },
+        "root_cause": {
+            "type": "string",
+            "description": "The primary cause of the incident."
+        },
+        "confidence": {
+            "type": "string",
+            "enum": [
+                "High",
+                "Medium",
+                "Low"
+            ],
+            "description": "Confidence level in the identified root cause."
+        },
+        "claims": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "claim": {
+                        "type": "string"
+                    },
+                    "supporting_evidence": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "description": "Specific finding IDs or timeline event references."
+                    }
+                },
+                "required": [
+                    "claim",
+                    "supporting_evidence"
+                ]
+            }
+        },
+        "unknowns": {
+            "type": "array",
+            "items": {
+                "type": "string"
+            },
+            "description": "Key investigative questions that remain unanswered."
+        },
+        "mitre_attack_mapping": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "technique_id": {
+                        "type": "string"
+                    },
+                    "tactic": {
+                        "type": "string"
+                    },
+                    "evidence": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "technique_id",
+                    "evidence"
+                ]
+            }
+        },
+        "assessment": {
+            "type": "string",
+            "description": "Subjective assessment, hypotheses, and context."
+        }
+    },
+    "required": [
+        "summary",
+        "root_cause",
+        "confidence",
+        "claims",
+        "unknowns",
+        "assessment"
+    ]
+}
