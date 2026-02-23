@@ -388,31 +388,46 @@ def tool_query_super_timeline(args: Dict[str, Any], audit: Dict[str, Path]) -> D
     filt = args.get("artifact_filter")
 
     # Construct psort command
-    # -z UTC: treat times as UTC
-    # -o json_line: for machine readability
-    # --slice: timeframe filter
     cmd = [PSORT_BIN, "-z", "UTC"]
     if fmt == "json":
         cmd.extend(["-o", "json_line"])
     else:
         cmd.extend(["-o", "csv"])
 
-    cmd.extend(["--slice", f"{start} {end}"])
+    # Plaso filter syntax for time range
+    # Use DATETIME() indicator as recommended by newer Plaso versions
+    t_start = start.replace("T", " ").replace("Z", "")
+    t_end = end.replace("T", " ").replace("Z", "")
     
+    time_filter = f"timestamp > DATETIME('{t_start}') AND timestamp < DATETIME('{t_end}')"
     if filt:
-        cmd.append(filt)
+        full_filter = f"({time_filter}) AND ({filt})"
+    else:
+        full_filter = time_filter
 
+    # psort -o json_line requires -w (output file)
+    run_id = str(uuid.uuid4())
+    tmp_out = PROJECT_ROOT / f"tmp_psort_{run_id}.{fmt}"
+    
+    cmd.extend(["-w", str(tmp_out)])
     cmd.append(str(plaso_path))
+    cmd.append(full_filter)
 
     rc, out, err = run_cmd(cmd, cwd=PROJECT_ROOT)
-    audit_write(audit, "stdout", out)
+    
+    # Read output file if it exists
+    out_content = ""
+    if tmp_out.exists():
+        out_content = tmp_out.read_text(encoding="utf-8")
+        tmp_out.unlink() # Cleanup
+
+    audit_write(audit, "stdout", out_content)
     audit_write(audit, "stderr", err)
 
     if rc != 0:
-        raise RuntimeError(f"psort failed (rc={rc})")
+        raise RuntimeError(f"psort failed (rc={rc}). Stderr: {err}")
 
-    # If JSON, try to parse at least one line to verify it worked
-    lines = out.strip().splitlines()
+    lines = out_content.strip().splitlines()
     if fmt == "json":
         preview = []
         for line in lines[:10]: # Return first 10 for safety/brevity
