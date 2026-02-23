@@ -1,0 +1,3 @@
+[submodule "tools/mcp/memory/winforensics-mcp"]
+	path = tools/mcp/memory/winforensics-mcp
+	url = https://github.com/x746b/winforensics-mcp.git
