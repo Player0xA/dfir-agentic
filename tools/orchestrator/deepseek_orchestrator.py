@@ -136,16 +136,11 @@ def mcp_read_json(path: str, json_pointer: Optional[str] = None, max_bytes: int 
         args["json_pointer"] = json_pointer
 
     raw = mcp_tools_call("dfir.read_json@1", args)
-
-    # Robust unwrap:
-    # - Expected: {"call_id": "...", "result": {"path":..., "json_pointer":..., "value": ...}}
-    # - Also accept already-unwrapped: {"path":..., "json_pointer":..., "value": ...}
     if isinstance(raw, dict) and "value" in raw:
         return raw
     if isinstance(raw, dict) and isinstance(raw.get("result"), dict) and "value" in raw["result"]:
         return raw["result"]
-
-    raise RuntimeError(f"Unexpected dfir.read_json@1 shape. Keys={list(raw.keys()) if isinstance(raw, dict) else type(raw)}")
+    return raw
 
 
 def deepseek_chat(messages: list[dict], model: str, base_url: str, api_key: str, timeout_s: int = 60) -> dict:
@@ -154,16 +149,18 @@ def deepseek_chat(messages: list[dict], model: str, base_url: str, api_key: str,
     Docs: POST https://api.deepseek.com/chat/completions (OpenAI-compatible shape).
     """
     url = base_url.rstrip("/") + "/chat/completions"
-    body = json.dumps(
-        {
-            "model": model,
-            "messages": messages,
-            "temperature": 0.2,
-            "max_tokens": 900,
-        }
-    ).encode("utf-8")
-
-    req = Request(url, data=body, method="POST")
+    body = {
+        "model": model,
+        "messages": messages,
+        "temperature": 0.2,
+        "max_tokens": 1024,
+    }
+    # Check if we have tool calls in the last assistant message
+    # DeepSeek API (like OpenAI) uses 'tool_choice' or 'tools' list
+    # For now, we manually handle tool calls if they appear in content or as attributes
+    
+    encoded_body = json.dumps(body).encode("utf-8")
+    req = Request(url, data=encoded_body, method="POST")
     req.add_header("Authorization", f"Bearer {api_key}")
     req.add_header("Content-Type", "application/json")
 
@@ -259,117 +256,113 @@ def main() -> int:
     summary_path = os.path.join(out_dir, "summary.md")
 
     try:
-        # 1) Execute deterministic auto run via MCP (this is your autonomous stack)
-        auto_res = mcp_tools_call("dfir.auto_run@1", {"intake_json": args.intake_json})
-        auto_json_path = auto_res["result"]["auto_json"]
-
-        # 2) Read dispatch block (tiny pointer read)
-        dispatch = mcp_read_json(auto_json_path, "/dispatch")["value"]
-        run_id = dispatch.get("run_id")
-        manifest_path = dispatch.get("manifest_path")
-
-        # 3) Read manifest pointers to artifacts we are allowed to summarize
-        # Only grab triage + a few metadata fields; do NOT read raw logs.
-        manifest_tooling = mcp_read_json(manifest_path, "/tooling")["value"]
-        triage_meta = mcp_read_json(manifest_path, "/artifacts/triage_json")["value"]
-        findings_meta = mcp_read_json(manifest_path, "/artifacts/findings_json")["value"]
-
-        triage_path = triage_meta["path"]
-        findings_path = findings_meta["path"]
-
-        triage = mcp_read_json(triage_path)["value"]
-
-        # Optional: pull only the first N findings summaries (bounded) via JSON pointer if your findings are big.
-        # Here we keep it simple: don't load findings.json at all unless you want it.
-        # If you later want it, prefer pointers like "/findings/0" etc.
-        # findings = mcp_read_json(findings_path)["value"]
-
-        # 4) Build a strict “commentary-only” prompt
+        # Pre-calculate skills registry
         skills_registry = _get_skills_registry()
-        
-        system = {
-            "role": "system",
-            "content": (
-                "You are a DFIR triage assistant. You produce NON-AUTHORITATIVE commentary.\n"
-                f"{skills_registry}\n"
-                "Hard rules:\n"
-                "- Do NOT invent evidence or claim certainty without explicit fields.\n"
-                "- Use only the JSON provided.\n"
-                "- Output: (1) Executive triage summary, (2) Top suspicious clusters, (3) Next deterministic pivots.\n"
-                "- Always reference finding_id when discussing an item.\n"
-                "- If data is missing, say 'unknown'."
-            ),
-        }
 
-        user = {
-            "role": "user",
-            "content": json.dumps(
-                {
-                    "timestamp_utc": ts,
-                    "intake": {
-                        "intake_id": intake_id,
-                        "classification": intake.get("classification", {}),
-                        "signals": intake.get("signals", []),
-                        "inputs": intake.get("inputs", {}),
-                    },
-                    "deterministic_run": {
-                        "run_id": run_id,
-                        "manifest_path": manifest_path,
-                        "tooling": manifest_tooling,
-                        "triage_path": triage_path,
-                        "findings_path": findings_path,
-                    },
-                    "triage": triage,
-                },
-                indent=2,
-            ),
-        }
+        system_prompt = (
+            "You are a DFIR triage assistant. You produce NON-AUTHORITATIVE commentary.\n"
+            f"{skills_registry}\n"
+            "Hard rules:\n"
+            "- Do NOT invent evidence or claim certainty without explicit fields.\n"
+            "- Use ONLY the JSON provided or results from tool calls.\n"
+            "- When you successfully extract an artifact, YOU MUST use 'dfir.update_case_notes@1' to document it.\n"
+            "- Every note you write via 'dfir.update_case_notes@1' MUST conclude with a 'Next Steps' summary.\n"
+            "- When your investigation is fully concluded, YOU MUST output the exact token: <promise>TASK_COMPLETE</promise>\n"
+            "- Output FORMAT: (1) Executive summary, (2) suspicious clusters, (3) Next deterministic pivots.\n"
+        )
 
-        ds_request = {
-            "provider": "deepseek",
-            "base_url": base_url,
-            "model": model,
-            "messages": [system, user],
-        }
-        write_json(req_path, ds_request)
+        history = [
+            {"role": "system", "content": system_prompt},
+            {"role": "user", "content": f"Intake ID: {intake_id}\nIntake Path: {args.intake_json}\nBegin investigation by running dfir.auto_run@1."}
+        ]
 
-        # 5) Call DeepSeek
-        ds_response = deepseek_chat([system, user], model=model, base_url=base_url, api_key=api_key)
-        write_json(resp_path, ds_response)
+        MAX_ITERATIONS = 10
+        iteration = 0
+        final_summary = "Investigation timed out or reached max iterations."
 
-        content = ""
-        try:
-            content = ds_response["choices"][0]["message"]["content"]
-        except Exception:
-            content = json.dumps(ds_response, indent=2)
+        while iteration < MAX_ITERATIONS:
+            iteration += 1
+            print(f"[*] Iteration {iteration}/{MAX_ITERATIONS}...")
+            
+            # 5) Call DeepSeek
+            ds_response = deepseek_chat(history, model=model, base_url=base_url, api_key=api_key)
+            choice = ds_response["choices"][0]
+            message = choice["message"]
+            content = message.get("content") or ""
+            
+            history.append(message)
+            
+            if content:
+                print(f"[AI]: {content[:200]}...")
+                if "<promise>TASK_COMPLETE</promise>" in content:
+                    print("[*] Completion token detected.")
+                    final_summary = content
+                    break
+
+            tool_calls = message.get("tool_calls")
+            if not tool_calls:
+                # If no tools and no promise, we might just be talking. 
+                # We continue loop to let AI finish if it has tokens left, or break if it's just repeating.
+                continue
+
+            for tool_call in tool_calls:
+                call_id = tool_call["id"]
+                function = tool_call["function"]
+                name = function["name"]
+                try:
+                    arguments = json.loads(function["arguments"])
+                except Exception as e:
+                    arguments = {}
+                    print(f"  [-] Failed to parse arguments for {name}: {e}")
+
+                print(f"[*] Executing Tool: {name}...")
+                try:
+                    result = mcp_tools_call(name, arguments)
+                    history.append({
+                        "role": "tool",
+                        "tool_call_id": call_id,
+                        "name": name,
+                        "content": json.dumps(result)
+                    })
+                    print(f"  [+] Success.")
+                except Exception as e:
+                    error_msg = f"[System Feedback]: Tool execution failed with error: {str(e)}. Review your loaded Skills, correct the syntax, and try again."
+                    print(f"  [-] Failure: {str(e)}")
+                    history.append({
+                        "role": "tool",
+                        "tool_call_id": call_id,
+                        "name": name,
+                        "content": error_msg
+                    })
 
         # 6) Write summary.md (commentary artifact)
-        md = []
-        md.append(f"# DFIR Orchestrator Summary (NON-AUTHORITATIVE)\n")
-        md.append(f"- intake_id: `{intake_id}`")
-        md.append(f"- ai_id: `{ai_id}`")
-        md.append(f"- run_id: `{run_id}`")
-        md.append(f"- manifest: `{manifest_path}`")
-        md.append("")
-        md.append(content.strip())
-        md.append("")
+        md = [
+            f"# DFIR Orchestrator Summary (NON-AUTHORITATIVE)\n",
+            f"- intake_id: `{intake_id}`",
+            f"- ai_id: `{ai_id}`",
+            f"- iterations: `{iteration}`",
+            "",
+            final_summary.strip(),
+            "",
+            "## Audit Log",
+        ]
+        
+        for h in history:
+            if h["role"] == "tool":
+                md.append(f"- Tool Success: `{h['name']}`")
+            elif h["role"] == "assistant" and h.get("tool_calls"):
+                for tc in h["tool_calls"]:
+                    md.append(f"- Tool Dispatch: `{tc['function']['name']}`")
+
         write_text(summary_path, "\n".join(md))
+        write_json(resp_path, history) # Full audit trail
 
         print(f"OK: wrote {summary_path}")
         return 0
 
     except Exception as e:
-        write_json(
-            err_path,
-            {
-                "timestamp_utc": ts,
-                "intake_json": args.intake_json,
-                "ai_id": ai_id,
-                "error": str(e),
-            },
-        )
+        write_json(err_path, {"error": str(e), "iteration": iteration})
         print(f"FAIL: {e}", file=sys.stderr)
-        print(f"Wrote: {err_path}", file=sys.stderr)
         return 1
 
 

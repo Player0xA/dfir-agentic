@@ -139,6 +139,18 @@ TOOLS = [
                 "file_name": {"type": "string", "description": "Optional specific file to load (e.g., 'psort_cheatsheet.md')"}
             }
         }
+    },
+    {
+        "name": "dfir.update_case_notes@1",
+        "description": "Log an investigation finding or progress note. MUST always conclude with a 'Next Steps' summary.",
+        "inputSchema": {
+            "type": "object",
+            "additionalProperties": False,
+            "required": ["notes"],
+            "properties": {
+                "notes": {"type": "string", "minLength": 1, "description": "Markdown formatted investigation notes."}
+            }
+        }
     }
 ]
 
@@ -505,6 +517,23 @@ def tool_load_skill(args: Dict[str, Any], audit: Dict[str, Path]) -> Dict[str, A
         "content": content.strip()
     }
 
+def tool_update_case_notes(args: Dict[str, Any], audit: Dict[str, Path]) -> Dict[str, Any]:
+    notes = args["notes"]
+    if not DFIR_CASE_DIR:
+        raise RuntimeError("DFIR_CASE_DIR not set; cannot update case notes.")
+    
+    case_path = Path(DFIR_CASE_DIR)
+    progress_file = case_path / "progress.md"
+    
+    timestamp = utc_now_z()
+    entry = f"\n## {timestamp}\n{notes}\n"
+    
+    # Append to file
+    with open(progress_file, "a", encoding="utf-8") as f:
+        f.write(entry)
+        
+    return {"path": str(progress_file), "status": "updated"}
+
 def dispatch_tool(name: str, arguments: Dict[str, Any], audit: Dict[str, Path]) -> Dict[str, Any]:
     if name == "dfir.identify_evidence@1":
         return tool_identify_evidence(arguments, audit)
@@ -520,6 +549,8 @@ def dispatch_tool(name: str, arguments: Dict[str, Any], audit: Dict[str, Path]) 
         return tool_query_super_timeline(arguments, audit)
     if name == "dfir.load_skill@1":
         return tool_load_skill(arguments, audit)
+    if name == "dfir.update_case_notes@1":
+        return tool_update_case_notes(arguments, audit)
     raise KeyError(f"unknown tool: {name}")
 
 # ----------------------------
