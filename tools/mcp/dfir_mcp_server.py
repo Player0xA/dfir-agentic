@@ -181,6 +181,8 @@ def audit_paths(call_id: str) -> Dict[str, Path]:
     }
 
 def audit_write(paths: Dict[str, Path], name: str, content: str):
+    if name not in paths:
+        return
     p = paths[name]
     p.write_text(content, encoding="utf-8")
 
