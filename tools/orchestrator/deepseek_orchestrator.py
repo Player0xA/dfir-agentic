@@ -590,67 +590,69 @@ def main() -> int:
             if not tool_calls:
                 continue
 
-                # V7: Parallel Tool Execution (Async Turns)
-                # We collect all tool calls and run them in parallel if possible.
-                # However, to preserve 'structured' mode logic (interception), we still process them.
+            # V7: Parallel Tool Execution (Async Turns)
+            # We collect all tool calls and run them in parallel if possible.
+            # However, to preserve 'structured' mode logic (interception), we still process them.
+            
+            def execute_one(tc):
+                c_id = tc.get("id", "none")
+                func = tc["function"]
+                s_name = func["name"]
+                t_name = desanitize_tool_name(s_name)
+                try:
+                    t_args = json.loads(func["arguments"])
+                except:
+                    t_args = {}
+
+                # Validation
+                v_err = validate_arguments(t_name, t_args, mcp_tools)
+                if v_err:
+                    print(f"DEBUG VAL ERROR FOR {t_name}: {v_err}")
+                    return {"id": c_id, "name": t_name, "error": f"[Local Validation Error]: {v_err}"}
+
+                # Interceptor (if structured)
+                if args.mode == "structured" and t_name not in AUTO_APPROVE_TOOLS:
+                    print(f"\n[AI PROPOSES TOOL]: {t_name}")
+                    print(f"[ARGUMENTS]: {json.dumps(t_args, indent=2)}")
+                    ch = input("Approve execution? [y/N/modify]: ").strip().lower()
+                    if ch == 'modify':
+                        fb = input("Provide your correction: ")
+                        return {"id": c_id, "name": t_name, "error": f"[Human Intercept]: Denied. Suggestion: {fb}"}
+                    elif ch != 'y':
+                        return {"id": c_id, "name": t_name, "error": "[Human Intercept]: Execution denied by lead investigator."}
+
+                # Execution
+                try:
+                    if t_name in AUTO_APPROVE_TOOLS:
+                        print(f"[*] Safe-Pass: Auto-approving {t_name}")
+                    
+                    res = mcp_tools_call(t_name, t_args)
+                    return {"id": c_id, "name": t_name, "result": res}
+                except Exception as ex:
+                    return {"id": c_id, "name": t_name, "error": f"[System Feedback]: Tool execution failed: {str(ex)}"}
+
+            # Run parallelized with order preservation
+            with concurrent.futures.ThreadPoolExecutor(max_workers=5) as executor:
+                # executor.map preserves the order of the input iterable
+                results = list(executor.map(execute_one, tool_calls))
                 
-                def execute_one(tc):
-                    c_id = tc.get("id", "none")
-                    func = tc["function"]
-                    s_name = func["name"]
-                    t_name = desanitize_tool_name(s_name)
-                    try:
-                        t_args = json.loads(func["arguments"])
-                    except:
-                        t_args = {}
-
-                    # Validation
-                    v_err = validate_arguments(t_name, t_args, mcp_tools)
-                    if v_err:
-                        return {"id": c_id, "name": t_name, "error": f"[Local Validation Error]: {v_err}"}
-
-                    # Interceptor (if structured)
-                    if args.mode == "structured" and t_name not in AUTO_APPROVE_TOOLS:
-                        print(f"\n[AI PROPOSES TOOL]: {t_name}")
-                        print(f"[ARGUMENTS]: {json.dumps(t_args, indent=2)}")
-                        ch = input("Approve execution? [y/N/modify]: ").strip().lower()
-                        if ch == 'modify':
-                            fb = input("Provide your correction: ")
-                            return {"id": c_id, "name": t_name, "error": f"[Human Intercept]: Denied. Suggestion: {fb}"}
-                        elif ch != 'y':
-                            return {"id": c_id, "name": t_name, "error": "[Human Intercept]: Execution denied by lead investigator."}
-
-                    # Execution
-                    try:
-                        if t_name in AUTO_APPROVE_TOOLS:
-                            print(f"[*] Safe-Pass: Auto-approving {t_name}")
-                        
-                        res = mcp_tools_call(t_name, t_args)
-                        return {"id": c_id, "name": t_name, "result": res}
-                    except Exception as ex:
-                        return {"id": c_id, "name": t_name, "error": f"[System Feedback]: Tool execution failed: {str(ex)}"}
-
-                # Run parallelized
-                with concurrent.futures.ThreadPoolExecutor(max_workers=5) as executor:
-                    futures = [executor.submit(execute_one, tc) for tc in tool_calls]
-                    for future in concurrent.futures.as_completed(futures):
-                        r = future.result()
-                        h_entry = {
-                            "role": "tool",
-                            "tool_call_id": r["id"],
-                            "name": r["name"],
-                        }
-                        if "error" in r:
-                            h_entry["content"] = r["error"]
-                            print(f"  [-] {r['name']} failed.")
-                        else:
-                            h_entry["content"] = json.dumps(r["result"])
-                            print(f"  [+] {r['name']} success.")
-                        
-                        history.append(h_entry)
-                
-                # V7: Active Compaction
-                compact_history(history)
+                for r in results:
+                    h_entry = {
+                        "role": "tool",
+                        "tool_call_id": r["id"],
+                        "name": r["name"],
+                    }
+                    if "error" in r:
+                        h_entry["content"] = r["error"]
+                        print(f"  [-] {r['name']} failed.")
+                    else:
+                        h_entry["content"] = json.dumps(r["result"])
+                        print(f"  [+] {r['name']} success.")
+                    
+                    history.append(h_entry)
+            
+            # V7: Active Compaction
+            compact_history(history)
 
         # 6) Write summary.md (commentary artifact)
         md = [
