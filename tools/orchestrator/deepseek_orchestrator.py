@@ -464,6 +464,10 @@ def main() -> int:
         # 1) Tool Discovery (New Production Invariant)
         mcp_tools = mcp_list_tools("dfir")
         
+        # Rule 1: Early Guardrails & Redundancy Prevention
+        if found_paths:
+            mcp_tools = [t for t in mcp_tools if t["name"] != "dfir.load_intake@1"]
+        
         # 2) Pre-calculate skills registry
         skills_registry = _get_skills_registry()
 
@@ -544,6 +548,15 @@ def main() -> int:
 
         MAX_ITERATIONS = 10
         iteration = 0
+        budget_points = 15
+        notes_count = 0
+        has_fetched_evidence = False
+        progress_jsonl = os.path.join(out_dir, "progress.jsonl")
+        
+        # Init progress.jsonl
+        with open(progress_jsonl, "w") as f:
+            f.write(json.dumps({"ts": ts, "event": "Investigation Started", "intake": intake_id}) + "\n")
+            
         final_summary = "Investigation timed out or reached max iterations."
 
         while iteration < MAX_ITERATIONS:
@@ -642,7 +655,12 @@ def main() -> int:
             # We collect all tool calls and run them in parallel if possible.
             # However, to preserve 'structured' mode logic (interception), we still process them.
             
+            batch_tools = [desanitize_tool_name(tc["function"]["name"]) for tc in tool_calls]
+            batch_has_evidence = any(t in ["dfir.query_super_timeline@1", "dfir.query_findings@1", "dfir.load_case_context@1"] for t in batch_tools)
+            
             def execute_one(tc):
+                nonlocal budget_points, notes_count, has_fetched_evidence
+                
                 c_id = tc.get("id", "none")
                 func = tc["function"]
                 s_name = func["name"]
@@ -651,6 +669,30 @@ def main() -> int:
                     t_args = json.loads(func["arguments"])
                 except:
                     t_args = {}
+
+                # Tool Cost Budgeting
+                TOOL_COSTS = {
+                    "dfir.query_super_timeline@1": 3,
+                    "dfir.query_findings@1": 2,
+                    "dfir.read_text@1": 1
+                }
+                cost = TOOL_COSTS.get(t_name, 0)
+                if budget_points - cost < 0:
+                    return {"id": c_id, "name": t_name, "error": f"[Budget Exceeded]: Tool '{t_name}' costs {cost} but you only have {budget_points} points left."}
+                
+                # First-Action Rule
+                if iteration in [1, 2] and not has_fetched_evidence and not batch_has_evidence:
+                    return {"id": c_id, "name": t_name, "error": "[First-Action Mandate]: You MUST execute a high-value evidence fetch (e.g., query_findings, query_super_timeline, or load_case_context) before further planning or note-taking."}
+
+                # Note limit policy
+                if t_name == "dfir.update_case_notes@1":
+                    if notes_count >= 3:
+                        return {"id": c_id, "name": t_name, "error": "[Policy Violation]: Maximum case note updates (3) reached. You must conclude the investigation."}
+                    notes_count += 1
+
+                budget_points -= cost
+                if t_name in ["dfir.query_super_timeline@1", "dfir.query_findings@1", "dfir.load_case_context@1"]:
+                    has_fetched_evidence = True
 
                 # Phase 11: Absolute Forensic Control - Redundancy Gate
                 if t_name in ["dfir.load_intake@1", "dfir.list_dir@1"] and found_paths:
@@ -696,11 +738,26 @@ def main() -> int:
                     if "error" in r:
                         h_entry["content"] = r["error"]
                         print(f"  [-] {r['name']} failed: {r['error']}")
+                        preview = r["error"]
                     else:
                         h_entry["content"] = json.dumps(r["result"])
+                        preview = "SUCCESS"
                         print(f"  [+] {r['name']} success.")
-                    
+
                     history.append(h_entry)
+                    
+                    # JSONL Structured Progress Logging
+                    try:
+                        with open(progress_jsonl, "a") as f:
+                            log_entry = {
+                                "ts": _now_utc_iso(),
+                                "step": f"Iteration {iteration}",
+                                "tool": r["name"],
+                                "result_preview": preview
+                            }
+                            f.write(json.dumps(log_entry) + "\n")
+                    except Exception:
+                        pass
             
             # V7: Active Compaction
             compact_history(history)

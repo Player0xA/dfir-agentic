@@ -194,6 +194,51 @@ TOOLS = [
                 "notes": {"type": "string", "minLength": 1, "description": "Markdown formatted investigation notes."}
             }
         }
+    },
+    {
+        "name": "dfir.load_case_context@1",
+        "description": "Load the deterministic case context bundle: intake summary, top findings, and pivot pointers.",
+        "inputSchema": {
+            "type": "object",
+            "additionalProperties": False,
+            "required": ["case_dir"],
+            "properties": {
+                "case_dir": {"type": "string", "description": "The absolute path to the case output directory"}
+            }
+        }
+    },
+    {
+        "name": "dfir.build_query_plan@1",
+        "description": "Formalize an investigation query plan. Outputs a plan object.",
+        "inputSchema": {
+            "type": "object",
+            "additionalProperties": False,
+            "required": ["primary_window", "pivots_to_search"],
+            "properties": {
+                "primary_window": {"type": "string", "description": "e.g., '2026-02-11T20:00:00Z to 24:00:00Z'"},
+                "secondary_window": {"type": "string"},
+                "pivots_to_search": {
+                    "type": "array",
+                    "items": {"type": "string"}
+                },
+                "max_queries_budget": {"type": "integer"}
+            }
+        }
+    },
+    {
+        "name": "dfir.validate_deliverable@1",
+        "description": "Validate your root_cause_analysis against the schema. You MUST run this and get a SUCCESS before concluding.",
+        "inputSchema": {
+            "type": "object",
+            "additionalProperties": False,
+            "required": ["root_cause_analysis"],
+            "properties": {
+                "root_cause_analysis": {
+                    "type": "object",
+                    "description": "The exact RCA JSON object mapped to the schema."
+                }
+            }
+        }
     }
 ]
 
@@ -296,6 +341,58 @@ def json_pointer_get(doc: Any, ptr: Optional[str]) -> Any:
 # ----------------------------
 # Tool implementations
 # ----------------------------
+def tool_load_case_context(args: Dict[str, Any], audit: Dict[str, Path]) -> Dict[str, Any]:
+    case_dir = safe_resolve(args["case_dir"])
+    ensure_read_allowed(case_dir)
+    
+    context = {}
+    
+    # Load Summary
+    summary_path = case_dir / "case_summary.md"
+    if summary_path.exists():
+        context["case_summary"] = summary_path.read_text(encoding="utf-8")
+        
+    # Load Top Findings (Critical)
+    findings_path = case_dir / "case_findings.json"
+    if findings_path.exists():
+        try:
+            findings = json.loads(findings_path.read_text(encoding="utf-8"))
+            criticals = [f for f in findings if f.get("severity") == "critical"]
+            context["top_critical_findings"] = criticals[:5] # Max 5
+        except Exception as e:
+            context["top_critical_findings_error"] = str(e)
+            
+    # Load Pointers (Plaso Timeline)
+    plaso_files = list(case_dir.glob("*.plaso"))
+    if plaso_files:
+        context["available_timelines"] = [str(p) for p in plaso_files]
+        
+    return context
+
+def tool_build_query_plan(args: Dict[str, Any], audit: Dict[str, Path]) -> Dict[str, Any]:
+    return {
+        "status": "APPROVED",
+        "plan": args,
+        "note": "Plan formalized. You may now execute read-only queries in batches according to this plan."
+    }
+
+def tool_validate_deliverable(args: Dict[str, Any], audit: Dict[str, Path]) -> Dict[str, Any]:
+    import jsonschema
+    import json
+    schema_path = PROJECT_ROOT / "contracts" / "root_cause.schema.json"
+    if not schema_path.exists():
+        return {"status": "ERROR", "message": "Schema file not found on disk."}
+    
+    try:
+        schema = json.loads(schema_path.read_text(encoding="utf-8"))
+        rca = args["root_cause_analysis"]
+        jsonschema.validate(instance=rca, schema=schema)
+        return {"status": "SUCCESS", "message": "root_cause_analysis is valid and ready for finalization."}
+    except jsonschema.exceptions.ValidationError as ve:
+        raise ValueError(f"RCA Schema Validation Failed: {ve.message}")
+    except Exception as e:
+        raise ValueError(f"Validation Error: {str(e)}")
+
 def tool_identify_evidence(args: Dict[str, Any], audit: Dict[str, Path]) -> Dict[str, Any]:
     evidence_path = safe_resolve(args["path"])
     ensure_evidence_allowed(evidence_path)
@@ -588,17 +685,38 @@ def tool_query_super_timeline(args: Dict[str, Any], audit: Dict[str, Path]) -> D
 
     lines = out_content.strip().splitlines()
     if fmt == "json":
+        from collections import Counter
         preview = []
-        for line in lines[:10]: # Return first 10 for safety/brevity
+        pivots = {"event_ids": Counter(), "users": Counter(), "pids": Counter()}
+        
+        for line in lines:
             try:
-                preview.append(json.loads(line))
+                evt = json.loads(line)
+                if len(preview) < 10:
+                    preview.append(evt)
+                    
+                # Pivot extraction
+                if "event_identifier" in evt and evt["event_identifier"] is not None:
+                    pivots["event_ids"][evt["event_identifier"]] += 1
+                if "username" in evt and evt["username"] not in ("-", "", "N/A", None):
+                    pivots["users"][evt["username"]] += 1
+                if "pid" in evt and evt["pid"] is not None:
+                    pivots["pids"][evt["pid"]] += 1
             except:
                 continue
+                
+        pivot_summary = {
+            "top_event_ids": dict(pivots["event_ids"].most_common(5)),
+            "top_users": dict(pivots["users"].most_common(5)),
+            "top_pids": dict(pivots["pids"].most_common(5))
+        }
+
         return {
             "plaso_file": str(plaso_path),
             "window": {"start": start, "end": end},
             "count": len(lines),
-            "events": preview
+            "events": preview,
+            "auto_pivot_extraction": pivot_summary
         }
     else:
         return {
@@ -678,6 +796,12 @@ def dispatch_tool(name: str, arguments: Dict[str, Any], audit: Dict[str, Path]) 
         return tool_query_findings(arguments, audit)
     if name == "dfir.load_skill@1":
         return tool_load_skill(arguments, audit)
+    if name == "dfir.load_case_context@1":
+        return tool_load_case_context(arguments, audit)
+    if name == "dfir.build_query_plan@1":
+        return tool_build_query_plan(arguments, audit)
+    if name == "dfir.validate_deliverable@1":
+        return tool_validate_deliverable(arguments, audit)
     if name == "dfir.update_case_notes@1":
         return tool_update_case_notes(arguments, audit)
     raise KeyError(f"unknown tool: {name}")
