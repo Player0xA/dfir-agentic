@@ -24,7 +24,7 @@ if __name__ == "__main__":
     print("Starting Multi-Server MCP Verification...")
     
     # 1. Test DFIR Server (Core)
-    test_tool("dfir.list_dir@1", {"path": "."})
+    test_tool("dfir.list_dir@1", {"path": "outputs"})
     
     # 2. Test WinForensics Server (Submodule)
     test_tool("evtx_explain_event_id", {"event_id": 4624})
