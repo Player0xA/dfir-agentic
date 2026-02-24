@@ -137,8 +137,14 @@ def main() -> int:
     if dispatch_block["status"] == "ok":
         manifest_path = Path(dispatch_block["manifest_path"])
         if manifest_path.is_file():
-            manifest = load_json(manifest_path)
-            evtx_dir = manifest.get("inputs", {}).get("evtx_dir")
+            # Step 8/9: Resolve primary evidence for Plaso
+            if "case_id" in intake:
+                staged = [e for e in intake.get("evidence", []) if e.get("root") == "staged"]
+                evtx_dir = Path(intake["evidence_roots"]["staged"]) / staged[0]["relpath"] if staged else None
+            else:
+                manifest = load_json(manifest_path)
+                evtx_dir = manifest.get("inputs", {}).get("evtx_dir")
+                
             if evtx_dir:
                 print("INFO: starting plaso pipeline")
                 auto_doc["stages"]["plaso"] = "running"

@@ -7,6 +7,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 INTAKE_SCHEMA = Path("contracts/intake.schema.json")
+CASE_SCHEMA = Path("contracts/case.schema.json")
 DISPATCH_SCHEMA = Path("contracts/dispatch.schema.json")
 
 VALIDATE_INTAKE = Path("tools/contracts/validate_intake.py")
@@ -41,15 +42,32 @@ def main() -> int:
         print(f"FAIL: intake.json not found: {intake_json}", file=sys.stderr)
         return 2
 
-    # Validate intake first (hard gate)
-    run([str(VALIDATE_INTAKE), str(INTAKE_SCHEMA), str(intake_json)])
-
-    intake = read_json(intake_json)
-    intake_id = intake["intake_id"]
-
-    # Deterministic decision
-    rec = intake["classification"]["recommended_pipeline"]
-    evidence_path = intake["inputs"]["paths"][0]
+    raw_data = read_json(intake_json)
+    
+    # Schema Detection & Validation (V30 Compatibility)
+    if "case_id" in raw_data:
+        # Validate against Case Schema
+        run([str(VALIDATE_INTAKE), str(CASE_SCHEMA), str(intake_json)])
+        intake_id = raw_data["case_id"]
+        # For dispatch, we need a primary evidence path. 
+        # We'll take the first staged evidence or fallback to original.
+        staged = [e for e in raw_data.get("evidence", []) if e.get("root") == "staged"]
+        if staged:
+            evidence_path = str(Path(raw_data["evidence_roots"]["staged"]) / staged[0]["relpath"])
+            kind = staged[0]["type"]
+        else:
+            evidence_path = str(Path(raw_data["evidence_roots"]["original"]) / raw_data["evidence"][0]["relpath"])
+            kind = raw_data["evidence"][0]["type"]
+            
+        # Infer recommended pipeline
+        rec = "chainsaw_evtx" if "evtx" in kind or "windows_evtx" in kind else None
+    else:
+        # Legacy intake.json: Validate against Intake Schema
+        run([str(VALIDATE_INTAKE), str(INTAKE_SCHEMA), str(intake_json)])
+        intake = raw_data
+        intake_id = intake["intake_id"]
+        rec = intake["classification"]["recommended_pipeline"]
+        evidence_path = intake["inputs"]["paths"][0]
 
     dispatch = {
         "intake_id": intake_id,

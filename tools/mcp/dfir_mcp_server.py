@@ -787,18 +787,26 @@ def tool_identify_evidence(args: Dict[str, Any], audit: Dict[str, Path]) -> Dict
 
     intake_abs = safe_resolve(intake_path)
     ensure_read_allowed(intake_abs)
+    
+    intake_data = json.loads(intake_abs.read_text(encoding="utf-8"))
+    
+    # Validate (V30 Compatibility)
+    if "case_id" in intake_data:
+        v_schema = str(PROJECT_ROOT / "contracts/case.schema.json")
+    else:
+        v_schema = str(PROJECT_ROOT / "contracts/intake.schema.json")
 
     # Validate intake (hard gate)
     vcmd = [
         str(PROJECT_ROOT / "tools/contracts/validate_intake.py"),
-        str(PROJECT_ROOT / "contracts/intake.schema.json"),
+        v_schema,
         str(intake_abs),
     ]
     rc2, out2, err2 = run_cmd(vcmd, cwd=PROJECT_ROOT)
     audit_write(audit, "stdout", (audit["stdout"].read_text(encoding="utf-8") if audit["stdout"].exists() else "") + out2)
     audit_write(audit, "stderr", (audit["stderr"].read_text(encoding="utf-8") if audit["stderr"].exists() else "") + err2)
     if rc2 != 0:
-        raise RuntimeError("intake validation failed")
+        raise RuntimeError(f"metadata validation failed against {v_schema}")
 
     return {"intake_json": str(intake_abs)}
 
@@ -807,14 +815,24 @@ def tool_auto_run(args: Dict[str, Any], audit: Dict[str, Path]) -> Dict[str, Any
     intake_path = resolve_internal(args["intake_json"])
     ensure_read_allowed(intake_path)
 
-    # For safety, ensure the intake.json itself refers to evidence under allowed evidence roots.
+    # For safety, ensure the metadata itself refers to evidence under allowed evidence roots.
     try:
         intake_doc = json.loads(intake_path.read_text(encoding="utf-8"))
-        ev = intake_doc["inputs"]["paths"][0]
-        ev_path = resolve_evidence(ev)
+        if "case_id" in intake_doc:
+            # V30 Check
+            staged = [e for e in intake_doc.get("evidence", []) if e.get("root") == "staged"]
+            if staged:
+                ev_path = Path(intake_doc["evidence_roots"]["staged"]) / staged[0]["relpath"]
+            else:
+                ev_path = Path(intake_doc["evidence_roots"]["original"]) / intake_doc["evidence"][0]["relpath"]
+        else:
+            # Legacy Check
+            ev = intake_doc["inputs"]["paths"][0]
+            ev_path = resolve_evidence(ev)
+            
         ensure_evidence_allowed(ev_path)
     except Exception as ex:
-        raise PermissionError(f"intake evidence root check failed: {ex}")
+        raise PermissionError(f"metadata evidence root check failed: {ex}")
 
     cmd = [str(PROJECT_ROOT / "tools/router/auto_run.py"), "--intake-json", str(intake_path)]
     rc, out, err = run_cmd(cmd, cwd=PROJECT_ROOT)
