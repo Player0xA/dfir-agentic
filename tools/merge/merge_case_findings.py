@@ -319,6 +319,9 @@ def main() -> int:
         "requests": reqs,
     }
 
+    out_case_summary_md = intake_dir / "case_summary.md"
+    out_case_findings = intake_dir / "case_findings.json"
+
     # --- Step 2: Generate the Markdown Index (The Map) ---
     severity_order = ["critical", "high", "medium", "low", "informational"]
     counts = {s: 0 for s in severity_order}
@@ -391,10 +394,7 @@ def main() -> int:
         "> Treat large tool outputs as data sources, not context. Do NOT read `case_findings.json` directly if it exceeds 100KB."
     ])
 
-    out_case_summary_md = intake_dir / "case_summary.md"
     out_case_summary_md.write_text("\n".join(md_lines), encoding="utf-8")
-
-    out_case_findings = intake_dir / "case_findings.json"
     write_json(out_case_findings, case_doc)
 
     case_manifest = {
