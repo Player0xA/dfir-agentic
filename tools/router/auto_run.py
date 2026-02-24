@@ -57,9 +57,23 @@ def main() -> int:
         return 2
 
     intake = load_json(intake_json)
-    intake_id = intake["intake_id"]
-    kind = intake["classification"]["kind"]
-    rec = intake["classification"]["recommended_pipeline"]
+    
+    # Schema Detection (V30 Compatibility)
+    if "case_id" in intake:
+        intake_id = intake["case_id"]
+        # Inferred classification based on evidence
+        evidence_types = [e["type"] for e in intake.get("evidence", [])]
+        if "evtx" in evidence_types or "evtx_dir" in evidence_types:
+            kind = "windows_evtx_dir"
+            rec = "chainsaw_evtx"
+        else:
+            kind = "generic"
+            rec = None
+    else:
+        # Legacy intake.json
+        intake_id = intake["intake_id"]
+        kind = intake["classification"]["kind"]
+        rec = intake["classification"]["recommended_pipeline"]
 
     auto_id = str(uuid.uuid4())
     ts = utc_now_z()

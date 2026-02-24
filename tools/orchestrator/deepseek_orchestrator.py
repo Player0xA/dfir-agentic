@@ -449,7 +449,7 @@ def main() -> int:
 
     # Read intake (bounded)
     intake = mcp_read_json(args.intake_json)["value"]
-    intake_id = intake.get("intake_id", "unknown")
+    intake_id = intake.get("intake_id", intake.get("case_id", "unknown"))
     os.environ["DFIR_CASE_ID"] = intake_id
 
     # Discovery Grounding (Case Envelope Implementation)

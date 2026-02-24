@@ -24,7 +24,21 @@ def main() -> int:
         return 2
 
     intake = load_json(intake_path)
-    kind = intake["classification"]["kind"]
+    
+    # Schema Detection (V30 Compatibility)
+    if "case_id" in intake:
+        # It's a case.json
+        intake_id = intake["case_id"]
+        # Inferred classification based on evidence
+        evidence_types = [e["type"] for e in intake.get("evidence", [])]
+        if "evtx" in evidence_types or "evtx_dir" in evidence_types:
+            kind = "windows_evtx_dir"
+        else:
+            kind = "generic"
+    else:
+        # Legacy intake.json
+        intake_id = intake["intake_id"]
+        kind = intake["classification"]["kind"]
 
     # deterministic mapping
     if kind in ("windows_evtx_dir", "windows_evtx_file"):
@@ -33,7 +47,7 @@ def main() -> int:
         agent_id = "triage_agent"
 
     out = {
-        "intake_id": intake["intake_id"],
+        "intake_id": intake_id,
         "kind": kind,
         "selected_agent": agent_id
     }
