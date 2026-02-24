@@ -364,6 +364,7 @@ def main() -> int:
     md_lines.extend([
         "",
         "## Top 15 High-Severity Findings (The Map)",
+        f"Primary Findings Artifact: `{out_case_findings.resolve()}`",
         "Use `dfir.query_findings@1` with the `finding_id` to surgically extract full evidence.",
         "",
         "| Severity | Tool | Rule | Finding ID |",

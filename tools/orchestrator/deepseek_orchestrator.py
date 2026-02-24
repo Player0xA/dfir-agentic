@@ -487,6 +487,23 @@ def main() -> int:
                 found_paths["Timeline (Plaso)"] = epath
             elif ename == "auto.json":
                 found_paths["Auto Enrichment"] = epath
+            elif ename == "case_findings.json":
+                found_paths["Case Findings"] = epath
+            elif ename == "case_manifest.json":
+                found_paths["Case Manifest"] = epath
+            elif ename == "case_summary.md":
+                found_paths["Case Summary"] = epath
+            elif ename == "intake.json":
+                found_paths["Intake Metadata"] = epath
+            elif ename == "case.json":
+                found_paths["Authoritative Case Metadata"] = epath
+        
+        # Also check for hoisted plaso at root (intake_dir)
+        case_id = intake_id or intake.get("case_id")
+        if case_id:
+            hoisted_plaso = os.path.join(intake_dir, f"{case_id}.plaso")
+            if os.path.exists(hoisted_plaso):
+                found_paths["Timeline (Super)"] = hoisted_plaso
         
         # V8: Executable Forensic Memory (CLAUDE.md)
         claude_md_path = os.path.join(intake_dir, "CLAUDE.md")
@@ -769,7 +786,7 @@ def main() -> int:
                     has_fetched_evidence = True
 
                 # Phase 11: Absolute Forensic Control - Redundancy Gate
-                if t_name in ["dfir.load_intake@1", "dfir.list_dir@1"] and found_paths:
+                if t_name in ["dfir.load_intake@1"] and found_paths:
                     return {"id": c_id, "name": t_name, "error": "[Redundancy Guardrail]: Violation of efficiency protocol. The intake data and critical paths are ALREADY in your grounding context (Case Envelope). DO NOT rediscover. Proceed immediately with analysis."}
 
                 # Validation
