@@ -168,7 +168,12 @@ def main() -> int:
     intake_id = load_json(intake_dir / "intake.json").get("intake_id", "unknown") if (intake_dir / "intake.json").is_file() else "unknown"
 
     # --- baseline (required) ---
-    baseline_manifest_path = Path(auto["dispatch"]["manifest_path"])
+    baseline_manifest_raw = auto.get("dispatch", {}).get("manifest_path")
+    if not baseline_manifest_raw:
+        print("FAIL: auto.json missing or null dispatch.manifest_path. Cannot merge findings.", file=sys.stderr)
+        return 2
+        
+    baseline_manifest_path = Path(baseline_manifest_raw)
     if not baseline_manifest_path.is_file():
         print(f"FAIL: baseline manifest not found: {baseline_manifest_path}", file=sys.stderr)
         return 2

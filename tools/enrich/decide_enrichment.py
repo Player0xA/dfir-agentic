@@ -35,10 +35,34 @@ def main() -> int:
     agent_id = auto["selection"]["selected_agent"]
 
     base_manifest_path = Path(auto.get("dispatch", {}).get("manifest_path") or "")
-    if not str(base_manifest_path):
-        print("FAIL: auto.json missing dispatch.manifest_path", file=sys.stderr)
-        return 2
-    must_file(base_manifest_path, "baseline manifest.json")
+    if not str(base_manifest_path) or not base_manifest_path.is_file():
+        # V37: If baseline completely failed, we can't enrich or we don't need to crash.
+        out_plan = Path(args.out_plan)
+        out_plan.parent.mkdir(parents=True, exist_ok=True)
+        out_plan.write_text(json.dumps({
+            "plan_id": str(uuid.uuid4()),
+            "timestamp_utc": utc_now_z(),
+            "agent_id": agent_id,
+            "baseline": {
+                "auto_json": str(auto_path),
+                "baseline_manifest_path": "MISSING",
+                "evtx_dir": "MISSING"
+            },
+            "enrichment": {
+                "enrichment_id": ENRICHMENT_ID,
+                "pipeline_script": PIPELINE_SCRIPT,
+                "args": [],
+                "tier": "fast"
+            },
+            "decision": {
+                "should_run": False,
+                "reason": "Baseline manifest missing (pipeline failure)",
+                "policy": {"mode": "agent_decision"}
+            }
+        }, indent=2), encoding="utf-8")
+        print(f"OK: baseline missing, skipped enrichment: {out_plan}")
+        return 0
+        
     base_manifest = load_json(base_manifest_path)
 
     evtx_dir = base_manifest.get("inputs", {}).get("evtx_dir")

@@ -19,16 +19,19 @@ PIPELINES = {
         "script": Path("pipelines/chainsaw_evtx/run.sh"),
         "latest_file": Path("outputs/jsonl/chainsaw_evtx/LATEST"),
         "manifest_path": lambda run_id: Path(f"outputs/jsonl/chainsaw_evtx/{run_id}/manifest.json"),
+        "manifest_schema": "contracts/manifest.schema.json"
     },
     "hayabusa_evtx": {
         "script": Path("pipelines/hayabusa_evtx/run.sh"),
         "latest_file": Path("outputs/jsonl/hayabusa_evtx/LATEST"),
         "manifest_path": lambda run_id: Path(f"outputs/jsonl/hayabusa_evtx/{run_id}/manifest.json"),
+        "manifest_schema": "contracts/manifest.hayabusa.schema.json"
     },
     "plaso_evtx": {
         "script": Path("pipelines/plaso_evtx/run.sh"),
         "latest_file": None, # Handled specially
         "manifest_path": None,
+        "manifest_schema": None
     }
 }
 
@@ -202,7 +205,8 @@ def main() -> int:
         if cfg["latest_file"] and cfg["latest_file"].is_file():
             run_id = cfg["latest_file"].read_text(encoding="utf-8").strip()
             manifest_path = cfg["manifest_path"](run_id)
-            run(["tools/contracts/validate_manifest.py", "contracts/manifest.schema.json", str(manifest_path)])
+            if cfg.get("manifest_schema"):
+                run(["tools/contracts/validate_manifest.py", cfg["manifest_schema"], str(manifest_path)])
             
             if primary_run_id is None:
                 primary_run_id = run_id

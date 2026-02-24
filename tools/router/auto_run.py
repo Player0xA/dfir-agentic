@@ -144,8 +144,11 @@ def main() -> int:
 
     # --- Phase: Automated Super Timeline (Plaso) ---
     if dispatch_block["status"] == "ok":
-        manifest_path = Path(dispatch_block["manifest_path"])
-        if manifest_path.is_file():
+        manifest_path_str = dispatch_block.get("manifest_path")
+        manifest_path = Path(manifest_path_str) if manifest_path_str else None
+        
+        # Plaso usually needs a manifest to run, but we can also infer from intake
+        if manifest_path and manifest_path.is_file():
             # Step 8/9: Resolve primary evidence for Plaso
             if "case_id" in intake:
                 staged = [e for e in intake.get("evidence", []) if e.get("root") == "staged"]
@@ -197,7 +200,7 @@ def main() -> int:
             auto_doc["stages"]["enrichment"] = f"error: {e}"
 
     # 7) Optional merge stage
-    if args.run_merge:
+    if args.run_merge and dispatch_block.get("manifest_path"):
         auto_doc["stages"]["merge"] = "running"
         if not MERGE_TOOL.is_file():
             print(f"FAIL: merge tool not found: {MERGE_TOOL}", file=sys.stderr)
@@ -205,11 +208,16 @@ def main() -> int:
         cmd = [str(MERGE_TOOL), "--intake-dir", str(intake_json.parent)]
         if args.merge_dedupe:
             cmd.append("--dedupe")
+        
         try:
             run_must(cmd)
             auto_doc["stages"]["merge"] = "ok"
         except Exception as e:
             auto_doc["stages"]["merge"] = f"error: {e}"
+            print(f"WARNING: Merge stage failed: {e}", file=sys.stderr)
+    elif args.run_merge:
+        # User requested merge, but we lack a manifest (likely pipeline failure)
+        auto_doc["stages"]["merge"] = "skipped (missing baseline manifest)"
 
     # 8) Final write of auto.json (full state)
     out_path.write_text(json.dumps(auto_doc, indent=2), encoding="utf-8")
