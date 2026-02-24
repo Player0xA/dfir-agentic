@@ -624,6 +624,17 @@ def resolve_internal(p: str) -> Path:
 def resolve_evidence(p: str) -> Path:
     """Bridge for legacy string-only paths during transition."""
     case_dir = get_case_dir()
+    
+    # Phase 36: Symbolic URI Support
+    if p.upper().startswith("CASE://"):
+        rel = p[7:].lstrip("/")
+        if case_dir:
+            return (case_dir / rel).resolve()
+    elif p.upper().startswith("CASE:"):
+        rel = p[5:].lstrip("/")
+        if case_dir:
+            return (case_dir / rel).resolve()
+
     path = Path(p)
     if not path.is_absolute() and case_dir:
         return (case_dir / path).resolve()
