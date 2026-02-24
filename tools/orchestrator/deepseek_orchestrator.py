@@ -253,11 +253,11 @@ def _run_mcp_lines(lines: list[str], server_key: str) -> list[dict]:
             objs.append(json.loads(line))
         except json.JSONDecodeError:
             err = p.stderr.decode("utf-8", errors="replace")
-            raise RuntimeError(f"MCP emitted non-JSON line: {line[:200]}\nSTDERR: {err}")
+            raise RuntimeError(f"MCP server '{server_key}' (RC={p.returncode}) emitted non-JSON line: {line[:200]}\nSTDERR: {err}")
     
     if not objs:
         err = p.stderr.decode("utf-8", errors="replace")
-        raise RuntimeError(f"MCP server '{server_key}' returned no response.\nSTDERR: {err}")
+        raise RuntimeError(f"MCP server '{server_key}' (RC={p.returncode}) returned no response.\nSTDERR: {err}")
             
     return objs
 

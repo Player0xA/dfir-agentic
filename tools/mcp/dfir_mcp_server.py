@@ -47,10 +47,11 @@ PSORT_BIN = os.environ.get("PSORT_BIN", "psort.py")
 # V20: Ensure user site-packages are visible (fixes macOS --user pathing issues)
 try:
     import site
-    user_site = site.getusersitepackages()
-    if user_site not in sys.path and os.path.exists(user_site):
-        sys.path.append(user_site)
-except ImportError:
+    if hasattr(site, "getusersitepackages"):
+        user_site = site.getusersitepackages()
+        if user_site and user_site not in sys.path and os.path.exists(user_site):
+            sys.path.append(user_site)
+except Exception:
     pass
 
 # V19: Bridge to winforensics-mcp
