@@ -613,9 +613,48 @@ def resolve_evidence_path(case_ref: str | Path, root_name: str, relpath: str) ->
         base = case_path.parent
     else:
         evidence_roots = case_data.get("evidence_roots", {})
-        base = Path(evidence_roots.get(root_name, evidence_roots.get("staged", case_data.get("case_root"))))
+        base_str = evidence_roots.get(root_name, evidence_roots.get("staged", case_data.get("case_root")))
+        base = Path(base_str)
     
-    return (base / relpath).resolve()
+    # V37: Path Resolution Sanitization
+    # If the relpath already begins with the root prefix (e.g. 'evidence/staged/'), 
+    # we deduplicate to avoid 'evidence/staged/evidence/staged/file'
+    rp = relpath.lstrip("/")
+    
+    # Common redundant prefixes based on standard case layout
+    prefixes = [
+        "evidence/staged",
+        "evidence/original",
+        "staged",
+        "original"
+    ]
+    
+    for prefix in prefixes:
+        # Check if base ends with this prefix AND rp starts with it
+        if base.name == prefix.split("/")[-1] and rp.startswith(prefix + "/"):
+            # If so, rp already includes part of the base. 
+            # We need to find the overlap.
+            # Example: base=.../evidence/staged, rp=evidence/staged/Logs
+            # Strategy: if rp starts with the full relative path from case_root, 
+            # and base is already at that location, strip the redundant tail from base or head from rp.
+            pass
+
+    # Simpler, more robust approach:
+    # If (base/rp) doesn't exist, but (case_root/rp) DOES exist and is a subset of (base/rp), 
+    # it's likely a recursive hallucination.
+    full_candidate = (base / rp).resolve()
+    
+    # If the candidate doesn't exist, try to heal common hallucinations
+    if not full_candidate.exists():
+        case_root = case_path.parent
+        # If rp starts with 'evidence/' or 'staged/' etc, try resolving relative to case_root directly
+        for prefix in ["evidence/", "staged/", "original/"]:
+            if rp.startswith(prefix):
+                alt_candidate = (case_root / rp).resolve()
+                if alt_candidate.exists():
+                    return alt_candidate
+
+    return full_candidate
 
 # Legacy aliases for Phase 28 transition
 def resolve_internal(p: str) -> Path:
