@@ -3,7 +3,6 @@ import argparse
 import json
 import subprocess
 import sys
-import yaml
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -67,6 +66,24 @@ def write_gap_to_case_notes(intake_json: Path, source: str, description: str):
         except Exception as e:
             print(f"Failed to write GAP claim to {notes_path}: {e}", file=sys.stderr)
 
+def load_playbooks_yaml(path: Path):
+    """Fallback manual YAML parser to avoid imposing PyYAML dependency on the env."""
+    lines = path.read_text(encoding="utf-8").splitlines()
+    playbooks = {}
+    curr_pb = None
+    for line in lines:
+        line_s = line.strip()
+        if not line_s or line_s.startswith("#") or line.startswith("playbooks:"):
+            continue
+        if line.startswith("  ") and not line.startswith("    "):
+            curr_pb = line_s.strip(":")
+            playbooks[curr_pb] = {"steps": []}
+        elif line.startswith("      - run:"):
+            val = line.split("- run:")[1].strip()
+            if curr_pb:
+                playbooks[curr_pb]["steps"].append({"run": val})
+    return {"playbooks": playbooks}
+
 def main() -> int:
     ap = argparse.ArgumentParser(description="Deterministic intake dispatcher (no MCP)")
     ap.add_argument("--intake-json", required=True, help="path to intake.json")
@@ -100,13 +117,12 @@ def main() -> int:
         evidence_path = intake["inputs"]["paths"][0]
         case_dir = intake_json.parent
 
-    # Load playbooks
+    # Load playbooks without PyYAML
     if not PLAYBOOKS_YAML.is_file():
         print(f"FAIL: playbooks.yaml not found: {PLAYBOOKS_YAML}", file=sys.stderr)
         return 2
         
-    with open(PLAYBOOKS_YAML, "r", encoding="utf-8") as f:
-        playbooks_doc = yaml.safe_load(f)
+    playbooks_doc = load_playbooks_yaml(PLAYBOOKS_YAML)
         
     playbooks = playbooks_doc.get("playbooks", {})
     if args.playbook not in playbooks:
