@@ -44,6 +44,15 @@ HAYABUSA_RULES = HAYABUSA_ROOT / "rules"
 HAYABUSA_CONFIG = HAYABUSA_RULES / "config"
 PSORT_BIN = os.environ.get("PSORT_BIN", "psort.py")
 
+# V20: Ensure user site-packages are visible (fixes macOS --user pathing issues)
+try:
+    import site
+    user_site = site.getusersitepackages()
+    if user_site not in sys.path and os.path.exists(user_site):
+        sys.path.append(user_site)
+except ImportError:
+    pass
+
 # V19: Bridge to winforensics-mcp
 WINFORENSICS_ROOT = PROJECT_ROOT / "tools" / "mcp" / "mcp-windows" / "winforensics-mcp"
 if WINFORENSICS_ROOT.exists():
