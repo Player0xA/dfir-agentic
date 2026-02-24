@@ -1,0 +1,17 @@
+ERROR: Time slice date and time must be defined in ISO 8601 format, for example: 2020-06-19T20:09:23+02:00.
+
+usage: psort.py [-h] [--troubles] [-V] [--analysis PLUGIN_LIST]
+                [--process_memory_limit SIZE]
+                [--temporary_directory DIRECTORY] [--worker_memory_limit SIZE]
+                [--worker_timeout MINUTES] [--logfile FILENAME] [-d] [-q] [-u]
+                [--status_view TYPE] [--status_view_file PATH]
+                [--status_view_interval SECONDS] [--slice DATE_TIME]
+                [--slice_size SLICE_SIZE] [--slicer] [--data PATH] [-a]
+                [--language LANGUAGE_TAG]
+                [--additional_fields ADDITIONAL_FIELDS]
+                [--custom_fields CUSTOM_FIELDS]
+                [--custom_formatter_definitions PATH] [--dynamic_time]
+                [--output_time_zone TIME_ZONE] [-o FORMAT] [-w OUTPUT_FILE]
+                [--profilers PROFILERS_LIST] [--profiling_directory DIRECTORY]
+                [--profiling_sample_rate SAMPLE_RATE]
+                [PATH] [FILTER]
