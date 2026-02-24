@@ -4,11 +4,16 @@
   "title": "DFIR Intake Dispatch Record",
   "type": "object",
   "additionalProperties": false,
-  "required": ["intake_id", "timestamp_utc", "decision", "result"],
+  "required": [
+    "intake_id",
+    "timestamp_utc",
+    "decision",
+    "result"
+  ],
   "properties": {
     "intake_id": {
       "type": "string",
-      "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+      "pattern": "^[a-zA-Z0-9_\\-\\.]+$"
     },
     "timestamp_utc": {
       "type": "string",
@@ -17,23 +22,56 @@
     "decision": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["recommended_pipeline", "evidence_path", "status"],
+      "required": [
+        "recommended_pipeline",
+        "evidence_path",
+        "status"
+      ],
       "properties": {
-        "recommended_pipeline": { "type": ["string", "null"] },
-        "evidence_path": { "type": "string", "minLength": 1 },
-        "status": { "type": "string", "enum": ["dispatch", "skip"] }
+        "recommended_pipeline": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "evidence_path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "dispatch",
+            "skip"
+          ]
+        }
       }
     },
     "result": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["ok", "run_id", "manifest_path"],
+      "required": [
+        "ok",
+        "run_id",
+        "manifest_path"
+      ],
       "properties": {
-        "ok": { "type": "boolean" },
-        "run_id": { "type": ["string", "null"] },
-        "manifest_path": { "type": ["string", "null"] }
+        "ok": {
+          "type": "boolean"
+        },
+        "run_id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "manifest_path": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
       }
     }
   }
 }
-

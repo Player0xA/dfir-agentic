@@ -17,7 +17,7 @@
   "properties": {
     "run_id": {
       "type": "string",
-      "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+      "pattern": "^[a-zA-Z0-9_\\-\\.]+$"
     },
     "timestamp_utc": {
       "type": "string",
@@ -26,79 +26,156 @@
     "pipeline": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["name", "version"],
+      "required": [
+        "name",
+        "version"
+      ],
       "properties": {
-        "name": { "type": "string", "minLength": 1 },
-        "version": { "type": "string", "minLength": 1 }
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "version": {
+          "type": "string",
+          "minLength": 1
+        }
       }
     },
     "status": {
       "type": "string",
-      "enum": ["ok", "error"]
+      "enum": [
+        "ok",
+        "error"
+      ]
     },
     "inputs": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["evtx_dir", "evtx_files"],
+      "required": [
+        "evtx_dir",
+        "evtx_files"
+      ],
       "properties": {
-        "evtx_dir": { "type": "string", "minLength": 1 },
+        "evtx_dir": {
+          "type": "string",
+          "minLength": 1
+        },
         "evtx_files": {
           "type": "array",
-          "items": { "$ref": "#/$defs/file_ref" }
+          "items": {
+            "$ref": "#/$defs/file_ref"
+          }
         }
       }
     },
     "tooling": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["chainsaw", "normalizer", "schema", "validator", "triage", "toon"],
+      "required": [
+        "chainsaw",
+        "normalizer",
+        "schema",
+        "validator",
+        "triage",
+        "toon"
+      ],
       "properties": {
         "chainsaw": {
           "type": "object",
           "additionalProperties": false,
-          "required": ["path", "version", "rules_dir", "cmd"],
+          "required": [
+            "path",
+            "version",
+            "rules_dir",
+            "cmd"
+          ],
           "properties": {
-            "path": { "type": "string", "minLength": 1 },
-            "version": { "type": "string", "minLength": 1 },
-            "rules_dir": { "type": "string", "minLength": 1 },
+            "path": {
+              "type": "string",
+              "minLength": 1
+            },
+            "version": {
+              "type": "string",
+              "minLength": 1
+            },
+            "rules_dir": {
+              "type": "string",
+              "minLength": 1
+            },
             "cmd": {
               "type": "array",
               "minItems": 1,
-              "items": { "type": "string", "minLength": 1 }
+              "items": {
+                "type": "string",
+                "minLength": 1
+              }
             }
           }
         },
         "normalizer": {
           "type": "object",
           "additionalProperties": false,
-          "required": ["path"],
-          "properties": { "path": { "type": "string", "minLength": 1 } }
+          "required": [
+            "path"
+          ],
+          "properties": {
+            "path": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
         },
         "schema": {
           "type": "object",
           "additionalProperties": false,
-          "required": ["path"],
-          "properties": { "path": { "type": "string", "minLength": 1 } }
+          "required": [
+            "path"
+          ],
+          "properties": {
+            "path": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
         },
         "validator": {
           "type": "object",
           "additionalProperties": false,
-          "required": ["path"],
-          "properties": { "path": { "type": "string", "minLength": 1 } }
+          "required": [
+            "path"
+          ],
+          "properties": {
+            "path": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
         },
-	"triage": {
-	  "type": "object",
- 	  "additionalProperties": false,
- 	  "required": ["generator"],
- 	  "properties": {
-   	    "generator": { "type": "string", "minLength": 1 }
- 	  }
-	},
+        "triage": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "generator"
+          ],
+          "properties": {
+            "generator": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        },
         "toon": {
           "type": "object",
           "additionalProperties": false,
-          "required": ["cli"],
-          "properties": { "cli": { "type": "string", "minLength": 1 } }
+          "required": [
+            "cli"
+          ],
+          "properties": {
+            "cli": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
         }
       }
     },
@@ -109,19 +186,33 @@
         "request",
         "chainsaw_jsonl",
         "findings_json",
-	"triage_json",
+        "triage_json",
         "findings_toon",
         "stdout_log",
         "stderr_log"
       ],
       "properties": {
-        "request": { "$ref": "#/$defs/file_meta" },
-        "chainsaw_jsonl": { "$ref": "#/$defs/file_meta" },
-        "findings_json": { "$ref": "#/$defs/file_meta" },
-	"triage_json": { "$ref": "#/$defs/file_meta" },
-        "findings_toon": { "$ref": "#/$defs/file_meta" },
-        "stdout_log": { "$ref": "#/$defs/file_meta" },
-        "stderr_log": { "$ref": "#/$defs/file_meta" }
+        "request": {
+          "$ref": "#/$defs/file_meta"
+        },
+        "chainsaw_jsonl": {
+          "$ref": "#/$defs/file_meta"
+        },
+        "findings_json": {
+          "$ref": "#/$defs/file_meta"
+        },
+        "triage_json": {
+          "$ref": "#/$defs/file_meta"
+        },
+        "findings_toon": {
+          "$ref": "#/$defs/file_meta"
+        },
+        "stdout_log": {
+          "$ref": "#/$defs/file_meta"
+        },
+        "stderr_log": {
+          "$ref": "#/$defs/file_meta"
+        }
       }
     },
     "latest": {
@@ -132,8 +223,12 @@
         "outputs/jsonl/chainsaw_evtx/LATEST"
       ],
       "properties": {
-        "outputs/toon/chainsaw_evtx/LATEST": { "type": "boolean" },
-        "outputs/jsonl/chainsaw_evtx/LATEST": { "type": "boolean" }
+        "outputs/toon/chainsaw_evtx/LATEST": {
+          "type": "boolean"
+        },
+        "outputs/jsonl/chainsaw_evtx/LATEST": {
+          "type": "boolean"
+        }
       }
     }
   },
@@ -145,23 +240,46 @@
     "file_ref": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["path", "sha256", "size"],
+      "required": [
+        "path",
+        "sha256",
+        "size"
+      ],
       "properties": {
-        "path": { "type": "string", "minLength": 1 },
-        "sha256": { "$ref": "#/$defs/sha256" },
-        "size": { "type": "integer", "minimum": 0 }
+        "path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "size": {
+          "type": "integer",
+          "minimum": 0
+        }
       }
     },
     "file_meta": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["path", "sha256", "size"],
+      "required": [
+        "path",
+        "sha256",
+        "size"
+      ],
       "properties": {
-        "path": { "type": "string", "minLength": 1 },
-        "sha256": { "$ref": "#/$defs/sha256" },
-        "size": { "type": "integer", "minimum": 0 }
+        "path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "size": {
+          "type": "integer",
+          "minimum": 0
+        }
       }
     }
   }
 }
-
