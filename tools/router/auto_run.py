@@ -151,7 +151,13 @@ def main() -> int:
                 try:
                     # Use deterministic run_id for plaso so the Map can find it
                     plaso_run_id = f"{intake_id}-plaso"
-                    run_must([str(PLASO_RUNNER), plaso_run_id, ts, str(evtx_dir)])
+                    run_must([str(PLASO_RUNNER), plaso_run_id, ts, str(evtx_dir), str(intake_json.parent)])
+                    
+                    src_plaso = intake_json.parent / plaso_run_id / "case.plaso"
+                    dest_plaso = intake_json.parent / f"{intake_id}.plaso"
+                    if src_plaso.exists():
+                        import shutil
+                        shutil.move(str(src_plaso), str(dest_plaso))
                     auto_doc["stages"]["plaso"] = "ok"
                 except Exception as e:
                     print(f"WARNING: Plaso pipeline failed: {e}", file=sys.stderr)

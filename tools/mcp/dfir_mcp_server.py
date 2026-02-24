@@ -111,7 +111,7 @@ TOOLS = [
                         "evidence": {
                             "type": "object",
                             "properties": {
-                                "root": {"type": "string", "enum": ["staged", "original"]},
+                                "root": {"type": "string", "enum": ["staged", "original", "case"], "default": "staged"},
                                 "relpath": {"type": "string"}
                             },
                              "required": ["relpath"]
@@ -141,7 +141,7 @@ TOOLS = [
                             "type": "object",
                             "required": ["relpath"],
                             "properties": {
-                                "root": {"type": "string", "enum": ["staged", "original"]},
+                                "root": {"type": "string", "enum": ["staged", "original", "case"], "default": "staged"},
                                 "relpath": {"type": "string"}
                             }
                         }
@@ -404,7 +404,7 @@ TOOLS = [
                             "type": "object",
                             "required": ["relpath"],
                             "properties": {
-                                "root": {"type": "string", "enum": ["staged", "original"], "default": "staged"},
+                                "root": {"type": "string", "enum": ["staged", "original", "case"], "default": "staged"},
                                 "relpath": {"type": "string", "description": "Relative path within the root (e.g. evtx/Logs/Security.evtx)"}
                             }
                         }
@@ -433,7 +433,7 @@ TOOLS = [
                             "type": "object",
                             "required": ["relpath"],
                             "properties": {
-                                "root": {"type": "string", "enum": ["staged", "original"], "default": "staged"},
+                                "root": {"type": "string", "enum": ["staged", "original", "case"], "default": "staged"},
                                 "relpath": {"type": "string"}
                             }
                         }
@@ -447,7 +447,7 @@ TOOLS = [
 # ----------------------------
 # Helpers
 # ----------------------------
-def get_evidence_path_from_ref(evidence_ref: Any, audit_paths: Dict[str, Path]) -> Path:
+def get_evidence_path_from_ref(evidence_ref: Any, audit_paths: Dict[str, Path], default_root: str = "staged") -> Path:
     """Authoritative EvidenceRef -> Absolute Path solver with rich auditing and legacy support."""
     if isinstance(evidence_ref, str):
         # Legacy support: resolve via safe/resolve_evidence
@@ -458,7 +458,7 @@ def get_evidence_path_from_ref(evidence_ref: Any, audit_paths: Dict[str, Path]) 
 
     case_ref = evidence_ref.get("case_ref")
     evidence = evidence_ref.get("evidence", {})
-    root = evidence.get("root", "staged")
+    root = evidence.get("root", default_root)
     relpath = evidence.get("relpath")
     
     if not relpath and "path" in evidence_ref:
@@ -490,7 +490,7 @@ def get_evidence_path_from_ref(evidence_ref: Any, audit_paths: Dict[str, Path]) 
     }
     
     # 3. Step 9: Strict Mode Hash Verification
-    if abs_path.exists():
+    if abs_path.exists() and root in ("original", "staged"):
         try:
             manifest_path = case_root / "manifests" / f"{root}.manifest.json"
             if manifest_path.exists():
@@ -556,8 +556,11 @@ def resolve_evidence_path(case_ref: str | Path, root_name: str, relpath: str) ->
     with open(case_path, 'r') as f:
         case_data = json.load(f)
         
-    evidence_roots = case_data.get("evidence_roots", {})
-    base = Path(evidence_roots.get(root_name, evidence_roots.get("staged", case_data.get("case_root"))))
+    if root_name == "case":
+        base = case_path.parent
+    else:
+        evidence_roots = case_data.get("evidence_roots", {})
+        base = Path(evidence_roots.get(root_name, evidence_roots.get("staged", case_data.get("case_root"))))
     
     return (base / relpath).resolve()
 
@@ -935,7 +938,7 @@ def tool_read_json(args: Dict[str, Any], audit: Dict[str, Path]) -> Dict[str, An
 
     # Phase 29: Uniform EvidenceRef Contract
     ref = args.get("evidence_ref") or args.get("path")
-    path = get_evidence_path_from_ref(ref, audit)
+    path = get_evidence_path_from_ref(ref, audit, default_root="case")
     ensure_read_allowed(path)
 
     st = path.stat()
@@ -957,7 +960,7 @@ def tool_read_text(args: Dict[str, Any], audit: Dict[str, Path]) -> Dict[str, An
 
     # Phase 29: Uniform EvidenceRef Contract
     ref = args.get("evidence_ref") or args.get("path")
-    path = get_evidence_path_from_ref(ref, audit)
+    path = get_evidence_path_from_ref(ref, audit, default_root="case")
     ensure_read_allowed(path)
 
     st = path.stat()
@@ -973,7 +976,7 @@ def tool_read_text(args: Dict[str, Any], audit: Dict[str, Path]) -> Dict[str, An
 def tool_query_findings(args: Dict[str, Any], audit: Dict[str, Path]) -> Dict[str, Any]:
     # Phase 29: Uniform EvidenceRef Contract
     ref = args.get("evidence_ref") or args.get("path")
-    path = get_evidence_path_from_ref(ref, audit)
+    path = get_evidence_path_from_ref(ref, audit, default_root="case")
     ensure_read_allowed(path)
     
     if not path.is_file():
@@ -1033,7 +1036,7 @@ def tool_list_dir(args: Dict[str, Any], audit: Dict[str, Path]) -> Dict[str, Any
 def tool_query_super_timeline(args: Dict[str, Any], audit: Dict[str, Path]) -> Dict[str, Any]:
     # Phase 29: Uniform EvidenceRef Contract
     ref = args.get("evidence_ref") or args.get("path") or args.get("plaso_file")
-    plaso_path = get_evidence_path_from_ref(ref, audit)
+    plaso_path = get_evidence_path_from_ref(ref, audit, default_root="case")
     ensure_read_allowed(plaso_path)
     if not plaso_path.is_file():
         raise ValueError(f"plaso_file not found: {plaso_path}")
