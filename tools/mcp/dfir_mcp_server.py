@@ -861,7 +861,8 @@ def tool_auto_run(args: Dict[str, Any], audit: Dict[str, Path]) -> Dict[str, Any
 
 def tool_hayabusa_csv_timeline(args: Dict[str, Any], audit: Dict[str, Path]) -> Dict[str, Any]:
     # Phase 29: Uniform EvidenceRef Contract
-    evtx_dir = get_evidence_path_from_ref(args["evidence_ref"], audit)
+    ref = args.get("evidence_ref") or args.get("path")
+    evtx_dir = get_evidence_path_from_ref(ref, audit)
     ensure_read_allowed(evtx_dir)
     if not evtx_dir.is_dir():
         raise ValueError(f"evtx_dir is not a directory: {evtx_dir}")
@@ -932,8 +933,9 @@ def tool_read_json(args: Dict[str, Any], audit: Dict[str, Path]) -> Dict[str, An
     if max_bytes > DEFAULT_MAX_BYTES:
         max_bytes = DEFAULT_MAX_BYTES
 
-    # Phase 25: Internal Resolution (outputs/contracts)
-    path = resolve_internal(args["path"])
+    # Phase 29: Uniform EvidenceRef Contract
+    ref = args.get("evidence_ref") or args.get("path")
+    path = get_evidence_path_from_ref(ref, audit)
     ensure_read_allowed(path)
 
     st = path.stat()
@@ -953,8 +955,9 @@ def tool_read_text(args: Dict[str, Any], audit: Dict[str, Path]) -> Dict[str, An
     if max_bytes > DEFAULT_MAX_BYTES:
         max_bytes = DEFAULT_MAX_BYTES
 
-    # Phase 25: Evidence Resolution (logs often outside repo)
-    path = resolve_evidence(args["path"])
+    # Phase 29: Uniform EvidenceRef Contract
+    ref = args.get("evidence_ref") or args.get("path")
+    path = get_evidence_path_from_ref(ref, audit)
     ensure_read_allowed(path)
 
     st = path.stat()
@@ -968,8 +971,9 @@ def tool_read_text(args: Dict[str, Any], audit: Dict[str, Path]) -> Dict[str, An
 
 
 def tool_query_findings(args: Dict[str, Any], audit: Dict[str, Path]) -> Dict[str, Any]:
-    # Phase 25: Internal Resolution
-    path = resolve_internal(args["path"])
+    # Phase 29: Uniform EvidenceRef Contract
+    ref = args.get("evidence_ref") or args.get("path")
+    path = get_evidence_path_from_ref(ref, audit)
     ensure_read_allowed(path)
     
     if not path.is_file():
@@ -1018,7 +1022,8 @@ def tool_query_findings(args: Dict[str, Any], audit: Dict[str, Path]) -> Dict[st
 
 def tool_list_dir(args: Dict[str, Any], audit: Dict[str, Path]) -> Dict[str, Any]:
     # Phase 29: Uniform EvidenceRef Contract
-    path = get_evidence_path_from_ref(args["evidence_ref"], audit)
+    ref = args.get("evidence_ref") or args.get("path")
+    path = get_evidence_path_from_ref(ref, audit)
     ensure_read_allowed(path)
     if not path.is_dir():
         raise ValueError(f"not a directory: {path}")
@@ -1027,7 +1032,8 @@ def tool_list_dir(args: Dict[str, Any], audit: Dict[str, Path]) -> Dict[str, Any
 
 def tool_query_super_timeline(args: Dict[str, Any], audit: Dict[str, Path]) -> Dict[str, Any]:
     # Phase 29: Uniform EvidenceRef Contract
-    plaso_path = get_evidence_path_from_ref(args["evidence_ref"], audit)
+    ref = args.get("evidence_ref") or args.get("path") or args.get("plaso_file")
+    plaso_path = get_evidence_path_from_ref(ref, audit)
     ensure_read_allowed(plaso_path)
     if not plaso_path.is_file():
         raise ValueError(f"plaso_file not found: {plaso_path}")
@@ -1229,7 +1235,8 @@ def tool_evtx_search(args: Dict[str, Any], audit: Dict[str, Path]) -> Dict[str, 
         raise RuntimeError("winforensics-mcp parsers not available.")
     
     # Phase 29: Uniform EvidenceRef Contract
-    path = get_evidence_path_from_ref(args["evidence_ref"], audit)
+    ref = args.get("evidence_ref") or args.get("path")
+    path = get_evidence_path_from_ref(ref, audit)
     ensure_read_allowed(path)
     
     return evtx_parser.get_evtx_events(
@@ -1243,7 +1250,8 @@ def tool_evtx_security_search(args: Dict[str, Any], audit: Dict[str, Path]) -> D
     if not WINFORENSICS_AVAILABLE:
         raise RuntimeError("winforensics-mcp parsers not available.")
     # Phase 29: Uniform EvidenceRef Contract
-    path = get_evidence_path_from_ref(args["evidence_ref"], audit)
+    ref = args.get("evidence_ref") or args.get("path")
+    path = get_evidence_path_from_ref(ref, audit)
     ensure_read_allowed(path)
     return evtx_parser.search_security_events(evtx_path=path, event_type=args["event_type"], limit=int(args.get("limit") or 20))
 
@@ -1252,7 +1260,8 @@ def tool_registry_get_persistence(args: Dict[str, Any], audit: Dict[str, Path]) 
         raise RuntimeError("winforensics-mcp parsers not available.")
         
     # Phase 29: Uniform EvidenceRef Contract
-    path = get_evidence_path_from_ref(args["evidence_ref"], audit)
+    ref = args.get("evidence_ref") or args.get("path")
+    path = get_evidence_path_from_ref(ref, audit)
     ensure_read_allowed(path)
     
     hive_name = path.name.upper()
