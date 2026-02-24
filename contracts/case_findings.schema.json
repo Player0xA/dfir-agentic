@@ -4,11 +4,17 @@
   "title": "DFIR Case Findings (Merged)",
   "type": "object",
   "additionalProperties": false,
-  "required": ["case_id", "timestamp_utc", "intake", "runs", "merged_findings"],
+  "required": [
+    "case_id",
+    "timestamp_utc",
+    "intake",
+    "runs",
+    "merged_findings"
+  ],
   "properties": {
     "case_id": {
       "type": "string",
-      "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+      "pattern": "^[a-zA-Z0-9_\\-\\.]+$"
     },
     "timestamp_utc": {
       "type": "string",
@@ -17,14 +23,24 @@
     "intake": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["intake_id", "intake_json", "auto_json"],
+      "required": [
+        "intake_id",
+        "intake_json",
+        "auto_json"
+      ],
       "properties": {
         "intake_id": {
           "type": "string",
-          "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+          "pattern": "^[a-zA-Z0-9_\\-\\.]+$"
         },
-        "intake_json": { "type": "string", "minLength": 1 },
-        "auto_json": { "type": "string", "minLength": 1 }
+        "intake_json": {
+          "type": "string",
+          "minLength": 1
+        },
+        "auto_json": {
+          "type": "string",
+          "minLength": 1
+        }
       }
     },
     "runs": {
@@ -33,12 +49,32 @@
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["kind", "run_id", "manifest_path", "findings_path"],
+        "required": [
+          "kind",
+          "run_id",
+          "manifest_path",
+          "findings_path"
+        ],
         "properties": {
-          "kind": { "type": "string", "enum": ["baseline", "enrichment"] },
-          "run_id": { "type": "string", "minLength": 8 },
-          "manifest_path": { "type": "string", "minLength": 1 },
-          "findings_path": { "type": "string", "minLength": 1 }
+          "kind": {
+            "type": "string",
+            "enum": [
+              "baseline",
+              "enrichment"
+            ]
+          },
+          "run_id": {
+            "type": "string",
+            "minLength": 8
+          },
+          "manifest_path": {
+            "type": "string",
+            "minLength": 1
+          },
+          "findings_path": {
+            "type": "string",
+            "minLength": 1
+          }
         }
       }
     },
@@ -47,4 +83,3 @@
     }
   }
 }
-
