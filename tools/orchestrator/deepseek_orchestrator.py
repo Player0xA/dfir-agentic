@@ -322,8 +322,10 @@ def sanitize_tool_name(name: str) -> str:
 
 def desanitize_tool_name(name: str) -> str:
     """Mapping dfir__foo__v1 -> dfir.foo@1 for MCP dispatch."""
-    if "__v" in name:
-        name = name.replace("__v", "@")
+    # V16 Fix: Use regex to only replace __v if it's followed by digits at the END
+    # prevent collision with words like 'validate'
+    name = re.sub(r'__v(\d+)$', r'@\1', name)
+    # Replace __ with . (scoped to namespacing)
     if "__" in name:
         name = name.replace("__", ".")
     return name
@@ -551,8 +553,8 @@ def main() -> int:
             "   - UNKNOWN: An explicitly identified gap for future investigation.\n"
             "2. INFERENCE GUARDRAILS: If a statement refers to 'attacker', 'compromised', or 'malicious' intent, it MUST be marked as 'HYPOTHESIS' and MUST cite supporting evidence.\n"
             "3. DETERMINISTIC CORRELATION: You have access to 'dfir__correlate_pivot__v1'. Use this for common investigative moves (LogonId -> 4624/4634, PID -> 4688). Do NOT attempt to perform these mappings via raw reasoning.\n"
-            "4. PIVOT LADDER: If a surgical search fails (returns 0), use 'dfir__pivot_ladder__v1' to generate a broader search plan. DO NOT waste budget on repeated failed searches.\n"
-            "5. TURN EFFICIENCY: 10-STEP DOOM CLOCK is still active. 15 points budget (Timeline=3, Finding=2, Read=1). Turn efficiency is critical.\n"
+            "4. AUTOMATED PIVOT LADDER: If a surgical search (keyword) returns 0 results, you are REQUIRED to call 'dfir__pivot_ladder__v1' in the SAME turn to generate a metadata-based recovery plan. Do NOT waste budget on repeated failed keyword searches.\n"
+            "5. TURN EFFICIENCY: 10-STEP DOOM CLOCK is still active. 25 points budget (Timeline=3, Finding=2, Read=1). Turn efficiency is critical.\n"
             "\nHard rules:\n"
             "- CRITICAL: Do NOT invent evidence or claim certainty without explicit fields from tool returns.\n"
             "- CRITICAL: Do NOT simulate tool outputs. You must wait for the actual tool call return.\n"
@@ -601,7 +603,7 @@ def main() -> int:
 
         MAX_ITERATIONS = 10
         iteration = 0
-        budget_points = 15
+        budget_points = 25
         notes_count = 0
         has_fetched_evidence = False
         progress_jsonl = os.path.join(out_dir, "progress.jsonl")

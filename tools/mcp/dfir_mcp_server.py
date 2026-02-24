@@ -441,8 +441,10 @@ def tool_correlate_pivot(args: Dict[str, Any], audit: Dict[str, Path]) -> Dict[s
     
     correlations = {
         "LogonId": f"Pivoting LogonId {pval} to Security Event IDs 4624 (Logon), 4634 (Logoff), and 4672 (Admin Logon).",
+        "SubjectLogonId": f"Pivoting SubjectLogonId {pval} to Security Event IDs 4624, 4634, 4672, and 4688 (Process Creation).",
         "PID": f"Pivoting PID {pval} to Security Event ID 4688 (Process Creation) and Sysmon Event ID 3 (Network Connection).",
-        "SrcIP": f"Pivoting SrcIP {pval} to Firewall logs, SMB activity, and RDP authentication events."
+        "ClientProcessId": f"Pivoting ClientProcessId {pval} to Security Event ID 4688 and Sysmon activity.",
+        "SrcIP": f"Pivoting SrcIP {pval} to Firewall logs, SMB activity (Event ID 5140), and RDP authentication events (Event ID 4624/4778)."
     }
     
     return {
