@@ -326,7 +326,7 @@ TOOLS = [
     },
     {
         "name": "dfir.update_case_notes@1",
-        "description": "Log structured investigation claims. Every statement must be an OBSERVATION, DERIVED, HYPOTHESIS, or UNKNOWN.",
+        "description": "Log structured investigation claims. Every statement must be an OBSERVATION, DERIVED, HYPOTHESIS, ASSESSMENT, GAP, or UNKNOWN.",
         "inputSchema": {
             "type": "object",
             "additionalProperties": False,
@@ -338,14 +338,15 @@ TOOLS = [
                         "type": "object",
                         "properties": {
                             "claim_id": { "type": "string" },
-                            "type": { "type": "string", "enum": ["OBSERVATION", "DERIVED", "HYPOTHESIS", "UNKNOWN"] },
+                            "type": { "type": "string", "enum": ["OBSERVATION", "DERIVED", "HYPOTHESIS", "ASSESSMENT", "GAP", "UNKNOWN"] },
                             "statement": { "type": "string" },
                             "evidence_refs": { "type": "array", "items": { "type": "string" } },
                             "confidence": { "type": "string", "enum": ["High", "Medium", "Low", "N/A"] },
+                            "impact": { "type": "string", "enum": ["Low", "Medium", "High"], "description": "Used specifically for GAP types." },
                             "validation_plan": { "type": "string" },
-                            "status": { "type": "string", "enum": ["Open", "Confirmed", "Refuted"] }
+                            "status": { "type": "string", "enum": ["Open", "Supported", "Confirmed", "Refuted"] }
                         },
-                        "required": ["claim_id", "type", "statement", "evidence_refs", "status"]
+                        "required": ["claim_id", "type", "statement", "status"]
                     }
                 },
                 "next_steps": { "type": "array", "items": { "type": "string" } }
@@ -1269,9 +1270,13 @@ def tool_update_case_notes(args: Dict[str, Any], audit: Dict[str, Path]) -> Dict
         stmt = c.get("statement", "")
         refs = ", ".join(c.get("evidence_refs", []))
         conf = c.get("confidence", "N/A")
+        impact = c.get("impact", "")
         status = c.get("status", "Open")
         
-        entry += f"- **[{ctype}]** ({cid}): {stmt} | Refs: `{refs}` | Conf: {conf} | Status: {status}\n"
+        if ctype == "GAP":
+             entry += f"- **[GAP]** ({cid}): {stmt} | Impact: {impact} | Status: {status}\n"
+        else:
+             entry += f"- **[{ctype}]** ({cid}): {stmt} | Refs: `{refs}` | Conf: {conf} | Status: {status}\n"
         if c.get("validation_plan"):
             entry += f"  > Validation: {c['validation_plan']}\n"
             

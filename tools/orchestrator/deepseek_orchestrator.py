@@ -61,6 +61,53 @@ MCP_SERVERS = {
     }
 }
 
+# Phase 35: Full Epistemic Protocol
+EPISTEMIC_SIGNALS = {
+    "HYPOTHESIS": [
+        "attacker", "compromised", "compromise", "malicious", "lateral movement", "privilege escalation",
+        "likely", "suggests", "indicates", "caused", "led to", "to hide", "because", "due to"
+    ],
+    "GAP": ["missing", "logging gap", "not found", "limitations", "unparsed", "missing evidence"]
+}
+
+def auto_correct_epistemic_claims(tool_args: dict):
+    """Programmatically enforces the V35 Epistemic Protocol."""
+    claims = tool_args.get("claims", [])
+    for c in claims:
+        stmt = c.get("statement", "").lower()
+        ctype = c.get("type", "UNKNOWN")
+        
+        # 1. Structural/Keyword Detection (Upgrade to HYPOTHESIS)
+        if any(k in stmt for k in EPISTEMIC_SIGNALS["HYPOTHESIS"]) and ctype != "HYPOTHESIS" and ctype != "ASSESSMENT":
+            print(f"[*] Epistemic Leveling: Upgraded '{c.get('claim_id')}' to HYPOTHESIS (Signal detected).")
+            c["type"] = "HYPOTHESIS"
+            ctype = "HYPOTHESIS"
+
+        # 2. GAP Detection
+        if any(k in stmt for k in EPISTEMIC_SIGNALS["GAP"]) and ctype != "GAP":
+             print(f"[*] Epistemic Leveling: Tagged '{c.get('claim_id')}' as GAP.")
+             c["type"] = "GAP"
+             ctype = "GAP"
+
+        # 3. Auto-Metadata Defaults (V35 Table)
+        if ctype == "OBSERVATION":
+            c.setdefault("confidence", "High")
+            c.setdefault("status", "Open")
+        elif ctype == "DERIVED":
+            c.setdefault("confidence", "High")
+            c.setdefault("status", "Open")
+        elif ctype == "HYPOTHESIS":
+            c.setdefault("confidence", "Medium")
+            c.setdefault("status", "Open")
+        elif ctype == "ASSESSMENT":
+            c.setdefault("confidence", "Medium")
+            c.setdefault("status", "Open")
+        elif ctype == "GAP":
+            c.setdefault("impact", "Medium")
+            c.setdefault("status", "Open")
+            # Clear confidence for GAPs as per schema
+            if "confidence" in c: del c["confidence"]
+
 AUTO_APPROVE_TOOLS = [
     "dfir.read_json@1",
     "dfir.read_text@1",
@@ -157,17 +204,15 @@ def validate_case_notes(tool_args: dict) -> tuple[bool, str]:
             schema = json.load(f)
         jsonschema.validate(instance=tool_args, schema=schema)
         
-        # Keyword Interceptor (High-Inference Enforcement)
-        INFERENCE_KEYWORDS = ["attacker", "compromised", "compromise", "malicious", "lateral movement", "privilege escalation"]
+        # V35 Structural Enforcement (Verification Only)
         claims = tool_args.get("claims", [])
         for c in claims:
             stmt = c.get("statement", "").lower()
             ctype = c.get("type", "")
-            if any(k in stmt for k in INFERENCE_KEYWORDS):
-                if ctype != "HYPOTHESIS":
-                    return (False, f"Epistemic Violation: Claim '{c['claim_id']}' uses high-inference terminology ('{stmt}') but is not marked as 'HYPOTHESIS'. Hint: Any claim inferring intent or attacker action must be marked as HYPOTHESIS and cite evidence.")
-                if not c.get("evidence_refs"):
-                    return (False, f"Epistemic Violation: Hypothesis '{c['claim_id']}' must cite specific 'evidence_refs'. Hint: You must justify hypotheses by listing the specific finding_ids or paths that support the inference.")
+            if any(k in stmt for k in EPISTEMIC_SIGNALS["HYPOTHESIS"]) and ctype not in ["HYPOTHESIS", "ASSESSMENT"]:
+                    return (False, f"Epistemic Violation: Claim '{c['claim_id']}' uses inferential language ('{stmt}') but is marked as '{ctype}'. Must be HYPOTHESIS or ASSESSMENT.")
+            if ctype == "HYPOTHESIS" and not c.get("evidence_refs"):
+                    return (False, f"Epistemic Violation: Hypothesis '{c['claim_id']}' must cite specific 'evidence_refs'.")
         return (True, "")
     except jsonschema.exceptions.ValidationError as ve:
         return (False, f"Case Notes Schema Validation Failed: {ve.message}")
@@ -571,13 +616,15 @@ def main() -> int:
             "2. PROCESS & SUCCESS CRITERIA: Make targeted, surgical queries. Use symbolic 'CASE://' URIs or 'case_ref': 'CASE' for all investigation artifacts to ensure portability.\n"
             "3. COMPLETION PROMISE: You must not stop or ask for human intervention until you have conclusively solved the task, noted any missing evidence gaps, and written your final structured conclusions to 'root_cause_analysis.json'.\n"
             "   * Once, and ONLY once, that file is fully written and validated, output exactly <promise>TASK_COMPLETE</promise> to terminate the loop.\n"
-            "\n--- THE EPISTEMIC FORENSIC PROTOCOL ---\n"
-            "1. STRUCTURED CLAIM OBJECTS: You MUST use 'dfir__update_case_notes__v1' with structured Claim Objects. Every statement must have an explicit type:\n"
-            "   - OBSERVATION: A direct finding from a tool (must cite evidence_refs).\n"
-            "   - DERIVED: A deterministic transform (e.g., base64 decode, UTC conversion).\n"
-            "   - HYPOTHESIS: A forensic inference or suspect activity (e.g., lateral movement).\n"
-            "   - UNKNOWN: An explicitly identified gap for future investigation.\n"
-            "2. INFERENCE GUARDRAILS: If a statement refers to 'attacker', 'compromised', or 'malicious' intent, it MUST be marked as 'HYPOTHESIS' and MUST cite supporting evidence.\n"
+            "--- THE EPISTEMIC FORENSIC PROTOCOL (V35) ---\n"
+            "1. STRUCTURED CLAIM OBJECTS: You MUST use 'dfir__update_case_notes__v1' with structured Claim Objects. Types:\n"
+            "   - OBSERVATION: Direct finding from a tool (must cite evidence_refs). No causal language.\n"
+            "   - DERIVED: Deterministic transform of observations (inputs + method). No inference.\n"
+            "   - HYPOTHESIS: Causal/inferential interpretation (e.g., lateral movement, 'likely', 'suggests').\n"
+            "   - ASSESSMENT: Weighted judgement after corroboration ('most probable root cause').\n"
+            "   - GAP: Explicitly identified evidence/logging gaps (use 'impact' field).\n"
+            "2. STRUCTURAL GUARDRAILS: Causal verbs ('caused', 'led to') or intent ('attacker', 'hide') REQUIRE labeling as HYPOTHESIS.\n"
+            "3. STATUS TRANSITIONS: Claims start 'Open'. Transition to 'Supported' or 'Confirmed' only when corroboration is complete.\n"
             "3. DETERMINISTIC CORRELATION: You have access to 'dfir__correlate_pivot__v1'. Use this for common investigative moves (LogonId -> 4624/4634, PID -> 4688). Do NOT attempt to perform these mappings via raw reasoning.\n"
             "4. AUTOMATED PIVOT LADDER: If a surgical search (keyword) returns 0 results, you are REQUIRED to call 'dfir__pivot_ladder__v1' in the SAME turn to generate a metadata-based recovery plan. Do NOT waste budget on repeated failed keyword searches.\n"
             "5. TURN EFFICIENCY: 12-STEP DOOM CLOCK is active. 25 points budget (Timeline=3, Finding=2, Read=1). Turn efficiency is critical.\n"
@@ -774,6 +821,9 @@ def main() -> int:
                     if notes_count >= 3:
                         return {"id": c_id, "name": t_name, "error": "[Policy Violation]: Maximum case note updates (3) reached. You must conclude the investigation."}
                     
+                    # Phase 34: Auto-Epistemic Leveling
+                    auto_correct_epistemic_claims(t_args)
+
                     # Epistemic integrity check
                     is_valid, err_msg = validate_case_notes(t_args)
                     if not is_valid:
