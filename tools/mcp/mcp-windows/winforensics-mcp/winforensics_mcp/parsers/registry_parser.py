@@ -5,11 +5,15 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Generator, Optional, Sequence
 
+import sys
+
 try:
     from Registry import Registry
     REGISTRY_AVAILABLE = True
-except ImportError:
+    REGISTRY_IMPORT_ERROR: Optional[Exception] = None
+except Exception as e:
     REGISTRY_AVAILABLE = False
+    REGISTRY_IMPORT_ERROR = e
 
 from ..config import (
     MAX_REGISTRY_RESULTS,
@@ -20,8 +24,12 @@ from ..config import (
 def check_registry_available() -> None:
     """Raise error if python-registry library not available"""
     if not REGISTRY_AVAILABLE:
-        raise ImportError(
-            "python-registry library not installed. Install with: pip install python-registry"
+        raise RuntimeError(
+            "python-registry library not available in this interpreter.\n"
+            f"sys.executable: {sys.executable}\n"
+            f"import error: {REGISTRY_IMPORT_ERROR!r}\n"
+            "Install with:\n"
+            f"  {sys.executable} -m pip install python-registry"
         )
 
 

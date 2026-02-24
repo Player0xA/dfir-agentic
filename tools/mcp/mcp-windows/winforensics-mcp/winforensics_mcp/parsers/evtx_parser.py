@@ -5,12 +5,16 @@ from pathlib import Path
 from typing import Any, Generator, Optional, Sequence
 from xml.etree import ElementTree as ET
 
+import sys
+
 try:
     from Evtx.Evtx import Evtx
     from Evtx.Views import evtx_file_xml_view
     EVTX_AVAILABLE = True
-except ImportError:
+    EVTX_IMPORT_ERROR: Optional[Exception] = None
+except Exception as e:
     EVTX_AVAILABLE = False
+    EVTX_IMPORT_ERROR = e
 
 from ..config import (
     MAX_EVTX_RESULTS,
@@ -22,8 +26,12 @@ from ..config import (
 def check_evtx_available() -> None:
     """Raise error if evtx library not available"""
     if not EVTX_AVAILABLE:
-        raise ImportError(
-            "python-evtx library not installed. Install with: pip install evtx"
+        raise RuntimeError(
+            "python-evtx library not available in this interpreter.\n"
+            f"sys.executable: {sys.executable}\n"
+            f"import error: {EVTX_IMPORT_ERROR!r}\n"
+            "Install with:\n"
+            f"  {sys.executable} -m pip install python-evtx"
         )
 
 
