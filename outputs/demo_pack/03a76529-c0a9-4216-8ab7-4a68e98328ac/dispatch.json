@@ -1,0 +1,14 @@
+{
+  "intake_id": "03a76529-c0a9-4216-8ab7-4a68e98328ac",
+  "timestamp_utc": "2026-02-24T02:22:42Z",
+  "decision": {
+    "recommended_pipeline": "chainsaw_evtx",
+    "evidence_path": "../cases/intake",
+    "status": "dispatch"
+  },
+  "result": {
+    "ok": true,
+    "run_id": "27ee6bd4-61f1-47f1-8b73-b060dc0d2763",
+    "manifest_path": "outputs/jsonl/chainsaw_evtx/27ee6bd4-61f1-47f1-8b73-b060dc0d2763/manifest.json"
+  }
+}
