@@ -40,6 +40,7 @@ def load_json(p: Path):
 def main() -> int:
     ap = argparse.ArgumentParser(description="Autonomous local protocol runner (no MCP)")
     ap.add_argument("--intake-json", required=True)
+    ap.add_argument("--task", help="Investigative intent/task description")
 
     # NEW: deterministic orchestration flags
     ap.add_argument("--enrichment-policy", choices=["always", "never"], default="never",
@@ -79,12 +80,17 @@ def main() -> int:
     ts = utc_now_z()
 
     # 1) Select agent deterministically
-    code, out, err = run_capture([str(SELECT_AGENT), "--intake-json", str(intake_json), "--registry", str(REGISTRY)])
+    select_cmd = [str(SELECT_AGENT), "--intake-json", str(intake_json), "--registry", str(REGISTRY)]
+    if args.task:
+        select_cmd.extend(["--task", args.task])
+    
+    code, out, err = run_capture(select_cmd)
     if code != 0:
         print(err, file=sys.stderr)
         return code
     sel = json.loads(out)
-    agent_id = sel["selected_agent"]
+    agent_id = sel.get("selected_agent", "triage_agent")
+    playbook_id = sel.get("selected_playbook", "initial_access_v1")
 
     # 2) Enforce capability (dispatch pipeline only if recommended)
     if rec:
@@ -104,7 +110,10 @@ def main() -> int:
 
     # 3) Execute dispatch if allowed
     if enforcement["action"] == "dispatch_pipeline" and enforcement["allowed"]:
-        run_must([str(DISPATCH), "--intake-json", str(intake_json)])
+        dispatch_cmd = [str(DISPATCH), "--intake-json", str(intake_json), "--playbook", playbook_id]
+        if args.task:
+            dispatch_cmd.extend(["--task", args.task])
+        run_must(dispatch_cmd)
         dispatch_json = intake_json.parent / "dispatch.json"
         d = load_json(dispatch_json)
         dispatch_block = {
@@ -121,7 +130,7 @@ def main() -> int:
         "auto_id": auto_id,
         "timestamp_utc": ts,
         "intake": {"intake_id": intake_id, "intake_json": str(intake_json)},
-        "selection": {"selected_agent": agent_id, "kind": kind},
+        "selection": {"selected_agent": agent_id, "selected_playbook": playbook_id, "kind": kind},
         "enforcement": enforcement,
         "dispatch": dispatch_block,
         "stages": {

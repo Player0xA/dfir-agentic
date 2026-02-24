@@ -11,6 +11,7 @@ def main() -> int:
     ap = argparse.ArgumentParser(description="Deterministic agent selection (HTM v0.1)")
     ap.add_argument("--intake-json", required=True, help="path to intake.json")
     ap.add_argument("--registry", default=".agents/registry.json", help="agent registry json")
+    ap.add_argument("--task", help="Investigative intent/task description")
     args = ap.parse_args()
 
     intake_path = Path(args.intake_json)
@@ -46,10 +47,22 @@ def main() -> int:
     else:
         agent_id = "triage_agent"
 
+    # Playbook Selection (V37)
+    playbook = "initial_access_v1"
+    if args.task:
+        task_lower = args.task.lower()
+        if any(k in task_lower for k in ["tamper", "clear", "audit"]):
+            playbook = "log_tampering_v1"
+        elif any(k in task_lower for k in ["lateral", "remote", "pivot", "move", "rdp", "smb"]):
+            playbook = "lateral_movement_v1"
+        elif any(k in task_lower for k in ["persistence", "service", "start", "run", "task"]):
+            playbook = "persistence_v1"
+
     out = {
         "intake_id": intake_id,
         "kind": kind,
-        "selected_agent": agent_id
+        "selected_agent": agent_id,
+        "selected_playbook": playbook
     }
     print(json.dumps(out, indent=2))
     return 0

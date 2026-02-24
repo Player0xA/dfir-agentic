@@ -34,6 +34,9 @@
             "null"
           ]
         },
+        "selected_playbook": {
+          "type": "string"
+        },
         "evidence_path": {
           "type": "string",
           "minLength": 1
@@ -58,6 +61,12 @@
       "properties": {
         "ok": {
           "type": "boolean"
+        },
+        "steps": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
         },
         "run_id": {
           "type": [

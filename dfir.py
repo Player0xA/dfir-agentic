@@ -73,6 +73,8 @@ def main():
         "--enrichment-policy", "always",
         "--run-merge"
     ]
+    if args.task:
+        ingest_cmd.extend(["--task", args.task])
     if run_cmd(ingest_cmd, "Deterministic Ingestion") is None: sys.exit(1)
 
     # 3. ORCHESTRATE (Agentic Loop)
