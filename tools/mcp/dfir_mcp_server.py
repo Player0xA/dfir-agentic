@@ -354,12 +354,35 @@ def write_line(obj: dict):
     sys.stdout.flush()
 
 def safe_resolve(p: str) -> Path:
-    # Accept relative paths; resolve against project root
     path = Path(p)
     if not path.is_absolute():
         path = (PROJECT_ROOT / path).resolve()
     else:
         path = path.resolve()
+    
+    # V21: Portable Case Root Remapper (Hallucination Healer)
+    # If path doesn't exist, try to strip prefixes heuristicallly
+    if not path.exists():
+        parts = Path(p).parts
+        markers = {"cases", "outputs", "intake", "evtx", "Logs", "data"}
+        
+        candidates = []
+        # Try relative to PROJECT_ROOT and its parent
+        bases = [PROJECT_ROOT, PROJECT_ROOT.parent]
+        
+        for i, part in enumerate(parts):
+            if part in markers:
+                # Potential tail found
+                tail = Path(*parts[i:])
+                for base in bases:
+                    candidate = (base / tail).resolve()
+                    if candidate.exists():
+                        return candidate
+        
+        # Final fallback: if it's absolute but on a different root (e.g. /home/nevermore/...)
+        # but the tail matches something in the current project parent
+        # This handles cross-machine moves where the base path changed.
+    
     return path
 
 def under_any_root(path: Path, roots: List[Path]) -> bool:

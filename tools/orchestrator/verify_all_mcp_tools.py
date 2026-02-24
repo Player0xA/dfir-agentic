@@ -89,7 +89,7 @@ def run_suite():
     if plaso_path.exists():
         test_tool("dfir.query_super_timeline", dfir_mcp_server.tool_query_super_timeline, {
             "plaso_file": str(plaso_path),
-            "contains": ["jasonr"],
+            "contains": "jasonr",
             "limit": 1
         })
     else:
