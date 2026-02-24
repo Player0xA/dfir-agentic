@@ -1,0 +1,19 @@
+{
+  "intake_id": "03a76529-c0a9-4216-8ab7-4a68e98328ac",
+  "timestamp_utc": "2026-02-24T02:22:42Z",
+  "inputs": {
+    "paths": [
+      "../cases/intake"
+    ]
+  },
+  "classification": {
+    "kind": "windows_evtx_dir",
+    "confidence": "high",
+    "recommended_pipeline": "chainsaw_evtx"
+  },
+  "signals": [
+    "intake:dir_contains_evtx_count:335",
+    "intake:dir_contains_evt_count:0",
+    "intake:security_evtx_present"
+  ]
+}

@@ -1,0 +1,54 @@
+{
+  "run_id": "58d51075-db2d-48c5-87c6-ffb4b09be0f6",
+  "timestamp_utc": "2026-02-24T02:23:05Z",
+  "pipeline": {
+    "name": "case-merge",
+    "version": "0.1.0"
+  },
+  "status": "ok",
+  "inputs": {
+    "intake_dir": "outputs/intake/03a76529-c0a9-4216-8ab7-4a68e98328ac",
+    "auto_json": {
+      "path": "outputs/intake/03a76529-c0a9-4216-8ab7-4a68e98328ac/auto.json",
+      "sha256": "6f638f4bc4a53cb9a93d7491c0ca35d0bb5375827767355eff1e19e95c6ea38f",
+      "size_bytes": 841
+    },
+    "baseline_manifest": {
+      "path": "outputs/jsonl/chainsaw_evtx/27ee6bd4-61f1-47f1-8b73-b060dc0d2763/manifest.json",
+      "sha256": "0df456b537e60359e2358ce2e39864e1b7d81fe95773ebbfbdb75c2d00cdd92b",
+      "size_bytes": 78098
+    },
+    "baseline_findings": {
+      "path": "outputs/jsonl/chainsaw_evtx/27ee6bd4-61f1-47f1-8b73-b060dc0d2763/findings.json",
+      "sha256": "6e845221e2c147e9765a9a22e450518f632495b9012a4a6f650a3a0413986eba",
+      "size_bytes": 1302238
+    },
+    "enrichment_json": {
+      "path": "outputs/intake/03a76529-c0a9-4216-8ab7-4a68e98328ac/enrichment.json",
+      "sha256": "728f4250f279128cb3be0817a62441dd968dcca16bbc7bb3e25c178086ee48c2",
+      "size_bytes": 940
+    },
+    "enrichment_manifest": {
+      "path": "outputs/jsonl/hayabusa_evtx/238a008c-b96f-4ab5-9e1d-edf3bfb56c07/manifest.json",
+      "sha256": "fac4c07a8dba3d9148d5483d00f7fd14ff1b3c3b07dc25d8427a5dc303e458c5",
+      "size_bytes": 78430
+    },
+    "enrichment_findings": {
+      "path": "/home/nevermore/dfir-agentic/outputs/jsonl/hayabusa_evtx/238a008c-b96f-4ab5-9e1d-edf3bfb56c07/findings.json",
+      "sha256": "fba49308ad9708f217021f48a51f0888ef247e5dcadcaf58c56396d9122da498",
+      "size_bytes": 1261714
+    }
+  },
+  "artifacts": {
+    "case_findings_json": {
+      "path": "outputs/intake/03a76529-c0a9-4216-8ab7-4a68e98328ac/case_findings.json",
+      "sha256": "182f878ce225574bae627bc54ce855716f88d7ebd9a87f8c0a34c125876c1dc4",
+      "size_bytes": 2746356
+    },
+    "case_summary_md": {
+      "path": "outputs/intake/03a76529-c0a9-4216-8ab7-4a68e98328ac/case_summary.md",
+      "sha256": "4fb3a8d7fdbea9ff026681211e7f56df6ce7b72271519f017c4448a60bc812ed",
+      "size_bytes": 2412
+    }
+  }
+}
