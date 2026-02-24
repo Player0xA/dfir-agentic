@@ -211,7 +211,11 @@ def check_for_rca(history: list[dict]) -> tuple[bool, str]:
                                 jsonschema.validate(instance=rca_data, schema=schema)
                                 return (True, "")
                     except jsonschema.exceptions.ValidationError as ve:
-                        return (False, f"RCA Schema Validation Failed: {ve.message}")
+                        # V17: Provide specific feedback on missing fields
+                        msg = ve.message
+                        if "required" in msg.lower():
+                            msg = f"RCA Schema Validation Failed: {msg}. Ensure 'summary', 'root_cause', 'confidence', 'claims', 'unknowns', and 'assessment' are ALL present."
+                        return (False, msg)
                     except Exception:
                         continue
     return (False, "Root cause analysis block (JSON) not found in case notes.")
@@ -560,6 +564,8 @@ def main() -> int:
             "- CRITICAL: Do NOT simulate tool outputs. You must wait for the actual tool call return.\n"
             "- FORENSIC SOUNDNESS: You are strictly forbidden from modifying evidence paths. Use read-only tools.\n"
             "- CONVERGENCE CONTRACT: You MUST produce a machine-readable 'root_cause_analysis.json' block in your case notes before you conclude. Reaching TASK_COMPLETE without it results in rejection.\n"
+            "   * CRITICAL: Your RCA JSON MUST include the 'summary' field (Executive summary), 'root_cause', 'confidence', 'claims' (with supporting_evidence refs), 'unknowns', and 'assessment'.\n"
+            "   * REJECTION WARNING: Omitting the 'summary' field will result in a hard validation error.\n"
             "- MANDATED TOOL CHAINING: ALWAYS batch 'update_case_notes' with your next investigative tool call.\n"
             "- PIVOT EXTRACTION: Every query result must produce extracted pivots.\n"
             "- When your investigation is fully concluded, YOU MUST output the exact token: <promise>TASK_COMPLETE</promise>\n"

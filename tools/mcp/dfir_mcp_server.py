@@ -431,7 +431,11 @@ def tool_validate_deliverable(args: Dict[str, Any], audit: Dict[str, Path]) -> D
         jsonschema.validate(instance=rca, schema=schema)
         return {"status": "SUCCESS", "message": "root_cause_analysis is valid and ready for finalization."}
     except jsonschema.exceptions.ValidationError as ve:
-        raise ValueError(f"RCA Schema Validation Failed: {ve.message}")
+        # V17: Consistent error feedback with orchestrator
+        msg = ve.message
+        if "required" in msg.lower():
+            msg = f"RCA Schema Validation Failed: {msg}. Ensure 'summary', 'root_cause', 'confidence', 'claims', 'unknowns', and 'assessment' are ALL present."
+        raise ValueError(msg)
     except Exception as e:
         raise ValueError(f"Validation Error: {str(e)}")
 
@@ -462,10 +466,11 @@ def tool_pivot_ladder(args: Dict[str, Any], audit: Dict[str, Path]) -> Dict[str,
         "failed_term": failed_term,
         "fallback_plan": [
             "1. Search by Event ID range (e.g. 4624, 4625 for auth) around the known time window.",
-            "2. Search by Provider GUID or Channel (e.g. Security, System) if metadata is known.",
-            "3. Search for related PIDs or ParentPIDs if found in other artifacts."
+            "2. Expand your search window by +/- 5 minutes to account for clock drift.",
+            "3. Search by Provider GUID or Channel (e.g. Security, System) if metadata is known.",
+            "4. Search for related PIDs or ParentPIDs if found in other artifacts."
         ],
-        "note": "Keyword search failed. Broaden your scope to metadata to avoid budget waste."
+        "note": "Keyword search failed. Broaden your scope to metadata and time-window expansion to avoid budget waste."
     }
 
 def tool_identify_evidence(args: Dict[str, Any], audit: Dict[str, Path]) -> Dict[str, Any]:
@@ -729,16 +734,25 @@ def tool_query_super_timeline(args: Dict[str, Any], audit: Dict[str, Path]) -> D
     # Backend Abstraction: Constructing filter programmatically
     struct_parts = []
     if search:
-        # V16 Hex Normalization: Plaso contains filter is literal. 
-        # Windows often zero-pads LogonIds/PIDs to 16 chars.
+        # V17 Robust Hex Normalization: Plaso contains filter is literal.
+        # Windows logs use 8-char or 16-char zero-padding for IDs.
         if search.startswith("0x"):
             try:
-                val = int(search, 16)
-                padded = f"0x{val:016x}"
-                if padded.lower() != search.lower():
-                    struct_parts.append(f"(message contains '{search}' OR message contains '{padded}')")
-                else:
-                    struct_parts.append(f"message contains '{search}'")
+                hex_val = search[2:]
+                val = int(hex_val, 16)
+                
+                # Generate variants
+                variants = set()
+                variants.add(search.lower())
+                variants.add(search.upper())
+                variants.add(f"0x{val:08x}")
+                variants.add(f"0x{val:08X}")
+                variants.add(f"0x{val:016x}")
+                variants.add(f"0x{val:016X}")
+                
+                # Build OR chain
+                or_parts = [f"message contains '{v}'" for v in sorted(list(variants))]
+                struct_parts.append(f"({' OR '.join(or_parts)})")
             except ValueError:
                 struct_parts.append(f"message contains '{search}'")
         else:
