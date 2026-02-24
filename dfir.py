@@ -4,6 +4,9 @@ import argparse
 import subprocess
 import re
 from pathlib import Path
+import sys, os
+print("MCP SERVER sys.executable =", sys.executable)
+print("MCP SERVER VIRTUAL_ENV    =", os.environ.get("VIRTUAL_ENV"))
 
 def run_cmd(cmd: list[str], task_name: str):
     print(f"\n>>> [Stage: {task_name}] Running: {' '.join(cmd)}")
