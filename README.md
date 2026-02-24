@@ -21,6 +21,7 @@ graph TD
         B --> G[case.json]
     end
     H[Agentic Orchestrator] -->|EvidenceRef| I[MCP Tool Server]
+    I -->|Symbolic URI Support| H
     I -->|Authoritative Resolution| B
     I -->|Hash Verification| E
     I -->|Audit Logging| F
@@ -48,15 +49,20 @@ python3 tools/case/import_evidence.py \
 ```
 
 ### 3. Run Autonomous Triage
-Invoke the agentic pipeline to perform analysis using the local MCP tools.
+Invoke the unified agentic pipeline. This automatically stages evidence, generates Plaso super timelines, merges enrichment findings, and begins the agentic loop.
 ```bash
 export DFIR_CASE_DIR="./cases/mills-sqlserver-2026-01"
-python3 dfir.py --auto
+python3 dfir.py --auto --task "Describe the lateral movement from SQL01"
 ```
 
 ---
 
 ## 🛡️ Forensic Standards & Guardrails
+
+### Symbolic Case Referencing (V32)
+The system abstracts absolute host paths to improve security and portability. 
+- **AI View**: The orchestrator uses the symbolic `CASE://` URI scheme (e.g., `CASE://case_findings.json`).
+- **Implicit Alias**: Tool calls can use `"case_ref": "CASE"` as a stable identifier regardless of where the case is stored on the filesystem.
 
 ### Authoritative Metadata (`case.json`)
 The `case.json` file is the **Single Source of Truth**. It contains logical mappings for all evidence artifacts, allowing the agent to resolve paths via logical IDs rather than host-specific absolute paths.

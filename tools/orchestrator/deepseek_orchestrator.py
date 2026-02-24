@@ -165,9 +165,9 @@ def validate_case_notes(tool_args: dict) -> tuple[bool, str]:
             ctype = c.get("type", "")
             if any(k in stmt for k in INFERENCE_KEYWORDS):
                 if ctype != "HYPOTHESIS":
-                    return (False, f"Epistemic Violation: Claim '{c['claim_id']}' uses high-inference terminology but is not marked as 'HYPOTHESIS'.")
+                    return (False, f"Epistemic Violation: Claim '{c['claim_id']}' uses high-inference terminology ('{stmt}') but is not marked as 'HYPOTHESIS'. Hint: Any claim inferring intent or attacker action must be marked as HYPOTHESIS and cite evidence.")
                 if not c.get("evidence_refs"):
-                    return (False, f"Epistemic Violation: Hypothesis '{c['claim_id']}' must cite specific 'evidence_refs'.")
+                    return (False, f"Epistemic Violation: Hypothesis '{c['claim_id']}' must cite specific 'evidence_refs'. Hint: You must justify hypotheses by listing the specific finding_ids or paths that support the inference.")
         return (True, "")
     except jsonschema.exceptions.ValidationError as ve:
         return (False, f"Case Notes Schema Validation Failed: {ve.message}")
@@ -460,6 +460,7 @@ def main() -> int:
     
     try:
         from tools.mcp.dfir_mcp_server import tool_list_dir, tool_read_text, tool_query_findings, symbolize_path
+        res = tool_list_dir({"path": intake_dir}, {})
         if "entries" in res:
             # Fix: Handle both list of dicts or list of strings
             dir_listing = [e["name"] if isinstance(e, dict) else e for e in res["entries"]]
