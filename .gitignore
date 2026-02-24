@@ -3,9 +3,12 @@ __pycache__/
 *.pyc
 *.pyo
 *.pyd
+**/__pycache__
+**/**/__pycache__
 
 # Virtual environments
 venv/
+.venv/
 .env/
 
 # Outputs
@@ -19,3 +22,6 @@ cases/
 
 # OS
 .DS_Store
+
+#plaso zipped packets
+*.log.gz
