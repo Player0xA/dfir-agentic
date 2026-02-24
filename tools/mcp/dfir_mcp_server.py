@@ -729,8 +729,20 @@ def tool_query_super_timeline(args: Dict[str, Any], audit: Dict[str, Path]) -> D
     # Backend Abstraction: Constructing filter programmatically
     struct_parts = []
     if search:
-        # Use 'contains' with single quotes for confirmed Plaso compatibility
-        struct_parts.append(f"message contains '{search}'")
+        # V16 Hex Normalization: Plaso contains filter is literal. 
+        # Windows often zero-pads LogonIds/PIDs to 16 chars.
+        if search.startswith("0x"):
+            try:
+                val = int(search, 16)
+                padded = f"0x{val:016x}"
+                if padded.lower() != search.lower():
+                    struct_parts.append(f"(message contains '{search}' OR message contains '{padded}')")
+                else:
+                    struct_parts.append(f"message contains '{search}'")
+            except ValueError:
+                struct_parts.append(f"message contains '{search}'")
+        else:
+            struct_parts.append(f"message contains '{search}'")
     if e_ids:
         # Note: Older Plaso SQL-like syntax rejects IN. Expand to OR chain.
         ids_parts = [f"event_identifier == {i}" for i in e_ids]
