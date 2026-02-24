@@ -459,8 +459,7 @@ def main() -> int:
     primary_finding_context = ""
     
     try:
-        from tools.mcp.dfir_mcp_server import tool_list_dir, tool_read_text, tool_query_findings
-        res = tool_list_dir({"path": intake_dir}, {})
+        from tools.mcp.dfir_mcp_server import tool_list_dir, tool_read_text, tool_query_findings, symbolize_path
         if "entries" in res:
             # Fix: Handle both list of dicts or list of strings
             dir_listing = [e["name"] if isinstance(e, dict) else e for e in res["entries"]]
@@ -468,7 +467,7 @@ def main() -> int:
         # Prioritize major artifacts
         for e in res.get("entries", []):
             ename = e["name"] if isinstance(e, dict) else e
-            epath = os.path.join(intake_dir, ename)
+            epath = symbolize_path(os.path.join(intake_dir, ename))
             if ename == "case_summary.md":
                 found_paths["Summary"] = epath
                 summary_res = tool_read_text({"path": epath, "max_bytes": 100000}, {})
@@ -501,9 +500,9 @@ def main() -> int:
         # Also check for hoisted plaso at root (intake_dir)
         case_id = intake_id or intake.get("case_id")
         if case_id:
-            hoisted_plaso = os.path.join(intake_dir, f"{case_id}.plaso")
-            if os.path.exists(hoisted_plaso):
-                found_paths["Timeline (Super)"] = hoisted_plaso
+            hoisted_abs = os.path.join(intake_dir, f"{case_id}.plaso")
+            if os.path.exists(hoisted_abs):
+                found_paths["Timeline (Super)"] = symbolize_path(hoisted_abs)
         
         # V8: Executable Forensic Memory (CLAUDE.md)
         claude_md_path = os.path.join(intake_dir, "CLAUDE.md")
@@ -520,7 +519,7 @@ def main() -> int:
         
         with open(claude_md_path, "w") as f:
             f.write(claude_content)
-        found_paths["Project Memory"] = claude_md_path
+        found_paths["Project Memory"] = symbolize_path(claude_md_path)
 
     except Exception as e:
         print(f"DEBUG: Resource discovery failed: {e}")
@@ -566,9 +565,9 @@ def main() -> int:
             "You are a HIGH-VELOCITY DFIR triage assistant. You produce NON-AUTHORITATIVE commentary.\n"
             f"{mode_instructions}\n"
             f"{skills_registry}\n"
-            "--- THE RALPH WIGGUM FORENSIC LOOP (V19) ---\n"
+            "--- THE RALPH WIGGUM FORENSIC LOOP (V20) ---\n"
             "1. TASK: Execute the assigned DFIR investigation autonomously by chaining appropriate forensic tools, analyzing the outputs, and documenting all findings progressively in your case notes.\n"
-            "2. PROCESS & SUCCESS CRITERIA: Make targeted, surgical queries, and treat any tool execution errors as direct feedback to instantly self-correct your syntax and retry.\n"
+            "2. PROCESS & SUCCESS CRITERIA: Make targeted, surgical queries. Use symbolic 'CASE://' URIs or 'case_ref': 'CASE' for all investigation artifacts to ensure portability.\n"
             "3. COMPLETION PROMISE: You must not stop or ask for human intervention until you have conclusively solved the task, noted any missing evidence gaps, and written your final structured conclusions to 'root_cause_analysis.json'.\n"
             "   * Once, and ONLY once, that file is fully written and validated, output exactly <promise>TASK_COMPLETE</promise> to terminate the loop.\n"
             "\n--- THE EPISTEMIC FORENSIC PROTOCOL ---\n"
@@ -604,12 +603,12 @@ def main() -> int:
         context_payload = f"Intake ID: {intake_id}\nIntake Path: {args.intake_json}\nTask: {user_task}\n"
         
         if found_paths:
-            context_payload += "\n[KNOWLEDGE] Primary Evidence Paths (Case Envelope):\n"
+            context_payload += "\n[KNOWLEDGE] Primary Evidence References (Case Envelope):\n"
             for label, fpath in found_paths.items():
                 context_payload += f"- {label}: {fpath}\n"
 
         context_payload += f"\n[CONTEXT] Auto-Detected Intake Payload:\n```json\n{intake_context}\n```\n"
-        context_payload += f"\n[CONTEXT] Case Output Directory Listing ({intake_dir}):\n- " + "\n- ".join(dir_listing)
+        context_payload += f"\n[CONTEXT] Case Output Directory Listing ({symbolize_path(intake_dir)}):\n- " + "\n- ".join(dir_listing)
         
         if case_summary_md:
             context_payload += f"\n\n[CONTEXT] SITUATIONAL AWARENESS MAP (case_summary.md):\n```markdown\n{case_summary_md}\n```"

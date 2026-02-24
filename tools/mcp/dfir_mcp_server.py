@@ -107,7 +107,10 @@ TOOLS = [
                 "evidence_ref": {
                     "type": "object",
                     "properties": {
-                        "case_ref": {"type": "string"},
+                        "case_ref": {
+                            "type": "string",
+                            "description": "Path to case.json or 'CASE' for active case"
+                        },
                         "evidence": {
                             "type": "object",
                             "properties": {
@@ -136,7 +139,10 @@ TOOLS = [
                     "type": "object",
                     "required": ["case_ref", "evidence"],
                     "properties": {
-                        "case_ref": {"type": "string"},
+                        "case_ref": {
+                            "type": "string",
+                            "description": "Path to case.json or 'CASE' for active case"
+                        },
                         "evidence": {
                             "type": "object",
                             "required": ["relpath"],
@@ -164,7 +170,10 @@ TOOLS = [
                     "type": "object",
                     "required": ["case_ref", "evidence"],
                     "properties": {
-                        "case_ref": {"type": "string"},
+                        "case_ref": {
+                            "type": "string",
+                            "description": "Path to case.json or 'CASE' for active case"
+                        },
                         "evidence": {
                             "type": "object",
                             "required": ["relpath"],
@@ -195,7 +204,10 @@ TOOLS = [
                     "type": "object",
                     "required": ["case_ref", "evidence"],
                     "properties": {
-                        "case_ref": {"type": "string"},
+                        "case_ref": {
+                            "type": "string",
+                            "description": "Path to case.json or 'CASE' for active case"
+                        },
                         "evidence": {
                             "type": "object",
                             "required": ["relpath"],
@@ -220,7 +232,10 @@ TOOLS = [
                     "type": "object",
                     "required": ["case_ref", "evidence"],
                     "properties": {
-                        "case_ref": {"type": "string"},
+                        "case_ref": {
+                            "type": "string",
+                            "description": "Path to case.json or 'CASE' for active case"
+                        },
                         "evidence": {
                             "type": "object",
                             "required": ["relpath"],
@@ -245,7 +260,10 @@ TOOLS = [
                     "type": "object",
                     "required": ["case_ref", "evidence"],
                     "properties": {
-                        "case_ref": {"type": "string"},
+                        "case_ref": {
+                            "type": "string",
+                            "description": "Path to case.json or 'CASE' for active case"
+                        },
                         "evidence": {
                             "type": "object",
                             "required": ["relpath"],
@@ -272,7 +290,10 @@ TOOLS = [
                     "type": "object",
                     "required": ["case_ref", "evidence"],
                     "properties": {
-                        "case_ref": {"type": "string"},
+                        "case_ref": {
+                            "type": "string",
+                            "description": "Path to case.json or 'CASE' for active case"
+                        },
                         "evidence": {
                             "type": "object",
                             "required": ["relpath"],
@@ -365,7 +386,7 @@ TOOLS = [
             "additionalProperties": False,
             "required": ["case_dir"],
             "properties": {
-                "case_dir": {"type": "string", "description": "The absolute path to the case output directory"}
+                "case_dir": {"type": "string", "description": "The path to the case directory or 'CASE'"}
             }
         }
     },
@@ -447,6 +468,19 @@ TOOLS = [
 # ----------------------------
 # Helpers
 # ----------------------------
+def symbolize_path(path: str | Path) -> str:
+    """Replaces the absolute Case Root with CASE:// for AI context."""
+    p_str = str(path)
+    case_dir = get_case_dir()
+    if case_dir:
+        abs_case = str(case_dir.resolve())
+        if p_str.startswith(abs_case):
+            # Resolve leading slash to ensure CASE://path instead of CASE:///path
+            rel = p_str.replace(abs_case, "").lstrip("/")
+            return f"CASE://{rel}"
+    return p_str
+
+
 def get_evidence_path_from_ref(evidence_ref: Any, audit_paths: Dict[str, Path], default_root: str = "staged") -> Path:
     """Authoritative EvidenceRef -> Absolute Path solver with rich auditing and legacy support."""
     if isinstance(evidence_ref, str):
@@ -472,14 +506,20 @@ def get_evidence_path_from_ref(evidence_ref: Any, audit_paths: Dict[str, Path], 
     abs_path = resolve_evidence_path(case_ref, root, relpath)
 
     # Step 9: Traversal Control (Reject paths outside case_root)
-    case_root = Path(case_ref).parent.resolve()
-    try:
-        abs_path.relative_to(case_root)
-    except ValueError:
-        # Check if it's in original but outside root? No, case_root should be the parent of case.json
-        # and all evidence/original, evidence/staged should be subdirs.
-        # If it's malicious, catch it.
-        raise PermissionError(f"Traversal Guard: Path escapes case root: {abs_path}")
+    if str(case_ref).upper() == "CASE" or str(case_ref).startswith("CASE://"):
+        case_dir = get_case_dir()
+        case_root = case_dir.resolve() if case_dir else None
+    else:
+        case_root = Path(case_ref).parent.resolve()
+    
+    if case_root:
+        try:
+            abs_path.relative_to(case_root)
+        except ValueError:
+            # Check if it's in original but outside root? No, case_root should be the parent of case.json
+            # and all evidence/original, evidence/staged should be subdirs.
+            # If it's malicious, catch it.
+            raise PermissionError(f"Traversal Guard: Path escapes case root: {abs_path}")
 
     # 2. Rich Audit Logging (Step 6)
     audit_data = {
@@ -545,13 +585,25 @@ def resolve_project_path(p: str) -> Path:
 
 def resolve_evidence_path(case_ref: str | Path, root_name: str, relpath: str) -> Path:
     """Authoritative resolution for forensic evidence via case.json."""
-    case_path = Path(case_ref).resolve()
+    if str(case_ref).upper() == "CASE" or str(case_ref).startswith("CASE://"):
+        case_dir = get_case_dir()
+        if not case_dir:
+             raise ValueError("Symbolic 'CASE' reference used but DFIR_CASE_DIR is not set.")
+        case_path = case_dir / "case.json"
+        if not case_path.exists():
+            case_path = case_dir / "intake.json"
+    else:
+        case_path = Path(case_ref).resolve()
+
     if not case_path.exists():
         # Fallback for Phase 28 transition: if case_ref is missing, try DFIR_CASE_DIR
         case_dir = get_case_dir()
         if case_dir:
-            return (case_dir / relpath).resolve()
-        raise FileNotFoundError(f"Case metadata not found: {case_path}")
+            # If we used CASE alias, case_dir / relpath might be wrong if it's staged evidence
+            # But here we are resolving from case.json, so let's continue.
+            pass
+        else:
+            raise FileNotFoundError(f"Case metadata not found: {case_path}")
     
     with open(case_path, 'r') as f:
         case_data = json.load(f)
@@ -705,7 +757,7 @@ def tool_load_case_context(args: Dict[str, Any], audit: Dict[str, Path]) -> Dict
     # Load Pointers (Plaso Timeline)
     plaso_files = list(case_dir.glob("*.plaso"))
     if plaso_files:
-        context["available_timelines"] = [str(p) for p in plaso_files]
+        context["available_timelines"] = [symbolize_path(p) for p in plaso_files]
         
     return context
 
@@ -949,7 +1001,7 @@ def tool_read_json(args: Dict[str, Any], audit: Dict[str, Path]) -> Dict[str, An
     ptr = args.get("json_pointer")
     value = json_pointer_get(doc, ptr)
 
-    return {"path": str(path), "json_pointer": ptr, "value": value}
+    return {"path": symbolize_path(path), "json_pointer": ptr, "value": value}
 
 
 def tool_read_text(args: Dict[str, Any], audit: Dict[str, Path]) -> Dict[str, Any]:
@@ -968,7 +1020,7 @@ def tool_read_text(args: Dict[str, Any], audit: Dict[str, Path]) -> Dict[str, An
         raise ValueError(f"read_text failed: file too large ({st.st_size} bytes) > max_bytes ({max_bytes}). Treat large logs as data sources, not context.")
 
     content = path.read_text(encoding="utf-8")
-    return {"path": str(path), "value": content}
+    return {"path": symbolize_path(path), "value": content}
 
 
 
@@ -1017,7 +1069,7 @@ def tool_query_findings(args: Dict[str, Any], audit: Dict[str, Path]) -> Dict[st
             break
             
     return {
-        "path": str(path),
+        "path": symbolize_path(path),
         "total_matched": len(filtered),
         "results": filtered,
         "note": "Use finding_id for surgical extraction of a single high-fidelity finding."
@@ -1031,7 +1083,10 @@ def tool_list_dir(args: Dict[str, Any], audit: Dict[str, Path]) -> Dict[str, Any
     if not path.is_dir():
         raise ValueError(f"not a directory: {path}")
     entries = sorted([p.name for p in path.iterdir()])
-    return {"path": str(path), "entries": entries}
+    return {
+        "path": symbolize_path(path),
+        "entries": entries
+    }
 
 def tool_query_super_timeline(args: Dict[str, Any], audit: Dict[str, Path]) -> Dict[str, Any]:
     # Phase 29: Uniform EvidenceRef Contract
@@ -1148,7 +1203,7 @@ def tool_query_super_timeline(args: Dict[str, Any], audit: Dict[str, Path]) -> D
         }
 
         return {
-            "plaso_file": str(plaso_path),
+            "plaso_file": symbolize_path(plaso_path),
             "window": {"start": start, "end": end},
             "count": len(lines),
             "events": preview,
@@ -1156,7 +1211,7 @@ def tool_query_super_timeline(args: Dict[str, Any], audit: Dict[str, Path]) -> D
         }
     else:
         return {
-            "plaso_file": str(plaso_path),
+            "plaso_file": symbolize_path(plaso_path),
             "window": {"start": start, "end": end},
             "count": len(lines),
             "raw_csv_snippet": "\n".join(lines[:20]) # First 20 lines
