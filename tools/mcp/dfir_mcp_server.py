@@ -185,13 +185,55 @@ TOOLS = [
     },
     {
         "name": "dfir.update_case_notes@1",
-        "description": "Log an investigation finding or progress note. MUST always conclude with a 'Next Steps' summary.",
+        "description": "Log structured investigation claims. Every statement must be an OBSERVATION, DERIVED, HYPOTHESIS, or UNKNOWN.",
         "inputSchema": {
             "type": "object",
             "additionalProperties": False,
-            "required": ["notes"],
+            "required": ["claims", "next_steps"],
             "properties": {
-                "notes": {"type": "string", "minLength": 1, "description": "Markdown formatted investigation notes."}
+                "claims": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "claim_id": { "type": "string" },
+                            "type": { "type": "string", "enum": ["OBSERVATION", "DERIVED", "HYPOTHESIS", "UNKNOWN"] },
+                            "statement": { "type": "string" },
+                            "evidence_refs": { "type": "array", "items": { "type": "string" } },
+                            "confidence": { "type": "string", "enum": ["High", "Medium", "Low", "N/A"] },
+                            "validation_plan": { "type": "string" },
+                            "status": { "type": "string", "enum": ["Open", "Confirmed", "Refuted"] }
+                        },
+                        "required": ["claim_id", "type", "statement", "evidence_refs", "status"]
+                    }
+                },
+                "next_steps": { "type": "array", "items": { "type": "string" } }
+            }
+        }
+    },
+    {
+        "name": "dfir.correlate_pivot@1",
+        "description": "Deterministic correlation module: LogonId -> Auth Logs, PID -> Process Creation, etc.",
+        "inputSchema": {
+            "type": "object",
+            "additionalProperties": False,
+            "required": ["pivot_type", "pivot_value"],
+            "properties": {
+                "pivot_type": { "type": "string", "enum": ["LogonId", "PID", "SrcIP"] },
+                "pivot_value": { "type": "string" }
+            }
+        }
+    },
+    {
+        "name": "dfir.pivot_ladder@1",
+        "description": "Automated fallback engine: if a keyword search fails, generate a metadata-based search plan.",
+        "inputSchema": {
+            "type": "object",
+            "additionalProperties": False,
+            "required": ["failed_search_term", "plaso_file"],
+            "properties": {
+                "failed_search_term": { "type": "string" },
+                "plaso_file": { "type": "string" }
             }
         }
     },
@@ -392,6 +434,37 @@ def tool_validate_deliverable(args: Dict[str, Any], audit: Dict[str, Path]) -> D
         raise ValueError(f"RCA Schema Validation Failed: {ve.message}")
     except Exception as e:
         raise ValueError(f"Validation Error: {str(e)}")
+
+def tool_correlate_pivot(args: Dict[str, Any], audit: Dict[str, Path]) -> Dict[str, Any]:
+    ptype = args["pivot_type"]
+    pval = args["pivot_value"]
+    
+    correlations = {
+        "LogonId": f"Pivoting LogonId {pval} to Security Event IDs 4624 (Logon), 4634 (Logoff), and 4672 (Admin Logon).",
+        "PID": f"Pivoting PID {pval} to Security Event ID 4688 (Process Creation) and Sysmon Event ID 3 (Network Connection).",
+        "SrcIP": f"Pivoting SrcIP {pval} to Firewall logs, SMB activity, and RDP authentication events."
+    }
+    
+    return {
+        "pivot": ptype,
+        "value": pval,
+        "suggested_query": correlations.get(ptype, "No deterministic rule found."),
+        "note": "Execute query_super_timeline with the suggested event IDs and this value as a search term or in specific fields."
+    }
+
+def tool_pivot_ladder(args: Dict[str, Any], audit: Dict[str, Path]) -> Dict[str, Any]:
+    failed_term = args["failed_search_term"]
+    
+    # Deterministic fallback plan
+    return {
+        "failed_term": failed_term,
+        "fallback_plan": [
+            "1. Search by Event ID range (e.g. 4624, 4625 for auth) around the known time window.",
+            "2. Search by Provider GUID or Channel (e.g. Security, System) if metadata is known.",
+            "3. Search for related PIDs or ParentPIDs if found in other artifacts."
+        ],
+        "note": "Keyword search failed. Broaden your scope to metadata to avoid budget waste."
+    }
 
 def tool_identify_evidence(args: Dict[str, Any], audit: Dict[str, Path]) -> Dict[str, Any]:
     evidence_path = safe_resolve(args["path"])
@@ -759,15 +832,35 @@ def tool_load_skill(args: Dict[str, Any], audit: Dict[str, Path]) -> Dict[str, A
     }
 
 def tool_update_case_notes(args: Dict[str, Any], audit: Dict[str, Path]) -> Dict[str, Any]:
-    notes = args["notes"]
     if not DFIR_CASE_DIR:
         raise RuntimeError("DFIR_CASE_DIR not set; cannot update case notes.")
     
     case_path = Path(DFIR_CASE_DIR)
     progress_file = case_path / "progress.md"
     
+    claims = args.get("claims", [])
+    next_steps = args.get("next_steps", [])
+    
     timestamp = utc_now_z()
-    entry = f"\n## {timestamp}\n{notes}\n"
+    
+    # Format entry
+    entry = f"\n## {timestamp}\n"
+    for c in claims:
+        cid = c.get("claim_id", "UNC-ID")
+        ctype = c.get("type", "UNKNOWN")
+        stmt = c.get("statement", "")
+        refs = ", ".join(c.get("evidence_refs", []))
+        conf = c.get("confidence", "N/A")
+        status = c.get("status", "Open")
+        
+        entry += f"- **[{ctype}]** ({cid}): {stmt} | Refs: `{refs}` | Conf: {conf} | Status: {status}\n"
+        if c.get("validation_plan"):
+            entry += f"  > Validation: {c['validation_plan']}\n"
+            
+    if next_steps:
+        entry += "\n### Next Steps\n"
+        for ns in next_steps:
+            entry += f"- {ns}\n"
     
     # Append to file
     with open(progress_file, "a", encoding="utf-8") as f:
@@ -802,6 +895,10 @@ def dispatch_tool(name: str, arguments: Dict[str, Any], audit: Dict[str, Path]) 
         return tool_build_query_plan(arguments, audit)
     if name == "dfir.validate_deliverable@1":
         return tool_validate_deliverable(arguments, audit)
+    if name == "dfir.correlate_pivot@1":
+        return tool_correlate_pivot(arguments, audit)
+    if name == "dfir.pivot_ladder@1":
+        return tool_pivot_ladder(arguments, audit)
     if name == "dfir.update_case_notes@1":
         return tool_update_case_notes(arguments, audit)
     raise KeyError(f"unknown tool: {name}")

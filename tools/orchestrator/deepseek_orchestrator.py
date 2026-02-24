@@ -110,7 +110,8 @@ def compact_history(history: list[dict]):
     has_notes = any(desanitize_tool_name(c["function"]["name"]) == "dfir.update_case_notes@1" for c in calls)
     
     if has_notes:
-        # Synchronized 100KB Compaction
+        # V15: Structured Claim Compaction
+        # Find the tool result to ensure it was SUCCESS before compacting
         idx_last_assistant = 0
         for i, m in enumerate(history):
             if m is last_assistant:
@@ -141,24 +142,74 @@ def check_for_rca(history: list[dict]) -> tuple[bool, str]:
     except Exception as e:
         return (False, f"Failed to load RCA schema: {str(e)}")
 
+def validate_case_notes(tool_args: dict) -> tuple[bool, str]:
+    """
+    V15: Validates structured case notes against claims schema.
+    Returns (is_valid, error_msg).
+    """
+    import jsonschema
+    schema_path = Path(__file__).parent.parent.parent / "contracts" / "case_notes.schema.json"
+    if not schema_path.exists():
+        return (True, "") # Fallback
+    
+    try:
+        with open(schema_path, "r") as f:
+            schema = json.load(f)
+        jsonschema.validate(instance=tool_args, schema=schema)
+        
+        # Keyword Interceptor (High-Inference Enforcement)
+        INFERENCE_KEYWORDS = ["attacker", "compromised", "compromise", "malicious", "lateral movement", "privilege escalation"]
+        claims = tool_args.get("claims", [])
+        for c in claims:
+            stmt = c.get("statement", "").lower()
+            ctype = c.get("type", "")
+            if any(k in stmt for k in INFERENCE_KEYWORDS):
+                if ctype != "HYPOTHESIS":
+                    return (False, f"Epistemic Violation: Claim '{c['claim_id']}' uses high-inference terminology but is not marked as 'HYPOTHESIS'.")
+                if not c.get("evidence_refs"):
+                    return (False, f"Epistemic Violation: Hypothesis '{c['claim_id']}' must cite specific 'evidence_refs'.")
+        return (True, "")
+    except jsonschema.exceptions.ValidationError as ve:
+        return (False, f"Case Notes Schema Validation Failed: {ve.message}")
+    except Exception as e:
+        return (False, f"Validation Error: {str(e)}")
+
+def check_for_rca(history: list[dict]) -> tuple[bool, str]:
+    """
+    Checks if a machine-readable root_cause_analysis.json block exists and matches the schema.
+    Returns (is_valid, error_message).
+    """
+    import jsonschema
+    import re
+    
+    schema_path = Path(__file__).parent.parent.parent / "contracts" / "root_cause.schema.json"
+    if not schema_path.exists():
+        return (False, "Root cause schema missing from 'contracts/root_cause.schema.json'.")
+        
+    try:
+        with open(schema_path, "r") as f:
+            schema = json.load(f)
+    except Exception as e:
+        return (False, f"Failed to load RCA schema: {str(e)}")
+
     for m in reversed(history):
         if m["role"] == "assistant" and "tool_calls" in m:
             for tc in m["tool_calls"]:
                 if desanitize_tool_name(tc["function"]["name"]) == "dfir.update_case_notes@1":
                     try:
                         args = json.loads(tc["function"]["arguments"])
-                        notes = args.get("notes", "")
-                        
-                        # Find the JSON block
-                        match = re.search(r"```json\s*(\{.*root_cause_analysis.*?\})\s*```", notes, re.DOTALL | re.IGNORECASE)
-                        if not match:
-                            # Try searching for the block without the filename header if it's just the object
-                            match = re.search(r"```json\s*(\{.*?\})\s*```", notes, re.DOTALL)
-                            
-                        if match:
-                            rca_data = json.loads(match.group(1))
-                            jsonschema.validate(instance=rca_data, schema=schema)
-                            return (True, "")
+                        # V15 Update: Claims is now a list. We search all statement fields for the RCA block.
+                        claims = args.get("claims", [])
+                        for c in claims:
+                            stmt = c.get("statement", "")
+                            match = re.search(r"```json\s*(\{.*root_cause_analysis.*?\})\s*```", stmt, re.DOTALL | re.IGNORECASE)
+                            if not match:
+                                match = re.search(r"```json\s*(\{.*?\})\s*```", stmt, re.DOTALL)
+                                
+                            if match:
+                                rca_data = json.loads(match.group(1))
+                                jsonschema.validate(instance=rca_data, schema=schema)
+                                return (True, "")
                     except jsonschema.exceptions.ValidationError as ve:
                         return (False, f"RCA Schema Validation Failed: {ve.message}")
                     except Exception:
@@ -492,21 +543,23 @@ def main() -> int:
             "You are a HIGH-VELOCITY DFIR triage assistant. You produce NON-AUTHORITATIVE commentary.\n"
             f"{mode_instructions}\n"
             f"{skills_registry}\n"
-            "--- THE FORENSIC HUNTER PROTOCOL (V13) ---\n"
-            "1. MANDATED TOOL CHAINING: NEVER use an iteration solely for note-taking. You must ALWAYS batch your 'dfir__update_case_notes__v1' call alongside your NEXT active investigative query (e.g., query_super_timeline) in the exact same response.\n"
-            "2. PIVOT EXTRACTION: Every query you run MUST result in extracted pivots (PIDs, Users, IPs). You must explicitly use these pivots to justify your next surgical query. Vague 'broader searches' are prohibited.\n"
-            "3. EXTERNALIZED PLANNER: In your first note update, you MUST generate a concrete `[ ] Checklist` of pivots to investigate based on the Case Summary. You will systematically execute this list.\n"
-            "4. INFERENCE POLICY: If key pivots return 'no events found', you MUST downgrade confidence and label conclusions as 'Hypothesis' or 'Likely'. DO NOT claim certainty (e.g., 'Credential Compromise') without direct evidence (Auth logs, Source IPs).\n"
-            "5. SEPARATION OF CONCERNS: Your responses must distinguish between FINDINGS (strictly evidenced facts) and ASSESSMENT (hypotheses, inferences, and MITRE-ATT&CK mapping).\n"
-            "6. PROVENANCE REQUIREMENT: You MUST attempt to resolve all key pivots (PID -> Executable, User -> Source IP) before finalization. If unresolved, list them as 'Unknowns' in your RCA.\n"
-            "7. 10-STEP DOOM CLOCK: You only have 10 iterations to find the root cause. Turn efficiency is a primary scoring metric. DO NOT waste turns.\n"
+            "--- THE EPISTEMIC FORENSIC PROTOCOL (V15) ---\n"
+            "1. STRUCTURED CLAIM OBJECTS: You MUST use 'dfir__update_case_notes__v1' with structured Claim Objects. Every statement must have an explicit type:\n"
+            "   - OBSERVATION: A direct finding from a tool (must cite evidence_refs).\n"
+            "   - DERIVED: A deterministic transform (e.g., base64 decode, UTC conversion).\n"
+            "   - HYPOTHESIS: A forensic inference or suspect activity (e.g., lateral movement).\n"
+            "   - UNKNOWN: An explicitly identified gap for future investigation.\n"
+            "2. INFERENCE GUARDRAILS: If a statement refers to 'attacker', 'compromised', or 'malicious' intent, it MUST be marked as 'HYPOTHESIS' and MUST cite supporting evidence.\n"
+            "3. DETERMINISTIC CORRELATION: You have access to 'dfir__correlate_pivot__v1'. Use this for common investigative moves (LogonId -> 4624/4634, PID -> 4688). Do NOT attempt to perform these mappings via raw reasoning.\n"
+            "4. PIVOT LADDER: If a surgical search fails (returns 0), use 'dfir__pivot_ladder__v1' to generate a broader search plan. DO NOT waste budget on repeated failed searches.\n"
+            "5. TURN EFFICIENCY: 10-STEP DOOM CLOCK is still active. 15 points budget (Timeline=3, Finding=2, Read=1). Turn efficiency is critical.\n"
             "\nHard rules:\n"
             "- CRITICAL: Do NOT invent evidence or claim certainty without explicit fields from tool returns.\n"
             "- CRITICAL: Do NOT simulate tool outputs. You must wait for the actual tool call return.\n"
             "- FORENSIC SOUNDNESS: You are strictly forbidden from modifying evidence paths. Use read-only tools.\n"
-            "- CONVERGENCE CONTRACT: You MUST produce a machine-readable 'root_cause_analysis.json' block in your case notes before you conclude. This block MUST match the provided schema (claims, evidence, unknowns, confidence). Reaching TASK_COMPLETE without it results in rejection.\n"
-            "- CASE ENVELOPE: I have provided absolute paths to critical resources below. Use these directly. [BILLING/EFFICIENCY ALERT]: DO NOT use 'load_intake' or 'list_dir' to rediscover these paths.\n"
-            "- PLASO ABSTRACTION: Use 'dfir__query_super_timeline__v1' with structured JSON. Do NOT attempt to write raw Plaso filter strings.\n"
+            "- CONVERGENCE CONTRACT: You MUST produce a machine-readable 'root_cause_analysis.json' block in your case notes before you conclude. Reaching TASK_COMPLETE without it results in rejection.\n"
+            "- MANDATED TOOL CHAINING: ALWAYS batch 'update_case_notes' with your next investigative tool call.\n"
+            "- PIVOT EXTRACTION: Every query result must produce extracted pivots.\n"
             "- When your investigation is fully concluded, YOU MUST output the exact token: <promise>TASK_COMPLETE</promise>\n"
             "- To use a tool, use the native tool calling capability OR output a JSON block like: ```json {\"dfir__tool_name__v1\": {\"arg\": \"val\"}} ```\n"
         )
@@ -684,10 +737,16 @@ def main() -> int:
                 if iteration in [1, 2] and not has_fetched_evidence and not batch_has_evidence:
                     return {"id": c_id, "name": t_name, "error": "[First-Action Mandate]: You MUST execute a high-value evidence fetch (e.g., query_findings, query_super_timeline, or load_case_context) before further planning or note-taking."}
 
-                # Note limit policy
+                # Note limit policy & V15 Epistemic Validation
                 if t_name == "dfir.update_case_notes@1":
                     if notes_count >= 3:
                         return {"id": c_id, "name": t_name, "error": "[Policy Violation]: Maximum case note updates (3) reached. You must conclude the investigation."}
+                    
+                    # Epistemic integrity check
+                    is_valid, err_msg = validate_case_notes(t_args)
+                    if not is_valid:
+                        return {"id": c_id, "name": t_name, "error": err_msg}
+                        
                     notes_count += 1
 
                 budget_points -= cost

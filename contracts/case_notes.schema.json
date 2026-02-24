@@ -1,0 +1,75 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "CaseNotes",
+    "type": "object",
+    "properties": {
+        "claims": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "claim_id": {
+                        "type": "string"
+                    },
+                    "type": {
+                        "type": "string",
+                        "enum": [
+                            "OBSERVATION",
+                            "DERIVED",
+                            "HYPOTHESIS",
+                            "UNKNOWN"
+                        ]
+                    },
+                    "statement": {
+                        "type": "string"
+                    },
+                    "evidence_refs": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "description": "Finding IDs, Timeline event references, or file paths."
+                    },
+                    "confidence": {
+                        "type": "string",
+                        "enum": [
+                            "High",
+                            "Medium",
+                            "Low",
+                            "N/A"
+                        ]
+                    },
+                    "validation_plan": {
+                        "type": "string",
+                        "description": "Next steps to confirm or refute a hypothesis."
+                    },
+                    "status": {
+                        "type": "string",
+                        "enum": [
+                            "Open",
+                            "Confirmed",
+                            "Refuted"
+                        ]
+                    }
+                },
+                "required": [
+                    "claim_id",
+                    "type",
+                    "statement",
+                    "evidence_refs",
+                    "status"
+                ]
+            }
+        },
+        "next_steps": {
+            "type": "array",
+            "items": {
+                "type": "string"
+            }
+        }
+    },
+    "required": [
+        "claims",
+        "next_steps"
+    ]
+}
