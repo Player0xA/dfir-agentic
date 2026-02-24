@@ -14,6 +14,10 @@ from typing import Any, Dict, Optional, List, Tuple
 PROJECT_ROOT = Path.cwd()
 DEFAULT_MAX_BYTES = 100000 # 100KB "Ralph Wiggum" Guardrail
 
+def get_case_dir() -> Optional[Path]:
+    val = os.environ.get("DFIR_CASE_DIR")
+    return Path(val).resolve() if val else None
+
 DFIR_CASE_DIR = os.environ.get("DFIR_CASE_DIR")
 
 ALLOWED_EVIDENCE_ROOTS = [
@@ -354,37 +358,53 @@ def write_line(obj: dict):
     sys.stdout.write(json.dumps(obj) + "\n")
     sys.stdout.flush()
 
-def safe_resolve(p: str) -> Path:
+def resolve_internal(p: str) -> Path:
+    """Always resolves relative to PROJECT_ROOT (for outputs/contracts)."""
     path = Path(p)
     if not path.is_absolute():
         path = (PROJECT_ROOT / path).resolve()
     else:
         path = path.resolve()
+    return path
+
+def resolve_evidence(p: str) -> Path:
+    """Prioritizes CASE_PATH for relative paths, then applies Hallucination Healer for absolute junk."""
+    path = Path(p)
     
-    # V21: Portable Case Root Remapper (Hallucination Healer)
-    # If path doesn't exist, try to strip prefixes heuristicallly
+    # 1. Handle relative paths: Prioritize CASE_PATH
+    case_dir = get_case_dir()
+    if not path.is_absolute():
+        if case_dir:
+            case_candidate = (case_dir / path).resolve()
+            if case_candidate.exists():
+                return case_candidate
+        # Fallback to project root if not in case dir
+        path = (PROJECT_ROOT / path).resolve()
+    else:
+        path = path.resolve()
+
+    # 2. V21/V25: Hallucination Healer (Heuristic Remapper for absolute junk)
     if not path.exists():
         parts = Path(p).parts
         markers = {"cases", "outputs", "intake", "evtx", "Logs", "data"}
-        
-        candidates = []
-        # Try relative to PROJECT_ROOT and its parent
+        # Try relative to PROJECT_ROOT and its parent, and CASE_PATH.parent
         bases = [PROJECT_ROOT, PROJECT_ROOT.parent]
+        if case_dir:
+            bases.append(case_dir.parent)
         
         for i, part in enumerate(parts):
             if part in markers:
-                # Potential tail found
                 tail = Path(*parts[i:])
                 for base in bases:
                     candidate = (base / tail).resolve()
                     if candidate.exists():
                         return candidate
-        
-        # Final fallback: if it's absolute but on a different root (e.g. /home/nevermore/...)
-        # but the tail matches something in the current project parent
-        # This handles cross-machine moves where the base path changed.
     
     return path
+
+def safe_resolve(p: str) -> Path:
+    """Legacy alias, defaults to evidence resolution as it's the highest risk."""
+    return resolve_evidence(p)
 
 def under_any_root(path: Path, roots: List[Path]) -> bool:
     for r in roots:
@@ -548,10 +568,11 @@ def tool_pivot_ladder(args: Dict[str, Any], audit: Dict[str, Path]) -> Dict[str,
     }
 
 def tool_identify_evidence(args: Dict[str, Any], audit: Dict[str, Path]) -> Dict[str, Any]:
-    evidence_path = safe_resolve(args["path"])
-    ensure_evidence_allowed(evidence_path)
+    # Phase 25: Evidence Resolution
+    raw_path = resolve_evidence(args["path"])
+    ensure_evidence_allowed(raw_path)
 
-    cmd = [str(PROJECT_ROOT / "tools/intake/identify_evidence.py"), str(evidence_path)]
+    cmd = [str(PROJECT_ROOT / "tools/intake/identify_evidence.py"), str(raw_path)]
     rc, out, err = run_cmd(cmd, cwd=PROJECT_ROOT)
     audit_write(audit, "stdout", out)
     audit_write(audit, "stderr", err)
@@ -581,14 +602,15 @@ def tool_identify_evidence(args: Dict[str, Any], audit: Dict[str, Path]) -> Dict
     return {"intake_json": str(intake_abs)}
 
 def tool_auto_run(args: Dict[str, Any], audit: Dict[str, Path]) -> Dict[str, Any]:
-    intake_path = safe_resolve(args["intake_json"])
+    # Phase 25: Internal Resolution (outputs/contracts)
+    intake_path = resolve_internal(args["intake_json"])
     ensure_read_allowed(intake_path)
 
     # For safety, ensure the intake.json itself refers to evidence under allowed evidence roots.
     try:
         intake_doc = json.loads(intake_path.read_text(encoding="utf-8"))
         ev = intake_doc["inputs"]["paths"][0]
-        ev_path = safe_resolve(ev)
+        ev_path = resolve_evidence(ev)
         ensure_evidence_allowed(ev_path)
     except Exception as ex:
         raise PermissionError(f"intake evidence root check failed: {ex}")
@@ -619,7 +641,8 @@ def tool_auto_run(args: Dict[str, Any], audit: Dict[str, Path]) -> Dict[str, Any
     return {"auto_json": str(auto_path)}
 
 def tool_hayabusa_csv_timeline(args: Dict[str, Any], audit: Dict[str, Path]) -> Dict[str, Any]:
-    evtx_dir = safe_resolve(args["evtx_dir"])
+    # Phase 25: Evidence Resolution
+    evtx_dir = resolve_evidence(args["evtx_dir"])
     ensure_evidence_allowed(evtx_dir)
     if not evtx_dir.is_dir():
         raise ValueError(f"evtx_dir is not a directory: {evtx_dir}")
@@ -690,7 +713,8 @@ def tool_read_json(args: Dict[str, Any], audit: Dict[str, Path]) -> Dict[str, An
     if max_bytes > DEFAULT_MAX_BYTES:
         max_bytes = DEFAULT_MAX_BYTES
 
-    path = safe_resolve(args["path"])
+    # Phase 25: Internal Resolution (outputs/contracts)
+    path = resolve_internal(args["path"])
     ensure_read_allowed(path)
 
     st = path.stat()
@@ -710,7 +734,8 @@ def tool_read_text(args: Dict[str, Any], audit: Dict[str, Path]) -> Dict[str, An
     if max_bytes > DEFAULT_MAX_BYTES:
         max_bytes = DEFAULT_MAX_BYTES
 
-    path = safe_resolve(args["path"])
+    # Phase 25: Evidence Resolution (logs often outside repo)
+    path = resolve_evidence(args["path"])
     ensure_read_allowed(path)
 
     st = path.stat()
@@ -724,7 +749,8 @@ def tool_read_text(args: Dict[str, Any], audit: Dict[str, Path]) -> Dict[str, An
 
 
 def tool_query_findings(args: Dict[str, Any], audit: Dict[str, Path]) -> Dict[str, Any]:
-    path = safe_resolve(args["path"])
+    # Phase 25: Internal Resolution
+    path = resolve_internal(args["path"])
     ensure_read_allowed(path)
     
     if not path.is_file():
@@ -772,7 +798,8 @@ def tool_query_findings(args: Dict[str, Any], audit: Dict[str, Path]) -> Dict[st
     }
 
 def tool_list_dir(args: Dict[str, Any], audit: Dict[str, Path]) -> Dict[str, Any]:
-    path = safe_resolve(args["path"])
+    # Phase 25: Evidence Resolution (highest risk for external paths)
+    path = resolve_evidence(args["path"])
     ensure_read_allowed(path)
     if not path.is_dir():
         raise ValueError(f"not a directory: {path}")
@@ -780,7 +807,8 @@ def tool_list_dir(args: Dict[str, Any], audit: Dict[str, Path]) -> Dict[str, Any
     return {"path": str(path), "entries": entries}
 
 def tool_query_super_timeline(args: Dict[str, Any], audit: Dict[str, Path]) -> Dict[str, Any]:
-    plaso_path = safe_resolve(args["plaso_file"])
+    # Phase 25: Evidence Resolution (plaso files can be in evidence)
+    plaso_path = resolve_evidence(args["plaso_file"])
     ensure_read_allowed(plaso_path)
     if not plaso_path.is_file():
         raise ValueError(f"plaso_file not found: {plaso_path}")
@@ -978,7 +1006,8 @@ def tool_update_case_notes(args: Dict[str, Any], audit: Dict[str, Path]) -> Dict
 def tool_evtx_search(args: Dict[str, Any], audit: Dict[str, Path]) -> Dict[str, Any]:
     if not WINFORENSICS_AVAILABLE:
         raise RuntimeError("winforensics-mcp parsers not available.")
-    path = safe_resolve(args["evtx_path"])
+    # Phase 25: Evidence Resolution
+    path = resolve_evidence(args["evtx_path"])
     ensure_read_allowed(path)
     start = datetime.fromisoformat(args["start_time"].replace("Z", "+00:00")) if args.get("start_time") else None
     end = datetime.fromisoformat(args["end_time"].replace("Z", "+00:00")) if args.get("end_time") else None
@@ -987,14 +1016,16 @@ def tool_evtx_search(args: Dict[str, Any], audit: Dict[str, Path]) -> Dict[str, 
 def tool_evtx_security_search(args: Dict[str, Any], audit: Dict[str, Path]) -> Dict[str, Any]:
     if not WINFORENSICS_AVAILABLE:
         raise RuntimeError("winforensics-mcp parsers not available.")
-    path = safe_resolve(args["evtx_path"])
+    # Phase 25: Evidence Resolution
+    path = resolve_evidence(args["evtx_path"])
     ensure_read_allowed(path)
     return evtx_parser.search_security_events(evtx_path=path, event_type=args["event_type"], limit=int(args.get("limit") or 20))
 
 def tool_registry_get_persistence(args: Dict[str, Any], audit: Dict[str, Path]) -> Dict[str, Any]:
     if not WINFORENSICS_AVAILABLE:
         raise RuntimeError("winforensics-mcp parsers not available.")
-    path = safe_resolve(args["hive_path"])
+    # Phase 25: Evidence Resolution
+    path = resolve_evidence(args["hive_path"])
     ensure_read_allowed(path)
     hive_name = path.name.upper()
     results = []
