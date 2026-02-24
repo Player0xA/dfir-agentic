@@ -1,0 +1,104 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "DFIR Case Metadata",
+    "description": "Authoritative metadata for a forensic case (V26).",
+    "type": "object",
+    "required": [
+        "case_id",
+        "case_root",
+        "evidence_roots",
+        "created_utc",
+        "evidence"
+    ],
+    "properties": {
+        "case_id": {
+            "type": "string"
+        },
+        "case_root": {
+            "type": "string"
+        },
+        "evidence_roots": {
+            "type": "object",
+            "properties": {
+                "original": {
+                    "type": "string"
+                },
+                "staged": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "original",
+                "staged"
+            ]
+        },
+        "default_evidence_root": {
+            "type": "string",
+            "enum": [
+                "original",
+                "staged"
+            ],
+            "default": "staged"
+        },
+        "created_utc": {
+            "type": "string",
+            "format": "date-time"
+        },
+        "policy": {
+            "type": "object",
+            "properties": {
+                "immutable_original": {
+                    "type": "boolean"
+                },
+                "allow_symlinks_in_staged": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "evidence": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "required": [
+                    "evidence_id",
+                    "type",
+                    "relpath"
+                ],
+                "properties": {
+                    "evidence_id": {
+                        "type": "string"
+                    },
+                    "type": {
+                        "type": "string"
+                    },
+                    "root": {
+                        "type": "string",
+                        "enum": [
+                            "original",
+                            "staged"
+                        ]
+                    },
+                    "relpath": {
+                        "type": "string"
+                    },
+                    "original_name": {
+                        "type": "string"
+                    },
+                    "added_utc": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "description": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "notes": {
+            "type": "array",
+            "items": {
+                "type": "string"
+            }
+        }
+    }
+}

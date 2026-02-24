@@ -6,7 +6,8 @@ import uuid
 import subprocess
 from pathlib import Path
 from datetime import datetime, timezone
-from typing import Any, Dict, Optional, List, Tuple
+import hashlib
+from typing import Any, Dict, Optional, List, Tuple, Union
 
 # ----------------------------
 # Policy (v0.1)
@@ -34,12 +35,12 @@ ALLOWED_READ_ROOTS = [
 if DFIR_CASE_DIR:
     CASE_PATH = Path(DFIR_CASE_DIR).resolve()
     ALLOWED_EVIDENCE_ROOTS.append(CASE_PATH)
-    ALLOWED_READ_ROOTS.extend(ALLOWED_EVIDENCE_ROOTS) # Allow reading from evidence roots
+    ALLOWED_READ_ROOTS.extend(ALLOWED_EVIDENCE_ROOTS) 
     ALLOWED_READ_ROOTS.append(CASE_PATH)
-    AUDIT_ROOT = CASE_PATH / "mcp_runs"
+    AUDIT_ROOT = CASE_PATH / "toolruns" # Step 9: Auditable tool logs
 else:
-    ALLOWED_READ_ROOTS.extend(ALLOWED_EVIDENCE_ROOTS) # Allow reading from evidence roots
-    AUDIT_ROOT = PROJECT_ROOT / "outputs" / "mcp_runs"
+    ALLOWED_READ_ROOTS.extend(ALLOWED_EVIDENCE_ROOTS)
+    AUDIT_ROOT = PROJECT_ROOT / "outputs" / "toolruns"
 
 
 HAYABUSA_ROOT = PROJECT_ROOT / "tools" / "hayabusa"
@@ -98,13 +99,27 @@ TOOLS = [
     },
     {
         "name": "dfir.read_json@1",
-        "description": "Read a JSON file under outputs/ or contracts/ with optional JSON Pointer, bounded by max_bytes (default 64KB, hard limit 100KB).",
+        "description": "Read a JSON file. Use 'evidence_ref' for investigation artifacts or 'path' for repo assets.",
         "inputSchema": {
             "type": "object",
             "additionalProperties": False,
-            "required": ["path"],
             "properties": {
-                "path": {"type": "string", "minLength": 1},
+                "evidence_ref": {
+                    "type": "object",
+                    "properties": {
+                        "case_ref": {"type": "string"},
+                        "evidence": {
+                            "type": "object",
+                            "properties": {
+                                "root": {"type": "string", "enum": ["staged", "original"]},
+                                "relpath": {"type": "string"}
+                            },
+                             "required": ["relpath"]
+                        }
+                    },
+                    "required": ["case_ref", "evidence"]
+                },
+                "path": {"type": "string", "description": "Legacy/Internal fallback path"},
                 "json_pointer": {"type": ["string", "null"]},
                 "max_bytes": {"type": "integer", "minimum": 1, "maximum": 100000}
             }
@@ -112,88 +127,166 @@ TOOLS = [
     },
     {
         "name": "dfir.read_text@1",
-        "description": "Read a text, log, or markdown file under outputs/ or contracts/, bounded by max_bytes (default 100KB, hard limit 100KB).",
+        "description": "Read a text, log, or markdown file. Use 'evidence_ref' for investigation artifacts or 'path' for repo assets.",
         "inputSchema": {
             "type": "object",
             "additionalProperties": False,
-            "required": ["path"],
             "properties": {
-                "path": {"type": "string", "minLength": 1},
+                "evidence_ref": {
+                    "type": "object",
+                    "required": ["case_ref", "evidence"],
+                    "properties": {
+                        "case_ref": {"type": "string"},
+                        "evidence": {
+                            "type": "object",
+                            "required": ["relpath"],
+                            "properties": {
+                                "root": {"type": "string", "enum": ["staged", "original"]},
+                                "relpath": {"type": "string"}
+                            }
+                        }
+                    }
+                },
+                "path": {"type": "string", "description": "Legacy/Internal fallback path"},
                 "max_bytes": {"type": "integer", "minimum": 1, "maximum": 100000}
             }
         }
     },
     {
         "name": "dfir.query_findings@1",
-        "description": "Surgically query the monolithic case_findings.json file without loading it all. Filter by ID, severity, or tactic.",
+        "description": "Surgically query the monolithic case_findings.json file.",
         "inputSchema": {
             "type": "object",
             "additionalProperties": False,
-            "required": ["path"],
+            "required": ["evidence_ref"],
             "properties": {
-                "path": {"type": "string", "description": "Path to case_findings.json"},
-                "finding_id": {"type": "string", "description": "Extract a specific finding by its UUID"},
-                "finding_ids": {"type": "array", "items": {"type": "string"}, "description": "Batch extract multiple findings by their UUIDs"},
+                "evidence_ref": {
+                    "type": "object",
+                    "required": ["case_ref", "evidence"],
+                    "properties": {
+                        "case_ref": {"type": "string"},
+                        "evidence": {
+                            "type": "object",
+                            "required": ["relpath"],
+                            "properties": {
+                                "root": {"type": "string", "enum": ["staged", "original"], "default": "staged"},
+                                "relpath": {"type": "string"}
+                            }
+                        }
+                    }
+                },
+                "finding_id": {"type": "string"},
+                "finding_ids": {"type": "array", "items": {"type": "string"}},
                 "severity": {"type": "string", "enum": ["critical", "high", "medium", "low", "informational"]},
-                "mitre_tactic": {"type": "string", "description": "e.g. T1547"},
+                "mitre_tactic": {"type": "string"},
                 "limit": {"type": "integer", "default": 10}
             }
         }
     },
     {
         "name": "dfir.load_intake@1",
-        "description": "Alias for read_json to read the intake.json file when starting an investigation.",
+        "description": "Alias for read_json to read the intake.json or case.json file.",
         "inputSchema": {
             "type": "object",
             "additionalProperties": False,
-            "required": ["path"],
+            "required": ["evidence_ref"],
             "properties": {
-                "path": {"type": "string", "minLength": 1, "description": "Path to the intake.json file"}
+                "evidence_ref": {
+                    "type": "object",
+                    "required": ["case_ref", "evidence"],
+                    "properties": {
+                        "case_ref": {"type": "string"},
+                        "evidence": {
+                            "type": "object",
+                            "required": ["relpath"],
+                            "properties": {
+                                "relpath": {"type": "string"}
+                            }
+                        }
+                    }
+                }
             }
         }
     },
-        {
+    {
         "name": "dfir.hayabusa_csv_timeline@1",
-        "description": "Run Hayabusa csv-timeline deterministically on an EVTX directory and write outputs/csv/hayabusa_evtx/<run_id>/timeline.csv",
+        "description": "Run Hayabusa csv-timeline deterministically on an EVTX directory.",
         "inputSchema": {
             "type": "object",
             "additionalProperties": False,
-            "required": ["evtx_dir"],
+            "required": ["evidence_ref"],
             "properties": {
-                "evtx_dir": {"type": "string", "minLength": 1},
-                "profile": {"type": "string", "minLength": 1, "default": "verbose"},
-                "iso_utc": {"type": "boolean", "default": True},
-                "no_wizard": {"type": "boolean", "default": True},
-                "clobber": {"type": "boolean", "default": True}
+                "evidence_ref": {
+                    "type": "object",
+                    "required": ["case_ref", "evidence"],
+                    "properties": {
+                        "case_ref": {"type": "string"},
+                        "evidence": {
+                            "type": "object",
+                            "required": ["relpath"],
+                            "properties": {
+                                "root": {"type": "string", "enum": ["staged", "original"], "default": "staged"},
+                                "relpath": {"type": "string"}
+                            }
+                        }
+                    }
+                }
             }
         }
     },
     {
         "name": "dfir.list_dir@1",
-        "description": "List directory entries under outputs/ or contracts/",
+        "description": "List directory entries. Use 'evidence_ref' for investigation artifacts or 'path' for repo assets.",
         "inputSchema": {
             "type": "object",
             "additionalProperties": False,
-            "required": ["path"],
             "properties": {
-                "path": {"type": "string", "minLength": 1}
+                "evidence_ref": {
+                    "type": "object",
+                    "required": ["case_ref", "evidence"],
+                    "properties": {
+                        "case_ref": {"type": "string"},
+                        "evidence": {
+                            "type": "object",
+                            "required": ["relpath"],
+                            "properties": {
+                                "root": {"type": "string", "enum": ["staged", "original"], "default": "staged"},
+                                "relpath": {"type": "string"}
+                            }
+                        }
+                    }
+                },
+                "path": {"type": "string", "description": "Legacy/Internal fallback path"}
             }
         }
     },
     {
         "name": "dfir.query_super_timeline@1",
-        "description": "Query a Plaso .plaso storage file with a structured filter (Time + Search Term + Event IDs).",
+        "description": "Query a Plaso .plaso storage file with a structured filter.",
         "inputSchema": {
             "type": "object",
             "additionalProperties": False,
-            "required": ["plaso_file", "start_time", "end_time"],
+            "required": ["evidence_ref", "start_time", "end_time"],
             "properties": {
-                "plaso_file": {"type": "string", "minLength": 1, "description": "Path to the .plaso file"},
-                "start_time": {"type": "string", "description": "ISO8601 UTC start time (e.g., 2026-02-11T23:00:00Z)"},
-                "end_time": {"type": "string", "description": "ISO8601 UTC end time"},
-                "search_term": {"type": "string", "description": "Keyword to search in message field (e.g. 'mimikatz', 'pypykatz')"},
-                "event_ids": {"type": "array", "items": {"type": "integer"}, "description": "List of Event IDs (e.g. [4624, 1102])"},
-                "output_format": {"type": "string", "enum": ["json", "csv"], "default": "json"}
+                "evidence_ref": {
+                    "type": "object",
+                    "required": ["case_ref", "evidence"],
+                    "properties": {
+                        "case_ref": {"type": "string"},
+                        "evidence": {
+                            "type": "object",
+                            "required": ["relpath"],
+                            "properties": {
+                                "root": {"type": "string", "enum": ["staged", "original"], "default": "staged"},
+                                "relpath": {"type": "string"}
+                            }
+                        }
+                    }
+                },
+                "start_time": {"type": "string"},
+                "end_time": {"type": "string"},
+                "search_term": {"type": "string"},
+                "event_ids": {"type": "array", "items": {"type": "integer"}}
             }
         }
     },
@@ -296,44 +389,56 @@ TOOLS = [
     },
     {
         "name": "dfir.evtx_search@1",
-        "description": "Surgical EVTX search: query a specific .evtx file for Event IDs or keywords. Use for targeted confirmation of suspicious activity.",
+        "description": "Surgical EVTX search: query a specific .evtx file for Event IDs or keywords.",
         "inputSchema": {
             "type": "object",
             "additionalProperties": False,
-            "required": ["evtx_path"],
+            "required": ["evidence_ref"],
             "properties": {
-                "evtx_path": {"type": "string", "description": "Absolute path to the .evtx file"},
+                "evidence_ref": {
+                    "type": "object",
+                    "required": ["case_ref", "evidence"],
+                    "properties": {
+                        "case_ref": {"type": "string", "description": "Absolute path to case.json"},
+                        "evidence": {
+                            "type": "object",
+                            "required": ["relpath"],
+                            "properties": {
+                                "root": {"type": "string", "enum": ["staged", "original"], "default": "staged"},
+                                "relpath": {"type": "string", "description": "Relative path within the root (e.g. evtx/Logs/Security.evtx)"}
+                            }
+                        }
+                    }
+                },
                 "event_ids": {"type": "array", "items": {"type": "integer"}},
                 "contains": {"type": "array", "items": {"type": "string"}},
-                "start_time": {"type": "string", "description": "ISO 8601 (optional)"},
-                "end_time": {"type": "string", "description": "ISO 8601 (optional)"},
-                "limit": {"type": "integer", "default": 20}
-            }
-        }
-    },
-    {
-        "name": "dfir.evtx_security_search@1",
-        "description": "Run high-fidelity pre-built security queries against a Security.evtx file (logon, log_cleared, process_creation, etc.)",
-        "inputSchema": {
-            "type": "object",
-            "additionalProperties": False,
-            "required": ["evtx_path", "event_type"],
-            "properties": {
-                "evtx_path": {"type": "string", "description": "Absolute path to Security.evtx"},
-                "event_type": {"type": "string", "enum": ["logon", "failed_logon", "log_cleared", "process_creation", "service_installed", "privilege_use"]},
                 "limit": {"type": "integer", "default": 20}
             }
         }
     },
     {
         "name": "dfir.registry_get_persistence@1",
-        "description": "Quickly extract common persistence keys (Run, RunOnce, Services) from SYSTEM or SOFTWARE hives.",
+        "description": "Extract common persistence keys from a registry hive.",
         "inputSchema": {
             "type": "object",
             "additionalProperties": False,
-            "required": ["hive_path"],
+            "required": ["evidence_ref"],
             "properties": {
-                "hive_path": {"type": "string", "description": "Absolute path to the registry hive (SYSTEM, SOFTWARE, or NTUSER.DAT)"}
+                "evidence_ref": {
+                    "type": "object",
+                    "required": ["case_ref", "evidence"],
+                    "properties": {
+                        "case_ref": {"type": "string"},
+                        "evidence": {
+                            "type": "object",
+                            "required": ["relpath"],
+                            "properties": {
+                                "root": {"type": "string", "enum": ["staged", "original"], "default": "staged"},
+                                "relpath": {"type": "string"}
+                            }
+                        }
+                    }
+                }
             }
         }
     }
@@ -342,6 +447,77 @@ TOOLS = [
 # ----------------------------
 # Helpers
 # ----------------------------
+def get_evidence_path_from_ref(evidence_ref: Any, audit_paths: Dict[str, Path]) -> Path:
+    """Authoritative EvidenceRef -> Absolute Path solver with rich auditing and legacy support."""
+    if isinstance(evidence_ref, str):
+        # Legacy support: resolve via safe/resolve_evidence
+        return resolve_evidence(evidence_ref)
+        
+    if not isinstance(evidence_ref, dict):
+        raise ValueError(f"Invalid EvidenceRef type: {type(evidence_ref)}")
+
+    case_ref = evidence_ref.get("case_ref")
+    evidence = evidence_ref.get("evidence", {})
+    root = evidence.get("root", "staged")
+    relpath = evidence.get("relpath")
+    
+    if not relpath and "path" in evidence_ref:
+        # Alternative schema support
+        return resolve_evidence(evidence_ref["path"])
+        
+    if not relpath:
+        raise ValueError("EvidenceRef missing 'relpath'")
+    
+    # 1. Resolve path
+    abs_path = resolve_evidence_path(case_ref, root, relpath)
+
+    # Step 9: Traversal Control (Reject paths outside case_root)
+    case_root = Path(case_ref).parent.resolve()
+    try:
+        abs_path.relative_to(case_root)
+    except ValueError:
+        # Check if it's in original but outside root? No, case_root should be the parent of case.json
+        # and all evidence/original, evidence/staged should be subdirs.
+        # If it's malicious, catch it.
+        raise PermissionError(f"Traversal Guard: Path escapes case root: {abs_path}")
+
+    # 2. Rich Audit Logging (Step 6)
+    audit_data = {
+        "resolved_path": str(abs_path),
+        "evidence_ref": evidence_ref,
+        "exists": abs_path.exists(),
+        "timestamp_utc": utc_now_z()
+    }
+    
+    # 3. Step 9: Strict Mode Hash Verification
+    if abs_path.exists():
+        try:
+            manifest_path = case_root / "manifests" / f"{root}.manifest.json"
+            if manifest_path.exists():
+                manifest = json.loads(manifest_path.read_text())
+                file_info = next((f for f in manifest.get("files", []) if f["relpath"] == relpath), None)
+                if file_info:
+                    expected_hash = file_info["sha256"]
+                    audit_data["manifest_sha256"] = expected_hash
+                    
+                    # Compute actual hash for verification (Strict Mode)
+                    actual_hash = hashlib.sha256()
+                    with open(abs_path, "rb") as f:
+                        for chunk in iter(lambda: f.read(4096), b""):
+                            actual_hash.update(chunk)
+                    
+                    if actual_hash.hexdigest() != expected_hash:
+                        raise RuntimeError(f"INTEGRITY FAILURE: Hash mismatch for {relpath}. Expected {expected_hash}, got {actual_hash.hexdigest()}")
+                    
+                    audit_data["integrity_check"] = "PASS"
+        except (PermissionError, RuntimeError):
+            raise
+        except Exception as e:
+            audit_data["integrity_check"] = f"WARN: {str(e)}"
+
+    audit_write(audit_paths, "evidence_audit", json.dumps(audit_data, indent=2))
+    return abs_path
+
 def utc_now_z() -> str:
     return datetime.now(timezone.utc).replace(microsecond=0).strftime("%Y-%m-%dT%H:%M:%SZ")
 
@@ -358,8 +534,8 @@ def write_line(obj: dict):
     sys.stdout.write(json.dumps(obj) + "\n")
     sys.stdout.flush()
 
-def resolve_internal(p: str) -> Path:
-    """Always resolves relative to PROJECT_ROOT (for outputs/contracts)."""
+def resolve_project_path(p: str) -> Path:
+    """Authoritative resolution for repo assets (skills, tools, configs)."""
     path = Path(p)
     if not path.is_absolute():
         path = (PROJECT_ROOT / path).resolve()
@@ -367,27 +543,39 @@ def resolve_internal(p: str) -> Path:
         path = path.resolve()
     return path
 
-def resolve_evidence(p: str) -> Path:
-    """Prioritizes CASE_PATH for relative paths, then applies Hallucination Healer for absolute junk."""
-    path = Path(p)
-    
-    # 1. Handle relative paths: Prioritize CASE_PATH
-    case_dir = get_case_dir()
-    if not path.is_absolute():
+def resolve_evidence_path(case_ref: str | Path, root_name: str, relpath: str) -> Path:
+    """Authoritative resolution for forensic evidence via case.json."""
+    case_path = Path(case_ref).resolve()
+    if not case_path.exists():
+        # Fallback for Phase 28 transition: if case_ref is missing, try DFIR_CASE_DIR
+        case_dir = get_case_dir()
         if case_dir:
-            case_candidate = (case_dir / path).resolve()
-            if case_candidate.exists():
-                return case_candidate
-        # Fallback to project root if not in case dir
-        path = (PROJECT_ROOT / path).resolve()
-    else:
-        path = path.resolve()
+            return (case_dir / relpath).resolve()
+        raise FileNotFoundError(f"Case metadata not found: {case_path}")
+    
+    with open(case_path, 'r') as f:
+        case_data = json.load(f)
+        
+    evidence_roots = case_data.get("evidence_roots", {})
+    base = Path(evidence_roots.get(root_name, evidence_roots.get("staged", case_data.get("case_root"))))
+    
+    return (base / relpath).resolve()
 
-    # 2. V21/V25: Hallucination Healer (Heuristic Remapper for absolute junk)
+# Legacy aliases for Phase 28 transition
+def resolve_internal(p: str) -> Path:
+    return resolve_project_path(p)
+
+def resolve_evidence(p: str) -> Path:
+    """Bridge for legacy string-only paths during transition."""
+    case_dir = get_case_dir()
+    path = Path(p)
+    if not path.is_absolute() and case_dir:
+        return (case_dir / path).resolve()
+    
+    # V21/V25: Hallucination Healer (Heuristic Remapper for absolute junk)
     if not path.exists():
         parts = Path(p).parts
         markers = {"cases", "outputs", "intake", "evtx", "Logs", "data"}
-        # Try relative to PROJECT_ROOT and its parent, and CASE_PATH.parent
         bases = [PROJECT_ROOT, PROJECT_ROOT.parent]
         if case_dir:
             bases.append(case_dir.parent)
@@ -399,8 +587,7 @@ def resolve_evidence(p: str) -> Path:
                     candidate = (base / tail).resolve()
                     if candidate.exists():
                         return candidate
-    
-    return path
+    return path.resolve()
 
 def safe_resolve(p: str) -> Path:
     """Legacy alias, defaults to evidence resolution as it's the highest risk."""
@@ -417,12 +604,26 @@ def under_any_root(path: Path, roots: List[Path]) -> bool:
     return False
 
 def ensure_read_allowed(path: Path) -> None:
-    if not under_any_root(path, ALLOWED_READ_ROOTS):
-        raise PermissionError(f"read denied: path outside allowed roots: {path}")
+    # V29: Dynamically allow reading from PROJECT_ROOT or current CASE_ROOT
+    roots = ALLOWED_READ_ROOTS[:]
+    case_dir = get_case_dir()
+    if case_dir:
+        roots.append(case_dir)
+        
+    if not under_any_root(path, roots):
+        # Final fallback: if it's within PROJECT_ROOT, allow it
+        if not under_any_root(path, [PROJECT_ROOT, PROJECT_ROOT.parent]):
+            raise PermissionError(f"read denied: path outside allowed roots: {path}")
 
 def ensure_evidence_allowed(path: Path) -> None:
-    if not under_any_root(path, ALLOWED_EVIDENCE_ROOTS):
-        raise PermissionError(f"evidence denied: path outside allowed evidence roots: {path}")
+    roots = ALLOWED_EVIDENCE_ROOTS[:]
+    case_dir = get_case_dir()
+    if case_dir:
+        roots.append(case_dir)
+        
+    if not under_any_root(path, roots):
+        if not under_any_root(path, [PROJECT_ROOT.parent / "cases"]):
+            raise PermissionError(f"evidence denied: path outside allowed evidence roots: {path}")
 
 def mkdirp(p: Path):
     p.mkdir(parents=True, exist_ok=True)
@@ -435,7 +636,7 @@ def audit_paths(call_id: str) -> Dict[str, Path]:
         "response": base / "response.json",
         "stdout": base / "stdout.log",
         "stderr": base / "stderr.log",
-        "meta": base / "meta.json",
+        "evidence_audit": base / "evidence_audit.json"
     }
 
 def audit_write(paths: Dict[str, Path], name: str, content: str):
@@ -641,9 +842,9 @@ def tool_auto_run(args: Dict[str, Any], audit: Dict[str, Path]) -> Dict[str, Any
     return {"auto_json": str(auto_path)}
 
 def tool_hayabusa_csv_timeline(args: Dict[str, Any], audit: Dict[str, Path]) -> Dict[str, Any]:
-    # Phase 25: Evidence Resolution
-    evtx_dir = resolve_evidence(args["evtx_dir"])
-    ensure_evidence_allowed(evtx_dir)
+    # Phase 29: Uniform EvidenceRef Contract
+    evtx_dir = get_evidence_path_from_ref(args["evidence_ref"], audit)
+    ensure_read_allowed(evtx_dir)
     if not evtx_dir.is_dir():
         raise ValueError(f"evtx_dir is not a directory: {evtx_dir}")
 
@@ -798,8 +999,8 @@ def tool_query_findings(args: Dict[str, Any], audit: Dict[str, Path]) -> Dict[st
     }
 
 def tool_list_dir(args: Dict[str, Any], audit: Dict[str, Path]) -> Dict[str, Any]:
-    # Phase 25: Evidence Resolution (highest risk for external paths)
-    path = resolve_evidence(args["path"])
+    # Phase 29: Uniform EvidenceRef Contract
+    path = get_evidence_path_from_ref(args["evidence_ref"], audit)
     ensure_read_allowed(path)
     if not path.is_dir():
         raise ValueError(f"not a directory: {path}")
@@ -807,8 +1008,8 @@ def tool_list_dir(args: Dict[str, Any], audit: Dict[str, Path]) -> Dict[str, Any
     return {"path": str(path), "entries": entries}
 
 def tool_query_super_timeline(args: Dict[str, Any], audit: Dict[str, Path]) -> Dict[str, Any]:
-    # Phase 25: Evidence Resolution (plaso files can be in evidence)
-    plaso_path = resolve_evidence(args["plaso_file"])
+    # Phase 29: Uniform EvidenceRef Contract
+    plaso_path = get_evidence_path_from_ref(args["evidence_ref"], audit)
     ensure_read_allowed(plaso_path)
     if not plaso_path.is_file():
         raise ValueError(f"plaso_file not found: {plaso_path}")
@@ -1003,30 +1204,39 @@ def tool_update_case_notes(args: Dict[str, Any], audit: Dict[str, Path]) -> Dict
         
     return {"path": str(progress_file), "status": "updated"}
 
+# Already handled by top helper
+
 def tool_evtx_search(args: Dict[str, Any], audit: Dict[str, Path]) -> Dict[str, Any]:
     if not WINFORENSICS_AVAILABLE:
         raise RuntimeError("winforensics-mcp parsers not available.")
-    # Phase 25: Evidence Resolution
-    path = resolve_evidence(args["evtx_path"])
+    
+    # Phase 29: Uniform EvidenceRef Contract
+    path = get_evidence_path_from_ref(args["evidence_ref"], audit)
     ensure_read_allowed(path)
-    start = datetime.fromisoformat(args["start_time"].replace("Z", "+00:00")) if args.get("start_time") else None
-    end = datetime.fromisoformat(args["end_time"].replace("Z", "+00:00")) if args.get("end_time") else None
-    return evtx_parser.get_evtx_events(evtx_path=path, event_ids=args.get("event_ids"), contains=args.get("contains"), start_time=start, end_time=end, limit=int(args.get("limit") or 20))
+    
+    return evtx_parser.get_evtx_events(
+        evtx_path=path, 
+        event_ids=args.get("event_ids"), 
+        contains=args.get("contains"), 
+        limit=int(args.get("limit") or 20)
+    )
 
 def tool_evtx_security_search(args: Dict[str, Any], audit: Dict[str, Path]) -> Dict[str, Any]:
     if not WINFORENSICS_AVAILABLE:
         raise RuntimeError("winforensics-mcp parsers not available.")
-    # Phase 25: Evidence Resolution
-    path = resolve_evidence(args["evtx_path"])
+    # Phase 29: Uniform EvidenceRef Contract
+    path = get_evidence_path_from_ref(args["evidence_ref"], audit)
     ensure_read_allowed(path)
     return evtx_parser.search_security_events(evtx_path=path, event_type=args["event_type"], limit=int(args.get("limit") or 20))
 
 def tool_registry_get_persistence(args: Dict[str, Any], audit: Dict[str, Path]) -> Dict[str, Any]:
     if not WINFORENSICS_AVAILABLE:
         raise RuntimeError("winforensics-mcp parsers not available.")
-    # Phase 25: Evidence Resolution
-    path = resolve_evidence(args["hive_path"])
+        
+    # Phase 29: Uniform EvidenceRef Contract
+    path = get_evidence_path_from_ref(args["evidence_ref"], audit)
     ensure_read_allowed(path)
+    
     hive_name = path.name.upper()
     results = []
     if "SOFTWARE" in hive_name or "NTUSER" in hive_name:
