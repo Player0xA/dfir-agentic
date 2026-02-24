@@ -44,6 +44,18 @@ HAYABUSA_RULES = HAYABUSA_ROOT / "rules"
 HAYABUSA_CONFIG = HAYABUSA_RULES / "config"
 PSORT_BIN = os.environ.get("PSORT_BIN", "psort.py")
 
+# V19: Bridge to winforensics-mcp
+WINFORENSICS_ROOT = PROJECT_ROOT / "tools" / "mcp" / "mcp-windows" / "winforensics-mcp"
+if WINFORENSICS_ROOT.exists():
+    sys.path.append(str(WINFORENSICS_ROOT))
+    try:
+        from winforensics_mcp.parsers import evtx_parser, registry_parser
+        WINFORENSICS_AVAILABLE = True
+    except ImportError:
+        WINFORENSICS_AVAILABLE = False
+else:
+    WINFORENSICS_AVAILABLE = False
+
 
 TOOLS = [
     {
@@ -269,17 +281,45 @@ TOOLS = [
         }
     },
     {
-        "name": "dfir.validate_deliverable@1",
-        "description": "Validate your root_cause_analysis against the schema. You MUST run this and get a SUCCESS before concluding.",
+        "name": "dfir.evtx_search@1",
+        "description": "Surgical EVTX search: query a specific .evtx file for Event IDs or keywords. Use for targeted confirmation of suspicious activity.",
         "inputSchema": {
             "type": "object",
             "additionalProperties": False,
-            "required": ["root_cause_analysis"],
+            "required": ["evtx_path"],
             "properties": {
-                "root_cause_analysis": {
-                    "type": "object",
-                    "description": "The exact RCA JSON object mapped to the schema."
-                }
+                "evtx_path": {"type": "string", "description": "Absolute path to the .evtx file"},
+                "event_ids": {"type": "array", "items": {"type": "integer"}},
+                "contains": {"type": "array", "items": {"type": "string"}},
+                "start_time": {"type": "string", "description": "ISO 8601 (optional)"},
+                "end_time": {"type": "string", "description": "ISO 8601 (optional)"},
+                "limit": {"type": "integer", "default": 20}
+            }
+        }
+    },
+    {
+        "name": "dfir.evtx_security_search@1",
+        "description": "Run high-fidelity pre-built security queries against a Security.evtx file (logon, log_cleared, process_creation, etc.)",
+        "inputSchema": {
+            "type": "object",
+            "additionalProperties": False,
+            "required": ["evtx_path", "event_type"],
+            "properties": {
+                "evtx_path": {"type": "string", "description": "Absolute path to Security.evtx"},
+                "event_type": {"type": "string", "enum": ["logon", "failed_logon", "log_cleared", "process_creation", "service_installed", "privilege_use"]},
+                "limit": {"type": "integer", "default": 20}
+            }
+        }
+    },
+    {
+        "name": "dfir.registry_get_persistence@1",
+        "description": "Quickly extract common persistence keys (Run, RunOnce, Services) from SYSTEM or SOFTWARE hives.",
+        "inputSchema": {
+            "type": "object",
+            "additionalProperties": False,
+            "required": ["hive_path"],
+            "properties": {
+                "hive_path": {"type": "string", "description": "Absolute path to the registry hive (SYSTEM, SOFTWARE, or NTUSER.DAT)"}
             }
         }
     }
@@ -902,6 +942,35 @@ def tool_update_case_notes(args: Dict[str, Any], audit: Dict[str, Path]) -> Dict
         
     return {"path": str(progress_file), "status": "updated"}
 
+def tool_evtx_search(args: Dict[str, Any], audit: Dict[str, Path]) -> Dict[str, Any]:
+    if not WINFORENSICS_AVAILABLE:
+        raise RuntimeError("winforensics-mcp parsers not available.")
+    path = safe_resolve(args["evtx_path"])
+    ensure_read_allowed(path)
+    start = datetime.fromisoformat(args["start_time"].replace("Z", "+00:00")) if args.get("start_time") else None
+    end = datetime.fromisoformat(args["end_time"].replace("Z", "+00:00")) if args.get("end_time") else None
+    return evtx_parser.get_evtx_events(evtx_path=path, event_ids=args.get("event_ids"), contains=args.get("contains"), start_time=start, end_time=end, limit=int(args.get("limit") or 20))
+
+def tool_evtx_security_search(args: Dict[str, Any], audit: Dict[str, Path]) -> Dict[str, Any]:
+    if not WINFORENSICS_AVAILABLE:
+        raise RuntimeError("winforensics-mcp parsers not available.")
+    path = safe_resolve(args["evtx_path"])
+    ensure_read_allowed(path)
+    return evtx_parser.search_security_events(evtx_path=path, event_type=args["event_type"], limit=int(args.get("limit") or 20))
+
+def tool_registry_get_persistence(args: Dict[str, Any], audit: Dict[str, Path]) -> Dict[str, Any]:
+    if not WINFORENSICS_AVAILABLE:
+        raise RuntimeError("winforensics-mcp parsers not available.")
+    path = safe_resolve(args["hive_path"])
+    ensure_read_allowed(path)
+    hive_name = path.name.upper()
+    results = []
+    if "SOFTWARE" in hive_name or "NTUSER" in hive_name:
+        results.extend(registry_parser.get_run_keys(path))
+    elif "SYSTEM" in hive_name:
+        results.extend(registry_parser.get_services(path))
+    return {"hive": str(path), "total": len(results), "persistence_entries": results}
+
 def dispatch_tool(name: str, arguments: Dict[str, Any], audit: Dict[str, Path]) -> Dict[str, Any]:
     if name == "dfir.identify_evidence@1":
         return tool_identify_evidence(arguments, audit)
@@ -935,6 +1004,12 @@ def dispatch_tool(name: str, arguments: Dict[str, Any], audit: Dict[str, Path]) 
         return tool_pivot_ladder(arguments, audit)
     if name == "dfir.update_case_notes@1":
         return tool_update_case_notes(arguments, audit)
+    if name == "dfir.evtx_search@1":
+        return tool_evtx_search(arguments, audit)
+    if name == "dfir.evtx_security_search@1":
+        return tool_evtx_security_search(arguments, audit)
+    if name == "dfir.registry_get_persistence@1":
+        return tool_registry_get_persistence(arguments, audit)
     raise KeyError(f"unknown tool: {name}")
 
 # ----------------------------
