@@ -107,6 +107,7 @@ TOOLS = [
             "properties": {
                 "path": {"type": "string", "description": "Path to case_findings.json"},
                 "finding_id": {"type": "string", "description": "Extract a specific finding by its UUID"},
+                "finding_ids": {"type": "array", "items": {"type": "string"}, "description": "Batch extract multiple findings by their UUIDs"},
                 "severity": {"type": "string", "enum": ["critical", "high", "medium", "low", "informational"]},
                 "mitre_tactic": {"type": "string", "description": "e.g. T1547"},
                 "limit": {"type": "integer", "default": 10}
@@ -661,6 +662,7 @@ def tool_query_findings(args: Dict[str, Any], audit: Dict[str, Path]) -> Dict[st
     findings = doc.get("findings", [])
     
     finding_id = args.get("finding_id")
+    finding_ids = args.get("finding_ids")
     severity = args.get("severity")
     tactic = args.get("mitre_tactic")
     limit = int(args.get("limit") or 10)
@@ -669,6 +671,10 @@ def tool_query_findings(args: Dict[str, Any], audit: Dict[str, Path]) -> Dict[st
     for f in findings:
         # Filter by ID
         if finding_id and f.get("finding_id") != finding_id:
+            continue
+        
+        # Filter by Batch IDs
+        if finding_ids and f.get("finding_id") not in finding_ids:
             continue
         
         # Filter by Severity

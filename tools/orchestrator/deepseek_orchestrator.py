@@ -558,7 +558,8 @@ def main() -> int:
             "2. INFERENCE GUARDRAILS: If a statement refers to 'attacker', 'compromised', or 'malicious' intent, it MUST be marked as 'HYPOTHESIS' and MUST cite supporting evidence.\n"
             "3. DETERMINISTIC CORRELATION: You have access to 'dfir__correlate_pivot__v1'. Use this for common investigative moves (LogonId -> 4624/4634, PID -> 4688). Do NOT attempt to perform these mappings via raw reasoning.\n"
             "4. AUTOMATED PIVOT LADDER: If a surgical search (keyword) returns 0 results, you are REQUIRED to call 'dfir__pivot_ladder__v1' in the SAME turn to generate a metadata-based recovery plan. Do NOT waste budget on repeated failed keyword searches.\n"
-            "5. TURN EFFICIENCY: 10-STEP DOOM CLOCK is still active. 25 points budget (Timeline=3, Finding=2, Read=1). Turn efficiency is critical.\n"
+            "5. TURN EFFICIENCY: 12-STEP DOOM CLOCK is active. 25 points budget (Timeline=3, Finding=2, Read=1). Turn efficiency is critical.\n"
+            "   * BATCH FINDINGS: Use 'finding_ids' (array) in 'dfir__query_findings__v1' to retrieve multiple critical findings in a SINGLE turn. Querying findings one-by-one is considered a failure in efficiency.\n"
             "\nHard rules:\n"
             "- CRITICAL: Do NOT invent evidence or claim certainty without explicit fields from tool returns.\n"
             "- CRITICAL: Do NOT simulate tool outputs. You must wait for the actual tool call return.\n"
@@ -607,7 +608,7 @@ def main() -> int:
             "mcp_tools_exposed": mcp_tools
         })
 
-        MAX_ITERATIONS = 10
+        MAX_ITERATIONS = 12
         iteration = 0
         budget_points = 25
         notes_count = 0
@@ -624,11 +625,12 @@ def main() -> int:
             iteration += 1
             print(f"[*] Iteration {iteration}/{MAX_ITERATIONS}...")
             
-            # Phase 12: 9th Inning Warning
-            if iteration in [8, 9]:
+            # Phase 18: Synthesis Pressure
+            if iteration >= (MAX_ITERATIONS - 3):
+                remaining = MAX_ITERATIONS - iteration + 1
                 history.append({
                     "role": "system",
-                    "content": f"[System WARNING]: You only have {MAX_ITERATIONS - iteration + 1} iterations remaining. Stop exploring immediately. Synthesize your current pivots, write your conclusions to 'root_cause_analysis.json', and output the <promise>TASK_COMPLETE</promise> token."
+                    "content": f"[System WARNING]: You only have {remaining} iterations remaining. Stop exploring immediately. You MUST now synthesize your current pivots and OBSERVATIONS into a final 'root_cause_analysis.json'. Transition to synthesis and output the <promise>TASK_COMPLETE</promise> token."
                 })
             
             # 5) Call DeepSeek with Discoverable Tools
