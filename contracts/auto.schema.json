@@ -45,10 +45,15 @@
       "additionalProperties": false,
       "required": [
         "selected_agent",
+        "selected_playbook",
         "kind"
       ],
       "properties": {
         "selected_agent": {
+          "type": "string",
+          "minLength": 1
+        },
+        "selected_playbook": {
           "type": "string",
           "minLength": 1
         },
