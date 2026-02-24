@@ -178,7 +178,7 @@ TOOLS = [
                             "type": "object",
                             "required": ["relpath"],
                             "properties": {
-                                "root": {"type": "string", "enum": ["staged", "original"], "default": "staged"},
+                                "root": {"type": "string", "enum": ["staged", "original", "case"], "default": "staged"},
                                 "relpath": {"type": "string"}
                             }
                         }
@@ -240,7 +240,7 @@ TOOLS = [
                             "type": "object",
                             "required": ["relpath"],
                             "properties": {
-                                "root": {"type": "string", "enum": ["staged", "original"], "default": "staged"},
+                                "root": {"type": "string", "enum": ["staged", "original", "case"], "default": "staged"},
                                 "relpath": {"type": "string"}
                             }
                         }
@@ -268,7 +268,7 @@ TOOLS = [
                             "type": "object",
                             "required": ["relpath"],
                             "properties": {
-                                "root": {"type": "string", "enum": ["staged", "original"], "default": "staged"},
+                                "root": {"type": "string", "enum": ["staged", "original", "case"], "default": "staged"},
                                 "relpath": {"type": "string"}
                             }
                         }
@@ -298,7 +298,7 @@ TOOLS = [
                             "type": "object",
                             "required": ["relpath"],
                             "properties": {
-                                "root": {"type": "string", "enum": ["staged", "original"], "default": "staged"},
+                                "root": {"type": "string", "enum": ["staged", "original", "case"], "default": "staged"},
                                 "relpath": {"type": "string"}
                             }
                         }
