@@ -185,16 +185,16 @@ def main() -> int:
         # V37: Handle failures gracefully and generate GAP entries
         rc = run_catch(cmd)
         
-        if rc != 0:
+        if rc != 0 and not (rc == 1 and ("chainsaw" in pipeline_id or "hayabusa" in pipeline_id)):
             step_history.append(f"{pipeline_id}: failed (rc={rc})")
             
-            # V37 GAP handling ("no 4688" or general pipeline failure)
-            if "chainsaw" in pipeline_id or "hayabusa" in pipeline_id:
-                 write_gap_to_case_notes(
-                     intake_json, 
-                     pipeline_id, 
-                     f"Pipeline {pipeline_id} failed during playbook execution. Expected logs (e.g., 4688) may be missing, corrupted, or unsupported."
-                 )
+            # V37 GAP handling: Triggered ONLY on true tool errors (RC > 1) 
+            # Or if we want to flag that no findings were produced even on RC 0.
+            write_gap_to_case_notes(
+                intake_json, 
+                pipeline_id, 
+                f"Extraction pipeline {pipeline_id} exited with code {rc}. The tool may have encountered a configuration error or unsupported log format, potentially resulting in visibility gaps for critical events like Process Creation (4688)."
+            )
             
             # Continue to next step instead of hard failure
             continue

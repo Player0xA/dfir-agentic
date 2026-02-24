@@ -1057,13 +1057,32 @@ def tool_query_findings(args: Dict[str, Any], audit: Dict[str, Path]) -> Dict[st
     limit = int(args.get("limit") or 10)
 
     filtered = []
+    
+    # V37 Hex Normalization for ID search
+    target_ids = set()
+    if finding_id:
+        target_ids.add(finding_id)
+        if finding_id.startswith("0x"):
+            try:
+                val = int(finding_id[2:], 16)
+                target_ids.add(finding_id.lower())
+                target_ids.add(finding_id.upper())
+                target_ids.add(f"0x{val:08x}")
+                target_ids.add(f"0x{val:08X}")
+                target_ids.add(f"0x{val:016x}")
+                target_ids.add(f"0x{val:016X}")
+            except ValueError:
+                pass
+
     for f in findings:
-        # Filter by ID
-        if finding_id and f.get("finding_id") != finding_id:
+        fid = f.get("finding_id")
+        
+        # Filter by ID (Robust)
+        if target_ids and fid not in target_ids:
             continue
         
         # Filter by Batch IDs
-        if finding_ids and f.get("finding_id") not in finding_ids:
+        if finding_ids and fid not in finding_ids:
             continue
         
         # Filter by Severity
