@@ -209,8 +209,8 @@ def validate_case_notes(tool_args: dict) -> tuple[bool, str]:
         for c in claims:
             stmt = c.get("statement", "").lower()
             ctype = c.get("type", "")
-            if any(k in stmt for k in EPISTEMIC_SIGNALS["HYPOTHESIS"]) and ctype not in ["HYPOTHESIS", "ASSESSMENT"]:
-                    return (False, f"Epistemic Violation: Claim '{c['claim_id']}' uses inferential language ('{stmt}') but is marked as '{ctype}'. Must be HYPOTHESIS or ASSESSMENT.")
+            if any(k in stmt for k in EPISTEMIC_SIGNALS["HYPOTHESIS"]) and ctype not in ["HYPOTHESIS", "ASSESSMENT", "GAP"]:
+                    return (False, f"Epistemic Violation: Claim '{c['claim_id']}' uses inferential language ('{stmt}') but is marked as '{ctype}'. Must be HYPOTHESIS, ASSESSMENT, or GAP.")
             if ctype == "HYPOTHESIS" and not c.get("evidence_refs"):
                     return (False, f"Epistemic Violation: Hypothesis '{c['claim_id']}' must cite specific 'evidence_refs'.")
         return (True, "")
