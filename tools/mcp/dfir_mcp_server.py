@@ -491,17 +491,16 @@ def get_evidence_path_from_ref(evidence_ref: Any, audit_paths: Dict[str, Path], 
     if not isinstance(evidence_ref, dict):
         raise ValueError(f"Invalid EvidenceRef type: {type(evidence_ref)}")
 
-    case_ref = evidence_ref.get("case_ref")
+    case_ref = evidence_ref.get("case_ref") or "CASE"
     evidence = evidence_ref.get("evidence", {})
     root = evidence.get("root", default_root)
-    relpath = evidence.get("relpath")
+    relpath = evidence.get("relpath", "")
     
     if not relpath and "path" in evidence_ref:
         # Alternative schema support
         return resolve_evidence(evidence_ref["path"])
-        
-    if not relpath:
-        raise ValueError("EvidenceRef missing 'relpath'")
+    
+    # relpath is now allowed to be empty (defaults to root of the evidence root)
     
     # 1. Resolve path
     abs_path = resolve_evidence_path(case_ref, root, relpath)
@@ -586,7 +585,9 @@ def resolve_project_path(p: str) -> Path:
 
 def resolve_evidence_path(case_ref: str | Path, root_name: str, relpath: str) -> Path:
     """Authoritative resolution for forensic evidence via case.json."""
-    if str(case_ref).upper() == "CASE" or str(case_ref).startswith("CASE://"):
+    # Phase 41: Handle None case_ref
+    case_ref_str = str(case_ref or "CASE")
+    if case_ref_str.upper() == "CASE" or case_ref_str.startswith("CASE://"):
         case_dir = get_case_dir()
         if not case_dir:
              raise ValueError("Symbolic 'CASE' reference used but DFIR_CASE_DIR is not set.")
