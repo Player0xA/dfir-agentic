@@ -29,7 +29,20 @@ graph TD
 
 ---
 
-## 🚀 Quick Start (Forensic Workflow)
+## 🏗️ Production Lifecycle (The Automation "Factory")
+
+DFIR-Agentic is built for headless automation. In a production environment, the workflow is triggered as follows:
+
+1.  **Onboarding**: Point `dfir.py` at a raw evidence directory. It automatically identifies artifact types (EVTX, Registry, etc.) and creates a standardized Case Root.
+2.  **Intent Selection**: The system parses your investigative `--task` and selects a specific forensic **Playbook** (e.g., `lateral_movement_v1`).
+3.  **Deterministic Ingestion**: Orchestrated pipelines (Plaso, Chainsaw, Hayabusa) extract timelines and detections into the Case Findings database.
+4.  **Autonomous Analysis**: The Ralph Wiggum loop analyzes the data, pivots on indicators, and converges on a validated **Root Cause Analysis (RCA)**.
+
+For detailed scaling patterns (CI/CD, Worker Queues), see [PRODUCTION_DEPLOYMENT.md](file:///Users/marianosanchezrojas/.gemini/antigravity/brain/80c779f0-5de7-47d6-96d6-848749f7bb3f/PRODUCTION_DEPLOYMENT.md).
+
+---
+
+## 🚀 Quick Start (Unified Flow)
 
 ### 1. Initialize a New Case
 Create a standardized forensic tree and the authoritative `case.json`.

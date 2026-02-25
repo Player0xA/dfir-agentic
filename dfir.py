@@ -62,7 +62,11 @@ def main():
             print(f"FAILED: Could not parse intake.json path from output: {out}", file=sys.stderr)
             sys.exit(1)
         intake_path = match.group(1).strip()
+        # Update context for sub-processes
+        new_case_dir = str(Path(intake_path).parent.resolve())
+        os.environ["DFIR_CASE_DIR"] = new_case_dir
         print(f"[+] Identified Case: {intake_path}")
+        print(f"[+] Effective DFIR_CASE_DIR: {new_case_dir}")
 
     # 2. INGEST (Deterministic Ingestion)
     # Skip if it's already a case.json (which implies ingestion/staging might be handled externally)

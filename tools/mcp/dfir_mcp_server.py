@@ -675,8 +675,17 @@ def resolve_evidence(p: str) -> Path:
             return (case_dir / rel).resolve()
 
     path = Path(p)
-    if not path.is_absolute() and case_dir:
-        return (case_dir / path).resolve()
+    if not path.is_absolute():
+        if case_dir:
+            cand = (case_dir / path).resolve()
+            if cand.exists():
+                return cand
+            # If it doesn't exist, we fallback to healer or project_root resolution
+            path = cand
+        else:
+            path = path.resolve()
+            if path.exists():
+                return path
     
     # V21/V25: Hallucination Healer (Heuristic Remapper for absolute junk)
     if not path.exists():
