@@ -33,6 +33,7 @@ const initGrid = async () => {
     // Default Layout
     const defaultLayout = [
         { id: 'overview', x: 0, y: 0, w: 4, h: 3 },
+        { id: 'artifacts', x: 4, y: 0, w: 4, h: 3 },
         { id: 'notes', x: 8, y: 0, w: 4, h: 8 },
         { id: 'agent', x: 0, y: 3, w: 4, h: 5 },
         { id: 'findings', x: 4, y: 3, w: 8, h: 5 },
@@ -95,6 +96,7 @@ const initGrid = async () => {
 const addPanel = (id, x, y, w, h) => {
     const titles = {
         'overview': '📋 Case Overview',
+        'artifacts': '📁 Evidence Artifacts',
         'findings': '🚨 Findings',
         'notes': '📝 Case Notes',
         'audit': '🔍 AI Audit Trail',
@@ -185,7 +187,7 @@ const loadCaseData = (caseId, isAutoRefresh = false) => {
 
     if (!isAutoRefresh) {
         // Set loading states
-        ['overview', 'findings', 'notes', 'audit', 'agent'].forEach(id => {
+        ['overview', 'artifacts', 'findings', 'notes', 'audit', 'agent'].forEach(id => {
             const container = document.getElementById(`panel-${id}`);
             if (container) container.innerHTML = '<div class="loading">Loading...</div>';
         });
@@ -193,6 +195,7 @@ const loadCaseData = (caseId, isAutoRefresh = false) => {
 
     // Call panel renderers defined in panels.js
     if (window.renderOverview) window.renderOverview(caseId);
+    if (window.renderArtifacts) window.renderArtifacts(caseId);
     if (window.renderFindings) window.renderFindings(caseId);
     if (window.renderNotes) window.renderNotes(caseId);
     if (window.renderAudit) window.renderAudit(caseId);

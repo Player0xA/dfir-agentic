@@ -55,6 +55,64 @@ window.renderOverview = async (caseId) => {
     }
 };
 
+// 1.5 Artifacts / Evidence Panel
+window.renderArtifacts = async (caseId) => {
+    const container = document.getElementById('panel-artifacts');
+    if (!container) return;
+
+    try {
+        const response = await fetch(`/api/cases/${caseId}`);
+        const data = await response.json();
+
+        const intake = data.intake || {};
+        const manifest = data.manifest || {};
+
+        let html = '<div style="display: flex; flex-direction: column; gap: 10px;">';
+
+        // Function to build table from structured evidence array
+        const buildEvidenceTable = (evidenceArray) => {
+            let t = '<div style="overflow-x: auto;"><table class="data-table"><thead><tr><th>ID</th><th>Type</th><th>Path</th></tr></thead><tbody>';
+            evidenceArray.forEach(e => {
+                let shortPath = (e.relpath || 'N/A').length > 40 ? '...' + (e.relpath || 'N/A').substring((e.relpath || 'N/A').length - 37) : (e.relpath || 'N/A');
+                t += `<tr><td><code>${e.evidence_id || 'N/A'}</code></td><td><span class="badge" style="background:var(--bg-panel); border:1px solid var(--border);">${e.type || 'N/A'}</span></td><td title="${e.relpath || ''}"><code>${shortPath}</code></td></tr>`;
+            });
+            t += '</tbody></table></div>';
+            return t;
+        };
+
+        // Check V30 manifest format first
+        if (manifest.evidence && manifest.evidence.length > 0) {
+            html += buildEvidenceTable(manifest.evidence);
+        }
+        // Then check V30 intake format
+        else if (intake.evidence && intake.evidence.length > 0) {
+            html += buildEvidenceTable(intake.evidence);
+        }
+        // Finally fallback to legacy format (list of paths)
+        else if (intake.inputs && intake.inputs.paths && intake.inputs.paths.length > 0) {
+            html += '<ul style="padding-left: 20px;">';
+            intake.inputs.paths.forEach(p => {
+                let shortPath = p.length > 50 ? '...' + p.substring(p.length - 47) : p;
+                html += `<li title="${p}"><code>${shortPath}</code></li>`;
+            });
+            html += '</ul>';
+        } else {
+            html += '<div class="loading">No artifacts or evidence listed for this case.</div>';
+        }
+
+        html += '</div>';
+
+        const prevScroll = container.scrollTop;
+        if (container.innerHTML !== html) {
+            container.innerHTML = html;
+        }
+        container.scrollTop = prevScroll;
+
+    } catch (e) {
+        container.innerHTML = `<div class="error">Failed to load artifacts: ${e.message}</div>`;
+    }
+};
+
 // 2. Findings Panel (Table with Severity Filter)
 let findingsData = [];
 window.renderFindings = async (caseId) => {
