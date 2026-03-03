@@ -270,53 +270,108 @@ def _now_utc_iso() -> str:
     return dt.datetime.now(dt.timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z")
 
 
-def _run_mcp_lines(lines: list[str], server_key: str) -> list[dict]:
-    """
-    Runs the specified MCP server once with the provided JSON-RPC lines over stdin.
-    Returns parsed JSON objects from stdout lines.
-    """
-    config = MCP_SERVERS[server_key]
-    cmd = config["command"]
-    cwd = config.get("cwd")
+import time
+import atexit
 
-    payload = "\n".join(lines) + "\n"
-    p = subprocess.run(
-        cmd,
-        cwd=cwd,
-        input=payload.encode("utf-8"),
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
-        check=False,
-    )
-    out = p.stdout.decode("utf-8", errors="replace").strip().splitlines()
-    objs = []
-    for line in out:
-        line = line.strip()
-        if not line:
-            continue
+class PersistentMCPClient:
+    def __init__(self, name: str, config: dict):
+        self.name = name
+        cmd = config["command"]
+        cwd = config.get("cwd")
+        self.process = subprocess.Popen(
+            cmd,
+            cwd=cwd,
+            stdin=subprocess.PIPE,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=True,
+            bufsize=1
+        )
+        self.req_id = 1
+        
+        # Initialize handshake
+        self._send({"jsonrpc": "2.0", "id": self.req_id, "method": "initialize", "params": {}})
+        self._read_response(self.req_id)
+        self._send({"jsonrpc": "2.0", "method": "notifications/initialized"})
+        
+    def _send(self, payload: dict):
+        if self.process.poll() is not None:
+            err = self.process.stderr.read()
+            raise RuntimeError(f"MCP server '{self.name}' died unexpectedly.\nSTDERR: {err}")
+        self.process.stdin.write(json.dumps(payload) + "\n")
+        self.process.stdin.flush()
+        
+    def _read_response(self, expected_id: int, timeout_s: int = 300) -> dict:
+        start = time.time()
+        while time.time() - start < timeout_s:
+            if self.process.poll() is not None:
+                err = self.process.stderr.read()
+                raise RuntimeError(f"MCP server '{self.name}' died unexpectedly.\nSTDERR: {err}")
+                
+            line = self.process.stdout.readline()
+            if not line:
+                time.sleep(0.1)
+                continue
+                
+            line = line.strip()
+            if not line:
+                continue
+                
+            try:
+                msg = json.loads(line)
+                if msg.get("id") == expected_id:
+                    return msg
+            except json.JSONDecodeError:
+                print(f"[!] MCP '{self.name}' stdout: {line[:100]}")
+                
+        raise TimeoutError(f"MCP server '{self.name}' response timeout for id {expected_id}")
+
+    def call_tool(self, name: str, arguments: dict) -> dict:
+        self.req_id += 1
+        current_id = self.req_id
+        self._send({"jsonrpc": "2.0", "id": current_id, "method": "tools/call", "params": {"name": name, "arguments": arguments}})
+        resp = self._read_response(current_id)
+        if "error" in resp:
+            raise RuntimeError(f"MCP tools/call error: {json.dumps(resp['error'], indent=2)}")
+        return resp["result"]
+        
+    def list_tools(self) -> list[dict]:
+        self.req_id += 1
+        current_id = self.req_id
+        self._send({"jsonrpc": "2.0", "id": current_id, "method": "tools/list", "params": {}})
+        resp = self._read_response(current_id)
+        return resp.get("result", {}).get("tools", [])
+        
+    def close(self):
+        if self.process.poll() is None:
+            self.process.terminate()
+            try:
+                self.process.wait(timeout=2)
+            except subprocess.TimeoutExpired:
+                self.process.kill()
+
+_ACTIVE_MCP_CLIENTS: Dict[str, PersistentMCPClient] = {}
+
+def get_mcp_client(server_key: str) -> PersistentMCPClient:
+    if server_key not in _ACTIVE_MCP_CLIENTS:
+        if server_key not in MCP_SERVERS:
+            raise ValueError(f"Unknown MCP server: {server_key}")
+        _ACTIVE_MCP_CLIENTS[server_key] = PersistentMCPClient(server_key, MCP_SERVERS[server_key])
+    return _ACTIVE_MCP_CLIENTS[server_key]
+
+def _close_all_mcp_clients():
+    for client in _ACTIVE_MCP_CLIENTS.values():
         try:
-            objs.append(json.loads(line))
-        except json.JSONDecodeError:
-            err = p.stderr.decode("utf-8", errors="replace")
-            raise RuntimeError(f"MCP server '{server_key}' (RC={p.returncode}) emitted non-JSON line: {line[:200]}\nSTDERR: {err}")
-    
-    if not objs:
-        err = p.stderr.decode("utf-8", errors="replace")
-        raise RuntimeError(f"MCP server '{server_key}' (RC={p.returncode}) returned no response.\nSTDERR: {err}")
-            
-    return objs
+            client.close()
+        except:
+            pass
+    _ACTIVE_MCP_CLIENTS.clear()
 
+atexit.register(_close_all_mcp_clients)
 
 def mcp_list_tools(server_key: str = "dfir") -> list[dict]:
-    lines = [
-        json.dumps({"jsonrpc": "2.0", "id": 1, "method": "initialize", "params": {}}),
-        json.dumps({"jsonrpc": "2.0", "id": 2, "method": "tools/list", "params": {}}),
-    ]
-    objs = _run_mcp_lines(lines, server_key)
-    for o in objs:
-        if o.get("id") == 2:
-            return o["result"].get("tools", [])
-    return []
+    client = get_mcp_client(server_key)
+    return client.list_tools()
 
 
 def mcp_tools_call(name: str, arguments: dict, req_id: int = 3) -> dict:
@@ -336,19 +391,8 @@ def mcp_tools_call(name: str, arguments: dict, req_id: int = 3) -> dict:
             elif "dump" in name and k == "output_dir" and "output_dir" not in arguments:
                 arguments["output_dir"] = case_dir
 
-    lines = [
-        json.dumps({"jsonrpc": "2.0", "id": 1, "method": "initialize", "params": {}}),
-        json.dumps({"jsonrpc": "2.0", "method": "notifications/initialized"}),
-        json.dumps({"jsonrpc": "2.0", "id": req_id, "method": "tools/call", "params": {"name": name, "arguments": arguments}}),
-    ]
-    objs = _run_mcp_lines(lines, server_key)
-    # Find response matching req_id
-    for o in objs:
-        if o.get("id") == req_id:
-            if "error" in o:
-                raise RuntimeError(f"MCP tools/call error: {json.dumps(o['error'], indent=2)}")
-            return o["result"]
-    raise RuntimeError("MCP tools/call: missing response")
+    client = get_mcp_client(server_key)
+    return client.call_tool(name, arguments)
 
 
 def mcp_read_json(path: str, json_pointer: Optional[str] = None, max_bytes: int = 100000) -> dict:
