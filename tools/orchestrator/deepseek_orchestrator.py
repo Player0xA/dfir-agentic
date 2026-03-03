@@ -36,6 +36,19 @@ PROJECT_ROOT = Path(__file__).parent.parent.parent.absolute()
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
+def _get_mcp_python(base_dir: Path) -> str:
+    """Phase 46: Dynamically resolve the virtual environment python path."""
+    for venv in [".venv", "venv"]:
+        # Mac/Linux
+        cand = base_dir / venv / "bin" / "python3"
+        if cand.exists():
+            return str(cand)
+        # Windows fallback (just in case they run it natively)
+        cand_win = base_dir / venv / "Scripts" / "python.exe"
+        if cand_win.exists():
+            return str(cand_win)
+    return "python3" # Fallback to system
+
 MCP_SERVERS = {
     "dfir": {
         "command": ["python3", "-u", str(PROJECT_ROOT / "tools/mcp/dfir_mcp_server.py")],
@@ -43,7 +56,7 @@ MCP_SERVERS = {
     },
     "win": {
         "command": [
-            str(PROJECT_ROOT / "tools/mcp/mcp-windows/venv/bin/python3"),
+            _get_mcp_python(PROJECT_ROOT / "tools/mcp/mcp-windows/winforensics-mcp"),
             "-u",
             "-m",
             "winforensics_mcp.server"
@@ -52,7 +65,7 @@ MCP_SERVERS = {
     },
     "mem": {
         "command": [
-            str(PROJECT_ROOT / "tools/mcp/memory/mem_forensics-mcp/venv/bin/python3"),
+            _get_mcp_python(PROJECT_ROOT / "tools/mcp/memory/mem_forensics-mcp"),
             "-u",
             "-m",
             "mem_forensics_mcp.server"
