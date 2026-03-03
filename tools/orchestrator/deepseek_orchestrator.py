@@ -712,7 +712,7 @@ def main() -> int:
         # 1) Tool Discovery (New Production Invariant)
         mcp_tools = mcp_list_tools("dfir")
         
-        # Phase 46: Discover memory forensics tools for memory dump cases
+        # Phase 46/51: Discover secondary tools (memory vs disk)
         is_memory_case = intake.get("classification", {}).get("kind") == "memory_dump_file"
         if is_memory_case:
             try:
@@ -721,6 +721,14 @@ def main() -> int:
                 print(f"[+] Memory forensics: {len(mem_tools)} tools discovered from mem MCP server.")
             except Exception as e:
                 print(f"[!] Warning: Could not discover mem MCP tools: {e}")
+        else:
+            # Phase 51: Discover Windows Forensics tools for disk cases
+            try:
+                win_tools = mcp_list_tools("win")
+                mcp_tools.extend(win_tools)
+                print(f"[+] Windows forensics: {len(win_tools)} tools discovered from win MCP server.")
+            except Exception as e:
+                print(f"[!] Warning: Could not discover win MCP tools: {e}")
         
         # Rule 1: Early Guardrails & Redundancy Prevention
         if found_paths:
@@ -756,7 +764,16 @@ def main() -> int:
                 "2. When done, write your conclusions using 'dfir__update_case_notes__v1'.\n"
                 "3. After writing conclusions, output exactly: <promise>TASK_COMPLETE</promise>\n"
                 "4. Use 'case_ref': 'CASE' for all evidence references.\n"
-            )
+                )
+            # Phase 51: Windows Tools Instructions for Local LLMs
+            if not is_memory_case:
+                system_prompt += (
+                    "\n--- WINDOWS FORENSICS ---\n"
+                    "You have access to 'winforensics-mcp' tools.\n"
+                    "1. For finding IOCs across all artifacts: use 'hunt_ioc'.\n"
+                    "2. To prove file execution: use 'investigate_execution'.\n"
+                    "3. To trace user behavior: use 'investigate_user_activity'.\n"
+                )
         else:
             system_prompt = (
                 "You are a HIGH-VELOCITY DFIR triage assistant. You produce NON-AUTHORITATIVE commentary.\n"
@@ -830,9 +847,20 @@ def main() -> int:
                     "5. Use 'memory_command_history' to extract command-line history from the dump.\n"
                     "6. For string/flag searches, use 'memory_run_plugin' with plugin='search' and params={'pattern': 'PicoCTF'}.\n"
                     "CRITICAL: The 'image_path' argument for ALL memory tools MUST be the absolute path shown above.\n"
-                    "CRITICAL: Do NOT waste turns trying dfir.list_dir or dfir.query_findings — there are no EVTX logs or pre-existing findings for memory dumps.\n"
-                    "CRITICAL DEFENSIVE OBSERVATION TYPING: When reporting a string or flag extracted from memory, your OBSERVATION claim MUST cite the 'offset', 'context_ascii', and 'context_hex' to provide defensible proof. Do not just say 'Flag extracted'.\n"
-                )
+                "CRITICAL: Do NOT waste turns trying dfir.list_dir or dfir.query_findings — there are no EVTX logs or pre-existing findings for memory dumps.\n"
+                "CRITICAL DEFENSIVE OBSERVATION TYPING: When reporting a string or flag extracted from memory, your OBSERVATION claim MUST cite the 'offset', 'context_ascii', and 'context_hex' to provide defensible proof. Do not just say 'Flag extracted'.\n"
+            )
+        else:
+            # Phase 51: Windows Forensics Protocol Injection (API models)
+            system_prompt += (
+                "\n--- WINDOWS FORENSICS PROTOCOL (V51) ---\n"
+                "You have access to the winforensics-mcp toolkit. Follow this orchestrator-first approach to save budget:\n"
+                "1. For finding IOCs across all artifacts: use 'hunt_ioc'.\n"
+                "2. To prove file execution: use 'investigate_execution' (checks Prefetch, Amcache, SRUM).\n"
+                "3. To trace user behavior: use 'investigate_user_activity'.\n"
+                "4. To build a unified timeline: use 'build_timeline'.\n"
+                "Only fall back to low-level parsers (evtx_search, registry_get_key) if the high-level orchestrators don't provide sufficient detail.\n"
+            )
 
         user_task = args.task if args.task else "Begin investigation by running dfir.auto_run@1."
         
