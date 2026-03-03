@@ -64,8 +64,22 @@ def main() -> int:
     
     # Setup LLM configuration, preferring CLI arguments or fallback to original run config
     model = args.ollama if args.ollama else target_entry.get("model")
-    base_url = args.base_url if args.base_url else "http://localhost:11434/v1" if args.ollama else "https://api.deepseek.com"
-    api_key = args.api_key if args.api_key else "ollama" if args.ollama else "N/A"
+    
+    import os
+    env_api_key = os.environ.get("DEEPSEEK_API_KEY", "").strip()
+    env_base_url = os.environ.get("DEEPSEEK_BASE_URL", "").strip()
+    
+    # Defaulting logic
+    if args.ollama:
+        base_url = args.base_url if args.base_url else "http://localhost:11434/v1"
+        api_key = args.api_key if args.api_key else "ollama"
+    else:
+        base_url = args.base_url if args.base_url else (env_base_url if env_base_url else "https://api.deepseek.com")
+        api_key = args.api_key if args.api_key else (env_api_key if env_api_key else "N/A")
+    
+    # Validation: If we are calling DeepSeek and key is N/A, warn
+    if "api.deepseek.com" in base_url and api_key == "N/A":
+        print("[!] WARNING: No API Key provided for DeepSeek. Set DEEPSEEK_API_KEY environment variable or use --api-key.")
     
     # We strip 'tools' from the payload dict, deepseek_chat handles tool converting. 
     # To keep it simple, we just pass the messages. The ledger payload actually HAS the schema tools injected,
