@@ -131,19 +131,22 @@ const loadCases = async (isAutoRefresh = false) => {
         // Detect if a brand new case was just ingested
         const isNewCaseStarted = newLatestId && knownCaseIds.length > 0 && !knownCaseIds.includes(newLatestId);
 
-        knownCaseIds = data.cases.map(c => c.id);
+        // Only redraw the dropdown if the number of cases actually changed
+        if (knownCaseIds.length !== data.cases.length) {
+            knownCaseIds = data.cases.map(c => c.id);
+            selector.innerHTML = '<option value="">-- Select a Case --</option>';
 
-        selector.innerHTML = '<option value="">-- Select a Case --</option>';
-
-        data.cases.forEach(c => {
-            const option = document.createElement('option');
-            option.value = c.id;
-            const typeFlag = c.classification?.kind === 'memory_dump_file' ? '[MEM]' : '[DISK]';
-            const shortName = c.name.length > 15 ? c.name.substring(0, 8) + '...' : c.name;
-            const shortDate = c.intake_utc ? c.intake_utc.substring(0, 16).replace('T', ' ') : 'N/A';
-            option.textContent = `${typeFlag} ${shortName} - ${shortDate}`;
-            selector.appendChild(option);
-        });
+            data.cases.forEach(c => {
+                const option = document.createElement('option');
+                option.value = c.id;
+                const typeFlag = c.classification?.kind === 'memory_dump_file' ? '[MEM]' : '[DISK]';
+                const shortName = c.name.length > 15 ? c.name.substring(0, 8) + '...' : c.name;
+                const shortDate = c.intake_utc ? c.intake_utc.substring(0, 16).replace('T', ' ') : 'N/A';
+                option.textContent = `${typeFlag} ${shortName} - ${shortDate}`;
+                selector.appendChild(option);
+            });
+            selector.value = currentValue; // Restore selection after redraw
+        }
 
         if (!isAutoRefresh) {
             // First time load

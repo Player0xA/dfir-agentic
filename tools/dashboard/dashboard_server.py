@@ -127,7 +127,12 @@ async def get_notes(case_id: str):
                         
         if latest_file:
             with open(latest_file, "r", encoding="utf-8") as f:
-                return {"notes": f.read()}
+                content = f.read()
+                # The orchestrator appends the raw audit log at the bottom.
+                # We only want to show the executive summary in the dashboard.
+                if "## Audit Log" in content:
+                    content = content.split("## Audit Log")[0].strip()
+                return {"notes": content}
         return {"notes": "*No progress notes found.*"}
     except Exception as e:
         return {"notes": f"Error loading notes: {str(e)}"}

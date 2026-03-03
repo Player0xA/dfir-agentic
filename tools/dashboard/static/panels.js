@@ -37,7 +37,11 @@ window.renderOverview = async (caseId) => {
             html += '</ul>';
         }
 
-        container.innerHTML = html;
+        const prevScroll = container.scrollTop;
+        if (container.innerHTML !== html) {
+            container.innerHTML = html;
+        }
+        container.scrollTop = prevScroll;
 
     } catch (e) {
         container.innerHTML = `<div class="error">Failed to load overview: ${e.message}</div>`;
@@ -119,7 +123,11 @@ const renderFindingsTable = (container, data, filter) => {
     }
 
     html += `</tbody></table></div>`;
-    container.innerHTML = html;
+    const prevScroll = container.scrollTop;
+    if (container.innerHTML !== html) {
+        container.innerHTML = html;
+    }
+    container.scrollTop = prevScroll;
 };
 
 // 3. Notes Panel (Markdown)
@@ -131,16 +139,23 @@ window.renderNotes = async (caseId) => {
         const response = await fetch(`/api/cases/${caseId}/notes`);
         const data = await response.json();
 
+        let newHtml = '';
         if (data.notes) {
             // Use marked.js if available, otherwise raw text
             if (typeof marked !== 'undefined') {
-                container.innerHTML = `<div class="markdown-body">${marked.parse(data.notes)}</div>`;
+                newHtml = `<div class="markdown-body">${marked.parse(data.notes)}</div>`;
             } else {
-                container.innerHTML = `<pre>${data.notes}</pre>`;
+                newHtml = `<pre>${data.notes}</pre>`;
             }
         } else {
-            container.innerHTML = `<div class="loading">No investigation notes found.</div>`;
+            newHtml = `<div class="loading">No investigation notes found.</div>`;
         }
+
+        const prevScroll = container.scrollTop;
+        if (container.innerHTML !== newHtml) {
+            container.innerHTML = newHtml;
+        }
+        container.scrollTop = prevScroll;
 
     } catch (e) {
         container.innerHTML = `<div class="error">Failed to load notes: ${e.message}</div>`;
@@ -180,7 +195,12 @@ window.renderAudit = async (caseId) => {
         }
 
         html += '</div>';
-        container.innerHTML = html;
+
+        const prevScroll = container.scrollTop;
+        if (container.innerHTML !== html) {
+            container.innerHTML = html;
+        }
+        container.scrollTop = prevScroll;
 
     } catch (e) {
         container.innerHTML = `<div class="error">Failed to load audit trail: ${e.message}</div>`;
@@ -235,11 +255,15 @@ window.renderAgent = async (caseId) => {
 
         // Auto scroll to bottom only if user hasn't heavily scrolled up
         const isScrolledToBottom = container.scrollHeight - container.clientHeight <= container.scrollTop + 50;
+        const prevScroll = container.scrollTop;
 
-        container.innerHTML = html;
-
-        if (isScrolledToBottom) {
-            container.scrollTop = container.scrollHeight;
+        if (container.innerHTML !== html) {
+            container.innerHTML = html;
+            if (isScrolledToBottom) {
+                container.scrollTop = container.scrollHeight;
+            } else {
+                container.scrollTop = prevScroll;
+            }
         }
 
     } catch (e) {
