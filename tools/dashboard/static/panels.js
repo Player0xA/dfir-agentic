@@ -19,7 +19,7 @@ window.renderOverview = async (caseId) => {
                 <div class="prop-value"><code>${data.id}</code></div>
                 
                 <div class="prop-label">Evidence Type</div>
-                <div class="prop-value">${kind}</div>
+                <div class="prop-value"><span class="badge info">${kind}</span></div>
                 
                 <div class="prop-label">Target Host</div>
                 <div class="prop-value">${hostname}</div>
