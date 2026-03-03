@@ -47,6 +47,7 @@ def main() -> int:
                     help="whether to run enrichment stage after baseline (default: never)")
     ap.add_argument("--run-merge", action="store_true",
                     help="run merge stage to produce case_findings.json + case_manifest.json")
+    ap.add_argument("--playbook", help="Manual playbook override (e.g. memory_triage_v1)")
     ap.add_argument("--merge-dedupe", action="store_true",
                     help="enable merge dedupe (same tool/rule_id/event_refs)")
 
@@ -90,7 +91,7 @@ def main() -> int:
         return code
     sel = json.loads(out)
     agent_id = sel.get("selected_agent", "triage_agent")
-    playbook_id = sel.get("selected_playbook", "initial_access_v1")
+    playbook_id = args.playbook if args.playbook else sel.get("selected_playbook", "initial_access_v1")
 
     # 2) Enforce capability (dispatch pipeline only if recommended)
     if rec:
