@@ -8,11 +8,11 @@ Built on the **"Ralph Wiggum" Philosophy** (Loud Failures), the system prioritiz
 
 ## 🏛️ Architecture Overview
 
-The system follows a strict **Bipolar Architectural Model**, separating project assets (skills, tools, configs) from forensic evidence (artifacts, cases).
+The system follows a strict **Bipolar Architectural Model**, separating project assets (skills, tools, configs) from forensic evidence (artifacts, cases). It uses **Persistent MCP Clients** to support stateful tools like memory forensics.
 
 ```mermaid
 graph TD
-    A[Source Material / Intake] -->|import_evidence.py| B[Forensic Case Root]
+    A[Source Material / Intake] -->|dfir.py| B[Forensic Case Root]
     subgraph Case Root
         B --> C[evidence/original]
         B --> D[evidence/staged]
@@ -20,7 +20,7 @@ graph TD
         B --> F[toolruns/]
         B --> G[case.json]
     end
-    H[Agentic Orchestrator] -->|EvidenceRef| I[MCP Tool Server]
+    H[Agentic Orchestrator] -->|EvidenceRef| I[Persistent MCP Tool Server]
     I -->|Symbolic URI Support| H
     I -->|Authoritative Resolution| B
     I -->|Hash Verification| E
@@ -31,65 +31,40 @@ graph TD
 
 ## 🏗️ Production Lifecycle (The Automation "Factory")
 
-DFIR-Agentic is built for headless automation. In a production environment, the workflow is triggered as follows:
-
-1.  **Onboarding**: Point `dfir.py` at a raw evidence directory. It automatically identifies artifact types (EVTX, Registry, etc.) and creates a standardized Case Root.
-2.  **Intent Selection**: The system parses your investigative `--task` and selects a specific forensic **Playbook** (e.g., `lateral_movement_v1`).
-3.  **Deterministic Ingestion**: Orchestrated pipelines (Plaso, Chainsaw, Hayabusa) extract timelines and detections into the Case Findings database.
-4.  **Autonomous Analysis**: The Ralph Wiggum loop analyzes the data, pivots on indicators, and converges on a validated **Root Cause Analysis (RCA)**.
-
-For detailed scaling patterns (CI/CD, Worker Queues), see [PRODUCTION_DEPLOYMENT.md](file:///Users/marianosanchezrojas/.gemini/antigravity/brain/80c779f0-5de7-47d6-96d6-848749f7bb3f/PRODUCTION_DEPLOYMENT.md).
+1.  **Onboarding**: Point `dfir.py` at raw evidence (EVTX dir, Disk Image, or Memory Dump). It automatically identifies artifacts and creates a standardized Case Root.
+2.  **Intent Selection**: The system parses your investigative `--task` and selects a specific forensic **Playbook** (e.g., `lateral_movement_v1`, `memory_triage_v1`).
+3.  **Deterministic Ingestion**: Orchestrated pipelines (Plaso, Chainsaw, Hayabusa) extract timelines and detections. For memory dumps, the system skips disk-style ingestion for live memory analysis.
+4.  **Autonomous Analysis**: The orchestrator chains tools (DFIR, Windows, Memory MCPs) to converge on a verified **Root Cause Analysis (RCA)**.
 
 ---
 
 ## 🚀 Quick Start (Unified Flow)
 
-### 1. Initialize a New Case
-Create a standardized forensic tree and the authoritative `case.json`.
+The recommended way to use DFIR-Agentic is via the unified CLI. This handles onboarding, ingestion, and orchestration in a single command.
+
+### 1. Set Up Environment
 ```bash
-python3 tools/case/init_case.py --case-id mills-sqlserver-2026-01 --root ./cases
+export DEEPSEEK_API_KEY="your-key-here"
 ```
 
-### 2. Ingest Evidence
-Import raw artifacts into the immutable `original/` root and establish a logical `staged/` view.
+### 2. Run Autonomous Triage on Disk/Logs
 ```bash
-python3 tools/case/import_evidence.py \
-  --case-ref cases/mills-sqlserver-2026-01/case.json \
-  --type evtx_dir \
-  --src /path/to/intake/evtx \
-  --dest evtx/Logs \
-  --stage symlink
+python3 dfir.py /path/to/evidence_dir --auto --task "Detect lateral movement"
 ```
 
-### 3. Run Autonomous Triage
-Invoke the unified agentic pipeline. This automatically stages evidence, generates Plaso super timelines, merges enrichment findings, and begins the agentic loop.
+### 3. Run Memory Forensics
+The system natively supports `.mem`, `.dd`, and `.raw` memory dumps using a multi-tier (Rust/Volatility 3) engine.
 ```bash
-export DFIR_CASE_DIR="./cases/mills-sqlserver-2026-01"
-python3 dfir.py --auto --task "Describe the lateral movement from SQL01"
+# Force the memory triage playbook for raw images
+python3 dfir.py /path/to/memory.dd --auto --playbook memory_triage_v1 --task "Find the flag"
 ```
 
----
-
-## 🛡️ Forensic Standards & Guardrails
-
-### Symbolic Case Referencing (V32)
-The system abstracts absolute host paths to improve security and portability. 
-- **AI View**: The orchestrator uses the symbolic `CASE://` URI scheme (e.g., `CASE://case_findings.json`).
-- **Implicit Alias**: Tool calls can use `"case_ref": "CASE"` as a stable identifier regardless of where the case is stored on the filesystem.
-
-### Authoritative Metadata (`case.json`)
-The `case.json` file is the **Single Source of Truth**. It contains logical mappings for all evidence artifacts, allowing the agent to resolve paths via logical IDs rather than host-specific absolute paths.
-
-### Cryptographic Integrity (Manifests)
-- **evidence.manifest.json**: SHA256 hashes of all files in `evidence/original/`.
-- **staged.manifest.json**: SHA256 hashes of all normalized views in `evidence/staged/`.
-- **Strict Mode**: The MCP server re-verifies high-priority artifacts against the manifest *at read time*. If a hash mismatch occurs, the operation is aborted.
-
-### Bipolar Path Resolution
-To prevent path traversal and accidental data leakage:
-- **`resolve_project_path()`**: Resolves internal repo assets relative to `PROJECT_ROOT`.
-- **`resolve_evidence_path()`**: Resolves forensic assets relative to `CASE_ROOT`.
-- **Traversal Guard**: Any attempt to escape the `case_root` via `..` or absolute paths is instantly blocked.
+### 4. Manual Overrides
+| Argument | Description |
+| :--- | :--- |
+| `--auto` | Shorthand for `--mode autonomous`. The agent runs until completion. |
+| `--task` | The specific investigative objective. |
+| `--playbook` | Manually select a triage workflow (e.g., `initial_access_v1`, `log_tampering_v1`). |
 
 ---
 
@@ -97,31 +72,32 @@ To prevent path traversal and accidental data leakage:
 
 | Tool | Capability | Logical Artifact |
 | :--- | :--- | :--- |
-| **Hayabusa** | EVTX Timeline & Threat Hunting | `evtx_dir` |
-| **Plaso** | Super Timeline Querying | `plaso_file` |
-| **WinForensics** | Registry Hive / Persistence Extraction | `registry_hive` |
-| **Case Findings** | Unified JSON Finding Aggregation | `findings_json` |
+| **dfir-mcp** | Unified Case Operations & Ingestion | EVTX, Plaso, Findings |
+| **mem-forensics-mcp**| Stateful Memory Analysis (Volatility 3/Rust) | Memory Dumps (.dd, .mem) |
+| **winforensics-mcp** | Registry & Windows Persistence | Registry Hives |
+| **Hayabusa** | High-Speed EVTX Threat Hunting | `evtx_dir` |
+
+---
+
+## 🛡️ Forensic Standards & Guardrails
+
+### Symbolic Case Referencing (V32)
+The orchestrator uses the symbolic `CASE://` URI scheme (e.g., `CASE://intake.json`). Tools can use `"case_ref": "CASE"` to remain storage-agnostic.
+
+### Authoritative Metadata (`case.json`)
+The `case.json` file is the **Single Source of Truth**. It maps logical IDs to forensic artifacts, ensuring the agent never interacts with absolute host paths.
+
+### Persistent MCP Connections (Stateful Tools)
+To support memory forensics, the orchestrator maintains persistent JSON-RPC connections to MCP servers. This allows servers to cache heavy objects (like Volatility 3 ISF profiles) in memory across multiple tool calls.
 
 ---
 
 ## 📜 Auditing & Provenance
 
-Every action taken by the agent is recorded in `toolruns/<run_id>/`:
-- **`evidence_audit.json`**: Captures exactly which file was read, its logical `EvidenceRef`, and its verified SHA256 hash.
-- **`request.json` / `response.json`**: Full trace of the tool execution.
-- **`meta.json`**: Tool versioning and environment context.
-
----
-
-## 🧑‍💻 Developer Setup
-
-1. **Environment Variables**:
-   - `PROJECT_ROOT`: Path to this repository.
-   - `DFIR_CASE_DIR`: (Optional) Current active case for tooling.
-2. **Dependencies**:
-   - Python 3.10+
-   - [Optional] WinForensics-MCP local build.
-   - [Optional] Hayabusa Binaries in `tools/hayabusa/bin/`.
+Every action taken by the agent is recorded in `outputs/intake/<id>/orchestrator/`:
+- **`request.json` / `response.json`**: Full tool execution trace.
+- **`progress.jsonl`**: Machine-readable audit of agent reasoning and findings.
+- **`progress.md`**: Human-readable case notes updated in real-time.
 
 ---
 
