@@ -6,13 +6,17 @@ const panels = {};
 // Theme Management
 const initTheme = () => {
     const savedTheme = localStorage.getItem('dfir-theme') || 'dark';
-    document.body.setAttribute('data-theme', savedTheme);
+    document.documentElement.setAttribute('data-theme', savedTheme);
+
+    const btn = document.getElementById('btn-theme-toggle');
+    if (btn) btn.innerHTML = savedTheme === 'dark' ? '☀️' : '🌙';
 
     document.getElementById('btn-theme-toggle').addEventListener('click', () => {
-        const currentTheme = document.body.getAttribute('data-theme');
+        const currentTheme = document.documentElement.getAttribute('data-theme');
         const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-        document.body.setAttribute('data-theme', newTheme);
+        document.documentElement.setAttribute('data-theme', newTheme);
         localStorage.setItem('dfir-theme', newTheme);
+        document.getElementById('btn-theme-toggle').innerHTML = newTheme === 'dark' ? '☀️' : '🌙';
     });
 };
 
@@ -99,7 +103,7 @@ const addPanel = (id, x, y, w, h) => {
         <div class="panel-header">
             <div class="panel-title">${titles[id] || id}</div>
             <div class="panel-controls">
-                <button onclick="grid.removeWidget(this.parentNode.parentNode.parentNode)">×</button>
+                <button onclick="grid.removeWidget(this.closest('.grid-stack-item'))">×</button>
             </div>
         </div>
         <div class="panel-body" id="panel-${id}">
@@ -107,9 +111,7 @@ const addPanel = (id, x, y, w, h) => {
         </div>
     `;
 
-    let el = document.createElement('div');
-    el.innerHTML = content;
-    grid.addWidget(el, { id: id, x: x, y: y, w: w, h: h });
+    grid.addWidget({ id: id, x: x, y: y, w: w, h: h, content: content });
 };
 
 // Case Management
