@@ -591,6 +591,14 @@ def main() -> int:
     else:
         if args.base_url:
             base_url = args.base_url
+            # Optimization: If it's a local IP/localhost and missing /v1, add it for OpenAI compat
+            if ":11434" in base_url and not base_url.endswith("/v1") and not base_url.endswith("/v1/"):
+                base_url = base_url.rstrip("/") + "/v1"
+                
+            # If user provided a base_url but no api_key, use a dummy one to satisfy the client
+            if not api_key:
+                api_key = "local-provider"
+                
         if args.api_key:
             api_key = args.api_key
 

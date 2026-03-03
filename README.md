@@ -59,12 +59,21 @@ The system natively supports `.mem`, `.dd`, and `.raw` memory dumps using a mult
 python3 dfir.py /path/to/memory.dd --auto --playbook memory_triage_v1 --task "Find the flag"
 ```
 
-### 4. Manual Overrides
+### 4. Tool & Execution Flags
 | Argument | Description |
 | :--- | :--- |
 | `--auto` | Shorthand for `--mode autonomous`. The agent runs until completion. |
-| `--task` | The specific investigative objective. |
-| `--playbook` | Manually select a triage workflow (e.g., `initial_access_v1`, `log_tampering_v1`). |
+| `--interactive` | Run in interactive mode, prompting the analyst for approval before each tool call. |
+| `--task` | The specific investigative objective or question for the AI. |
+| `--playbook` | Manually select a triage workflow (e.g., `initial_access_v1`, `memory_triage_v1`). |
+
+### 5. Local LLM Support (Air-Gapped / Offline)
+DFIR-Agentic natively supports OpenAI-compatible local endpoints, such as Ollama, LM Studio, or vLLM.
+| Argument | Description |
+| :--- | :--- |
+| `--ollama <MODEL>` | Shorthand to route to `http://localhost:11434/v1` using the specified model (e.g., `llama3.3`). |
+| `--llm-base-url <URL>` | Custom base URL for your local LLM OpenAI-compatible endpoint. |
+| `--llm-api-key <KEY>` | Custom API key (defaults to "ollama" if using `--ollama`). |
 
 ---
 
