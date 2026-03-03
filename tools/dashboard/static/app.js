@@ -200,13 +200,22 @@ const loadCaseData = (caseId, isAutoRefresh = false) => {
 
     // Setup auto-refresh loop
     if (refreshInterval) clearInterval(refreshInterval);
+
+    // Only set up polling if we know the case is active, or if we haven't loaded it yet.
+    // window.isCurrentCaseActive is set by renderOverview. Default to true if undefined.
+    if (window.isCurrentCaseActive === false) {
+        return; // Investigation finished, no need to poll
+    }
+
     refreshInterval = setInterval(() => {
         // Ping case list first to see if a new one appeared
         loadCases(true).then(() => {
             const currentSelected = document.getElementById('case-selector').value;
             if (currentSelected && currentSelected === caseId) {
-                // If it didn't switch, refresh the current one
-                loadCaseData(currentSelected, true);
+                // If it didn't switch, and is still active, refresh the current one
+                if (window.isCurrentCaseActive !== false) {
+                    loadCaseData(currentSelected, true);
+                }
             }
         });
     }, 10000); // 10 seconds

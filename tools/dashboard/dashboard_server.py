@@ -66,7 +66,7 @@ async def get_case(case_id: str):
     intake_json_path = case_dir / "intake.json"
     manifest_json_path = case_dir / "case_manifest.json"
     
-    result = {"id": case_id, "intake": {}, "manifest": {}}
+    result = {"id": case_id, "intake": {}, "manifest": {}, "is_active": True}
     
     if intake_json_path.exists():
         try:
@@ -80,6 +80,14 @@ async def get_case(case_id: str):
                 result["manifest"] = json.load(f)
         except Exception: pass
         
+    # Check if the orchestrator has finished by looking for summary.md in any of its run dirs
+    orchestrator_dir = case_dir / "orchestrator"
+    if orchestrator_dir.exists():
+        for run_dir in orchestrator_dir.iterdir():
+            if run_dir.is_dir() and (run_dir / "summary.md").exists():
+                result["is_active"] = False
+                break
+                
     return result
 
 @app.get("/api/cases/{case_id}/findings")
@@ -106,34 +114,17 @@ async def get_findings(case_id: str, severity: str = None):
 @app.get("/api/cases/{case_id}/notes")
 async def get_notes(case_id: str):
     """Get markdown notes for a case."""
-    # Find the most recent progress.md
-    case_dir = PROJECT_ROOT / "outputs" / "intake" / case_id / "orchestrator"
-    if not case_dir.exists():
-        return {"notes": ""}
+    # Find the actively written progress.md
+    case_dir = PROJECT_ROOT / "outputs" / "intake" / case_id
+    progress_path = case_dir / "progress.md"
+    
+    if not progress_path.exists():
+        return {"notes": "*No progress notes found.*"}
         
     try:
-        latest_file = None
-        latest_time = 0
-        
-        # In the orchestrator dir, there are UUID subdirs for each run
-        for run_dir in case_dir.iterdir():
-            if run_dir.is_dir():
-                notes_path = run_dir / "summary.md"
-                if notes_path.exists():
-                    mtime = notes_path.stat().st_mtime
-                    if mtime > latest_time:
-                        latest_time = mtime
-                        latest_file = notes_path
-                        
-        if latest_file:
-            with open(latest_file, "r", encoding="utf-8") as f:
-                content = f.read()
-                # The orchestrator appends the raw audit log at the bottom.
-                # We only want to show the executive summary in the dashboard.
-                if "## Audit Log" in content:
-                    content = content.split("## Audit Log")[0].strip()
-                return {"notes": content}
-        return {"notes": "*No progress notes found.*"}
+        with open(progress_path, "r", encoding="utf-8") as f:
+            content = f.read()
+            return {"notes": content if content.strip() else "*No progress notes found.*"}
     except Exception as e:
         return {"notes": f"Error loading notes: {str(e)}"}
 

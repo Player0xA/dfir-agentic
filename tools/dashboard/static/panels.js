@@ -9,11 +9,18 @@ window.renderOverview = async (caseId) => {
         const response = await fetch(`/api/cases/${caseId}`);
         const data = await response.json();
 
+        // Track active state globally to control polling
+        window.isCurrentCaseActive = data.is_active;
+
         const intake = data.intake || {};
         const kind = intake.classification?.kind || 'Unknown';
         const hostname = intake.classification?.hostname || 'Unknown';
+        const statusBadge = data.is_active
+            ? '<span class="badge warning" style="animation: pulse 2s infinite;">Live Investigation</span>'
+            : '<span class="badge info">Finished</span>';
 
         let html = `
+            <div style="margin-bottom: 15px;">${statusBadge}</div>
             <div class="prop-grid">
                 <div class="prop-label">Case ID</div>
                 <div class="prop-value"><code>${data.id}</code></div>
