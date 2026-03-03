@@ -74,6 +74,15 @@ DFIR-Agentic natively supports OpenAI-compatible local endpoints, such as Ollama
 | `--ollama <MODEL>` | Shorthand to route to `http://localhost:11434/v1` using the specified model (e.g., `llama3.3`). |
 | `--llm-base-url <URL>` | Custom base URL for your local LLM OpenAI-compatible endpoint. |
 | `--llm-api-key <KEY>` | Custom API key (defaults to "ollama" if using `--ollama`). |
+| `--llm-model <MODEL>` | Custom model name (required if using `--llm-base-url` without `--ollama`). |
+
+> [!NOTE]
+> When using a local LLM, the orchestrator automatically activates **Local LLM Mode**:
+> - The system prompt is simplified for smaller models (~9B parameters).
+> - For **memory forensics cases**, the first `memory_full_triage` call is auto-injected so the model starts with triage data already in context.
+> - Disk-only tools (`list_dir`, `read_json`) are blocked for memory cases to prevent the model from thrashing.
+> - The HTTP timeout is increased to 300 seconds to accommodate slower inference.
+> - All of these optimizations are **skipped** when using the DeepSeek API (or any cloud provider).
 
 ---
 
