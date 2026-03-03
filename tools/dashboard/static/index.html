@@ -1,50 +1,61 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DFIR-Agentic Dashboard</title>
-    
+
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-    
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+
     <!-- GridStack CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/gridstack@10.3.1/dist/gridstack.min.css" rel="stylesheet"/>
-    <link href="https://cdn.jsdelivr.net/npm/gridstack@10.3.1/dist/gridstack-extra.min.css" rel="stylesheet"/>
-    
+    <link href="https://cdn.jsdelivr.net/npm/gridstack@10.3.1/dist/gridstack.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/gridstack@10.3.1/dist/gridstack-extra.min.css" rel="stylesheet" />
+
     <!-- Marked.js for Case Notes -->
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-    
+
     <!-- GridStack JS -->
     <script src="https://cdn.jsdelivr.net/npm/gridstack@10.3.1/dist/gridstack-all.js"></script>
-    
-    <link rel="stylesheet" href="/static/style.css">
+
+    <script>
+        const cb = new Date().getTime();
+        document.write('<link rel="stylesheet" href="/static/style.css?v=' + cb + '">');
+    </script>
 </head>
+
 <body data-theme="dark">
 
-<div class="topbar">
-    <div class="brand">
-        <span class="logo">🛡️</span>
-        <h1>DFIR-Agentic</h1>
-    </div>
-    
-    <div class="controls">
-        <select id="case-selector" aria-label="Select Case">
-            <option value="">Loading cases...</option>
-        </select>
-        <button id="btn-save-layout" class="btn primary" title="Save Layout">💾 Save</button>
-        <button id="btn-reset-layout" class="btn secondary" title="Reset Layout">🔄 Reset</button>
-        <button id="btn-theme-toggle" class="btn icon" title="Toggle Theme">☀️</button>
-    </div>
-</div>
+    <div class="topbar">
+        <div class="brand">
+            <span class="logo">🛡️</span>
+            <h1>DFIR-Agentic</h1>
+        </div>
 
-<main class="grid-container">
-    <div class="grid-stack"></div>
-</main>
+        <div class="controls">
+            <select id="case-selector" aria-label="Select Case">
+                <option value="">Loading cases...</option>
+            </select>
+            <button id="btn-save-layout" class="btn primary" title="Save Layout">💾 Save</button>
+            <button id="btn-reset-layout" class="btn secondary" title="Reset Layout">🔄 Reset</button>
+            <button id="btn-theme-toggle" class="btn icon" title="Toggle Theme">☀️</button>
+        </div>
+    </div>
 
-<script src="/static/panels.js"></script>
-<script src="/static/app.js"></script>
+    <main class="grid-container">
+        <div class="grid-stack"></div>
+    </main>
+
+    <script>
+        const cb_js = new Date().getTime();
+        document.write('<script src="/static/panels.js?v=' + cb_js + '"><\\/script>');
+        document.write('<script src="/static/app.js?v=' + cb_js + '"><\\/script>');
+    </script>
 </body>
+
 </html>
