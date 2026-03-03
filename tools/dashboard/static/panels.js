@@ -122,11 +122,16 @@ window.renderArtifacts = async (caseId) => {
         // Finally fallback to legacy format (list of paths)
         else if (intake.inputs && intake.inputs.paths && intake.inputs.paths.length > 0) {
             // Emulate V30 format for legacy categorization
-            const emulatedEvidence = intake.inputs.paths.map((p, i) => ({
-                evidence_id: `legacy-${i}`,
-                type: 'legacy_input',
-                relpath: p
-            }));
+            const emulatedEvidence = intake.inputs.paths.map((p, i) => {
+                const parts = p.replace(/\/$/, '').split('/');
+                const name = parts[parts.length - 1] || 'root';
+                const kind = p.includes('.') ? 'file' : 'dir';
+                return {
+                    evidence_id: `${name}-${i}`,
+                    type: `legacy_${kind}`,
+                    relpath: p
+                };
+            });
             html += buildCategorizedTables(emulatedEvidence);
         } else {
             html += `<div class="loading">No artifacts or evidence listed for this case.</div>`;
