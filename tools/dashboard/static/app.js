@@ -44,7 +44,18 @@ const initGrid = async () => {
         const response = await fetch('/api/settings');
         const savedLayout = await response.json();
 
-        const layoutToUse = savedLayout.length > 0 ? savedLayout : defaultLayout;
+        let layoutToUse = savedLayout && savedLayout.length > 0 ? [...savedLayout] : [...defaultLayout];
+
+        // Migration: If a default panel (like 'artifacts') is missing from the saved layout,
+        // automatically append it so the user doesn't have to hit "Reset".
+        if (savedLayout && savedLayout.length > 0) {
+            defaultLayout.forEach(defItem => {
+                if (!layoutToUse.find(item => item.id === defItem.id)) {
+                    console.log(`Migrating: Adding missing panel ${defItem.id}`);
+                    layoutToUse.push(defItem);
+                }
+            });
+        }
 
         layoutToUse.forEach(item => {
             addPanel(item.id, item.x, item.y, item.w, item.h);
