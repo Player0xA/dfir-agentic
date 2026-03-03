@@ -28,3 +28,6 @@ playbooks:
       - run: hayabusa_evtx
       - run: plaso_evtx
 
+  memory_triage_v1:
+    description: "Focused triage for memory snapshots/dumps using Volatility and Memoxide."
+    steps: []
