@@ -22,6 +22,7 @@ def main():
     parser.add_argument("--mode", choices=["structured", "autonomous"], default="structured")
     parser.add_argument("--auto", action="store_true", help="Shorthand for --mode autonomous")
     parser.add_argument("--task", help="Optional mission objective")
+    parser.add_argument("--playbook", help="Optional playbook override")
     args = parser.parse_args()
 
     # 0. RESOLVE CASE/INTAKE
@@ -79,6 +80,8 @@ def main():
     ]
     if args.task:
         ingest_cmd.extend(["--task", args.task])
+    if args.playbook:
+        ingest_cmd.extend(["--playbook", args.playbook])
     if run_cmd(ingest_cmd, "Deterministic Ingestion") is None: sys.exit(1)
 
     # 3. ORCHESTRATE (Agentic Loop)
