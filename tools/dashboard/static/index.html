@@ -41,8 +41,15 @@
             <select id="case-selector" aria-label="Select Case">
                 <option value="">Loading cases...</option>
             </select>
+            <div style="border-left: 1px solid var(--border); margin: 0 10px; height: 30px;"></div>
+            <select id="profile-selector" aria-label="Select Layout Profile">
+                <option value="Default">Default Profile</option>
+            </select>
             <button id="btn-save-layout" class="btn primary" title="Save Layout">💾 Save</button>
-            <button id="btn-reset-layout" class="btn secondary" title="Reset Layout">🔄 Reset</button>
+            <button id="btn-save-as" class="btn secondary" title="Save As New Profile">📝 Save As</button>
+            <button id="btn-reset-layout" class="btn secondary" title="Reset Current Layout">🔄 Reset</button>
+            <button id="btn-delete-profile" class="btn error" title="Delete Profile" style="display:none;">🗑️
+                Delete</button>
             <button id="btn-theme-toggle" class="btn icon" title="Toggle Theme">☀️</button>
         </div>
     </div>

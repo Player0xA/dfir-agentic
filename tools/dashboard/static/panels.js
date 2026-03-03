@@ -67,37 +67,69 @@ window.renderArtifacts = async (caseId) => {
         const intake = data.intake || {};
         const manifest = data.manifest || {};
 
-        let html = '<div style="display: flex; flex-direction: column; gap: 10px;">';
+        let html = '<div style="display: flex; flex-direction: column; gap: 15px;">';
 
-        // Function to build table from structured evidence array
-        const buildEvidenceTable = (evidenceArray) => {
-            let t = '<div style="overflow-x: auto;"><table class="data-table"><thead><tr><th>ID</th><th>Type</th><th>Path</th></tr></thead><tbody>';
+        // Function to categorize and build tables
+        const buildCategorizedTables = (evidenceArray) => {
+            const categories = {
+                '🖥️ Event Logs (EVTX)': [],
+                '🧠 Memory Dumps': [],
+                '⚙️ Tool Outputs': [],
+                '📄 Other Evidence': []
+            };
+
             evidenceArray.forEach(e => {
-                let shortPath = (e.relpath || 'N/A').length > 40 ? '...' + (e.relpath || 'N/A').substring((e.relpath || 'N/A').length - 37) : (e.relpath || 'N/A');
-                t += `<tr><td><code>${e.evidence_id || 'N/A'}</code></td><td><span class="badge" style="background:var(--bg-panel); border:1px solid var(--border);">${e.type || 'N/A'}</span></td><td title="${e.relpath || ''}"><code>${shortPath}</code></td></tr>`;
+                const pathStr = (e.relpath || '').toLowerCase();
+                const typeStr = (e.type || '').toLowerCase();
+
+                if (pathStr.endsWith('.evtx')) {
+                    categories['🖥️ Event Logs (EVTX)'].push(e);
+                } else if (pathStr.endsWith('.raw') || pathStr.endsWith('.dd') || pathStr.endsWith('.mem') || typeStr.includes('memory')) {
+                    categories['🧠 Memory Dumps'].push(e);
+                } else if (pathStr.endsWith('.csv') || pathStr.endsWith('.json') || pathStr.endsWith('.plaso') || typeStr.includes('tool')) {
+                    categories['⚙️ Tool Outputs'].push(e);
+                } else {
+                    categories['📄 Other Evidence'].push(e);
+                }
             });
-            t += '</tbody></table></div>';
+
+            let t = '';
+            for (const [categoryName, items] of Object.entries(categories)) {
+                if (items.length === 0) continue;
+
+                t += `<div style="margin-bottom: 10px;">`;
+                t += `<div style="font-weight: bold; margin-bottom: 5px; color: var(--accent); border-bottom: 1px solid var(--border); padding-bottom: 3px;">${categoryName} (${items.length})</div>`;
+                t += `<div style="overflow-x: auto;"><table class="data-table"><thead><tr><th>ID</th><th>Type</th><th>Path</th></tr></thead><tbody>`;
+
+                items.forEach(e => {
+                    let shortPath = (e.relpath || 'N/A').length > 40 ? '...' + (e.relpath || 'N/A').substring((e.relpath || 'N/A').length - 37) : (e.relpath || 'N/A');
+                    t += `<tr><td><code>${e.evidence_id || 'N/A'}</code></td><td><span class="badge" style="background:var(--bg-panel); border:1px solid var(--border);">${e.type || 'N/A'}</span></td><td title="${e.relpath || ''}"><code>${shortPath}</code></td></tr>`;
+                });
+
+                t += '</tbody></table></div></div>';
+            }
             return t;
         };
 
         // Check V30 manifest format first
         if (manifest.evidence && manifest.evidence.length > 0) {
-            html += buildEvidenceTable(manifest.evidence);
+            html += buildCategorizedTables(manifest.evidence);
         }
         // Then check V30 intake format
         else if (intake.evidence && intake.evidence.length > 0) {
-            html += buildEvidenceTable(intake.evidence);
+            html += buildCategorizedTables(intake.evidence);
         }
         // Finally fallback to legacy format (list of paths)
         else if (intake.inputs && intake.inputs.paths && intake.inputs.paths.length > 0) {
-            html += '<ul style="padding-left: 20px;">';
-            intake.inputs.paths.forEach(p => {
-                let shortPath = p.length > 50 ? '...' + p.substring(p.length - 47) : p;
-                html += `<li title="${p}"><code>${shortPath}</code></li>`;
-            });
-            html += '</ul>';
+            // Emulate V30 format for legacy categorization
+            const emulatedEvidence = intake.inputs.paths.map((p, i) => ({
+                evidence_id: `legacy-${i}`,
+                type: 'legacy_input',
+                relpath: p
+            }));
+            html += buildCategorizedTables(emulatedEvidence);
         } else {
-            html += '<div class="loading">No artifacts or evidence listed for this case.</div>';
+            html += `<div class="loading">No artifacts or evidence listed for this case.</div>`;
         }
 
         html += '</div>';

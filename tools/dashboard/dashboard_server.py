@@ -168,21 +168,41 @@ async def get_settings():
     if not SETTINGS_FILE.parent.exists():
         SETTINGS_FILE.parent.mkdir(parents=True, exist_ok=True)
     
+    default_settings = {
+        "active_profile": "Default",
+        "profiles": {
+            "Default": [] # Empty list tells frontend to use its hardcoded default layout
+        }
+    }
+    
     if SETTINGS_FILE.exists():
         try:
             with open(SETTINGS_FILE, "r") as f:
-                return json.load(f)
+                data = json.load(f)
+                # Handle legacy format (flat array)
+                if isinstance(data, list):
+                    return {
+                        "active_profile": "Default",
+                        "profiles": {
+                            "Default": data
+                        }
+                    }
+                return data
         except Exception:
-            return {}
-    return {}
+            return default_settings
+    return default_settings
 
 @app.post("/api/settings")
-async def save_settings(payload: list[dict]):
+async def save_settings(payload: dict):
     if not SETTINGS_FILE.parent.exists():
         SETTINGS_FILE.parent.mkdir(parents=True, exist_ok=True)
         
+    # Ensure structure is valid
+    if "active_profile" not in payload or "profiles" not in payload:
+        raise HTTPException(status_code=400, detail="Invalid payload structure. Expected active_profile and profiles dict.")
+        
     with open(SETTINGS_FILE, "w") as f:
-        json.dump(payload, f)
+        json.dump(payload, f, indent=2)
     
     return {"status": "success"}
 

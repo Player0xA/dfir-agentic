@@ -40,65 +40,171 @@ const initGrid = async () => {
         { id: 'audit', x: 0, y: 8, w: 12, h: 4 }
     ];
 
-    try {
-        const response = await fetch('/api/settings');
-        const savedLayout = await response.json();
+    window.dashboardProfiles = {
+        "Default": []
+    };
+    window.activeProfile = "Default";
 
-        let layoutToUse = savedLayout && savedLayout.length > 0 ? [...savedLayout] : [...defaultLayout];
+    const loadLayoutFromData = (data) => {
+        grid.removeAll();
+        let layoutToUse = [...defaultLayout];
+
+        if (data && data.active_profile && data.profiles) {
+            window.dashboardProfiles = data.profiles;
+            window.activeProfile = data.active_profile;
+
+            if (data.profiles[window.activeProfile] && data.profiles[window.activeProfile].length > 0) {
+                layoutToUse = [...data.profiles[window.activeProfile]];
+            }
+        }
 
         // Migration: If a default panel (like 'artifacts') is missing from the saved layout,
         // automatically append it so the user doesn't have to hit "Reset".
-        if (savedLayout && savedLayout.length > 0) {
-            defaultLayout.forEach(defItem => {
-                if (!layoutToUse.find(item => item.id === defItem.id)) {
-                    console.log(`Migrating: Adding missing panel ${defItem.id}`);
-                    layoutToUse.push(defItem);
-                }
-            });
-        }
+        defaultLayout.forEach(defItem => {
+            if (!layoutToUse.find(item => item.id === defItem.id)) {
+                console.log(`Migrating: Adding missing panel ${defItem.id}`);
+                layoutToUse.push(defItem);
+            }
+        });
 
         layoutToUse.forEach(item => {
             addPanel(item.id, item.x, item.y, item.w, item.h);
         });
 
+        updateProfileUI();
+    };
+
+    const updateProfileUI = () => {
+        const selector = document.getElementById('profile-selector');
+        selector.innerHTML = '';
+        Object.keys(window.dashboardProfiles).forEach(pName => {
+            const opt = document.createElement('option');
+            opt.value = pName;
+            opt.textContent = pName;
+            if (pName === window.activeProfile) opt.selected = true;
+            selector.appendChild(opt);
+        });
+
+        // Show/hide delete button (cannot delete Default)
+        document.getElementById('btn-delete-profile').style.display = window.activeProfile === 'Default' ? 'none' : 'inline-block';
+    };
+
+    try {
+        const response = await fetch('/api/settings');
+        const data = await response.json();
+        loadLayoutFromData(data);
     } catch (e) {
         console.error("Failed to load settings:", e);
-        defaultLayout.forEach(item => {
-            addPanel(item.id, item.x, item.y, item.w, item.h);
-        });
+        loadLayoutFromData(null);
     }
 
-    // Attach save layout handler
-    document.getElementById('btn-save-layout').addEventListener('click', async () => {
-        const layout = grid.save().map(item => ({
-            id: item.id,
-            x: item.x,
-            y: item.y,
-            w: item.w,
-            h: item.h
-        }));
+    // Profile Dropdown Change
+    document.getElementById('profile-selector').addEventListener('change', (e) => {
+        window.activeProfile = e.target.value;
+        const savedLayout = window.dashboardProfiles[window.activeProfile];
 
+        grid.removeAll();
+        let layoutToUse = savedLayout && savedLayout.length > 0 ? [...savedLayout] : [...defaultLayout];
+
+        defaultLayout.forEach(defItem => {
+            if (!layoutToUse.find(item => item.id === defItem.id)) layoutToUse.push(defItem);
+        });
+
+        layoutToUse.forEach(item => {
+            addPanel(item.id, item.x, item.y, item.w, item.h);
+        });
+
+        saveSettingsToServer(); // Save the new active profile state
+        updateProfileUI();
+        loadCaseData(document.getElementById('case-selector').value);
+    });
+
+    const saveSettingsToServer = async () => {
+        const payload = {
+            active_profile: window.activeProfile,
+            profiles: window.dashboardProfiles
+        };
         try {
             await fetch('/api/settings', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(layout)
+                body: JSON.stringify(payload)
             });
+            return true;
+        } catch (e) {
+            console.error("Failed to save layout:", e);
+            return false;
+        }
+    };
+
+    // Attach save layout handler (overwrite current)
+    document.getElementById('btn-save-layout').addEventListener('click', async () => {
+        const layout = grid.save().map(item => ({
+            id: item.id, x: item.x, y: item.y, w: item.w, h: item.h
+        }));
+
+        window.dashboardProfiles[window.activeProfile] = layout;
+
+        if (await saveSettingsToServer()) {
             const btn = document.getElementById('btn-save-layout');
             const originalText = btn.innerHTML;
             btn.innerHTML = '✅ Saved';
             setTimeout(() => btn.innerHTML = originalText, 2000);
-        } catch (e) {
-            console.error("Failed to save layout:", e);
         }
     });
 
-    // Reset layout handler
+    // Attach save as handler (new profile)
+    document.getElementById('btn-save-as').addEventListener('click', async () => {
+        const newName = prompt("Enter a name for the new layout profile:");
+        if (!newName || !newName.trim()) return;
+
+        const cleanName = newName.trim();
+        if (cleanName === "Default") {
+            alert("Cannot overwrite the Default profile name this way.");
+            return;
+        }
+
+        const layout = grid.save().map(item => ({
+            id: item.id, x: item.x, y: item.y, w: item.w, h: item.h
+        }));
+
+        window.dashboardProfiles[cleanName] = layout;
+        window.activeProfile = cleanName;
+
+        if (await saveSettingsToServer()) {
+            updateProfileUI();
+        }
+    });
+
+    // Delete profile handler
+    document.getElementById('btn-delete-profile').addEventListener('click', async () => {
+        if (window.activeProfile === 'Default') return;
+
+        if (confirm(`Are you sure you want to delete the layout profile '${window.activeProfile}'?`)) {
+            delete window.dashboardProfiles[window.activeProfile];
+            window.activeProfile = 'Default';
+
+            if (await saveSettingsToServer()) {
+                // Switch back to default view
+                const e = new Event('change');
+                const sel = document.getElementById('profile-selector');
+                sel.value = 'Default';
+                sel.dispatchEvent(e);
+            }
+        }
+    });
+
+    // Reset layout handler (resets current view to default)
     document.getElementById('btn-reset-layout').addEventListener('click', () => {
         grid.removeAll();
         defaultLayout.forEach(item => {
             addPanel(item.id, item.x, item.y, item.w, item.h);
         });
+
+        // Save the reset state to the current profile
+        window.dashboardProfiles[window.activeProfile] = [];
+        saveSettingsToServer();
+
         loadCaseData(document.getElementById('case-selector').value);
     });
 };
