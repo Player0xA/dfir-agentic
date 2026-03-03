@@ -1348,11 +1348,41 @@ def tool_load_skill(args: Dict[str, Any], audit: Dict[str, Path]) -> Dict[str, A
 
     content = target_file.read_text(encoding="utf-8")
     
+    # Phase 55: Skill Governance Layer (Provenance Tracking)
+    import hashlib
+    content_hash = hashlib.sha256(content.encode('utf-8')).hexdigest()
+    
     # If reading SKILL.md, strip YAML frontmatter
     if file_name == "SKILL.md":
         import re
         # Match content between triple-dashes at the start of the file
         content = re.sub(r'^---\s*\n.*?\n---\s*\n', '', content, flags=re.DOTALL)
+        
+    # Log Provenance to case manifest
+    try:
+        if DFIR_CASE_DIR:
+            manifest_path = Path(DFIR_CASE_DIR) / "case_manifest.json"
+            if manifest_path.exists():
+                with open(manifest_path, "r", encoding="utf-8") as f:
+                    manifest = json.load(f)
+                
+                if ".governance.skills_used" not in manifest:
+                    manifest[".governance.skills_used"] = []
+                
+                # Check for duplicates
+                prov_entry = {
+                    "skill_name": skill_name,
+                    "file_name": file_name,
+                    "version_hash": f"sha256:{content_hash}",
+                    "loaded_utc": utc_now_z()
+                }
+                
+                if not any(s.get("version_hash") == prov_entry["version_hash"] for s in manifest[".governance.skills_used"]):
+                    manifest[".governance.skills_used"].append(prov_entry)
+                    with open(manifest_path, "w", encoding="utf-8") as f:
+                        json.dump(manifest, f, indent=2)
+    except Exception as e:
+        print(f"DEBUG: Failed to write skill provenance: {e}", file=sys.stderr)
 
     return {
         "skill_name": skill_name,

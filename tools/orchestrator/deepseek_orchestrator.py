@@ -473,13 +473,15 @@ def desanitize_tool_name(name: str) -> str:
     return name
 
 
-def deepseek_chat(messages: list[dict], model: str, base_url: str, api_key: str, tools: Optional[list[dict]] = None, timeout_s: int = 300) -> dict:
+def deepseek_chat(messages: list[dict], model: str, base_url: str, api_key: str, tools: Optional[list[dict]] = None, timeout_s: int = 300, ledger_callback=None) -> dict:
     url = base_url.rstrip("/") + "/chat/completions"
+    
+    # Phase 54: Deterministic Replay Preparations (temp=0.0)
     body = {
         "model": model,
         "messages": messages,
-        "temperature": 0.2,
-        "max_tokens": 1024,
+        "temperature": 0.0,
+        "max_tokens": 8192,
     }
     if tools:
         # Convert MCP tools to OpenAI function calling format with sanitized names
@@ -506,9 +508,20 @@ def deepseek_chat(messages: list[dict], model: str, base_url: str, api_key: str,
     try:
         with urlopen(req, timeout=timeout_s) as resp:
             raw = resp.read().decode("utf-8", errors="replace")
+            
+            # Phase 53: LLM Audit Ledger Interception
+            if ledger_callback:
+                import hashlib
+                response_hash = hashlib.sha256(raw.encode("utf-8")).hexdigest()
+                ledger_callback(body, raw, response_hash)
+                
             return json.loads(raw)
     except HTTPError as e:
         raw = e.read().decode("utf-8", errors="replace") if hasattr(e, "read") else str(e)
+        if ledger_callback:
+            import hashlib
+            response_hash = hashlib.sha256(raw.encode("utf-8")).hexdigest()
+            ledger_callback(body, raw, response_hash)
         raise RuntimeError(f"DeepSeek HTTPError {e.code}: {raw}")
     except URLError as e:
         raise RuntimeError(f"DeepSeek URLError: {e}")
@@ -550,7 +563,11 @@ def _get_skills_registry() -> str:
             if name_match and desc_match:
                 name = name_match.group(1).strip()
                 desc = desc_match.group(1).strip()
-                registry.append(f"- {name}: {desc}")
+                
+                # Phase 55: Skill Governance Layer (Version Hashing)
+                import hashlib
+                version_hash = hashlib.sha256(content.encode('utf-8')).hexdigest()[:8]
+                registry.append(f"- {name} (v.{version_hash}): {desc}")
         except Exception as e:
             print(f"DEBUG: Failed to parse skill {skill_file.name}: {e}")
 
@@ -904,6 +921,9 @@ def main() -> int:
         has_fetched_evidence = False
         progress_jsonl = os.path.join(out_dir, "progress.jsonl")
         
+        # Phase 53: LLM Audit Ledger Setup
+        audit_ledger_jsonl = os.path.join(out_dir, "audit_ledger.jsonl")
+        
         # Init progress.jsonl
         with open(progress_jsonl, "w") as f:
             f.write(json.dumps({"ts": ts, "event": "Investigation Started", "intake": intake_id}) + "\n")
@@ -955,7 +975,32 @@ def main() -> int:
                 })
             
             # 5) Call DeepSeek with Discoverable Tools
-            ds_response = deepseek_chat(history, model=model, base_url=base_url, api_key=api_key, tools=mcp_tools)
+            def ledger_callback(body, raw_response, response_hash):
+                # Calculate the context hash (everything the AI has seen so far)
+                import hashlib
+                import datetime
+                context_str = json.dumps(history, sort_keys=True)
+                context_hash = hashlib.sha256(context_str.encode("utf-8")).hexdigest()
+                
+                ledger_entry = {
+                    "run_id": ai_id,
+                    "iteration": iteration,
+                    "timestamp_utc": datetime.datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ"),
+                    "model": model,
+                    "parameters": {
+                        "temperature": body.get("temperature", 0.0),
+                        "max_tokens": body.get("max_tokens", 8192)
+                    },
+                    "context_hash": context_hash,
+                    "prompt_payload": body,
+                    "response_hash": response_hash,
+                    "raw_response": json.loads(raw_response) if raw_response.startswith("{") else raw_response
+                }
+                
+                with open(audit_ledger_jsonl, "a", encoding="utf-8") as ledger_file:
+                    ledger_file.write(json.dumps(ledger_entry) + "\n")
+                    
+            ds_response = deepseek_chat(history, model=model, base_url=base_url, api_key=api_key, tools=mcp_tools, ledger_callback=ledger_callback)
             choice = ds_response["choices"][0]
             message = choice["message"]
             content = message.get("content") or ""

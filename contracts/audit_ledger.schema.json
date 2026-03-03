@@ -1,0 +1,64 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://example.local/dfir-agentic/contracts/audit_ledger.schema.json",
+    "title": "LLM Inference Audit Ledger",
+    "description": "Cryptographic ledger tracking exact LLM inputs and outputs for legal defensibility.",
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+        "run_id",
+        "iteration",
+        "timestamp_utc",
+        "model",
+        "parameters",
+        "context_hash",
+        "prompt_payload",
+        "response_hash",
+        "raw_response"
+    ],
+    "properties": {
+        "run_id": {
+            "type": "string",
+            "description": "UUID of the specific investigation run."
+        },
+        "iteration": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "The loop iteration number."
+        },
+        "timestamp_utc": {
+            "type": "string",
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}Z$",
+            "description": "ISO-8601 UTC timestamp of inference generation."
+        },
+        "model": {
+            "type": "string",
+            "description": "The exact model string used (e.g., deepseek-chat, qwen3.5:9b)."
+        },
+        "parameters": {
+            "type": "object",
+            "description": "Inference parameters used for this call (temperature, max_tokens, etc)."
+        },
+        "context_hash": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$",
+            "description": "SHA256 hash of the evidence manifest/state at the time of the prompt."
+        },
+        "prompt_payload": {
+            "type": "object",
+            "description": "The exact, fully hydrated JSON payload sent to the LLM API."
+        },
+        "response_hash": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$",
+            "description": "SHA256 hash of the raw response received from the LLM API."
+        },
+        "raw_response": {
+            "type": [
+                "object",
+                "string"
+            ],
+            "description": "The exact raw JSON response received from the LLM, or the raw string if parsing failed."
+        }
+    }
+}
