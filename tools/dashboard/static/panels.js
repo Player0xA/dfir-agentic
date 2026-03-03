@@ -69,55 +69,35 @@ window.renderArtifacts = async (caseId) => {
 
         let html = '<div style="display: flex; flex-direction: column; gap: 15px;">';
 
-        // Function to categorize and build tables
-        const buildCategorizedTables = (evidenceArray) => {
-            const categories = {
-                '🖥️ Event Logs (EVTX)': [],
-                '🧠 Memory Dumps': [],
-                '⚙️ Tool Outputs': [],
-                '📄 Other Evidence': []
-            };
+        // Function to build a simple table
+        const buildSimpleTable = (evidenceArray) => {
+            if (!evidenceArray || evidenceArray.length === 0) return '';
+
+            let t = `<div style="overflow-x: auto;"><table class="data-table"><thead><tr><th>ID</th><th>Path</th></tr></thead><tbody>`;
 
             evidenceArray.forEach(e => {
-                const pathStr = (e.relpath || '').toLowerCase();
-                const typeStr = (e.type || '').toLowerCase();
+                let shortPath = (e.relpath || 'N/A').length > 50 ? '...' + (e.relpath || 'N/A').substring((e.relpath || 'N/A').length - 47) : (e.relpath || 'N/A');
+                let eid = e.evidence_id || 'N/A';
 
-                if (pathStr.endsWith('.evtx')) {
-                    categories['🖥️ Event Logs (EVTX)'].push(e);
-                } else if (pathStr.endsWith('.raw') || pathStr.endsWith('.dd') || pathStr.endsWith('.mem') || typeStr.includes('memory')) {
-                    categories['🧠 Memory Dumps'].push(e);
-                } else if (pathStr.endsWith('.csv') || pathStr.endsWith('.json') || pathStr.endsWith('.plaso') || typeStr.includes('tool')) {
-                    categories['⚙️ Tool Outputs'].push(e);
-                } else {
-                    categories['📄 Other Evidence'].push(e);
+                // Truncate UUIDs for cleaner display
+                if (eid.length > 12 && eid.includes('-')) {
+                    eid = eid.substring(0, 8);
                 }
+
+                t += `<tr><td><code>${eid}</code></td><td title="${e.relpath || ''}"><code>${shortPath}</code></td></tr>`;
             });
 
-            let t = '';
-            for (const [categoryName, items] of Object.entries(categories)) {
-                if (items.length === 0) continue;
-
-                t += `<div style="margin-bottom: 10px;">`;
-                t += `<div style="font-weight: bold; margin-bottom: 5px; color: var(--accent); border-bottom: 1px solid var(--border); padding-bottom: 3px;">${categoryName} (${items.length})</div>`;
-                t += `<div style="overflow-x: auto;"><table class="data-table"><thead><tr><th>ID</th><th>Type</th><th>Path</th></tr></thead><tbody>`;
-
-                items.forEach(e => {
-                    let shortPath = (e.relpath || 'N/A').length > 40 ? '...' + (e.relpath || 'N/A').substring((e.relpath || 'N/A').length - 37) : (e.relpath || 'N/A');
-                    t += `<tr><td><code>${e.evidence_id || 'N/A'}</code></td><td><span class="badge" style="background:var(--bg-panel); border:1px solid var(--border);">${e.type || 'N/A'}</span></td><td title="${e.relpath || ''}"><code>${shortPath}</code></td></tr>`;
-                });
-
-                t += '</tbody></table></div></div>';
-            }
+            t += '</tbody></table></div>';
             return t;
         };
 
         // Check V30 manifest format first
         if (manifest.evidence && manifest.evidence.length > 0) {
-            html += buildCategorizedTables(manifest.evidence);
+            html += buildSimpleTable(manifest.evidence);
         }
         // Then check V30 intake format
         else if (intake.evidence && intake.evidence.length > 0) {
-            html += buildCategorizedTables(intake.evidence);
+            html += buildSimpleTable(intake.evidence);
         }
         // Finally fallback to legacy format (list of paths)
         else if (intake.inputs && intake.inputs.paths && intake.inputs.paths.length > 0) {
@@ -125,14 +105,12 @@ window.renderArtifacts = async (caseId) => {
             const emulatedEvidence = intake.inputs.paths.map((p, i) => {
                 const parts = p.replace(/\/$/, '').split('/');
                 const name = parts[parts.length - 1] || 'root';
-                const kind = p.includes('.') ? 'file' : 'dir';
                 return {
-                    evidence_id: `${name}-${i}`,
-                    type: `legacy_${kind}`,
+                    evidence_id: `${name}`,
                     relpath: p
                 };
             });
-            html += buildCategorizedTables(emulatedEvidence);
+            html += buildSimpleTable(emulatedEvidence);
         } else {
             html += `<div class="loading">No artifacts or evidence listed for this case.</div>`;
         }
@@ -201,7 +179,9 @@ const renderFindingsTable = (container, data, filter) => {
         html += `<tr><td colspan="4" style="text-align:center;">No findings reported.</td></tr>`;
     } else {
         filtered.forEach(f => {
-            const sev = (f.severity || f.impact || 'info').toLowerCase();
+            const rawSev = (f.severity || f.impact || 'info').toLowerCase();
+            const sev = rawSev.length > 4 ? rawSev.substring(0, 4) : rawSev; // Truncate to 4 chars
+            const sevClass = rawSev; // Keep full class name for CSS styling
             const type = f.category || f.type || 'Unknown';
             const desc = f.summary || f.statement || f.description || 'N/A';
             let source = 'N/A';
@@ -215,7 +195,7 @@ const renderFindingsTable = (container, data, filter) => {
 
             html += `
                 <tr>
-                    <td><span class="badge ${sev}">${sev}</span></td>
+                    <td><span class="badge ${sevClass}">${sev}</span></td>
                     <td>${type}</td>
                     <td>${desc}</td>
                     <td><code>${source}</code></td>
