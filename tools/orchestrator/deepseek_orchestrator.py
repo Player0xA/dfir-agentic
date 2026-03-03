@@ -572,6 +572,7 @@ def main() -> int:
     ap.add_argument("--ollama", type=str, metavar="MODEL", help="Use local Ollama instance with specified model (e.g., llama3.3)")
     ap.add_argument("--base-url", type=str, help="Custom base URL for the LLM API")
     ap.add_argument("--api-key", type=str, help="Custom API key for the LLM API")
+    ap.add_argument("--model", type=str, help="Custom model name for the LLM API")
     args = ap.parse_args()
 
     intake_abs = os.path.abspath(args.intake_json)
@@ -585,9 +586,12 @@ def main() -> int:
 
     # Phase 50: Override with Local LLM settings if provided
     if args.ollama:
-        base_url = "http://localhost:11434/v1"
+        base_url = args.base_url if args.base_url else "http://localhost:11434/v1"
         model = args.ollama
         api_key = args.api_key if args.api_key else "ollama"
+        # Optimization: If it's a local IP/localhost and missing /v1, add it for OpenAI compat
+        if ":11434" in base_url and not base_url.endswith("/v1") and not base_url.endswith("/v1/"):
+            base_url = base_url.rstrip("/") + "/v1"
     else:
         if args.base_url:
             base_url = args.base_url
@@ -601,6 +605,9 @@ def main() -> int:
                 
         if args.api_key:
             api_key = args.api_key
+            
+        if args.model:
+            model = args.model
 
     if not api_key:
         print("FAIL: DEEPSEEK_API_KEY (or local --api-key / --ollama) not set", file=sys.stderr)

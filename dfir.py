@@ -29,6 +29,7 @@ def main():
     llm_group.add_argument("--ollama", type=str, metavar="MODEL", help="Use local Ollama instance with specified model (e.g., llama3.3)")
     llm_group.add_argument("--llm-base-url", type=str, help="Custom base URL for the LLM API")
     llm_group.add_argument("--llm-api-key", type=str, help="Custom API key for the LLM API")
+    llm_group.add_argument("--llm-model", type=str, help="Custom model name (required if using --llm-base-url without --ollama)")
 
     args = parser.parse_args()
 
@@ -107,6 +108,8 @@ def main():
         orchestrate_cmd.extend(["--base-url", args.llm_base_url])
     if args.llm_api_key:
         orchestrate_cmd.extend(["--api-key", args.llm_api_key])
+    if args.llm_model:
+        orchestrate_cmd.extend(["--model", args.llm_model])
 
     # For the orchestrator, we don't want to capture output because of interactive prompts
     print(f"\n>>> [Stage: Agentic Loop] Running: {' '.join(orchestrate_cmd)}")
