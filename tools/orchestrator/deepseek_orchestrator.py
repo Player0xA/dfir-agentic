@@ -613,6 +613,11 @@ def main() -> int:
         print("FAIL: DEEPSEEK_API_KEY (or local --api-key / --ollama) not set", file=sys.stderr)
         return 2
 
+    # Phase 50: Detect local LLM mode (gates guardrails + prompt simplification)
+    is_local_llm = bool(args.ollama or args.base_url)
+    if is_local_llm:
+        print(f"[*] Local LLM mode active: model={model}, base_url={base_url}")
+
     ai_id = str(uuid.uuid4())
     ts = _now_utc_iso()
 
@@ -741,40 +746,52 @@ def main() -> int:
                 "If the investigator corrects you, adjust your command immediately."
             )
 
-        system_prompt = (
-            "You are a HIGH-VELOCITY DFIR triage assistant. You produce NON-AUTHORITATIVE commentary.\n"
-            f"{mode_instructions}\n"
-            f"{skills_registry}\n"
-            "--- THE RALPH WIGGUM FORENSIC LOOP (V20) ---\n"
-            "1. TASK: Execute the assigned DFIR investigation autonomously by chaining appropriate forensic tools, analyzing the outputs, and documenting all findings progressively in your case notes.\n"
-            "2. PROCESS & SUCCESS CRITERIA: Make targeted, surgical queries. Use symbolic 'CASE://' URIs or 'case_ref': 'CASE' for all investigation artifacts to ensure portability.\n"
-            "3. COMPLETION PROMISE: You must not stop or ask for human intervention until you have conclusively solved the task, noted any missing evidence gaps, and written your final structured conclusions to 'root_cause_analysis.json'.\n"
-            "   * Once, and ONLY once, that file is fully written and validated, output exactly <promise>TASK_COMPLETE</promise> to terminate the loop.\n"
-            "--- THE EPISTEMIC FORENSIC PROTOCOL (V35) ---\n"
-            "1. STRUCTURED CLAIM OBJECTS: You MUST use 'dfir__update_case_notes__v1' with structured Claim Objects. Types:\n"
-            "   - OBSERVATION: Direct finding from a tool (must cite evidence_refs). No causal language.\n"
-            "   - DERIVED: Deterministic transform of observations (inputs + method). No inference.\n"
-            "   - HYPOTHESIS: Causal/inferential interpretation (e.g., lateral movement, 'likely', 'suggests').\n"
-            "   - ASSESSMENT: Weighted judgement after corroboration ('most probable root cause').\n"
-            "   - GAP: Explicitly identified evidence/logging gaps (use 'impact' field).\n"
-            "2. STRUCTURAL GUARDRAILS: Causal verbs ('caused', 'led to') or intent ('attacker', 'hide') REQUIRE labeling as HYPOTHESIS.\n"
-            "3. STATUS TRANSITIONS: Claims start 'Open'. Transition to 'Supported' or 'Confirmed' only when corroboration is complete.\n"
-            "3. DETERMINISTIC CORRELATION: You have access to 'dfir__correlate_pivot__v1'. Use this for common investigative moves (LogonId -> 4624/4634, PID -> 4688). Do NOT attempt to perform these mappings via raw reasoning.\n"
-            "4. AUTOMATED PIVOT LADDER: If a surgical search (keyword) returns 0 results, you are REQUIRED to call 'dfir__pivot_ladder__v1' in the SAME turn to generate a metadata-based recovery plan. Do NOT waste budget on repeated failed keyword searches.\n"
-            "5. TURN EFFICIENCY: 12-STEP DOOM CLOCK is active. 25 points budget (Timeline=3, Finding=2, Read=1). Turn efficiency is critical.\n"
-            "   * BATCH FINDINGS: Use 'finding_ids' (array) in 'dfir__query_findings__v1' to retrieve multiple critical findings in a SINGLE turn. Querying findings one-by-one is considered a failure in efficiency.\n"
-            "\nHard rules:\n"
-            "- CRITICAL: Do NOT invent evidence or claim certainty without explicit fields from tool returns.\n"
-            "- CRITICAL: Do NOT simulate tool outputs. You must wait for the actual tool call return.\n"
-            "- FORENSIC SOUNDNESS: You are strictly forbidden from modifying evidence paths. Use read-only tools.\n"
-            "- CONVERGENCE CONTRACT: You MUST produce a machine-readable 'root_cause_analysis.json' block in your case notes before you conclude. Reaching TASK_COMPLETE without it results in rejection.\n"
-            "   * CRITICAL: Your RCA JSON MUST include the 'summary' field (Executive summary), 'root_cause', 'confidence', 'claims' (with supporting_evidence refs), 'unknowns', and 'assessment'.\n"
-            "   * REJECTION WARNING: Omitting the 'summary' field will result in a hard validation error.\n"
-            "- MANDATED TOOL CHAINING: ALWAYS batch 'update_case_notes' with your next investigative tool call.\n"
-            "- PIVOT EXTRACTION: Every query result must produce extracted pivots.\n"
-            "- When your investigation is fully concluded, YOU MUST output the exact token: <promise>TASK_COMPLETE</promise>\n"
-            "- To use a tool, use the native tool calling capability OR output a JSON block like: ```json {\"dfir__tool_name__v1\": {\"arg\": \"val\"}} ```\n"
-        )
+        # Phase 50: Simplified system prompt for local LLMs
+        if is_local_llm:
+            system_prompt = (
+                "You are a DFIR forensic triage assistant. You analyze digital evidence using the tools provided.\n"
+                f"{mode_instructions}\n"
+                "RULES:\n"
+                "1. Use the tools provided to investigate the evidence. Do NOT invent evidence.\n"
+                "2. When done, write your conclusions using 'dfir__update_case_notes__v1'.\n"
+                "3. After writing conclusions, output exactly: <promise>TASK_COMPLETE</promise>\n"
+                "4. Use 'case_ref': 'CASE' for all evidence references.\n"
+            )
+        else:
+            system_prompt = (
+                "You are a HIGH-VELOCITY DFIR triage assistant. You produce NON-AUTHORITATIVE commentary.\n"
+                f"{mode_instructions}\n"
+                f"{skills_registry}\n"
+                "--- THE RALPH WIGGUM FORENSIC LOOP (V20) ---\n"
+                "1. TASK: Execute the assigned DFIR investigation autonomously by chaining appropriate forensic tools, analyzing the outputs, and documenting all findings progressively in your case notes.\n"
+                "2. PROCESS & SUCCESS CRITERIA: Make targeted, surgical queries. Use symbolic 'CASE://' URIs or 'case_ref': 'CASE' for all investigation artifacts to ensure portability.\n"
+                "3. COMPLETION PROMISE: You must not stop or ask for human intervention until you have conclusively solved the task, noted any missing evidence gaps, and written your final structured conclusions to 'root_cause_analysis.json'.\n"
+                "   * Once, and ONLY once, that file is fully written and validated, output exactly <promise>TASK_COMPLETE</promise> to terminate the loop.\n"
+                "--- THE EPISTEMIC FORENSIC PROTOCOL (V35) ---\n"
+                "1. STRUCTURED CLAIM OBJECTS: You MUST use 'dfir__update_case_notes__v1' with structured Claim Objects. Types:\n"
+                "   - OBSERVATION: Direct finding from a tool (must cite evidence_refs). No causal language.\n"
+                "   - DERIVED: Deterministic transform of observations (inputs + method). No inference.\n"
+                "   - HYPOTHESIS: Causal/inferential interpretation (e.g., lateral movement, 'likely', 'suggests').\n"
+                "   - ASSESSMENT: Weighted judgement after corroboration ('most probable root cause').\n"
+                "   - GAP: Explicitly identified evidence/logging gaps (use 'impact' field).\n"
+                "2. STRUCTURAL GUARDRAILS: Causal verbs ('caused', 'led to') or intent ('attacker', 'hide') REQUIRE labeling as HYPOTHESIS.\n"
+                "3. STATUS TRANSITIONS: Claims start 'Open'. Transition to 'Supported' or 'Confirmed' only when corroboration is complete.\n"
+                "3. DETERMINISTIC CORRELATION: You have access to 'dfir__correlate_pivot__v1'. Use this for common investigative moves (LogonId -> 4624/4634, PID -> 4688). Do NOT attempt to perform these mappings via raw reasoning.\n"
+                "4. AUTOMATED PIVOT LADDER: If a surgical search (keyword) returns 0 results, you are REQUIRED to call 'dfir__pivot_ladder__v1' in the SAME turn to generate a metadata-based recovery plan. Do NOT waste budget on repeated failed keyword searches.\n"
+                "5. TURN EFFICIENCY: 12-STEP DOOM CLOCK is active. 25 points budget (Timeline=3, Finding=2, Read=1). Turn efficiency is critical.\n"
+                "   * BATCH FINDINGS: Use 'finding_ids' (array) in 'dfir__query_findings__v1' to retrieve multiple critical findings in a SINGLE turn. Querying findings one-by-one is considered a failure in efficiency.\n"
+                "\nHard rules:\n"
+                "- CRITICAL: Do NOT invent evidence or claim certainty without explicit fields from tool returns.\n"
+                "- CRITICAL: Do NOT simulate tool outputs. You must wait for the actual tool call return.\n"
+                "- FORENSIC SOUNDNESS: You are strictly forbidden from modifying evidence paths. Use read-only tools.\n"
+                "- CONVERGENCE CONTRACT: You MUST produce a machine-readable 'root_cause_analysis.json' block in your case notes before you conclude. Reaching TASK_COMPLETE without it results in rejection.\n"
+                "   * CRITICAL: Your RCA JSON MUST include the 'summary' field (Executive summary), 'root_cause', 'confidence', 'claims' (with supporting_evidence refs), 'unknowns', and 'assessment'.\n"
+                "   * REJECTION WARNING: Omitting the 'summary' field will result in a hard validation error.\n"
+                "- MANDATED TOOL CHAINING: ALWAYS batch 'update_case_notes' with your next investigative tool call.\n"
+                "- PIVOT EXTRACTION: Every query result must produce extracted pivots.\n"
+                "- When your investigation is fully concluded, YOU MUST output the exact token: <promise>TASK_COMPLETE</promise>\n"
+                "- To use a tool, use the native tool calling capability OR output a JSON block like: ```json {\"dfir__tool_name__v1\": {\"arg\": \"val\"}} ```\n"
+            )
 
         # Phase 46: Memory Forensics Protocol Injection
         if is_memory_case:
@@ -786,22 +803,36 @@ def main() -> int:
                 # Try from project root
                 abs_evidence = str((PROJECT_ROOT / evidence_file).resolve())
 
-            system_prompt += (
-                "\n--- MEMORY FORENSICS PROTOCOL (V46) ---\n"
-                "This case contains a MEMORY DUMP file. Traditional EVTX/timeline tools will NOT work.\n"
-                f"EVIDENCE FILE: {abs_evidence}\n"
-                "MANDATORY WORKFLOW:\n"
-                "1. FIRST: Call 'memory_full_triage' with image_path set to the evidence file path above.\n"
-                "   This runs automated analysis (process listing, network scan, malware detection) and produces a comprehensive triage report.\n"
-                "2. THEN: Use 'memory_run_plugin' for surgical follow-up (e.g., specific Vol3 plugins like windows.pslist.PsList, windows.netscan.NetScan, windows.cmdline.CmdLine).\n"
-                "3. Use 'memory_hunt_process_anomalies' to find injected or hidden processes.\n"
-                "4. Use 'memory_find_c2' to check for C2 beacons and suspicious network connections.\n"
-                "5. Use 'memory_command_history' to extract command-line history from the dump.\n"
-                "6. For string/flag searches, use 'memory_run_plugin' with plugin='search' and params={'pattern': 'PicoCTF'}.\n"
-                "CRITICAL: The 'image_path' argument for ALL memory tools MUST be the absolute path shown above.\n"
-                "CRITICAL: Do NOT waste turns trying dfir.list_dir or dfir.query_findings — there are no EVTX logs or pre-existing findings for memory dumps.\n"
-                "CRITICAL DEFENSIVE OBSERVATION TYPING: When reporting a string or flag extracted from memory, your OBSERVATION claim MUST cite the 'offset', 'context_ascii', and 'context_hex' to provide defensible proof. Do not just say 'Flag extracted'.\n"
-            )
+            if is_local_llm:
+                # Simplified memory protocol for local LLMs
+                system_prompt += (
+                    "\n--- MEMORY FORENSICS ---\n"
+                    "This case contains a MEMORY DUMP. Do NOT use disk tools (list_dir, read_json, query_findings).\n"
+                    f"EVIDENCE FILE: {abs_evidence}\n"
+                    "STEPS:\n"
+                    "1. Call 'memory_full_triage' with image_path='{abs_evidence}'\n"
+                    "2. Review the triage output\n"
+                    "3. Use 'memory_run_plugin' with plugin='search' and params={'pattern': 'YOUR_SEARCH_TERM'} for targeted searches\n"
+                    "4. Write your findings using 'dfir__update_case_notes__v1'\n"
+                    "5. Output <promise>TASK_COMPLETE</promise>\n"
+                )
+            else:
+                system_prompt += (
+                    "\n--- MEMORY FORENSICS PROTOCOL (V46) ---\n"
+                    "This case contains a MEMORY DUMP file. Traditional EVTX/timeline tools will NOT work.\n"
+                    f"EVIDENCE FILE: {abs_evidence}\n"
+                    "MANDATORY WORKFLOW:\n"
+                    "1. FIRST: Call 'memory_full_triage' with image_path set to the evidence file path above.\n"
+                    "   This runs automated analysis (process listing, network scan, malware detection) and produces a comprehensive triage report.\n"
+                    "2. THEN: Use 'memory_run_plugin' for surgical follow-up (e.g., specific Vol3 plugins like windows.pslist.PsList, windows.netscan.NetScan, windows.cmdline.CmdLine).\n"
+                    "3. Use 'memory_hunt_process_anomalies' to find injected or hidden processes.\n"
+                    "4. Use 'memory_find_c2' to check for C2 beacons and suspicious network connections.\n"
+                    "5. Use 'memory_command_history' to extract command-line history from the dump.\n"
+                    "6. For string/flag searches, use 'memory_run_plugin' with plugin='search' and params={'pattern': 'PicoCTF'}.\n"
+                    "CRITICAL: The 'image_path' argument for ALL memory tools MUST be the absolute path shown above.\n"
+                    "CRITICAL: Do NOT waste turns trying dfir.list_dir or dfir.query_findings — there are no EVTX logs or pre-existing findings for memory dumps.\n"
+                    "CRITICAL DEFENSIVE OBSERVATION TYPING: When reporting a string or flag extracted from memory, your OBSERVATION claim MUST cite the 'offset', 'context_ascii', and 'context_hex' to provide defensible proof. Do not just say 'Flag extracted'.\n"
+                )
 
         user_task = args.task if args.task else "Begin investigation by running dfir.auto_run@1."
         
@@ -850,6 +881,38 @@ def main() -> int:
             f.write(json.dumps({"ts": ts, "event": "Investigation Started", "intake": intake_id}) + "\n")
             
         final_summary = "Investigation timed out or reached max iterations."
+
+        # Phase 50: Auto-inject first memory tool call for local LLMs
+        # Small models struggle to parse the system prompt and call the right tool,
+        # so we pre-execute memory_full_triage and inject the result into history.
+        if is_local_llm and is_memory_case:
+            print("[*] Local LLM + Memory Case detected: Auto-injecting memory_full_triage...")
+            try:
+                triage_result = mcp_tools_call("memory_full_triage", {"image_path": abs_evidence})
+                triage_json = json.dumps(triage_result)
+                # Inject as if the AI called it and got a response
+                history.append({
+                    "role": "assistant",
+                    "content": f"I will start by running a full memory triage on the evidence file: {abs_evidence}",
+                    "tool_calls": [{
+                        "id": "auto_triage_0",
+                        "type": "function",
+                        "function": {
+                            "name": sanitize_tool_name("memory_full_triage"),
+                            "arguments": json.dumps({"image_path": abs_evidence})
+                        }
+                    }]
+                })
+                history.append({
+                    "role": "tool",
+                    "tool_call_id": "auto_triage_0",
+                    "name": "memory_full_triage",
+                    "content": triage_json
+                })
+                has_fetched_evidence = True
+                print(f"[+] Auto-triage complete. Result injected into context ({len(triage_json)} chars).")
+            except Exception as e:
+                print(f"[!] Auto-triage failed: {e}. The LLM will need to call it manually.")
 
         while iteration < MAX_ITERATIONS:
             iteration += 1
@@ -982,7 +1045,8 @@ def main() -> int:
                     return {"id": c_id, "name": t_name, "error": "[First-Action Mandate]: You MUST execute a high-value evidence fetch (e.g., query_findings, query_super_timeline, or load_case_context) before further planning or note-taking."}
 
                 # Phase 50: Hard Guidance for Local LLMs on Memory Cases
-                if is_memory_case and t_name in ["dfir.list_dir@1", "dfir.read_json@1", "dfir.read_text@1", "dfir.query_findings@1", "dfir.query_super_timeline@1"]:
+                # Only active for local models — API models (DeepSeek) follow the system prompt correctly.
+                if is_local_llm and is_memory_case and t_name in ["dfir.list_dir@1", "dfir.read_json@1", "dfir.read_text@1", "dfir.query_findings@1", "dfir.query_super_timeline@1"]:
                     return {"id": c_id, "name": t_name, "error": f"[Memory Forensics Guardrail]: You are analyzing a MEMORY dump. Standard disk tools like '{t_name}' DO NOT WORK. You MUST use 'memory_full_triage' to get started."}
 
                 # Note limit policy & V15 Epistemic Validation
