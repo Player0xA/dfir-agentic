@@ -1,0 +1,30 @@
+{
+  "jsonrpc": "2.0",
+  "id": 2,
+  "result": {
+    "call_id": "63b9bff3-443e-4435-b20c-1846a4bb7b6c",
+    "result": {
+      "path": "CASE://intake.json",
+      "json_pointer": null,
+      "value": {
+        "intake_id": "54c69a3c-1ba6-44c2-9ece-52363fe1d1ff",
+        "timestamp_utc": "2026-03-03T22:49:07Z",
+        "inputs": {
+          "paths": [
+            "/home/nevermore/cases/intake/evtx/Logs"
+          ]
+        },
+        "classification": {
+          "kind": "windows_evtx_dir",
+          "confidence": "high",
+          "recommended_pipeline": "chainsaw_evtx"
+        },
+        "signals": [
+          "Logs:dir_contains_evtx_count:335",
+          "Logs:dir_contains_evt_count:0",
+          "Logs:security_evtx_present"
+        ]
+      }
+    }
+  }
+}

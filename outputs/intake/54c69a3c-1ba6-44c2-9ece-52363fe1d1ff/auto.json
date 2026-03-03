@@ -1,0 +1,29 @@
+{
+  "auto_id": "b47cdd75-dc2d-4a80-b5fc-d1142305a86f",
+  "timestamp_utc": "2026-03-03T22:49:07Z",
+  "intake": {
+    "intake_id": "54c69a3c-1ba6-44c2-9ece-52363fe1d1ff",
+    "intake_json": "outputs/intake/54c69a3c-1ba6-44c2-9ece-52363fe1d1ff/intake.json"
+  },
+  "selection": {
+    "selected_agent": "windows_evtx_agent",
+    "selected_playbook": "initial_access_v1",
+    "kind": "windows_evtx_dir"
+  },
+  "enforcement": {
+    "allowed": true,
+    "action": "dispatch_pipeline",
+    "details": "ALLOW"
+  },
+  "dispatch": {
+    "status": "ok",
+    "dispatch_json": "outputs/intake/54c69a3c-1ba6-44c2-9ece-52363fe1d1ff/dispatch.json",
+    "run_id": "f5d1a29d-2446-4a73-a0af-1e1bcc4b41b2",
+    "manifest_path": "outputs/jsonl/chainsaw_evtx/f5d1a29d-2446-4a73-a0af-1e1bcc4b41b2/manifest.json"
+  },
+  "stages": {
+    "plaso": "ok",
+    "enrichment": "ok",
+    "merge": "ok"
+  }
+}

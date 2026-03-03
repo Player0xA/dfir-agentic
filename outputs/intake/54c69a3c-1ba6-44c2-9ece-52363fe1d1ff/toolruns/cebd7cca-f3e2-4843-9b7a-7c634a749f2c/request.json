@@ -1,0 +1,65 @@
+{
+  "timestamp_utc": "2026-03-03T22:50:29Z",
+  "rpc": {
+    "jsonrpc": "2.0",
+    "id": 7,
+    "method": "tools/call",
+    "params": {
+      "name": "dfir.update_case_notes@1",
+      "arguments": {
+        "claims": [
+          {
+            "claim_id": "obs-001",
+            "type": "OBSERVATION",
+            "statement": "Security audit logs were cleared on 2026-01-14T10:49:44.557632Z by user jasonr (SID: S-1-5-21-1841095656-2843128008-524542198-2677) from domain MILLSINC using process ID 5760",
+            "evidence_refs": [
+              "F-f5d1a29d-000006"
+            ],
+            "confidence": "High",
+            "status": "Open"
+          },
+          {
+            "claim_id": "obs-002",
+            "type": "OBSERVATION",
+            "statement": "System logs were cleared on 2026-01-14T10:49:44.557632Z by user jasonr affecting both System and Windows PowerShell logs",
+            "evidence_refs": [
+              "F-f5d1a29d-000004",
+              "F-f5d1a29d-000005"
+            ],
+            "confidence": "High",
+            "status": "Open"
+          },
+          {
+            "claim_id": "obs-003",
+            "type": "OBSERVATION",
+            "statement": "Multiple external remote SMB logons from public IP 195.101.67.3 (source computer DCFS) targeting accounts TaskManager (SID: S-1-5-21-1841095656-2843128008-524542198-2921) and Administrator (SID: S-1-5-21-1841095656-2843128008-524542198-500)",
+            "evidence_refs": [
+              "F-893d610c-bb8e-4257-8ed7-c1bd80ae296d-000127",
+              "F-893d610c-bb8e-4257-8ed7-c1bd80ae296d-000131",
+              "F-893d610c-bb8e-4257-8ed7-c1bd80ae296d-000140"
+            ],
+            "confidence": "High",
+            "status": "Open"
+          },
+          {
+            "claim_id": "hyp-001",
+            "type": "HYPOTHESIS",
+            "statement": "The log clearing activity by jasonr at 10:49:44Z was likely an attempt to cover tracks after or during external SMB logon attempts from IP 195.101.67.3 starting at 11:41:03Z",
+            "evidence_refs": [
+              "F-f5d1a29d-000006",
+              "F-893d610c-bb8e-4257-8ed7-c1bd80ae296d-000127"
+            ],
+            "confidence": "Medium",
+            "status": "Open"
+          }
+        ],
+        "next_steps": [
+          "Investigate process ID 5760 associated with log clearing",
+          "Examine events around 2026-01-14T10:49:44Z to understand context of log clearing",
+          "Investigate the external IP 195.101.67.3 for threat intelligence",
+          "Check for other suspicious activities around the same timeframe"
+        ]
+      }
+    }
+  }
+}

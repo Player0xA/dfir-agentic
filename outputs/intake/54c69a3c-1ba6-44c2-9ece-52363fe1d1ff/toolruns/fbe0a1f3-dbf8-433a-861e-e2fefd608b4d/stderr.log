@@ -1,0 +1,5 @@
+2026-03-03 22:50:36,080 [WARNING] (MainProcess) PID:2176 <expressions> Implicit event filter date and time conversion is deprecated use the DATETIME() value type indicator instead
+2026-03-03 22:50:36,080 [WARNING] (MainProcess) PID:2176 <expressions> Implicit event filter date and time conversion is deprecated use the DATETIME() value type indicator instead
+WARNING: the version of plaso you are using is more than 6 months old. We
+strongly recommend to update it.
+

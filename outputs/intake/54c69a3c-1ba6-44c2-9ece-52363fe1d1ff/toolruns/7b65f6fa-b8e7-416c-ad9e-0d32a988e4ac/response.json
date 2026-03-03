@@ -1,0 +1,11 @@
+{
+  "jsonrpc": "2.0",
+  "id": 10,
+  "result": {
+    "call_id": "7b65f6fa-b8e7-416c-ad9e-0d32a988e4ac",
+    "result": {
+      "path": "/home/nevermore/dfir-agentic/outputs/intake/54c69a3c-1ba6-44c2-9ece-52363fe1d1ff/progress.md",
+      "status": "updated"
+    }
+  }
+}

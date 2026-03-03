@@ -1,0 +1,13 @@
+{"ts": "2026-03-03T22:49:49Z", "event": "Investigation Started", "intake": "54c69a3c-1ba6-44c2-9ece-52363fe1d1ff"}
+{"ts": "2026-03-03T22:49:55Z", "step": "Iteration 1", "tool": "dfir.load_case_context@1", "result_preview": "SUCCESS"}
+{"ts": "2026-03-03T22:50:01Z", "step": "Iteration 2", "tool": "dfir.query_findings@1", "result_preview": "SUCCESS"}
+{"ts": "2026-03-03T22:50:06Z", "step": "Iteration 3", "tool": "dfir.query_findings@1", "result_preview": "SUCCESS"}
+{"ts": "2026-03-03T22:50:29Z", "step": "Iteration 4", "tool": "dfir.update_case_notes@1", "result_preview": "SUCCESS"}
+{"ts": "2026-03-03T22:50:39Z", "step": "Iteration 5", "tool": "dfir.query_super_timeline@1", "result_preview": "SUCCESS"}
+{"ts": "2026-03-03T22:50:49Z", "step": "Iteration 6", "tool": "dfir.query_super_timeline@1", "result_preview": "SUCCESS"}
+{"ts": "2026-03-03T22:51:06Z", "step": "Iteration 7", "tool": "evtx_search", "result_preview": "SUCCESS"}
+{"ts": "2026-03-03T22:51:24Z", "step": "Iteration 8", "tool": "evtx_search", "result_preview": "SUCCESS"}
+{"ts": "2026-03-03T22:51:45Z", "step": "Iteration 9", "tool": "evtx_search", "result_preview": "SUCCESS"}
+{"ts": "2026-03-03T22:51:57Z", "step": "Iteration 10", "tool": "evtx_search", "result_preview": "SUCCESS"}
+{"ts": "2026-03-03T22:52:09Z", "step": "Iteration 11", "tool": "evtx_search", "result_preview": "SUCCESS"}
+{"ts": "2026-03-03T22:52:35Z", "step": "Iteration 12", "tool": "dfir.update_case_notes@1", "result_preview": "SUCCESS"}

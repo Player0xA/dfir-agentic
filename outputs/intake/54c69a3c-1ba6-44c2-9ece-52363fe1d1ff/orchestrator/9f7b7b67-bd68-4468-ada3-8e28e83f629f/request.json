@@ -1,0 +1,2431 @@
+{
+  "timestamp": "2026-03-03T22:49:49Z",
+  "system_prompt": "You are a HIGH-VELOCITY DFIR triage assistant. You produce NON-AUTHORITATIVE commentary.\nYou are an autonomous DFIR agent. You will not receive human feedback. You must execute this investigation end-to-end. If a tool command fails, read the error message, consult your loaded Skills, and retry with corrected syntax. When you have found the root cause, write your final findings to progress.md and output exactly <promise>TASK_COMPLETE</promise> to conclude the investigation.\n\nAVAILABLE SKILLS (Progressive Disclosure):\n- parsing-registry (v.bdeb0558): Use this skill when investigating persistence mechanisms, user activity, or system configuration within Windows Registry hives.\n- analyzing-timeline (v.7d7d2117): Use this skill when you need to query the Plaso Super Timeline to correlate file system events, find file creation times, or verify execution artifacts within a specific time window.\n- performing-memory-forensics (v.ad513021): Use this skill when investigating active memory dumps (RAM/vmem), detecting injected code, analyzing running processes, or finding hidden network connections.\nTo load the full instructions for a skill (or its supporting files), use dfir__load_skill__v1(skill_name='name', file_name=None).\n\n--- THE RALPH WIGGUM FORENSIC LOOP (V20) ---\n1. TASK: Execute the assigned DFIR investigation autonomously by chaining appropriate forensic tools, analyzing the outputs, and documenting all findings progressively in your case notes.\n2. PROCESS & SUCCESS CRITERIA: Make targeted, surgical queries. Use symbolic 'CASE://' URIs or 'case_ref': 'CASE' for all investigation artifacts to ensure portability.\n3. COMPLETION PROMISE: You must not stop or ask for human intervention until you have conclusively solved the task, noted any missing evidence gaps, and written your final structured conclusions to 'root_cause_analysis.json'.\n   * Once, and ONLY once, that file is fully written and validated, output exactly <promise>TASK_COMPLETE</promise> to terminate the loop.\n--- THE EPISTEMIC FORENSIC PROTOCOL (V35) ---\n1. STRUCTURED CLAIM OBJECTS: You MUST use 'dfir__update_case_notes__v1' with structured Claim Objects. Types:\n   - OBSERVATION: Direct finding from a tool (must cite evidence_refs). No causal language.\n   - DERIVED: Deterministic transform of observations (inputs + method). No inference.\n   - HYPOTHESIS: Causal/inferential interpretation (e.g., lateral movement, 'likely', 'suggests').\n   - ASSESSMENT: Weighted judgement after corroboration ('most probable root cause').\n   - GAP: Explicitly identified evidence/logging gaps (use 'impact' field).\n2. STRUCTURAL GUARDRAILS: Causal verbs ('caused', 'led to') or intent ('attacker', 'hide') REQUIRE labeling as HYPOTHESIS.\n3. STATUS TRANSITIONS: Claims start 'Open'. Transition to 'Supported' or 'Confirmed' only when corroboration is complete.\n3. DETERMINISTIC CORRELATION: You have access to 'dfir__correlate_pivot__v1'. Use this for common investigative moves (LogonId -> 4624/4634, PID -> 4688). Do NOT attempt to perform these mappings via raw reasoning.\n4. AUTOMATED PIVOT LADDER: If a surgical search (keyword) returns 0 results, you are REQUIRED to call 'dfir__pivot_ladder__v1' in the SAME turn to generate a metadata-based recovery plan. Do NOT waste budget on repeated failed keyword searches.\n5. TURN EFFICIENCY: 12-STEP DOOM CLOCK is active. 25 points budget (Timeline=3, Finding=2, Read=1). Turn efficiency is critical.\n   * BATCH FINDINGS: Use 'finding_ids' (array) in 'dfir__query_findings__v1' to retrieve multiple critical findings in a SINGLE turn. Querying findings one-by-one is considered a failure in efficiency.\n\nHard rules:\n- CRITICAL: Do NOT invent evidence or claim certainty without explicit fields from tool returns.\n- CRITICAL: Do NOT simulate tool outputs. You must wait for the actual tool call return.\n- FORENSIC SOUNDNESS: You are strictly forbidden from modifying evidence paths. Use read-only tools.\n- CONVERGENCE CONTRACT: You MUST produce a machine-readable 'root_cause_analysis.json' block in your case notes before you conclude. Reaching TASK_COMPLETE without it results in rejection.\n   * CRITICAL: Your RCA JSON MUST include the 'summary' field (Executive summary), 'root_cause', 'confidence', 'claims' (with supporting_evidence refs), 'unknowns', and 'assessment'.\n   * REJECTION WARNING: Omitting the 'summary' field will result in a hard validation error.\n- MANDATED TOOL CHAINING: ALWAYS batch 'update_case_notes' with your next investigative tool call.\n- PIVOT EXTRACTION: Every query result must produce extracted pivots.\n- When your investigation is fully concluded, YOU MUST output the exact token: <promise>TASK_COMPLETE</promise>\n- To use a tool, use the native tool calling capability OR output a JSON block like: ```json {\"dfir__tool_name__v1\": {\"arg\": \"val\"}} ```\n\n--- WINDOWS FORENSICS PROTOCOL (V51) ---\nYou have access to the winforensics-mcp toolkit. Follow this orchestrator-first approach to save budget:\n1. For finding IOCs across all artifacts: use 'hunt_ioc'.\n2. To prove file execution: use 'investigate_execution' (checks Prefetch, Amcache, SRUM).\n3. To trace user behavior: use 'investigate_user_activity'.\n4. To build a unified timeline: use 'build_timeline'.\nOnly fall back to low-level parsers (evtx_search, registry_get_key) if the high-level orchestrators don't provide sufficient detail.\n",
+  "user_prompt": "Intake ID: 54c69a3c-1ba6-44c2-9ece-52363fe1d1ff\nIntake Path: outputs/intake/54c69a3c-1ba6-44c2-9ece-52363fe1d1ff/intake.json\nTask: whats suspicious about this?\n\n[KNOWLEDGE] Primary Evidence References (Case Envelope):\n- Timeline (Plaso): CASE://54c69a3c-1ba6-44c2-9ece-52363fe1d1ff.plaso\n- Auto Enrichment: CASE://auto.json\n- Findings: CASE://case_findings.json\n- Case Manifest: CASE://case_manifest.json\n- Summary: CASE://case_summary.md\n- Intake Metadata: CASE://intake.json\n- Timeline (Super): CASE://54c69a3c-1ba6-44c2-9ece-52363fe1d1ff.plaso\n- Project Memory: CASE://CLAUDE.md\n\n[CONTEXT] Auto-Detected Intake Payload:\n```json\n{\n  \"intake_id\": \"54c69a3c-1ba6-44c2-9ece-52363fe1d1ff\",\n  \"timestamp_utc\": \"2026-03-03T22:49:07Z\",\n  \"inputs\": {\n    \"paths\": [\n      \"/home/nevermore/cases/intake/evtx/Logs\"\n    ]\n  },\n  \"classification\": {\n    \"kind\": \"windows_evtx_dir\",\n    \"confidence\": \"high\",\n    \"recommended_pipeline\": \"chainsaw_evtx\"\n  },\n  \"signals\": [\n    \"Logs:dir_contains_evtx_count:335\",\n    \"Logs:dir_contains_evt_count:0\",\n    \"Logs:security_evtx_present\"\n  ]\n}\n```\n\n[CONTEXT] Case Output Directory Listing (CASE://):\n- 54c69a3c-1ba6-44c2-9ece-52363fe1d1ff-plaso\n- 54c69a3c-1ba6-44c2-9ece-52363fe1d1ff.plaso\n- auto.json\n- case_findings.json\n- case_manifest.json\n- case_summary.md\n- dispatch.json\n- enrichment.json\n- enrichment_plan.json\n- intake.json\n- toolruns\n\n[CONTEXT] SITUATIONAL AWARENESS MAP (case_summary.md):\n```markdown\n# Case Investigation Summary: 54c69a3c-1ba6-44c2-9ece-52363fe1d1ff\n**Timestamp**: 2026-03-03T22:49:48Z\n\n## Situational Awareness (Metrics)\n- **CRITICAL**: 1\n- **HIGH**: 18\n- **LOW**: 304\n- **INFORMATIONAL**: 757\n\n## Top 15 High-Severity Findings (The Map)\nPrimary Findings Artifact: `/home/nevermore/dfir-agentic/outputs/intake/54c69a3c-1ba6-44c2-9ece-52363fe1d1ff/case_findings.json`\nUse `dfir.query_findings@1` with the `finding_id` to surgically extract full evidence.\n\n| Severity | Tool | Rule | Finding ID |\n| :--- | :--- | :--- | :--- |\n| CRITICAL | chainsaw | RAWREF:chainsaw.evtx.jsonl:line:6 | `F-f5d1a29d-000006` |\n| HIGH | chainsaw | RAWREF:chainsaw.evtx.jsonl:line:4 | `F-f5d1a29d-000004` |\n| HIGH | chainsaw | RAWREF:chainsaw.evtx.jsonl:line:5 | `F-f5d1a29d-000005` |\n| HIGH | hayabusa | f481a1f3-969e-4187-b3a5-b47c272bfebd | `F-893d610c-bb8e-4257-8ed7-c1bd80ae296d-000001` |\n| HIGH | hayabusa | f481a1f3-969e-4187-b3a5-b47c272bfebd | `F-893d610c-bb8e-4257-8ed7-c1bd80ae296d-000002` |\n| HIGH | hayabusa | c2f690ac-53f8-4745-8cfe-7127dda28c74 | `F-893d610c-bb8e-4257-8ed7-c1bd80ae296d-000003` |\n| HIGH | hayabusa | 5c67a566-7829-eb05-4a1f-0eb292ef993f | `F-893d610c-bb8e-4257-8ed7-c1bd80ae296d-000127` |\n| HIGH | hayabusa | 5c67a566-7829-eb05-4a1f-0eb292ef993f | `F-893d610c-bb8e-4257-8ed7-c1bd80ae296d-000131` |\n| HIGH | hayabusa | 5c67a566-7829-eb05-4a1f-0eb292ef993f | `F-893d610c-bb8e-4257-8ed7-c1bd80ae296d-000140` |\n| HIGH | hayabusa | 5c67a566-7829-eb05-4a1f-0eb292ef993f | `F-893d610c-bb8e-4257-8ed7-c1bd80ae296d-000181` |\n| HIGH | hayabusa | 5c67a566-7829-eb05-4a1f-0eb292ef993f | `F-893d610c-bb8e-4257-8ed7-c1bd80ae296d-000213` |\n| HIGH | hayabusa | 5c67a566-7829-eb05-4a1f-0eb292ef993f | `F-893d610c-bb8e-4257-8ed7-c1bd80ae296d-000287` |\n| HIGH | hayabusa | 5c67a566-7829-eb05-4a1f-0eb292ef993f | `F-893d610c-bb8e-4257-8ed7-c1bd80ae296d-000312` |\n| HIGH | hayabusa | 5c67a566-7829-eb05-4a1f-0eb292ef993f | `F-893d610c-bb8e-4257-8ed7-c1bd80ae296d-000336` |\n| HIGH | hayabusa | 5c67a566-7829-eb05-4a1f-0eb292ef993f | `F-893d610c-bb8e-4257-8ed7-c1bd80ae296d-000363` |\n\n> [!IMPORTANT]\n> Treat large tool outputs as data sources, not context. Do NOT read `case_findings.json` directly if it exceeds 100KB.\n```\n\n[GROUNDING] Primary Critical Finding (Investigation Focus):\n```json\n{\n  \"finding_id\": \"F-f5d1a29d-000006\",\n  \"category\": \"unknown\",\n  \"summary\": \"Security Audit Logs Cleared\",\n  \"confidence\": null,\n  \"severity\": \"critical\",\n  \"source\": {\n    \"tool\": \"chainsaw\",\n    \"rule_id\": \"RAWREF:chainsaw.evtx.jsonl:line:6\",\n    \"rule_title\": \"Security Audit Logs Cleared\"\n  },\n  \"evidence\": {\n    \"event_refs\": [\n      \"chainsaw.evtx.jsonl:line:6\"\n    ],\n    \"artifacts\": [],\n    \"timestamps\": {\n      \"first_seen\": \"2026-01-14T10:49:44.557632+00:00\",\n      \"last_seen\": \"2026-01-14T10:49:44.557632+00:00\"\n    },\n    \"raw\": {\n      \"group\": \"Log Tampering\",\n      \"kind\": \"individual\",\n      \"document\": {\n        \"kind\": \"evtx\",\n        \"path\": \"/home/nevermore/cases/intake/evtx/Logs/Security.evtx\",\n        \"data\": {\n          \"Event\": {\n            \"UserData\": {\n              \"LogFileCleared\": {\n                \"ClientProcessStartKey\": 7599824371189413,\n                \"SubjectDomainName\": \"MILLSINC\",\n                \"SubjectUserName\": \"jasonr\",\n                \"SubjectLogonId\": \"0x9d397\",\n                \"SubjectUserSid\": \"S-1-5-21-1841095656-2843128008-524542198-2677\",\n                \"ClientProcessId\": 5760\n              },\n              \"LogFileCleared_attributes\": {\n                \"xmlns\": \"http://manifests.microsoft.com/win/2004/08/windows/eventlog\"\n              }\n            },\n            \"System\": {\n              \"EventID\": 1102,\n              \"Level\": 4,\n              \"Provider_attributes\": {\n                \"Name\": \"Microsoft-Windows-Eventlog\",\n                \"Guid\": \"{fc65ddd8-d6ef-4962-83d5-6e5cfe9ce148}\"\n              },\n              \"Version\": 1,\n              \"Task\": 104,\n              \"Opcode\": 0,\n              \"TimeCreated_attributes\": {\n                \"SystemTime\": \"2026-01-14T10:49:44.557632Z\"\n              },\n              \"Execution_attributes\": {\n                \"ProcessID\": 1376,\n                \"ThreadID\": 9100\n              },\n              \"Correlation\": null,\n              \"Keywords\": \"0x4020000000000000\",\n              \"EventRecordID\": 935131,\n              \"Channel\": \"Security\",\n              \"Computer\": \"SQLSERVER.Mills.local\",\n              \"Security\": null\n            }\n          },\n          \"Event_attributes\": {\n            \"xmlns\": \"http://schemas.microsoft.com/win/2004/08/events/event\"\n          }\n        }\n      },\n      \"name\": \"Security Audit Logs Cleared\",\n      \"timestamp\": \"2026-01-14T10:49:44.557632+00:00\",\n      \"authors\": [\n        \"FranticTyping\"\n      ],\n      \"level\": \"critical\",\n      \"source\": \"chainsaw\",\n      \"status\": \"stable\"\n    }\n  },\n  \"raw_refs\": [\n    \"chainsaw.evtx.jsonl:line:6\"\n  ],\n  \"provenance\": {\n    \"origin\": \"baseline\",\n    \"manifest_path\": \"outputs/jsonl/chainsaw_evtx/f5d1a29d-2446-4a73-a0af-1e1bcc4b41b2/manifest.json\"\n  }\n}\n```",
+  "mcp_tools_exposed": [
+    {
+      "name": "dfir.identify_evidence@1",
+      "description": "Deterministically identify evidence and write outputs/intake/<id>/intake.json",
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "path"
+        ],
+        "properties": {
+          "path": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    {
+      "name": "dfir.auto_run@1",
+      "description": "Run autonomous local protocol (select_agent -> enforce -> dispatch -> validate) and write auto.json next to intake.json",
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "intake_json"
+        ],
+        "properties": {
+          "intake_json": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    {
+      "name": "dfir.read_json@1",
+      "description": "Read a JSON file. Use 'evidence_ref' for investigation artifacts or 'path' for repo assets.",
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "evidence_ref": {
+            "type": "object",
+            "properties": {
+              "case_ref": {
+                "type": "string",
+                "description": "Path to case.json or 'CASE' for active case"
+              },
+              "evidence": {
+                "type": "object",
+                "properties": {
+                  "root": {
+                    "type": "string",
+                    "enum": [
+                      "staged",
+                      "original",
+                      "case"
+                    ],
+                    "default": "staged"
+                  },
+                  "relpath": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "relpath"
+                ]
+              }
+            },
+            "required": [
+              "case_ref",
+              "evidence"
+            ]
+          },
+          "path": {
+            "type": "string",
+            "description": "Legacy/Internal fallback path"
+          },
+          "json_pointer": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "max_bytes": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 100000
+          }
+        }
+      }
+    },
+    {
+      "name": "dfir.read_text@1",
+      "description": "Read a text, log, or markdown file. Use 'evidence_ref' for investigation artifacts or 'path' for repo assets.",
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "evidence_ref": {
+            "type": "object",
+            "required": [
+              "case_ref",
+              "evidence"
+            ],
+            "properties": {
+              "case_ref": {
+                "type": "string",
+                "description": "Path to case.json or 'CASE' for active case"
+              },
+              "evidence": {
+                "type": "object",
+                "required": [
+                  "relpath"
+                ],
+                "properties": {
+                  "root": {
+                    "type": "string",
+                    "enum": [
+                      "staged",
+                      "original",
+                      "case"
+                    ],
+                    "default": "staged"
+                  },
+                  "relpath": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "path": {
+            "type": "string",
+            "description": "Legacy/Internal fallback path"
+          },
+          "max_bytes": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 100000
+          }
+        }
+      }
+    },
+    {
+      "name": "dfir.query_findings@1",
+      "description": "Surgically query the monolithic case_findings.json file.",
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "evidence_ref"
+        ],
+        "properties": {
+          "evidence_ref": {
+            "type": "object",
+            "required": [
+              "case_ref",
+              "evidence"
+            ],
+            "properties": {
+              "case_ref": {
+                "type": "string",
+                "description": "Path to case.json or 'CASE' for active case"
+              },
+              "evidence": {
+                "type": "object",
+                "required": [
+                  "relpath"
+                ],
+                "properties": {
+                  "root": {
+                    "type": "string",
+                    "enum": [
+                      "staged",
+                      "original",
+                      "case"
+                    ],
+                    "default": "staged"
+                  },
+                  "relpath": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "finding_id": {
+            "type": "string"
+          },
+          "finding_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "severity": {
+            "type": "string",
+            "enum": [
+              "critical",
+              "high",
+              "medium",
+              "low",
+              "informational"
+            ]
+          },
+          "mitre_tactic": {
+            "type": "string"
+          },
+          "limit": {
+            "type": "integer",
+            "default": 10
+          }
+        }
+      }
+    },
+    {
+      "name": "dfir.hayabusa_csv_timeline@1",
+      "description": "Run Hayabusa csv-timeline deterministically on an EVTX directory.",
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "evidence_ref"
+        ],
+        "properties": {
+          "evidence_ref": {
+            "type": "object",
+            "required": [
+              "case_ref",
+              "evidence"
+            ],
+            "properties": {
+              "case_ref": {
+                "type": "string",
+                "description": "Path to case.json or 'CASE' for active case"
+              },
+              "evidence": {
+                "type": "object",
+                "required": [
+                  "relpath"
+                ],
+                "properties": {
+                  "root": {
+                    "type": "string",
+                    "enum": [
+                      "staged",
+                      "original",
+                      "case"
+                    ],
+                    "default": "staged"
+                  },
+                  "relpath": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "dfir.list_dir@1",
+      "description": "List directory entries. Use 'evidence_ref' for investigation artifacts or 'path' for repo assets.",
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "evidence_ref": {
+            "type": "object",
+            "required": [
+              "case_ref",
+              "evidence"
+            ],
+            "properties": {
+              "case_ref": {
+                "type": "string",
+                "description": "Path to case.json or 'CASE' for active case"
+              },
+              "evidence": {
+                "type": "object",
+                "required": [
+                  "relpath"
+                ],
+                "properties": {
+                  "root": {
+                    "type": "string",
+                    "enum": [
+                      "staged",
+                      "original",
+                      "case"
+                    ],
+                    "default": "staged"
+                  },
+                  "relpath": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "path": {
+            "type": "string",
+            "description": "Legacy/Internal fallback path"
+          }
+        }
+      }
+    },
+    {
+      "name": "dfir.query_super_timeline@1",
+      "description": "Query a Plaso .plaso storage file with a structured filter.",
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "evidence_ref",
+          "start_time",
+          "end_time"
+        ],
+        "properties": {
+          "evidence_ref": {
+            "type": "object",
+            "required": [
+              "case_ref",
+              "evidence"
+            ],
+            "properties": {
+              "case_ref": {
+                "type": "string",
+                "description": "Path to case.json or 'CASE' for active case"
+              },
+              "evidence": {
+                "type": "object",
+                "required": [
+                  "relpath"
+                ],
+                "properties": {
+                  "root": {
+                    "type": "string",
+                    "enum": [
+                      "staged",
+                      "original",
+                      "case"
+                    ],
+                    "default": "staged"
+                  },
+                  "relpath": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "start_time": {
+            "type": "string"
+          },
+          "end_time": {
+            "type": "string"
+          },
+          "search_term": {
+            "type": "string"
+          },
+          "event_ids": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "dfir.load_skill@1",
+      "description": "Load detailed instructions for a specific forensic skill. Returns markdown.",
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "skill_name"
+        ],
+        "properties": {
+          "skill_name": {
+            "type": "string",
+            "minLength": 1,
+            "description": "e.g., 'analyzing-timeline'"
+          },
+          "file_name": {
+            "type": "string",
+            "description": "Optional specific file to load (e.g., 'psort_cheatsheet.md')"
+          }
+        }
+      }
+    },
+    {
+      "name": "dfir.update_case_notes@1",
+      "description": "Log structured investigation claims. Every statement must be an OBSERVATION, DERIVED, HYPOTHESIS, ASSESSMENT, GAP, or UNKNOWN.",
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "claims",
+          "next_steps"
+        ],
+        "properties": {
+          "claims": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "claim_id": {
+                  "type": "string"
+                },
+                "type": {
+                  "type": "string",
+                  "enum": [
+                    "OBSERVATION",
+                    "DERIVED",
+                    "HYPOTHESIS",
+                    "ASSESSMENT",
+                    "GAP",
+                    "UNKNOWN"
+                  ]
+                },
+                "statement": {
+                  "type": "string"
+                },
+                "evidence_refs": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "confidence": {
+                  "type": "string",
+                  "enum": [
+                    "High",
+                    "Medium",
+                    "Low",
+                    "N/A"
+                  ]
+                },
+                "impact": {
+                  "type": "string",
+                  "enum": [
+                    "Low",
+                    "Medium",
+                    "High"
+                  ],
+                  "description": "Used specifically for GAP types."
+                },
+                "validation_plan": {
+                  "type": "string"
+                },
+                "status": {
+                  "type": "string",
+                  "enum": [
+                    "Open",
+                    "Supported",
+                    "Confirmed",
+                    "Refuted"
+                  ]
+                }
+              },
+              "required": [
+                "claim_id",
+                "type",
+                "statement",
+                "status"
+              ]
+            }
+          },
+          "next_steps": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "dfir.correlate_pivot@1",
+      "description": "Deterministic correlation module: LogonId -> Auth Logs, PID -> Process Creation, etc.",
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "pivot_type",
+          "pivot_value"
+        ],
+        "properties": {
+          "pivot_type": {
+            "type": "string",
+            "enum": [
+              "LogonId",
+              "PID",
+              "SrcIP"
+            ]
+          },
+          "pivot_value": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    {
+      "name": "dfir.pivot_ladder@1",
+      "description": "Automated fallback engine: if a keyword search fails, generate a metadata-based search plan.",
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "failed_search_term",
+          "plaso_file"
+        ],
+        "properties": {
+          "failed_search_term": {
+            "type": "string"
+          },
+          "plaso_file": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    {
+      "name": "dfir.load_case_context@1",
+      "description": "Load the deterministic case context bundle: intake summary, top findings, and pivot pointers.",
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "case_dir"
+        ],
+        "properties": {
+          "case_dir": {
+            "type": "string",
+            "description": "The path to the case directory or 'CASE'"
+          }
+        }
+      }
+    },
+    {
+      "name": "dfir.build_query_plan@1",
+      "description": "Formalize an investigation query plan. Outputs a plan object.",
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "primary_window",
+          "pivots_to_search"
+        ],
+        "properties": {
+          "primary_window": {
+            "type": "string",
+            "description": "e.g., '2026-02-11T20:00:00Z to 24:00:00Z'"
+          },
+          "secondary_window": {
+            "type": "string"
+          },
+          "pivots_to_search": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "max_queries_budget": {
+            "type": "integer"
+          }
+        }
+      }
+    },
+    {
+      "name": "dfir.evtx_search@1",
+      "description": "Surgical EVTX search: query a specific .evtx file for Event IDs or keywords.",
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "evidence_ref"
+        ],
+        "properties": {
+          "evidence_ref": {
+            "type": "object",
+            "required": [
+              "case_ref",
+              "evidence"
+            ],
+            "properties": {
+              "case_ref": {
+                "type": "string",
+                "description": "Absolute path to case.json"
+              },
+              "evidence": {
+                "type": "object",
+                "required": [
+                  "relpath"
+                ],
+                "properties": {
+                  "root": {
+                    "type": "string",
+                    "enum": [
+                      "staged",
+                      "original",
+                      "case"
+                    ],
+                    "default": "staged"
+                  },
+                  "relpath": {
+                    "type": "string",
+                    "description": "Relative path within the root (e.g. evtx/Logs/Security.evtx)"
+                  }
+                }
+              }
+            }
+          },
+          "event_ids": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            }
+          },
+          "contains": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "limit": {
+            "type": "integer",
+            "default": 20
+          }
+        }
+      }
+    },
+    {
+      "name": "dfir.registry_get_persistence@1",
+      "description": "Extract common persistence keys from a registry hive.",
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "evidence_ref"
+        ],
+        "properties": {
+          "evidence_ref": {
+            "type": "object",
+            "required": [
+              "case_ref",
+              "evidence"
+            ],
+            "properties": {
+              "case_ref": {
+                "type": "string"
+              },
+              "evidence": {
+                "type": "object",
+                "required": [
+                  "relpath"
+                ],
+                "properties": {
+                  "root": {
+                    "type": "string",
+                    "enum": [
+                      "staged",
+                      "original",
+                      "case"
+                    ],
+                    "default": "staged"
+                  },
+                  "relpath": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "evtx_list_files",
+      "description": "List all EVTX (Windows Event Log) files in a directory.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "directory": {
+            "type": "string",
+            "description": "Directory path to search"
+          },
+          "recursive": {
+            "type": "boolean",
+            "default": true
+          }
+        },
+        "required": [
+          "directory"
+        ]
+      }
+    },
+    {
+      "name": "evtx_get_stats",
+      "description": "Get statistics about an EVTX file: event counts, time range, Event ID distribution.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "evtx_path": {
+            "type": "string",
+            "description": "Path to EVTX file"
+          }
+        },
+        "required": [
+          "evtx_path"
+        ]
+      }
+    },
+    {
+      "name": "evtx_search",
+      "description": "Search events from EVTX file. Filter by time, Event ID, keywords, provider. Supports pagination with offset.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "evtx_path": {
+            "type": "string"
+          },
+          "event_ids": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            }
+          },
+          "start_time": {
+            "type": "string",
+            "description": "ISO format datetime"
+          },
+          "end_time": {
+            "type": "string"
+          },
+          "contains": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "not_contains": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "provider": {
+            "type": "string"
+          },
+          "limit": {
+            "type": "integer",
+            "default": 40,
+            "description": "Max results to return (default 50)"
+          },
+          "offset": {
+            "type": "integer",
+            "default": 0,
+            "description": "Skip first N matches for pagination"
+          }
+        },
+        "required": [
+          "evtx_path"
+        ]
+      }
+    },
+    {
+      "name": "evtx_security_search",
+      "description": "Search for security events by type: logon, failed_logon, process_creation, etc. Supports pagination with offset.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "evtx_path": {
+            "type": "string"
+          },
+          "event_type": {
+            "type": "string",
+            "enum": [
+              "logon",
+              "failed_logon",
+              "logoff",
+              "process_creation",
+              "service_installed",
+              "account_created",
+              "account_modified",
+              "privilege_use",
+              "log_cleared",
+              "scheduled_task",
+              "kerberos",
+              "lateral_movement",
+              "credential_access"
+            ]
+          },
+          "limit": {
+            "type": "integer",
+            "default": 40,
+            "description": "Max results to return (default 50)"
+          },
+          "offset": {
+            "type": "integer",
+            "default": 0,
+            "description": "Skip first N matches for pagination"
+          }
+        },
+        "required": [
+          "evtx_path",
+          "event_type"
+        ]
+      }
+    },
+    {
+      "name": "evtx_explain_event_id",
+      "description": "Get description of a Windows Event ID.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "event_id": {
+            "type": "integer"
+          },
+          "channel": {
+            "type": "string",
+            "default": "Security"
+          }
+        },
+        "required": [
+          "event_id"
+        ]
+      }
+    },
+    {
+      "name": "registry_get_key",
+      "description": "Get registry key and values from a hive file.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "hive_path": {
+            "type": "string"
+          },
+          "key_path": {
+            "type": "string"
+          },
+          "max_depth": {
+            "type": "integer",
+            "default": 3
+          }
+        },
+        "required": [
+          "hive_path",
+          "key_path"
+        ]
+      }
+    },
+    {
+      "name": "registry_search",
+      "description": "Search registry values by pattern.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "hive_path": {
+            "type": "string"
+          },
+          "pattern": {
+            "type": "string"
+          },
+          "search_names": {
+            "type": "boolean",
+            "default": true
+          },
+          "search_data": {
+            "type": "boolean",
+            "default": true
+          },
+          "limit": {
+            "type": "integer",
+            "default": 50
+          }
+        },
+        "required": [
+          "hive_path",
+          "pattern"
+        ]
+      }
+    },
+    {
+      "name": "registry_get_persistence",
+      "description": "Get persistence mechanisms (Run keys, services) from registry.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "software_hive": {
+            "type": "string"
+          },
+          "system_hive": {
+            "type": "string"
+          },
+          "ntuser_hive": {
+            "type": "string"
+          },
+          "include_microsoft_services": {
+            "type": "boolean",
+            "default": false
+          }
+        }
+      }
+    },
+    {
+      "name": "registry_get_users",
+      "description": "Get user accounts from SAM hive.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "sam_path": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "sam_path"
+        ]
+      }
+    },
+    {
+      "name": "registry_get_usb_history",
+      "description": "Get USB device history from SYSTEM hive.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "system_hive": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "system_hive"
+        ]
+      }
+    },
+    {
+      "name": "registry_get_system_info",
+      "description": "Get OS version, computer name, timezone from registry.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "software_hive": {
+            "type": "string"
+          },
+          "system_hive": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "software_hive",
+          "system_hive"
+        ]
+      }
+    },
+    {
+      "name": "registry_get_network",
+      "description": "Get network configuration from SYSTEM hive.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "system_hive": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "system_hive"
+        ]
+      }
+    },
+    {
+      "name": "forensics_list_important_events",
+      "description": "List important Event IDs for a log channel.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "channel": {
+            "type": "string",
+            "enum": [
+              "Security",
+              "System",
+              "PowerShell",
+              "Sysmon"
+            ]
+          }
+        },
+        "required": [
+          "channel"
+        ]
+      }
+    },
+    {
+      "name": "forensics_list_registry_keys",
+      "description": "List forensically important registry keys.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "category": {
+            "type": "string",
+            "enum": [
+              "persistence",
+              "services",
+              "network",
+              "usb",
+              "user_activity",
+              "system_info"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "name": "file_analyze_pe",
+      "description": "Perform static analysis on Windows PE files (EXE/DLL/SYS). Extracts headers, imports, exports, sections, calculates hashes (MD5/SHA1/SHA256/Imphash), and detects packers/suspicious indicators.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "file_path": {
+            "type": "string",
+            "description": "Path to the PE file to analyze"
+          },
+          "calculate_hashes": {
+            "type": "boolean",
+            "default": true,
+            "description": "Calculate MD5, SHA1, SHA256, Imphash"
+          },
+          "extract_strings": {
+            "type": "boolean",
+            "default": false,
+            "description": "Extract ASCII/Unicode strings (can be verbose)"
+          },
+          "check_signatures": {
+            "type": "boolean",
+            "default": true,
+            "description": "Check for known packer/crypter signatures"
+          },
+          "detail_level": {
+            "type": "string",
+            "enum": [
+              "minimal",
+              "standard",
+              "verbose"
+            ],
+            "default": "standard",
+            "description": "Level of detail: minimal (hashes+type), standard (+ sections/imports), verbose (+ all data)"
+          }
+        },
+        "required": [
+          "file_path"
+        ]
+      }
+    },
+    {
+      "name": "yara_scan_file",
+      "description": "Scan a file with YARA rules for malware detection. Uses bundled signature-base rules by default (Mimikatz, CobaltStrike, webshells, ransomware, etc.).",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "file_path": {
+            "type": "string",
+            "description": "Path to file to scan"
+          },
+          "rule_paths": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Custom YARA rule paths (files or directories). Uses bundled rules if not specified."
+          },
+          "timeout": {
+            "type": "integer",
+            "default": 60,
+            "description": "Scan timeout in seconds"
+          }
+        },
+        "required": [
+          "file_path"
+        ]
+      }
+    },
+    {
+      "name": "yara_scan_directory",
+      "description": "Scan directory for malware with YARA rules. Returns only files with matches. Uses bundled signature-base rules by default.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "directory": {
+            "type": "string",
+            "description": "Directory to scan"
+          },
+          "rule_paths": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Custom YARA rule paths"
+          },
+          "file_pattern": {
+            "type": "string",
+            "default": "*",
+            "description": "Glob pattern for files (e.g., '*.exe', '*.dll')"
+          },
+          "recursive": {
+            "type": "boolean",
+            "default": true,
+            "description": "Search subdirectories"
+          },
+          "limit": {
+            "type": "integer",
+            "default": 100,
+            "description": "Maximum files to scan"
+          }
+        },
+        "required": [
+          "directory"
+        ]
+      }
+    },
+    {
+      "name": "yara_list_rules",
+      "description": "List available YARA rules. Shows bundled rules or custom rules from specified paths.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "rule_paths": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Custom rule paths to list. Lists bundled rules if not specified."
+          }
+        }
+      }
+    },
+    {
+      "name": "vt_lookup_hash",
+      "description": "Look up file hash (MD5/SHA1/SHA256) on VirusTotal for threat intelligence. Returns AV detections, threat names, verdict, and file metadata. Requires VIRUSTOTAL_API_KEY env var. Rate limited (15s between requests).",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "file_hash": {
+            "type": "string",
+            "description": "MD5 (32 chars), SHA1 (40 chars), or SHA256 (64 chars) hash"
+          }
+        },
+        "required": [
+          "file_hash"
+        ]
+      }
+    },
+    {
+      "name": "vt_lookup_ip",
+      "description": "Look up IP address reputation on VirusTotal. Returns AV verdicts, ASN info, country, and reputation score. Requires VIRUSTOTAL_API_KEY env var.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "ip_address": {
+            "type": "string",
+            "description": "IPv4 or IPv6 address"
+          }
+        },
+        "required": [
+          "ip_address"
+        ]
+      }
+    },
+    {
+      "name": "vt_lookup_domain",
+      "description": "Look up domain reputation on VirusTotal. Returns AV verdicts, registrar, creation date, and categorizations. Requires VIRUSTOTAL_API_KEY env var.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "domain": {
+            "type": "string",
+            "description": "Domain name (e.g., 'evil.com')"
+          }
+        },
+        "required": [
+          "domain"
+        ]
+      }
+    },
+    {
+      "name": "vt_lookup_file",
+      "description": "Calculate file hash and look up on VirusTotal. Combines local hashing + VT lookup in one call. Requires VIRUSTOTAL_API_KEY env var.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "file_path": {
+            "type": "string",
+            "description": "Path to file to hash and look up"
+          }
+        },
+        "required": [
+          "file_path"
+        ]
+      }
+    },
+    {
+      "name": "pcap_get_stats",
+      "description": "Get statistics from a PCAP/PCAPNG file including packet counts, time range, protocol distribution, top talkers, and top ports.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "pcap_path": {
+            "type": "string",
+            "description": "Path to PCAP or PCAPNG file"
+          },
+          "max_packets": {
+            "type": "integer",
+            "default": 100000,
+            "description": "Maximum packets to analyze (for large files)"
+          }
+        },
+        "required": [
+          "pcap_path"
+        ]
+      }
+    },
+    {
+      "name": "pcap_get_conversations",
+      "description": "Extract network conversations (TCP/UDP flows) from PCAP. Shows source/destination, ports, packet counts, bytes, and duration.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "pcap_path": {
+            "type": "string",
+            "description": "Path to PCAP or PCAPNG file"
+          },
+          "protocol": {
+            "type": "string",
+            "enum": [
+              "all",
+              "tcp",
+              "udp"
+            ],
+            "default": "all",
+            "description": "Filter by protocol"
+          },
+          "limit": {
+            "type": "integer",
+            "default": 50,
+            "description": "Maximum conversations to return"
+          },
+          "min_packets": {
+            "type": "integer",
+            "default": 1,
+            "description": "Minimum packets for a conversation to be included"
+          }
+        },
+        "required": [
+          "pcap_path"
+        ]
+      }
+    },
+    {
+      "name": "pcap_get_dns",
+      "description": "Extract DNS queries and responses from PCAP. Shows query names, types, response IPs, and top queried domains.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "pcap_path": {
+            "type": "string",
+            "description": "Path to PCAP or PCAPNG file"
+          },
+          "limit": {
+            "type": "integer",
+            "default": 100,
+            "description": "Maximum queries to return"
+          },
+          "query_filter": {
+            "type": "string",
+            "description": "Filter by domain name (substring match)"
+          }
+        },
+        "required": [
+          "pcap_path"
+        ]
+      }
+    },
+    {
+      "name": "pcap_get_http",
+      "description": "Extract HTTP requests from PCAP. Shows method, host, URI, user-agent, and content-type.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "pcap_path": {
+            "type": "string",
+            "description": "Path to PCAP or PCAPNG file"
+          },
+          "limit": {
+            "type": "integer",
+            "default": 100,
+            "description": "Maximum requests to return"
+          },
+          "url_filter": {
+            "type": "string",
+            "description": "Filter by URL (substring match)"
+          },
+          "method_filter": {
+            "type": "string",
+            "description": "Filter by HTTP method (GET, POST, etc.)"
+          }
+        },
+        "required": [
+          "pcap_path"
+        ]
+      }
+    },
+    {
+      "name": "pcap_search",
+      "description": "Search for pattern in packet payloads. Supports string or regex search.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "pcap_path": {
+            "type": "string",
+            "description": "Path to PCAP or PCAPNG file"
+          },
+          "pattern": {
+            "type": "string",
+            "description": "String or regex pattern to search for"
+          },
+          "regex": {
+            "type": "boolean",
+            "default": false,
+            "description": "Treat pattern as regex"
+          },
+          "limit": {
+            "type": "integer",
+            "default": 50,
+            "description": "Maximum matches to return"
+          }
+        },
+        "required": [
+          "pcap_path",
+          "pattern"
+        ]
+      }
+    },
+    {
+      "name": "pcap_find_suspicious",
+      "description": "Detect suspicious network activity in PCAP. Finds: suspicious ports (4444, etc.), beaconing patterns, DNS tunneling indicators, suspicious user-agents, large outbound transfers.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "pcap_path": {
+            "type": "string",
+            "description": "Path to PCAP or PCAPNG file"
+          },
+          "limit": {
+            "type": "integer",
+            "default": 50,
+            "description": "Maximum findings per category"
+          }
+        },
+        "required": [
+          "pcap_path"
+        ]
+      }
+    },
+    {
+      "name": "api_analyze_imports",
+      "description": "Detailed PE import analysis with pattern detection and API enrichment. Extracts all imports, detects injection/evasion/persistence patterns with MITRE ATT&CK mapping, and optionally enriches with API definitions.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "file_path": {
+            "type": "string",
+            "description": "Path to PE file to analyze"
+          },
+          "detect_patterns": {
+            "type": "boolean",
+            "default": true,
+            "description": "Run pattern detection against import table"
+          },
+          "enrich_from_db": {
+            "type": "boolean",
+            "default": false,
+            "description": "Add API definitions from knowledge base (requires built DB)"
+          }
+        },
+        "required": [
+          "file_path"
+        ]
+      }
+    },
+    {
+      "name": "api_lookup",
+      "description": "Look up Windows API definition (signature, params, DLL, category) from the API Monitor knowledge base. Supports wildcards (e.g., 'Create*').",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "api_name": {
+            "type": "string",
+            "description": "API name or pattern (e.g., 'CreateFileW', 'NtCreate*')"
+          },
+          "include_params": {
+            "type": "boolean",
+            "default": true,
+            "description": "Include parameter details in results"
+          }
+        },
+        "required": [
+          "api_name"
+        ]
+      }
+    },
+    {
+      "name": "api_search_category",
+      "description": "Browse/search Windows APIs by category. Categories are hierarchical (e.g., 'Data Access and Storage/Local File Systems/File Management').",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "category": {
+            "type": "string",
+            "description": "Category path or substring to search"
+          },
+          "limit": {
+            "type": "integer",
+            "default": 50,
+            "description": "Maximum results to return"
+          }
+        },
+        "required": [
+          "category"
+        ]
+      }
+    },
+    {
+      "name": "api_detect_patterns",
+      "description": "Detect injection/evasion/persistence API patterns from PE imports. Returns matched patterns with MITRE ATT&CK technique IDs and risk levels.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "file_path": {
+            "type": "string",
+            "description": "Path to PE file to analyze"
+          }
+        },
+        "required": [
+          "file_path"
+        ]
+      }
+    },
+    {
+      "name": "apmx_parse",
+      "description": "Parse Rohitab API Monitor capture file (.apmx64/.apmx86). Returns process info (name, PID, path, command line), loaded modules, and API call count. Use this first to understand what's in a capture.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "file_path": {
+            "type": "string",
+            "description": "Path to .apmx64 or .apmx86 capture file"
+          }
+        },
+        "required": [
+          "file_path"
+        ]
+      }
+    },
+    {
+      "name": "apmx_get_calls",
+      "description": "Extract API call records from an APMX capture with filtering and pagination. Each record shows the top-level API and any nested calls made within it.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "file_path": {
+            "type": "string",
+            "description": "Path to .apmx64 or .apmx86 capture file"
+          },
+          "process_index": {
+            "type": "integer",
+            "default": 0,
+            "description": "Which process to read (0 = first/only process)"
+          },
+          "api_filter": {
+            "type": "string",
+            "description": "Filter by API name substring (case-insensitive)"
+          },
+          "limit": {
+            "type": "integer",
+            "default": 500,
+            "description": "Maximum number of call records to return"
+          },
+          "offset": {
+            "type": "integer",
+            "default": 0,
+            "description": "Skip first N matching records (for pagination)"
+          },
+          "time_range_start": {
+            "type": "string",
+            "description": "ISO 8601 datetime — only include calls at or after this time"
+          },
+          "time_range_end": {
+            "type": "string",
+            "description": "ISO 8601 datetime — only include calls at or before this time"
+          }
+        },
+        "required": [
+          "file_path"
+        ]
+      }
+    },
+    {
+      "name": "apmx_detect_patterns",
+      "description": "Detect injection/evasion/persistence patterns in APMX captured API calls. Analyzes runtime behavior (actually-called APIs) against known attack patterns with MITRE ATT&CK technique IDs. Returns risk level and suspicious call timeline.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "file_path": {
+            "type": "string",
+            "description": "Path to .apmx64 or .apmx86 capture file"
+          },
+          "process_index": {
+            "type": "integer",
+            "default": 0,
+            "description": "Which process to analyze (0 = first/only process)"
+          }
+        },
+        "required": [
+          "file_path"
+        ]
+      }
+    },
+    {
+      "name": "apmx_get_call_details",
+      "description": "Extract detailed API call records with parameter values, return values, and timestamps from an APMX capture. Shows pre-call and post-call parameter values, identifies return values by comparing pre/post state, and extracts embedded strings. Use call_indices for specific records or api_filter to search.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "file_path": {
+            "type": "string",
+            "description": "Path to .apmx64 or .apmx86 capture file"
+          },
+          "process_index": {
+            "type": "integer",
+            "default": 0,
+            "description": "Which process to read (0 = first/only process)"
+          },
+          "call_indices": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            },
+            "description": "Specific record indices to retrieve (overrides filter/pagination)"
+          },
+          "api_filter": {
+            "type": "string",
+            "description": "Filter by API name substring (case-insensitive)"
+          },
+          "limit": {
+            "type": "integer",
+            "default": 50,
+            "description": "Maximum number of detailed records to return"
+          },
+          "offset": {
+            "type": "integer",
+            "default": 0,
+            "description": "Skip first N matching records (for pagination)"
+          }
+        },
+        "required": [
+          "file_path"
+        ]
+      }
+    },
+    {
+      "name": "apmx_correlate_handles",
+      "description": "Track handle values across API calls to reconstruct operation chains. Identifies handle-producing APIs (OpenProcess, CreateFile, etc.) and traces where those handles are consumed (VirtualAllocEx, WriteProcessMemory, etc.). Reveals attack chains like: OpenProcess -> VirtualAllocEx -> WriteProcessMemory -> CreateRemoteThread.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "file_path": {
+            "type": "string",
+            "description": "Path to .apmx64 or .apmx86 capture file"
+          },
+          "process_index": {
+            "type": "integer",
+            "default": 0,
+            "description": "Which process to analyze (0 = first/only process)"
+          },
+          "target_apis": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Limit to specific APIs (default: common injection/evasion APIs)"
+          },
+          "limit": {
+            "type": "integer",
+            "default": 100,
+            "description": "Maximum number of handle chains to return"
+          }
+        },
+        "required": [
+          "file_path"
+        ]
+      }
+    },
+    {
+      "name": "apmx_injection_info",
+      "description": "Extract enriched injection chain details from an APMX capture. Returns target PID, target process name, shellcode size (requested vs aligned), start address, and injection technique label. Wraps handle correlation with parameter decoding for a forensic-friendly summary.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "file_path": {
+            "type": "string",
+            "description": "Path to .apmx64 or .apmx86 capture file"
+          },
+          "process_index": {
+            "type": "integer",
+            "default": 0,
+            "description": "Which process to analyze (0 = first/only process)"
+          }
+        },
+        "required": [
+          "file_path"
+        ]
+      }
+    },
+    {
+      "name": "apmx_calls_around",
+      "description": "Get a context window of API calls around a specific record index. Returns detailed call records in the range [call_index-before, call_index+after]. Useful for understanding what happened immediately before and after a suspicious call.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "file_path": {
+            "type": "string",
+            "description": "Path to .apmx64 or .apmx86 capture file"
+          },
+          "call_index": {
+            "type": "integer",
+            "description": "The center record index to look around"
+          },
+          "before": {
+            "type": "integer",
+            "default": 10,
+            "description": "Number of records before the target to include"
+          },
+          "after": {
+            "type": "integer",
+            "default": 10,
+            "description": "Number of records after the target to include"
+          },
+          "process_index": {
+            "type": "integer",
+            "default": 0,
+            "description": "Which process to read (0 = first/only process)"
+          }
+        },
+        "required": [
+          "file_path",
+          "call_index"
+        ]
+      }
+    },
+    {
+      "name": "apmx_search_params",
+      "description": "Search API calls by parameter value in an APMX capture. Finds all calls where a specific integer (e.g., PID, handle, size) or string appears as a parameter value. Returns matching calls with the matched parameters highlighted.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "file_path": {
+            "type": "string",
+            "description": "Path to .apmx64 or .apmx86 capture file"
+          },
+          "value": {
+            "description": "Integer or string value to search for in parameters"
+          },
+          "process_index": {
+            "type": "integer",
+            "default": 0,
+            "description": "Which process to search (0 = first/only process)"
+          },
+          "limit": {
+            "type": "integer",
+            "default": 50,
+            "description": "Maximum number of matching calls to return"
+          }
+        },
+        "required": [
+          "file_path",
+          "value"
+        ]
+      }
+    },
+    {
+      "name": "disk_parse_prefetch",
+      "description": "Parse Windows Prefetch files to determine program execution history, run counts, and last execution times. Can parse a single .pf file or an entire Prefetch directory. Supports pagination.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "path": {
+            "type": "string",
+            "description": "Path to .pf file or Prefetch directory"
+          },
+          "executable_filter": {
+            "type": "string",
+            "description": "Filter by executable name (case-insensitive substring). Only applies to directory parsing."
+          },
+          "include_loaded_files": {
+            "type": "boolean",
+            "default": false,
+            "description": "Include list of files/DLLs loaded by the executable (WARNING: increases output size significantly)"
+          },
+          "limit": {
+            "type": "integer",
+            "default": 20,
+            "description": "Maximum number of prefetch entries to return (default 20)"
+          },
+          "offset": {
+            "type": "integer",
+            "default": 0,
+            "description": "Skip first N entries for pagination"
+          }
+        },
+        "required": [
+          "path"
+        ]
+      }
+    },
+    {
+      "name": "disk_parse_amcache",
+      "description": "Parse Amcache.hve to extract program execution evidence with SHA1 hashes, file paths, and timestamps. Proves a file existed and was prepared for execution.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "amcache_path": {
+            "type": "string",
+            "description": "Path to Amcache.hve file"
+          },
+          "sha1_filter": {
+            "type": "string",
+            "description": "Filter by SHA1 hash (case-insensitive)"
+          },
+          "path_filter": {
+            "type": "string",
+            "description": "Filter by file path (case-insensitive substring)"
+          },
+          "name_filter": {
+            "type": "string",
+            "description": "Filter by file name (case-insensitive substring)"
+          },
+          "time_range_start": {
+            "type": "string",
+            "description": "ISO format datetime - filter entries after this time"
+          },
+          "time_range_end": {
+            "type": "string",
+            "description": "ISO format datetime - filter entries before this time"
+          },
+          "limit": {
+            "type": "integer",
+            "default": 30,
+            "description": "Maximum number of entries to return"
+          }
+        },
+        "required": [
+          "amcache_path"
+        ]
+      }
+    },
+    {
+      "name": "disk_parse_srum",
+      "description": "Parse SRUDB.dat for application resource usage including CPU time, network bytes sent/received, and foreground time. Answers: How long did this program run? What was its network activity?",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "srum_path": {
+            "type": "string",
+            "description": "Path to SRUDB.dat file"
+          },
+          "table": {
+            "type": "string",
+            "enum": [
+              "app_resource_usage",
+              "network_data_usage",
+              "all"
+            ],
+            "default": "app_resource_usage",
+            "description": "Which SRUM table to parse"
+          },
+          "app_filter": {
+            "type": "string",
+            "description": "Filter by application name (case-insensitive substring)"
+          },
+          "time_range_start": {
+            "type": "string",
+            "description": "ISO format datetime - filter entries after this time"
+          },
+          "time_range_end": {
+            "type": "string",
+            "description": "ISO format datetime - filter entries before this time"
+          },
+          "limit": {
+            "type": "integer",
+            "default": 30,
+            "description": "Maximum number of entries to return"
+          }
+        },
+        "required": [
+          "srum_path"
+        ]
+      }
+    },
+    {
+      "name": "investigate_execution",
+      "description": "Comprehensive execution analysis. Correlates Prefetch, Amcache, and SRUM to prove or disprove binary execution. Answers: Was this binary executed? When? How long did it run? Provides confidence scoring and unified timeline.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "target": {
+            "type": "string",
+            "description": "Executable name (e.g., 'mimikatz.exe'), file path, or SHA1 hash to investigate"
+          },
+          "artifacts_dir": {
+            "type": "string",
+            "description": "Base directory containing forensic artifacts (Prefetch, Amcache.hve, SRUDB.dat). Tool will auto-detect common paths."
+          },
+          "time_range_start": {
+            "type": "string",
+            "description": "ISO format datetime - filter events after this time"
+          },
+          "time_range_end": {
+            "type": "string",
+            "description": "ISO format datetime - filter events before this time"
+          },
+          "prefetch_path": {
+            "type": "string",
+            "description": "Override auto-detected Prefetch directory path"
+          },
+          "amcache_path": {
+            "type": "string",
+            "description": "Override auto-detected Amcache.hve path"
+          },
+          "srum_path": {
+            "type": "string",
+            "description": "Override auto-detected SRUDB.dat path"
+          }
+        },
+        "required": [
+          "target",
+          "artifacts_dir"
+        ]
+      }
+    },
+    {
+      "name": "build_timeline",
+      "description": "Build comprehensive forensic timeline from multiple artifact sources (MFT, USN Journal, Prefetch, Amcache, EVTX). Returns sorted, deduplicated events. Answers: What happened and when? Provides unified chronological view of system activity.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "artifacts_dir": {
+            "type": "string",
+            "description": "Base directory containing forensic artifacts. Tool will auto-detect common paths for MFT, USN, Prefetch, etc."
+          },
+          "sources": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "mft",
+                "usn",
+                "prefetch",
+                "amcache",
+                "evtx"
+              ]
+            },
+            "default": [
+              "mft",
+              "usn",
+              "prefetch",
+              "amcache"
+            ],
+            "description": "List of sources to include in timeline"
+          },
+          "time_range_start": {
+            "type": "string",
+            "description": "ISO format datetime - include events after this time"
+          },
+          "time_range_end": {
+            "type": "string",
+            "description": "ISO format datetime - include events before this time"
+          },
+          "keyword_filter": {
+            "type": "string",
+            "description": "Filter events containing this keyword (case-insensitive)"
+          },
+          "limit": {
+            "type": "integer",
+            "default": 50,
+            "description": "Maximum number of events to return"
+          },
+          "mft_path": {
+            "type": "string",
+            "description": "Override auto-detected $MFT path"
+          },
+          "usn_path": {
+            "type": "string",
+            "description": "Override auto-detected USN Journal path"
+          },
+          "prefetch_path": {
+            "type": "string",
+            "description": "Override auto-detected Prefetch directory path"
+          },
+          "amcache_path": {
+            "type": "string",
+            "description": "Override auto-detected Amcache.hve path"
+          },
+          "evtx_path": {
+            "type": "string",
+            "description": "Override auto-detected EVTX directory path"
+          }
+        },
+        "required": [
+          "artifacts_dir"
+        ]
+      }
+    },
+    {
+      "name": "hunt_ioc",
+      "description": "Hunt for IOC (hash, filename, IP, domain) across all forensic artifacts. Searches Prefetch, Amcache, SRUM, MFT, USN Journal, Browser History, EVTX logs, and optionally YARA rules. Answers: Where does this IOC appear? Was this file/hash/domain seen on the system? Is it known malware?",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "ioc": {
+            "type": "string",
+            "description": "The indicator to search for: MD5/SHA1/SHA256 hash, filename, IP address, or domain"
+          },
+          "artifacts_dir": {
+            "type": "string",
+            "description": "Base directory containing forensic artifacts. Tool will auto-detect common paths."
+          },
+          "ioc_type": {
+            "type": "string",
+            "enum": [
+              "auto",
+              "md5",
+              "sha1",
+              "sha256",
+              "ip",
+              "domain",
+              "filename"
+            ],
+            "default": "auto",
+            "description": "Type of IOC (auto-detected if not specified)"
+          },
+          "time_range_start": {
+            "type": "string",
+            "description": "ISO format datetime - filter events after this time"
+          },
+          "time_range_end": {
+            "type": "string",
+            "description": "ISO format datetime - filter events before this time"
+          },
+          "yara_scan": {
+            "type": "boolean",
+            "default": false,
+            "description": "If True, scan the file with YARA rules when IOC is a filename and file is found. Provides threat intelligence (is it known malware?)."
+          },
+          "prefetch_path": {
+            "type": "string",
+            "description": "Override auto-detected Prefetch directory path"
+          },
+          "amcache_path": {
+            "type": "string",
+            "description": "Override auto-detected Amcache.hve path"
+          },
+          "srum_path": {
+            "type": "string",
+            "description": "Override auto-detected SRUDB.dat path"
+          },
+          "mft_path": {
+            "type": "string",
+            "description": "Override auto-detected $MFT path"
+          },
+          "usn_path": {
+            "type": "string",
+            "description": "Override auto-detected USN Journal path"
+          },
+          "evtx_path": {
+            "type": "string",
+            "description": "Override auto-detected EVTX directory path"
+          }
+        },
+        "required": [
+          "ioc",
+          "artifacts_dir"
+        ]
+      }
+    },
+    {
+      "name": "investigate_user_activity",
+      "description": "Comprehensive user activity investigation. Correlates Browser History, ShellBags, LNK files, and RecentDocs to build a complete picture of user activity. Answers: What did the user browse? What files did they access? What folders did they navigate?",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "artifacts_dir": {
+            "type": "string",
+            "description": "Base directory containing forensic artifacts or user profile"
+          },
+          "keyword": {
+            "type": "string",
+            "description": "Optional keyword to search across all sources (URLs, filenames, paths)"
+          },
+          "username": {
+            "type": "string",
+            "description": "Optional username to narrow artifact search in multi-user images"
+          },
+          "time_range_start": {
+            "type": "string",
+            "description": "ISO format datetime - filter events after this time"
+          },
+          "time_range_end": {
+            "type": "string",
+            "description": "ISO format datetime - filter events before this time"
+          },
+          "suspicious_only": {
+            "type": "boolean",
+            "default": false,
+            "description": "For ShellBags, only return suspicious folder access (temp, AppData, network shares)"
+          },
+          "browser_path": {
+            "type": "string",
+            "description": "Override auto-detected browser History path"
+          },
+          "lnk_path": {
+            "type": "string",
+            "description": "Override auto-detected Recent LNK folder path"
+          },
+          "usrclass_path": {
+            "type": "string",
+            "description": "Override auto-detected UsrClass.dat path"
+          },
+          "ntuser_path": {
+            "type": "string",
+            "description": "Override auto-detected NTUSER.DAT path"
+          },
+          "limit": {
+            "type": "integer",
+            "default": 50,
+            "description": "Maximum results per source"
+          }
+        },
+        "required": [
+          "artifacts_dir"
+        ]
+      }
+    },
+    {
+      "name": "ingest_parsed_csv",
+      "description": "Import pre-parsed CSV from Eric Zimmerman tools (MFTECmd, PECmd, AmcacheParser, SrumECmd) for querying. Auto-detects CSV type by column headers. Useful when you already have parsed output from EZ tools.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "csv_path": {
+            "type": "string",
+            "description": "Path to the CSV file"
+          },
+          "csv_type": {
+            "type": "string",
+            "enum": [
+              "auto",
+              "mftecmd",
+              "pecmd",
+              "amcache",
+              "srumemd"
+            ],
+            "default": "auto",
+            "description": "Type of CSV (auto-detected if not specified)"
+          },
+          "filter_field": {
+            "type": "string",
+            "description": "Field name to filter on (e.g., 'filename', 'sha1', 'executable')"
+          },
+          "filter_value": {
+            "type": "string",
+            "description": "Value to filter for (case-insensitive substring match)"
+          },
+          "time_range_start": {
+            "type": "string",
+            "description": "ISO format datetime - filter entries after this time"
+          },
+          "time_range_end": {
+            "type": "string",
+            "description": "ISO format datetime - filter entries before this time"
+          },
+          "limit": {
+            "type": "integer",
+            "default": 100,
+            "description": "Maximum number of entries to return"
+          }
+        },
+        "required": [
+          "csv_path"
+        ]
+      }
+    },
+    {
+      "name": "disk_parse_mft",
+      "description": "Parse $MFT (Master File Table) for file metadata and timestomping detection. Compares $STANDARD_INFORMATION and $FILE_NAME timestamps to identify manipulation. Answers: When was this file actually created? Has it been timestomped?",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "mft_path": {
+            "type": "string",
+            "description": "Path to $MFT file"
+          },
+          "file_path_filter": {
+            "type": "string",
+            "description": "Filter by file path (case-insensitive substring)"
+          },
+          "entry_number": {
+            "type": "integer",
+            "description": "Get specific MFT entry by number"
+          },
+          "detect_timestomping": {
+            "type": "boolean",
+            "default": true,
+            "description": "Flag files where $SI timestamps are earlier than $FN timestamps"
+          },
+          "output_mode": {
+            "type": "string",
+            "enum": [
+              "full",
+              "summary",
+              "timestomping_only"
+            ],
+            "default": "summary",
+            "description": "Output mode: full (all data), summary (basic info), timestomping_only (only flagged files)"
+          },
+          "allocated_only": {
+            "type": "boolean",
+            "default": true,
+            "description": "Only return allocated (not deleted) entries"
+          },
+          "files_only": {
+            "type": "boolean",
+            "default": false,
+            "description": "Only return files (exclude directories)"
+          },
+          "time_range_start": {
+            "type": "string",
+            "description": "ISO format datetime - filter entries modified after this time"
+          },
+          "time_range_end": {
+            "type": "string",
+            "description": "ISO format datetime - filter entries modified before this time"
+          },
+          "limit": {
+            "type": "integer",
+            "default": 30,
+            "description": "Maximum number of entries to return"
+          }
+        },
+        "required": [
+          "mft_path"
+        ]
+      }
+    },
+    {
+      "name": "disk_parse_usn_journal",
+      "description": "Parse $UsnJrnl:$J (USN Journal) for file system change history. Records file creation, deletion, modification, and rename operations. Answers: What files were created/deleted/renamed? When did file changes occur?",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "usn_path": {
+            "type": "string",
+            "description": "Path to $J file (typically $Extend/$J)"
+          },
+          "filename_filter": {
+            "type": "string",
+            "description": "Filter by filename (case-insensitive substring)"
+          },
+          "reason_filter": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Filter by reason types (e.g., FILE_CREATE, FILE_DELETE, RENAME_NEW_NAME)"
+          },
+          "time_range_start": {
+            "type": "string",
+            "description": "ISO format datetime - filter events after this time"
+          },
+          "time_range_end": {
+            "type": "string",
+            "description": "ISO format datetime - filter events before this time"
+          },
+          "interesting_only": {
+            "type": "boolean",
+            "default": false,
+            "description": "Only return forensically interesting changes (create, delete, rename, modify)"
+          },
+          "files_only": {
+            "type": "boolean",
+            "default": false,
+            "description": "Only return file events (exclude directories)"
+          },
+          "output_mode": {
+            "type": "string",
+            "enum": [
+              "records",
+              "summary",
+              "deleted_files"
+            ],
+            "default": "records",
+            "description": "Output mode: records (individual changes), summary (statistics), deleted_files (only deletions)"
+          },
+          "extension_filter": {
+            "type": "string",
+            "description": "Filter by file extension (for deleted_files mode)"
+          },
+          "limit": {
+            "type": "integer",
+            "default": 30,
+            "description": "Maximum number of records to return"
+          }
+        },
+        "required": [
+          "usn_path"
+        ]
+      }
+    },
+    {
+      "name": "browser_get_history",
+      "description": "Parse browser history and downloads from Edge, Chrome, or Firefox. Answers: What URLs did the user visit? What files were downloaded? Where did downloads originate from?",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "history_path": {
+            "type": "string",
+            "description": "Path to browser History SQLite file or profile directory"
+          },
+          "browser": {
+            "type": "string",
+            "enum": [
+              "auto",
+              "chrome",
+              "edge",
+              "firefox"
+            ],
+            "default": "auto",
+            "description": "Browser type (auto-detected if not specified)"
+          },
+          "include_downloads": {
+            "type": "boolean",
+            "default": true,
+            "description": "Include download history"
+          },
+          "url_filter": {
+            "type": "string",
+            "description": "Filter by URL or title (case-insensitive substring)"
+          },
+          "dangerous_only": {
+            "type": "boolean",
+            "default": false,
+            "description": "Only return downloads flagged as dangerous (Chrome/Edge only)"
+          },
+          "time_range_start": {
+            "type": "string",
+            "description": "ISO format datetime - filter visits after this time"
+          },
+          "time_range_end": {
+            "type": "string",
+            "description": "ISO format datetime - filter visits before this time"
+          },
+          "limit": {
+            "type": "integer",
+            "default": 40,
+            "description": "Maximum number of results per category"
+          }
+        },
+        "required": [
+          "history_path"
+        ]
+      }
+    },
+    {
+      "name": "user_parse_lnk_files",
+      "description": "Parse Windows shortcut (.lnk) files to determine target paths, access times, and volume information. Answers: What files did the user access recently? What were the original file locations?",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "path": {
+            "type": "string",
+            "description": "Path to .lnk file, directory containing .lnk files, or user profile path"
+          },
+          "recursive": {
+            "type": "boolean",
+            "default": true,
+            "description": "Search recursively in subdirectories"
+          },
+          "target_filter": {
+            "type": "string",
+            "description": "Filter by target path (case-insensitive substring)"
+          },
+          "recent_only": {
+            "type": "boolean",
+            "default": false,
+            "description": "Only search the user's Recent folder (requires user profile path)"
+          },
+          "extension_filter": {
+            "type": "string",
+            "description": "Filter recent files by extension (e.g., '.exe', '.ps1')"
+          },
+          "limit": {
+            "type": "integer",
+            "default": 20,
+            "description": "Maximum number of results"
+          }
+        },
+        "required": [
+          "path"
+        ]
+      }
+    },
+    {
+      "name": "user_parse_shellbags",
+      "description": "Parse ShellBags from UsrClass.dat to reveal folder navigation history. Shows which folders a user browsed in Windows Explorer with timestamps. Answers: Which folders did the user access? When did they browse suspicious paths?",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "usrclass_path": {
+            "type": "string",
+            "description": "Path to UsrClass.dat (typically in Users/<user>/AppData/Local/Microsoft/Windows/UsrClass.dat)"
+          },
+          "path_filter": {
+            "type": "string",
+            "description": "Filter results by path substring (case-insensitive)"
+          },
+          "suspicious_only": {
+            "type": "boolean",
+            "default": false,
+            "description": "Only return suspicious folder accesses (temp, AppData, network shares, etc.)"
+          },
+          "limit": {
+            "type": "integer",
+            "default": 50,
+            "description": "Maximum number of results"
+          }
+        },
+        "required": [
+          "usrclass_path"
+        ]
+      }
+    },
+    {
+      "name": "remote_collect_artifacts",
+      "description": "Collect forensic artifacts from remote Windows system via WinRM. Supports password or pass-the-hash authentication.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "host": {
+            "type": "string",
+            "description": "Target hostname or IP address"
+          },
+          "username": {
+            "type": "string",
+            "description": "Username (e.g., Administrator or DOMAIN\\user)"
+          },
+          "password": {
+            "type": "string",
+            "description": "Password for authentication (use this OR ntlm_hash, not both)"
+          },
+          "ntlm_hash": {
+            "type": "string",
+            "description": "NTLM hash for pass-the-hash (e.g., 'aad3b435b51404ee:31d6cfe0d16ae931b73c59d7e0c089c0' or just NT hash)"
+          },
+          "output_dir": {
+            "type": "string",
+            "description": "Local directory to save collected artifacts"
+          },
+          "include_evtx": {
+            "type": "boolean",
+            "default": true,
+            "description": "Collect Windows Event Logs"
+          },
+          "include_registry": {
+            "type": "boolean",
+            "default": true,
+            "description": "Collect registry hives (SAM, SYSTEM, SOFTWARE, etc.)"
+          }
+        },
+        "required": [
+          "host",
+          "username",
+          "output_dir"
+        ]
+      }
+    },
+    {
+      "name": "remote_get_system_info",
+      "description": "Get system info from remote Windows via WinRM. Supports password or pass-the-hash authentication.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "host": {
+            "type": "string",
+            "description": "Target hostname or IP address"
+          },
+          "username": {
+            "type": "string",
+            "description": "Username (e.g., Administrator or DOMAIN\\user)"
+          },
+          "password": {
+            "type": "string",
+            "description": "Password for authentication (use this OR ntlm_hash, not both)"
+          },
+          "ntlm_hash": {
+            "type": "string",
+            "description": "NTLM hash for pass-the-hash (e.g., 'aad3b435b51404ee:31d6cfe0d16ae931b73c59d7e0c089c0' or just NT hash)"
+          }
+        },
+        "required": [
+          "host",
+          "username"
+        ]
+      }
+    }
+  ]
+}

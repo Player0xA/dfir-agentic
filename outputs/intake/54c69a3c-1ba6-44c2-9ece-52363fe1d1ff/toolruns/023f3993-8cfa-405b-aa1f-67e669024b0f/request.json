@@ -1,0 +1,21 @@
+{
+  "timestamp_utc": "2026-03-03T22:50:06Z",
+  "rpc": {
+    "jsonrpc": "2.0",
+    "id": 6,
+    "method": "tools/call",
+    "params": {
+      "name": "dfir.query_findings@1",
+      "arguments": {
+        "evidence_ref": {
+          "case_ref": "CASE",
+          "evidence": {
+            "relpath": "case_findings.json"
+          }
+        },
+        "severity": "high",
+        "limit": 20
+      }
+    }
+  }
+}
