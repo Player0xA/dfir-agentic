@@ -9,7 +9,7 @@ from typing import List, Tuple, Optional
 
 DISK_IMAGE_EXT = {".e01", ".ex01", ".aff", ".aff4", ".dd", ".img", ".raw"}
 PCAP_EXT = {".pcap", ".pcapng"}
-MEM_EXT = {".mem", ".rawmem", ".dmp"}
+MEM_EXT = {".mem", ".rawmem", ".dmp", ".dd"}
 
 def utc_now_z() -> str:
     return datetime.now(timezone.utc).replace(microsecond=0).strftime("%Y-%m-%dT%H:%M:%SZ")
@@ -56,13 +56,13 @@ def classify_path(p: pathlib.Path) -> Tuple[str, List[str], str, Optional[str]]:
         signals.append(f"file_extension_pcap:{ext}")
         return ("pcap_file", signals, "high", None)
 
-    if ext in DISK_IMAGE_EXT:
-        signals.append(f"file_extension_disk_image:{ext}")
-        return ("disk_image_file", signals, "medium", None)
-
     if ext in MEM_EXT:
         signals.append(f"file_extension_memory_dump:{ext}")
         return ("memory_dump_file", signals, "medium", None)
+
+    if ext in DISK_IMAGE_EXT:
+        signals.append(f"file_extension_disk_image:{ext}")
+        return ("disk_image_file", signals, "medium", None)
 
     # lightweight magic check (no external deps): read first bytes for pcapng
     try:
