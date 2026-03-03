@@ -116,13 +116,23 @@ const addPanel = (id, x, y, w, h) => {
     grid.addWidget({ id: id, x: x, y: y, w: w, h: h, content: content });
 };
 
+let knownCaseIds = [];
+
 // Case Management
-const loadCases = async () => {
+const loadCases = async (isAutoRefresh = false) => {
     try {
         const response = await fetch('/api/cases');
         const data = await response.json();
 
         const selector = document.getElementById('case-selector');
+        const currentValue = selector.value;
+        const newLatestId = data.cases.length > 0 ? data.cases[0].id : null;
+
+        // Detect if a brand new case was just ingested
+        const isNewCaseStarted = newLatestId && knownCaseIds.length > 0 && !knownCaseIds.includes(newLatestId);
+
+        knownCaseIds = data.cases.map(c => c.id);
+
         selector.innerHTML = '<option value="">-- Select a Case --</option>';
 
         data.cases.forEach(c => {
@@ -135,21 +145,33 @@ const loadCases = async () => {
             selector.appendChild(option);
         });
 
-        // Auto-select first case if available
-        if (data.cases.length > 0) {
-            selector.value = data.cases[0].id;
-            loadCaseData(data.cases[0].id);
-        }
-
-        selector.addEventListener('change', (e) => {
-            if (e.target.value) {
-                loadCaseData(e.target.value);
+        if (!isAutoRefresh) {
+            // First time load
+            if (data.cases.length > 0) {
+                selector.value = data.cases[0].id;
+                loadCaseData(data.cases[0].id);
             }
-        });
+
+            selector.addEventListener('change', (e) => {
+                if (e.target.value) {
+                    loadCaseData(e.target.value);
+                }
+            });
+        } else {
+            // Polling refresh
+            if (isNewCaseStarted) {
+                // Instantly switch to the new case
+                selector.value = newLatestId;
+                loadCaseData(newLatestId);
+            } else if (currentValue) {
+                // Maintain current selection if nothing new happened
+                selector.value = currentValue;
+            }
+        }
 
     } catch (e) {
         console.error("Failed to load cases:", e);
-        document.getElementById('case-selector').innerHTML = '<option value="">Error loading cases</option>';
+        if (!isAutoRefresh) document.getElementById('case-selector').innerHTML = '<option value="">Error loading cases</option>';
     }
 };
 
@@ -176,9 +198,14 @@ const loadCaseData = (caseId, isAutoRefresh = false) => {
     // Setup auto-refresh loop
     if (refreshInterval) clearInterval(refreshInterval);
     refreshInterval = setInterval(() => {
-        if (document.getElementById('case-selector').value === caseId) {
-            loadCaseData(caseId, true);
-        }
+        // Ping case list first to see if a new one appeared
+        loadCases(true).then(() => {
+            const currentSelected = document.getElementById('case-selector').value;
+            if (currentSelected && currentSelected === caseId) {
+                // If it didn't switch, refresh the current one
+                loadCaseData(currentSelected, true);
+            }
+        });
     }, 10000); // 10 seconds
 };
 
