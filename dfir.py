@@ -24,6 +24,10 @@ def main():
     parser.add_argument("--task", help="Optional mission objective")
     parser.add_argument("--playbook", help="Optional playbook override")
     
+    # Dashboard GUI Mode
+    parser.add_argument("--dashboard", action="store_true", help="Launch the web-based dashboard UI")
+    parser.add_argument("--port", type=int, default=8080, help="Port for the dashboard (default 8080)")
+    
     # Phase 50: Local LLM Support
     llm_group = parser.add_argument_group("Local LLM Configuration")
     llm_group.add_argument("--ollama", type=str, metavar="MODEL", help="Use local Ollama instance with specified model (e.g., llama3.3)")
@@ -39,6 +43,13 @@ def main():
     intake_path = None
 
     target = args.evidence_path
+    
+    if args.dashboard:
+        from tools.dashboard.dashboard_server import run_server
+        print(f"[*] Launching Modular Dashboard on 0.0.0.0:{args.port}...")
+        run_server(host="0.0.0.0", port=args.port)
+        return
+
     if not target and case_dir:
         # Check for case.json in DFIR_CASE_DIR
         candidate = Path(case_dir) / "case.json"
