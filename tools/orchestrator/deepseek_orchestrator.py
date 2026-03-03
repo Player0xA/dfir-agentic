@@ -627,6 +627,16 @@ def main() -> int:
         # 1) Tool Discovery (New Production Invariant)
         mcp_tools = mcp_list_tools("dfir")
         
+        # Phase 46: Discover memory forensics tools for memory dump cases
+        is_memory_case = intake.get("classification", {}).get("kind") == "memory_dump_file"
+        if is_memory_case:
+            try:
+                mem_tools = mcp_list_tools("mem")
+                mcp_tools.extend(mem_tools)
+                print(f"[+] Memory forensics: {len(mem_tools)} tools discovered from mem MCP server.")
+            except Exception as e:
+                print(f"[!] Warning: Could not discover mem MCP tools: {e}")
+        
         # Rule 1: Early Guardrails & Redundancy Prevention
         if found_paths:
             mcp_tools = [t for t in mcp_tools if t["name"] != "dfir.load_intake@1"]
@@ -685,6 +695,32 @@ def main() -> int:
             "- When your investigation is fully concluded, YOU MUST output the exact token: <promise>TASK_COMPLETE</promise>\n"
             "- To use a tool, use the native tool calling capability OR output a JSON block like: ```json {\"dfir__tool_name__v1\": {\"arg\": \"val\"}} ```\n"
         )
+
+        # Phase 46: Memory Forensics Protocol Injection
+        if is_memory_case:
+            evidence_paths = intake.get("inputs", {}).get("paths", [])
+            evidence_file = evidence_paths[0] if evidence_paths else "unknown"
+            # Resolve to absolute path
+            abs_evidence = str((Path(os.environ.get("DFIR_CASE_DIR", ".")).parent.parent / evidence_file).resolve())
+            if not os.path.exists(abs_evidence):
+                # Try from project root
+                abs_evidence = str((PROJECT_ROOT / evidence_file).resolve())
+
+            system_prompt += (
+                "\n--- MEMORY FORENSICS PROTOCOL (V46) ---\n"
+                "This case contains a MEMORY DUMP file. Traditional EVTX/timeline tools will NOT work.\n"
+                f"EVIDENCE FILE: {abs_evidence}\n"
+                "MANDATORY WORKFLOW:\n"
+                "1. FIRST: Call 'memory_full_triage' with image_path set to the evidence file path above.\n"
+                "   This runs automated analysis (process listing, network scan, malware detection) and produces a comprehensive triage report.\n"
+                "2. THEN: Use 'memory_run_plugin' for surgical follow-up (e.g., specific Vol3 plugins like windows.pslist.PsList, windows.netscan.NetScan, windows.cmdline.CmdLine).\n"
+                "3. Use 'memory_hunt_process_anomalies' to find injected or hidden processes.\n"
+                "4. Use 'memory_find_c2' to check for C2 beacons and suspicious network connections.\n"
+                "5. Use 'memory_command_history' to extract command-line history from the dump.\n"
+                "6. For string/flag searches, use 'memory_run_plugin' with plugin='search' and params={'pattern': 'PicoCTF'}.\n"
+                "CRITICAL: The 'image_path' argument for ALL memory tools MUST be the absolute path shown above.\n"
+                "CRITICAL: Do NOT waste turns trying dfir.list_dir or dfir.query_findings — there are no EVTX logs or pre-existing findings for memory dumps.\n"
+            )
 
         user_task = args.task if args.task else "Begin investigation by running dfir.auto_run@1."
         

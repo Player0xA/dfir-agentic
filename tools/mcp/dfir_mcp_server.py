@@ -1110,8 +1110,14 @@ def tool_query_findings(args: Dict[str, Any], audit: Dict[str, Path]) -> Dict[st
     path = get_evidence_path_from_ref(ref, audit, default_root="case")
     ensure_read_allowed(path)
     
+    # Phase 46: Graceful handling for memory dumps where case_findings.json doesn't exist yet
     if not path.is_file():
-        raise ValueError(f"file not found: {path}")
+        return {
+            "path": symbolize_path(path),
+            "total_matched": 0,
+            "results": [],
+            "note": "No findings file exists yet. For memory dumps, use memory forensics tools (memory_full_triage, memory_analyze_image) to generate findings."
+        }
 
     # Load full file - this is done in memory by the TOOL, keeping it out of LLM context
     doc = json.loads(path.read_text(encoding="utf-8"))
@@ -1178,8 +1184,15 @@ def tool_list_dir(args: Dict[str, Any], audit: Dict[str, Path]) -> Dict[str, Any
     ref = args.get("evidence_ref") or args.get("path")
     path = get_evidence_path_from_ref(ref, audit)
     ensure_read_allowed(path)
+    
+    # Phase 46: Fallback for memory dumps where evidence/staged doesn't exist
     if not path.is_dir():
-        raise ValueError(f"not a directory: {path}")
+        case_dir = get_case_dir()
+        if case_dir and case_dir.is_dir():
+            path = case_dir
+        else:
+            raise ValueError(f"not a directory: {path}")
+    
     entries = sorted([p.name for p in path.iterdir()])
     return {
         "path": symbolize_path(path),
