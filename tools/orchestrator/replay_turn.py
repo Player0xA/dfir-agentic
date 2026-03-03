@@ -13,6 +13,7 @@ import sys
 import argparse
 import json
 import hashlib
+import difflib
 from pathlib import Path
 
 # Add project root to sys.path
@@ -116,18 +117,55 @@ def main() -> int:
         return 1
 
     print("\n[<<] Response Received.")
+    
+    # Extract content for comparison
+    orig_msg = target_entry.get("raw_response", {}).get("choices", [{}])[0].get("message", {})
+    new_msg = new_raw_response.get("choices", [{}])[0].get("message", {}) if isinstance(new_raw_response, dict) else {}
+    
+    orig_content = orig_msg.get("content") or ""
+    new_content = new_msg.get("content") or ""
+    
+    # Tool call comparison
+    orig_tools = json.dumps(orig_msg.get("tool_calls") or [], indent=2)
+    new_tools = json.dumps(new_msg.get("tool_calls") or [], indent=2)
+
     print(f"\n{'='*60}")
     print("[*] REPLAY CERTIFICATION RESULTS")
     print(f"[*] Original Response Hash: {target_entry.get('response_hash')}")
     print(f"[*] Replay Response Hash:   {new_response_hash}")
     
-    if target_entry.get('response_hash') == new_response_hash:
+    is_bit_identical = target_entry.get('response_hash') == new_response_hash
+    
+    if is_bit_identical:
         print("\n[+] CERTIFIED: Cryptographic Determinism Achieved.")
         print("[+] The AI produced the EXACT same byte-for-byte output.")
     else:
         print("\n[!] DIVERGENCE: Hash mismatch.")
-        print("This usually happens if temperature wasn't strictly honored by the API backend, or if the model weights were updated.")
-        print("We recommend performing a semantic diff on the output payloads.")
+        print("This usually happens with API models (like DeepSeek) due to cluster non-determinism.")
+        print("\n--- SEMANTIC DIFF (TEXT CONTENT) ---")
+        diff = list(difflib.unified_diff(
+            orig_content.splitlines(keepends=True),
+            new_content.splitlines(keepends=True),
+            fromfile='Original',
+            tofile='Replay'
+        ))
+        if diff:
+            sys.stdout.writelines(diff)
+        else:
+            print("[+] Semantic Content: IDENTICAL (Only metadata/timing bytes differed).")
+            
+        print("\n--- TOOL CALL DIFF ---")
+        tool_diff = list(difflib.unified_diff(
+            orig_tools.splitlines(keepends=True),
+            new_tools.splitlines(keepends=True),
+            fromfile='Original Tools',
+            tofile='Replay Tools'
+        ))
+        if tool_diff:
+            sys.stdout.writelines(tool_diff)
+        else:
+            print("[+] Tool Logic: IDENTICAL.")
+
     print(f"{'='*60}\n")
     
     # Write report
@@ -139,10 +177,14 @@ def main() -> int:
         f"- **Replay Response Hash**: `{new_response_hash}`\n\n"
         f"## Result\n"
     )
-    if target_entry.get('response_hash') == new_response_hash:
-        report += "**[COMPLIANT]** Cryptographically Deterministic Replay."
+    if is_bit_identical:
+        report += "**[COMPLIANT]** Cryptographically Deterministic Replay.\n"
     else:
-        report += "**[DIVERGED]** Byte signatures differed. Requires semantic review."
+        report += "**[DIVERGED]** Byte signatures differed. See diff below.\n\n### Semantic Diff\n```diff\n"
+        report += "".join(diff) if diff else "No textual content difference detected.\n"
+        report += "```\n\n### Tool Call Diff\n```diff\n"
+        report += "".join(tool_diff) if tool_diff else "No tool call difference detected.\n"
+        report += "```\n"
         
     with open(report_path, "w") as f:
         f.write(report)
