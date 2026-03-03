@@ -115,6 +115,29 @@ window.renderArtifacts = async (caseId) => {
             html += `<div class="loading">No artifacts or evidence listed for this case.</div>`;
         }
 
+        // Also fetch generated artifacts from tools
+        try {
+            const genRes = await fetch(`/api/cases/${caseId}/generated_artifacts`);
+            if (genRes.ok) {
+                const genData = await genRes.json();
+                if (genData.artifacts && genData.artifacts.length > 0) {
+
+                    html += `<div style="margin-top: 15px; font-weight: bold; color: var(--accent); border-bottom: 1px solid var(--border); padding-bottom: 3px;">⚙️ Tool Outputs & Generated Files (${genData.artifacts.length})</div>`;
+                    html += `<div style="overflow-x: auto;"><table class="data-table"><thead><tr><th>File Name</th><th>Path</th><th>Size (KB)</th></tr></thead><tbody>`;
+
+                    genData.artifacts.forEach(a => {
+                        let shortPath = (a.relpath || 'N/A').length > 50 ? '...' + (a.relpath || 'N/A').substring((a.relpath || 'N/A').length - 47) : (a.relpath || 'N/A');
+                        let kbSize = Math.round((a.size || 0) / 1024);
+                        html += `<tr><td><code>${a.name}</code></td><td title="${a.relpath}"><code>${shortPath}</code></td><td>${kbSize}</td></tr>`;
+                    });
+
+                    html += '</tbody></table></div>';
+                }
+            }
+        } catch (e) {
+            console.warn("Failed to load generated artifacts:", e);
+        }
+
         html += '</div>';
 
         const prevScroll = container.scrollTop;

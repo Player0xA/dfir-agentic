@@ -128,6 +128,47 @@ async def get_notes(case_id: str):
     except Exception as e:
         return {"notes": f"Error loading notes: {str(e)}"}
 
+@app.get("/api/cases/{case_id}/generated_artifacts")
+async def get_generated_artifacts(case_id: str):
+    """Scan the case directory for any tool-generated artifacts (CSVs, JSONs, etc)."""
+    case_dir = PROJECT_ROOT / "outputs" / "intake" / case_id
+    if not case_dir.exists():
+        return {"artifacts": []}
+    
+    found_artifacts = []
+    
+    # Check top level artifacts dir
+    artifacts_dir = case_dir / "artifacts"
+    if artifacts_dir.exists():
+        for item in artifacts_dir.rglob("*"):
+            if item.is_file():
+                found_artifacts.append({
+                    "name": item.name,
+                    "relpath": str(item.relative_to(case_dir)),
+                    "size": item.stat().st_size
+                })
+                
+    # Check inside orchestrator runs for tool outputs
+    orch_dir = case_dir / "orchestrator"
+    if orch_dir.exists():
+        for run_dir in orch_dir.iterdir():
+            if run_dir.is_dir() and run_dir.name.startswith("run_"):
+                # Sometimes tools drop files directly in run_X or run_X/artifacts
+                for item in run_dir.rglob("*"):
+                    # Ignore python scripts, standard logs, and hidden files
+                    if item.is_file() and not item.name.endswith(".py") and not item.name.endswith(".log") and not item.name.startswith("."):
+                        # Only grab actual data outputs like csv, json, sqlite, txt
+                        if item.suffix.lower() in [".csv", ".json", ".sqlite", ".db", ".txt", ".plaso"]:
+                            # Skip the standard orchestrator framework files
+                            if item.name not in ["summary.md", "audit_ledger.jsonl", "manifest.json", "plan.md", "progress.md"]:
+                                found_artifacts.append({
+                                    "name": item.name,
+                                    "relpath": str(item.relative_to(case_dir)),
+                                    "size": item.stat().st_size
+                                })
+                                
+    return {"artifacts": found_artifacts}
+
 @app.get("/api/cases/{case_id}/audit")
 async def get_audit(case_id: str):
     """Get the audit ledger for the most recent run."""
