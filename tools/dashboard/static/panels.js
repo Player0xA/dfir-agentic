@@ -95,13 +95,24 @@ const renderFindingsTable = (container, data, filter) => {
         html += `<tr><td colspan="4" style="text-align:center;">No findings reported.</td></tr>`;
     } else {
         filtered.forEach(f => {
-            const sev = f.severity?.toLowerCase() || 'info';
+            const sev = (f.severity || f.impact || 'info').toLowerCase();
+            const type = f.category || f.type || 'Unknown';
+            const desc = f.summary || f.statement || f.description || 'N/A';
+            let source = 'N/A';
+            if (f.source && f.source.tool) {
+                source = `${f.source.tool} ${f.source.rule_title ? '(' + f.source.rule_title + ')' : ''}`;
+            } else if (f.source_evidence_id) {
+                source = f.source_evidence_id;
+            } else if (f.evidence_refs && f.evidence_refs.length > 0) {
+                source = f.evidence_refs[0].substring(0, 15) + '...';
+            }
+
             html += `
                 <tr>
                     <td><span class="badge ${sev}">${sev}</span></td>
-                    <td>${f.type || 'N/A'}</td>
-                    <td>${f.description || 'N/A'}</td>
-                    <td><code>${f.source_evidence_id || 'N/A'}</code></td>
+                    <td>${type}</td>
+                    <td>${desc}</td>
+                    <td><code>${source}</code></td>
                 </tr>
             `;
         });

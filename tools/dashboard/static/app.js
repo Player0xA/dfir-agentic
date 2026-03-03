@@ -127,7 +127,9 @@ const loadCases = async () => {
             const option = document.createElement('option');
             option.value = c.id;
             const typeFlag = c.classification?.kind === 'memory_dump_file' ? '[MEM]' : '[DISK]';
-            option.textContent = `${typeFlag} ${c.name} (${c.intake_utc})`;
+            const shortName = c.name.length > 15 ? c.name.substring(0, 8) + '...' : c.name;
+            const shortDate = c.intake_utc ? c.intake_utc.substring(0, 16).replace('T', ' ') : 'N/A';
+            option.textContent = `${typeFlag} ${shortName} - ${shortDate}`;
             selector.appendChild(option);
         });
 
