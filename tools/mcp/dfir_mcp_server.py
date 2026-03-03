@@ -615,7 +615,17 @@ def resolve_evidence_path(case_ref: str | Path, root_name: str, relpath: str) ->
     else:
         evidence_roots = case_data.get("evidence_roots", {})
         base_str = evidence_roots.get(root_name, evidence_roots.get("staged", case_data.get("case_root")))
-        base = Path(base_str)
+        
+        # Phase 45: Fallback for intake.json where case_root and evidence_roots don't exist yet
+        if base_str is None:
+            if root_name == "staged":
+                base = case_path.parent / "evidence" / "staged"
+            elif root_name == "original":
+                base = case_path.parent / "evidence" / "original"
+            else:
+                base = case_path.parent
+        else:
+            base = Path(base_str)
     
     # V37: Path Resolution Sanitization
     # If the relpath already begins with the root prefix (e.g. 'evidence/staged/'), 
@@ -678,10 +688,18 @@ def resolve_evidence(p: str) -> Path:
     path = Path(p)
     if not path.is_absolute():
         if case_dir:
-            cand = (case_dir / path).resolve()
+            # Phase 45: Prevent "Path Doubling" (e.g., outputs/intake/.../outputs/intake)
+            # If the path already starts with the common case directories relative to project root,
+            # resolve it against PROJECT_ROOT instead of case_dir.
+            rp_str = str(path)
+            if rp_str.startswith("outputs/intake/") or rp_str.startswith("cases/"):
+                cand = (PROJECT_ROOT / path).resolve()
+            else:
+                cand = (case_dir / path).resolve()
+                
             if cand.exists():
                 return cand
-            # If it doesn't exist, we fallback to healer or project_root resolution
+            # If it doesn't exist, retain cand for heuristic fallback
             path = cand
         else:
             path = path.resolve()
