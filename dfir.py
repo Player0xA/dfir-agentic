@@ -23,6 +23,13 @@ def main():
     parser.add_argument("--auto", action="store_true", help="Shorthand for --mode autonomous")
     parser.add_argument("--task", help="Optional mission objective")
     parser.add_argument("--playbook", help="Optional playbook override")
+    
+    # Phase 50: Local LLM Support
+    llm_group = parser.add_argument_group("Local LLM Configuration")
+    llm_group.add_argument("--ollama", type=str, metavar="MODEL", help="Use local Ollama instance with specified model (e.g., llama3.3)")
+    llm_group.add_argument("--llm-base-url", type=str, help="Custom base URL for the LLM API")
+    llm_group.add_argument("--llm-api-key", type=str, help="Custom API key for the LLM API")
+
     args = parser.parse_args()
 
     # 0. RESOLVE CASE/INTAKE
@@ -92,6 +99,14 @@ def main():
     ]
     if args.task:
         orchestrate_cmd.extend(["--task", args.task])
+        
+    # Phase 50: Pass Local LLM Arguments
+    if args.ollama:
+        orchestrate_cmd.extend(["--ollama", args.ollama])
+    if args.llm_base_url:
+        orchestrate_cmd.extend(["--base-url", args.llm_base_url])
+    if args.llm_api_key:
+        orchestrate_cmd.extend(["--api-key", args.llm_api_key])
 
     # For the orchestrator, we don't want to capture output because of interactive prompts
     print(f"\n>>> [Stage: Agentic Loop] Running: {' '.join(orchestrate_cmd)}")

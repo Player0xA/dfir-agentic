@@ -17,6 +17,59 @@ def utc_now_z() -> str:
 def is_evtx_file(p: pathlib.Path) -> bool:
     return p.is_file() and p.suffix.lower() in {".evtx", ".evt"}
 
+def probe_magic(p: pathlib.Path) -> Tuple[Optional[str], Optional[str]]:
+    """
+    Phase 47: Deterministic Evidence Probing
+    Reads the head of the file to identify known magic bytes/structures.
+    Returns (kind, signature_name).
+    """
+    try:
+        with p.open("rb") as f:
+            head = f.read(4096)
+            
+        if not head:
+            return None, None
+
+        # Memory Dump Signatures
+        # LiME (Linux Memory Extractor): "EMiL"
+        if head.startswith(b"EMiL"):
+            return "memory_dump_file", "lime_magic_detected"
+        
+        # Windows Crash Dump (64-bit): "PAGE" or "MDMP"
+        if head.startswith(b"PAGE") or head.startswith(b"MDMP"):
+            return "memory_dump_file", "crashdump_magic_detected"
+
+        # AVML (Acquire Volatile Memory for Linux): AVML signature in ELF note or header
+        if head.startswith(b"\x7fELF") and b"AVML" in head:
+            return "memory_dump_file", "avml_magic_detected"
+
+        # Disk Image Signatures
+        # Raw disk with GPT (EFI PART at offset 512)
+        if len(head) >= 1024 and head[512:520] == b"EFI PART":
+            return "disk_image_file", "gpt_partition_magic_detected"
+
+        # Raw disk with MBR (Boot signature 0x55 0xAA at offset 510)
+        # We must be careful not to mistake a random file for MBR, so we also check
+        # common boot code heuristics or just accept it as a weak signal.
+        if len(head) >= 512 and head[510:512] == b"\x55\xaa":
+            # Check for common MBR boot code (e.g., GRUB, Windows MBR)
+            # or an active partition flag (0x80) at offset 446
+            if head[446] in (0x00, 0x80):
+                return "disk_image_file", "mbr_partition_magic_detected"
+
+        # PCAPNG
+        if head.startswith(b"\x0a\x0d\x0d\x0a"):
+            return "pcap_file", "pcapng_magic_detected"
+
+        # PCAP (Magic 0xa1b2c3d4 or 0xd4c3b2a1)
+        if head.startswith(b"\xa1\xb2\xc3\xd4") or head.startswith(b"\xd4\xc3\xb2\xa1"):
+            return "pcap_file", "pcap_magic_detected"
+
+    except Exception:
+        pass
+        
+    return None, None
+
 def classify_path(p: pathlib.Path) -> Tuple[str, List[str], str, Optional[str]]:
     signals: List[str] = []
 
@@ -52,9 +105,29 @@ def classify_path(p: pathlib.Path) -> Tuple[str, List[str], str, Optional[str]]:
         return ("windows_evtx_file", signals, "high", "chainsaw_evtx")
 
     ext = p.suffix.lower()
+    
+    # Phase 47: Magic Signature Probing
+    magic_kind, sig_name = probe_magic(p)
+    if magic_kind:
+        signals.append(sig_name)
+        if magic_kind == "memory_dump_file":
+            # Extra signal if extension matches, but trust magic as HIGH
+            if ext in MEM_EXT:
+                signals.append(f"file_extension_memory_dump:{ext}")
+            return ("memory_dump_file", signals, "high", None)
+            
+        if magic_kind == "disk_image_file":
+            if ext in DISK_IMAGE_EXT:
+                signals.append(f"file_extension_disk_image:{ext}")
+            return ("disk_image_file", signals, "high", None)
+            
+        if magic_kind == "pcap_file":
+            return ("pcap_file", signals, "high", None)
+
+    # Fallback to pure extension-based heuristics (medium/low confidence)
     if ext in PCAP_EXT:
         signals.append(f"file_extension_pcap:{ext}")
-        return ("pcap_file", signals, "high", None)
+        return ("pcap_file", signals, "medium", None)
 
     if ext in MEM_EXT:
         signals.append(f"file_extension_memory_dump:{ext}")
@@ -63,17 +136,6 @@ def classify_path(p: pathlib.Path) -> Tuple[str, List[str], str, Optional[str]]:
     if ext in DISK_IMAGE_EXT:
         signals.append(f"file_extension_disk_image:{ext}")
         return ("disk_image_file", signals, "medium", None)
-
-    # lightweight magic check (no external deps): read first bytes for pcapng
-    try:
-        with p.open("rb") as f:
-            head = f.read(16)
-        # pcapng section header block magic (0x0A0D0D0A)
-        if head[:4] == b"\x0a\x0d\x0d\x0a":
-            signals.append("pcapng_magic_detected")
-            return ("pcap_file", signals, "medium", None)
-    except Exception:
-        pass
 
     return ("unknown", ["file_no_known_signals"], "low", None)
 

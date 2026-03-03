@@ -333,13 +333,14 @@ async def list_tools() -> list[Tool]:
             "Tier 3 (Vol3): any other plugin — short names auto-resolve (e.g. 'filescan', 'handles', 'envars'). "
             "If a short name fails, use full Vol3 path: 'windows.category.PluginName' (e.g. 'windows.mftscan.MFTScan'). "
             "Use 'filter' param to grep results server-side (avoids truncation). "
-            "For search: use params={\"pattern\": \"text\", \"encoding\": \"ascii|utf16le|hex\", \"limit\": N, \"context\": N}."
+            "For search: use params={\"pattern\": \"text\", \"encoding\": \"ascii|utf16le|hex\", \"limit\": N, \"context\": N}. "
+            "Search results will include 'offset', 'context_ascii', and 'context_hex' for defensive observation typing."
         ),
         inputSchema={
             "type": "object",
             "properties": {
                 "image_path": {"type": "string", "description": "Path to memory dump file"},
-                "plugin": {"type": "string", "description": "Plugin name (e.g., 'pslist', 'malfind', 'filescan')"},
+                "plugin": {"type": "string", "description": "Plugin name (e.g., 'pslist', 'malfind', 'filescan', 'search')"},
                 "pid": {"type": "integer", "description": "Filter by PID"},
                 "params": {"type": "object", "description": "Additional plugin parameters"},
                 "filter": {"type": "string", "description": "Case-insensitive substring filter applied to results before returning. Useful for large result sets like filescan."},
