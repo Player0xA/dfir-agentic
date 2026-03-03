@@ -186,3 +186,63 @@ window.renderAudit = async (caseId) => {
         container.innerHTML = `<div class="error">Failed to load audit trail: ${e.message}</div>`;
     }
 };
+
+// 5. Agent Thoughts Panel (Readable text of what the agent is doing)
+window.renderAgent = async (caseId) => {
+    const container = document.getElementById('panel-agent');
+    if (!container) return;
+
+    try {
+        // We reuse the audit API but extract the human readable text
+        const response = await fetch(`/api/cases/${caseId}/audit`);
+        const data = await response.json();
+
+        let html = '<div class="agent-thoughts-container" style="display: flex; flex-direction: column; gap: 15px; padding: 10px;">';
+
+        if (data.audit && data.audit.length > 0) {
+            data.audit.forEach((entry, i) => {
+                let textContent = '';
+
+                // Parse deepseek/litellm response structure
+                if (entry.raw_response && entry.raw_response.choices && entry.raw_response.choices.length > 0) {
+                    textContent = entry.raw_response.choices[0].message?.content || '';
+                } else {
+                    textContent = entry.raw_response?.message?.content || entry.raw_response?.content || '';
+                }
+
+                if (textContent.trim()) {
+                    let formattedText = typeof marked !== 'undefined' ? marked.parse(textContent) : `<pre style="white-space: pre-wrap;">${textContent}</pre>`;
+                    html += `
+                        <div class="agent-thought-item" style="border-left: 3px solid var(--accent); padding-left: 10px; background: rgba(0,0,0,0.2); border-radius: 4px; padding-top: 5px; padding-bottom: 5px; padding-right: 10px;">
+                            <div style="font-size: 0.8em; color: var(--accent); margin-bottom: 5px; font-weight: bold;">[Step ${i + 1}]</div>
+                            <div class="markdown-body" style="font-size: 0.9em;">${formattedText}</div>
+                        </div>
+                    `;
+                } else if (entry.tool_calls_issued) {
+                    html += `
+                        <div class="agent-thought-item" style="border-left: 3px solid var(--warning); padding-left: 10px; background: rgba(0,0,0,0.2); border-radius: 4px; padding-top: 5px; padding-bottom: 5px; padding-right: 10px;">
+                            <div style="font-size: 0.8em; color: var(--warning); margin-bottom: 5px; font-weight: bold;">[Step ${i + 1}] ⚙️ Executing Tools</div>
+                            <div style="font-size: 0.9em; font-family: monospace;">${entry.tool_calls_issued.join(', ')}</div>
+                        </div>
+                    `;
+                }
+            });
+        } else {
+            html += `<div class="loading">Agent is starting up or waiting for input...</div>`;
+        }
+
+        html += '</div>';
+
+        // Auto scroll to bottom only if user hasn't heavily scrolled up
+        const isScrolledToBottom = container.scrollHeight - container.clientHeight <= container.scrollTop + 50;
+
+        container.innerHTML = html;
+
+        if (isScrolledToBottom) {
+            container.scrollTop = container.scrollHeight;
+        }
+
+    } catch (e) {
+        container.innerHTML = `<div class="error">Failed to load agent thoughts: ${e.message}</div>`;
+    }
+};

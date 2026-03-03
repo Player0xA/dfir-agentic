@@ -118,7 +118,7 @@ async def get_notes(case_id: str):
         # In the orchestrator dir, there are UUID subdirs for each run
         for run_dir in case_dir.iterdir():
             if run_dir.is_dir():
-                notes_path = run_dir / "progress.md"
+                notes_path = run_dir / "summary.md"
                 if notes_path.exists():
                     mtime = notes_path.stat().st_mtime
                     if mtime > latest_time:

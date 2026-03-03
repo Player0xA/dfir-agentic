@@ -34,7 +34,8 @@ const initGrid = async () => {
     const defaultLayout = [
         { id: 'overview', x: 0, y: 0, w: 4, h: 3 },
         { id: 'notes', x: 8, y: 0, w: 4, h: 8 },
-        { id: 'findings', x: 0, y: 3, w: 8, h: 5 },
+        { id: 'agent', x: 0, y: 3, w: 4, h: 5 },
+        { id: 'findings', x: 4, y: 3, w: 8, h: 5 },
         { id: 'audit', x: 0, y: 8, w: 12, h: 4 }
     ];
 
@@ -96,7 +97,8 @@ const addPanel = (id, x, y, w, h) => {
         'overview': '📋 Case Overview',
         'findings': '🚨 Findings',
         'notes': '📝 Case Notes',
-        'audit': '🔍 AI Audit Trail'
+        'audit': '🔍 AI Audit Trail',
+        'agent': '🧠 Agent Thoughts'
     };
 
     const content = `
@@ -151,20 +153,33 @@ const loadCases = async () => {
     }
 };
 
-const loadCaseData = (caseId) => {
+let refreshInterval;
+
+const loadCaseData = (caseId, isAutoRefresh = false) => {
     if (!caseId) return;
 
-    // Set loading states
-    ['overview', 'findings', 'notes', 'audit'].forEach(id => {
-        const container = document.getElementById(`panel-${id}`);
-        if (container) container.innerHTML = '<div class="loading">Loading...</div>';
-    });
+    if (!isAutoRefresh) {
+        // Set loading states
+        ['overview', 'findings', 'notes', 'audit', 'agent'].forEach(id => {
+            const container = document.getElementById(`panel-${id}`);
+            if (container) container.innerHTML = '<div class="loading">Loading...</div>';
+        });
+    }
 
     // Call panel renderers defined in panels.js
     if (window.renderOverview) window.renderOverview(caseId);
     if (window.renderFindings) window.renderFindings(caseId);
     if (window.renderNotes) window.renderNotes(caseId);
     if (window.renderAudit) window.renderAudit(caseId);
+    if (window.renderAgent) window.renderAgent(caseId);
+
+    // Setup auto-refresh loop
+    if (refreshInterval) clearInterval(refreshInterval);
+    refreshInterval = setInterval(() => {
+        if (document.getElementById('case-selector').value === caseId) {
+            loadCaseData(caseId, true);
+        }
+    }, 10000); // 10 seconds
 };
 
 // Bootstrap
