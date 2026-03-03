@@ -180,8 +180,8 @@ const renderFindingsTable = (container, data, filter) => {
     } else {
         filtered.forEach(f => {
             const rawSev = (f.severity || f.impact || 'info').toLowerCase();
-            const sev = rawSev.length > 4 ? rawSev.substring(0, 4) : rawSev; // Truncate to 4 chars
-            const sevClass = rawSev; // Keep full class name for CSS styling
+            const sev = rawSev; // Restore full severity name
+            const sevClass = rawSev;
             const type = f.category || f.type || 'Unknown';
             const desc = f.summary || f.statement || f.description || 'N/A';
             let source = 'N/A';
