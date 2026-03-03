@@ -473,7 +473,7 @@ def desanitize_tool_name(name: str) -> str:
     return name
 
 
-def deepseek_chat(messages: list[dict], model: str, base_url: str, api_key: str, tools: Optional[list[dict]] = None, timeout_s: int = 60) -> dict:
+def deepseek_chat(messages: list[dict], model: str, base_url: str, api_key: str, tools: Optional[list[dict]] = None, timeout_s: int = 300) -> dict:
     url = base_url.rstrip("/") + "/chat/completions"
     body = {
         "model": model,
@@ -890,6 +890,10 @@ def main() -> int:
 
             tool_calls = message.get("tool_calls") or []
             
+            if not content and tool_calls:
+                names = [tc["function"]["name"] for tc in tool_calls]
+                print(f"[AI]: (Native Tool Call) Executing {', '.join(names)}...")
+            
             # Fallback 1: Parse normal markdown JSON blocks if native tool_calls is empty
             if not tool_calls and "```json" in content:
                 try:
@@ -976,6 +980,10 @@ def main() -> int:
                 # First-Action Rule
                 if iteration in [1, 2] and not has_fetched_evidence and not batch_has_evidence:
                     return {"id": c_id, "name": t_name, "error": "[First-Action Mandate]: You MUST execute a high-value evidence fetch (e.g., query_findings, query_super_timeline, or load_case_context) before further planning or note-taking."}
+
+                # Phase 50: Hard Guidance for Local LLMs on Memory Cases
+                if is_memory_case and t_name in ["dfir.list_dir@1", "dfir.read_json@1", "dfir.read_text@1", "dfir.query_findings@1", "dfir.query_super_timeline@1"]:
+                    return {"id": c_id, "name": t_name, "error": f"[Memory Forensics Guardrail]: You are analyzing a MEMORY dump. Standard disk tools like '{t_name}' DO NOT WORK. You MUST use 'memory_full_triage' to get started."}
 
                 # Note limit policy & V15 Epistemic Validation
                 if t_name == "dfir.update_case_notes@1":
