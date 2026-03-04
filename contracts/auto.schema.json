@@ -139,6 +139,27 @@
         "plaso": {
           "type": "string"
         },
+        "appcompatcache": {
+          "type": "string"
+        },
+        "mftecmd": {
+          "type": "string"
+        },
+        "rbcmd": {
+          "type": "string"
+        },
+        "lecmd": {
+          "type": "string"
+        },
+        "recentfilecache": {
+          "type": "string"
+        },
+        "jlecmd": {
+          "type": "string"
+        },
+        "recmd": {
+          "type": "string"
+        },
         "enrichment": {
           "type": "string"
         },

@@ -20,6 +20,12 @@ PLASO_RUNNER = Path("pipelines/plaso_evtx/run.sh")
 MERGE_TOOL = Path("tools/merge/merge_case_findings.py")
 
 APPCOMPAT_RUNNER = Path("pipelines/appcompatcache/run.sh")
+MFTECMD_RUNNER = Path("pipelines/mftecmd/run.sh")
+RBCMD_RUNNER = Path("pipelines/rbcmd/run.sh")
+LECMD_RUNNER = Path("pipelines/lecmd/run.sh")
+RFC_RUNNER = Path("pipelines/recentfilecache/run.sh")
+JLECMD_RUNNER = Path("pipelines/jlecmd/run.sh")
+RECMD_RUNNER = Path("pipelines/recmd/run.sh")
 
 VALIDATE_AUTO = Path("tools/contracts/validate_auto.py")
 AUTO_SCHEMA = Path("contracts/auto.schema.json")
@@ -75,6 +81,24 @@ def main() -> int:
         elif any("system" in name for name in ev_names):
             kind = "windows_registry"
             rec = "appcompatcache"
+        elif any("$mft" in name or "mft" in name for name in ev_names):
+            kind = "windows_mft"
+            rec = "mftecmd"
+        elif any("recycle" in name or "$i" in name for name in ev_names):
+            kind = "windows_recycle_bin"
+            rec = "rbcmd"
+        elif any(".lnk" in name for name in ev_names):
+            kind = "windows_lnk"
+            rec = "lecmd"
+        elif any("recentfilecache" in name.lower() for name in ev_names):
+            kind = "windows_recentfilecache"
+            rec = "recentfilecache"
+        elif any("destinations-ms" in name.lower() for name in ev_names):
+            kind = "windows_jumplist"
+            rec = "jlecmd"
+        elif any(".dat" in name.lower() or "software" in name.lower() or "security" in name.lower() or "sam" in name.lower() or "default" in name.lower() for name in ev_names):
+            kind = "windows_registry"
+            rec = "recmd"
         else:
             kind = "generic"
             rec = None
@@ -144,6 +168,12 @@ def main() -> int:
         "stages": {
             "plaso": "skipped",
             "appcompatcache": "skipped",
+            "mftecmd": "skipped",
+            "rbcmd": "skipped",
+            "lecmd": "skipped",
+            "recentfilecache": "skipped",
+            "jlecmd": "skipped",
+            "recmd": "skipped",
             "enrichment": "skipped",
             "merge": "skipped"
         }
@@ -201,6 +231,108 @@ def main() -> int:
         except Exception as e:
             print(f"WARNING: AppCompatCache pipeline failed: {e}", file=sys.stderr)
             auto_doc["stages"]["appcompatcache"] = f"error: {e}"
+
+    # --- Phase: Automated MFTECmd ---
+    if rec == "mftecmd" and dispatch_block["status"] == "ok":
+        print("INFO: starting mftecmd pipeline")
+        auto_doc["stages"]["mftecmd"] = "running"
+        try:
+            staged = [e for e in intake.get("evidence", []) if e.get("root") == "staged"]
+            if staged:
+                mft_file = Path(intake["evidence_roots"]["staged"]) / staged[0]["relpath"]
+                mft_run_id = f"{intake_id}-mft"
+                run_must([str(MFTECMD_RUNNER), mft_run_id, ts, str(mft_file)])
+                auto_doc["stages"]["mftecmd"] = "ok"
+            else:
+                auto_doc["stages"]["mftecmd"] = "skipped (no evidence)"
+        except Exception as e:
+            print(f"WARNING: MFTECmd pipeline failed: {e}", file=sys.stderr)
+            auto_doc["stages"]["mftecmd"] = f"error: {e}"
+
+    # --- Phase: Automated RBCmd ---
+    if rec == "rbcmd" and dispatch_block["status"] == "ok":
+        print("INFO: starting rbcmd pipeline")
+        auto_doc["stages"]["rbcmd"] = "running"
+        try:
+            staged = [e for e in intake.get("evidence", []) if e.get("root") == "staged"]
+            if staged:
+                target_path = Path(intake["evidence_roots"]["staged"]) / staged[0]["relpath"]
+                rb_run_id = f"{intake_id}-rb"
+                run_must([str(RBCMD_RUNNER), rb_run_id, ts, str(target_path)])
+                auto_doc["stages"]["rbcmd"] = "ok"
+            else:
+                auto_doc["stages"]["rbcmd"] = "skipped (no evidence)"
+        except Exception as e:
+            print(f"WARNING: RBCmd pipeline failed: {e}", file=sys.stderr)
+            auto_doc["stages"]["rbcmd"] = f"error: {e}"
+
+    # --- Phase: Automated LECmd ---
+    if rec == "lecmd" and dispatch_block["status"] == "ok":
+        print("INFO: starting lecmd pipeline")
+        auto_doc["stages"]["lecmd"] = "running"
+        try:
+            staged = [e for e in intake.get("evidence", []) if e.get("root") == "staged"]
+            if staged:
+                target_path = Path(intake["evidence_roots"]["staged"]) / staged[0]["relpath"]
+                le_run_id = f"{intake_id}-le"
+                run_must([str(LECMD_RUNNER), le_run_id, ts, str(target_path)])
+                auto_doc["stages"]["lecmd"] = "ok"
+            else:
+                auto_doc["stages"]["lecmd"] = "skipped (no evidence)"
+        except Exception as e:
+            print(f"WARNING: LECmd pipeline failed: {e}", file=sys.stderr)
+            auto_doc["stages"]["lecmd"] = f"error: {e}"
+
+    # --- Phase: Automated RecentFileCacheParser ---
+    if rec == "recentfilecache" and dispatch_block["status"] == "ok":
+        print("INFO: starting recentfilecache pipeline")
+        auto_doc["stages"]["recentfilecache"] = "running"
+        try:
+            staged = [e for e in intake.get("evidence", []) if e.get("root") == "staged"]
+            if staged:
+                target_path = Path(intake["evidence_roots"]["staged"]) / staged[0]["relpath"]
+                rfc_run_id = f"{intake_id}-rfc"
+                run_must([str(RFC_RUNNER), rfc_run_id, ts, str(target_path)])
+                auto_doc["stages"]["recentfilecache"] = "ok"
+            else:
+                auto_doc["stages"]["recentfilecache"] = "skipped (no evidence)"
+        except Exception as e:
+            print(f"WARNING: RecentFileCache pipeline failed: {e}", file=sys.stderr)
+            auto_doc["stages"]["recentfilecache"] = f"error: {e}"
+
+    # --- Phase: Automated JLECmd ---
+    if rec == "jlecmd" and dispatch_block["status"] == "ok":
+        print("INFO: starting jlecmd pipeline")
+        auto_doc["stages"]["jlecmd"] = "running"
+        try:
+            staged = [e for e in intake.get("evidence", []) if e.get("root") == "staged"]
+            if staged:
+                target_path = Path(intake["evidence_roots"]["staged"]) / staged[0]["relpath"]
+                jl_run_id = f"{intake_id}-jl"
+                run_must([str(JLECMD_RUNNER), jl_run_id, ts, str(target_path)])
+                auto_doc["stages"]["jlecmd"] = "ok"
+            else:
+                auto_doc["stages"]["jlecmd"] = "skipped (no evidence)"
+        except Exception as e:
+            print(f"WARNING: JLECmd pipeline failed: {e}", file=sys.stderr)
+            auto_doc["stages"]["jlecmd"] = f"error: {e}"
+
+    # --- Phase: Automated RECmd ---
+    if rec == "recmd" and dispatch_block["status"] == "ok":
+        print("INFO: starting recmd pipeline")
+        auto_doc["stages"]["recmd"] = "running"
+        try:
+            staged = [e for e in intake.get("evidence", []) if e.get("root") == "staged"]
+            if staged:
+                target_path = Path(intake["evidence_roots"]["staged"]) / staged[0]["relpath"]
+                re_run_id = f"{intake_id}-re"
+                run_must([str(RECMD_RUNNER), re_run_id, ts, str(target_path)])
+                auto_doc["stages"]["recmd"] = "ok"
+            else:
+                auto_doc["stages"]["recmd"] = "skipped (no evidence)"
+        except Exception as e:
+            print(f"WARNING: RECmd pipeline failed: {e}", file=sys.stderr)
+            auto_doc["stages"]["recmd"] = f"error: {e}"
 
     # 6) Optional enrichment stage
     if args.enrichment_policy == "always":
