@@ -154,6 +154,9 @@
         "recentfilecache": {
           "type": "string"
         },
+        "jlecmd": {
+          "type": "string"
+        },
         "enrichment": {
           "type": "string"
         },
