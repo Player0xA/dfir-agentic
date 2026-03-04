@@ -23,6 +23,7 @@ APPCOMPAT_RUNNER = Path("pipelines/appcompatcache/run.sh")
 MFTECMD_RUNNER = Path("pipelines/mftecmd/run.sh")
 RBCMD_RUNNER = Path("pipelines/rbcmd/run.sh")
 LECMD_RUNNER = Path("pipelines/lecmd/run.sh")
+RFC_RUNNER = Path("pipelines/recentfilecache/run.sh")
 
 VALIDATE_AUTO = Path("tools/contracts/validate_auto.py")
 AUTO_SCHEMA = Path("contracts/auto.schema.json")
@@ -87,6 +88,9 @@ def main() -> int:
         elif any(".lnk" in name for name in ev_names):
             kind = "windows_lnk"
             rec = "lecmd"
+        elif any("recentfilecache" in name.lower() for name in ev_names):
+            kind = "windows_recentfilecache"
+            rec = "recentfilecache"
         else:
             kind = "generic"
             rec = None
@@ -159,6 +163,7 @@ def main() -> int:
             "mftecmd": "skipped",
             "rbcmd": "skipped",
             "lecmd": "skipped",
+            "recentfilecache": "skipped",
             "enrichment": "skipped",
             "merge": "skipped"
         }
@@ -267,6 +272,23 @@ def main() -> int:
         except Exception as e:
             print(f"WARNING: LECmd pipeline failed: {e}", file=sys.stderr)
             auto_doc["stages"]["lecmd"] = f"error: {e}"
+
+    # --- Phase: Automated RecentFileCacheParser ---
+    if rec == "recentfilecache" and dispatch_block["status"] == "ok":
+        print("INFO: starting recentfilecache pipeline")
+        auto_doc["stages"]["recentfilecache"] = "running"
+        try:
+            staged = [e for e in intake.get("evidence", []) if e.get("root") == "staged"]
+            if staged:
+                target_path = Path(intake["evidence_roots"]["staged"]) / staged[0]["relpath"]
+                rfc_run_id = f"{intake_id}-rfc"
+                run_must([str(RFC_RUNNER), rfc_run_id, ts, str(target_path)])
+                auto_doc["stages"]["recentfilecache"] = "ok"
+            else:
+                auto_doc["stages"]["recentfilecache"] = "skipped (no evidence)"
+        except Exception as e:
+            print(f"WARNING: RecentFileCache pipeline failed: {e}", file=sys.stderr)
+            auto_doc["stages"]["recentfilecache"] = f"error: {e}"
 
     # 6) Optional enrichment stage
     if args.enrichment_policy == "always":
