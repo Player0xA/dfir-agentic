@@ -148,6 +148,9 @@
         "rbcmd": {
           "type": "string"
         },
+        "lecmd": {
+          "type": "string"
+        },
         "enrichment": {
           "type": "string"
         },

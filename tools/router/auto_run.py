@@ -22,6 +22,7 @@ MERGE_TOOL = Path("tools/merge/merge_case_findings.py")
 APPCOMPAT_RUNNER = Path("pipelines/appcompatcache/run.sh")
 MFTECMD_RUNNER = Path("pipelines/mftecmd/run.sh")
 RBCMD_RUNNER = Path("pipelines/rbcmd/run.sh")
+LECMD_RUNNER = Path("pipelines/lecmd/run.sh")
 
 VALIDATE_AUTO = Path("tools/contracts/validate_auto.py")
 AUTO_SCHEMA = Path("contracts/auto.schema.json")
@@ -83,6 +84,9 @@ def main() -> int:
         elif any("recycle" in name or "$i" in name for name in ev_names):
             kind = "windows_recycle_bin"
             rec = "rbcmd"
+        elif any(".lnk" in name for name in ev_names):
+            kind = "windows_lnk"
+            rec = "lecmd"
         else:
             kind = "generic"
             rec = None
@@ -154,6 +158,7 @@ def main() -> int:
             "appcompatcache": "skipped",
             "mftecmd": "skipped",
             "rbcmd": "skipped",
+            "lecmd": "skipped",
             "enrichment": "skipped",
             "merge": "skipped"
         }
@@ -245,6 +250,23 @@ def main() -> int:
         except Exception as e:
             print(f"WARNING: RBCmd pipeline failed: {e}", file=sys.stderr)
             auto_doc["stages"]["rbcmd"] = f"error: {e}"
+
+    # --- Phase: Automated LECmd ---
+    if rec == "lecmd" and dispatch_block["status"] == "ok":
+        print("INFO: starting lecmd pipeline")
+        auto_doc["stages"]["lecmd"] = "running"
+        try:
+            staged = [e for e in intake.get("evidence", []) if e.get("root") == "staged"]
+            if staged:
+                target_path = Path(intake["evidence_roots"]["staged"]) / staged[0]["relpath"]
+                le_run_id = f"{intake_id}-le"
+                run_must([str(LECMD_RUNNER), le_run_id, ts, str(target_path)])
+                auto_doc["stages"]["lecmd"] = "ok"
+            else:
+                auto_doc["stages"]["lecmd"] = "skipped (no evidence)"
+        except Exception as e:
+            print(f"WARNING: LECmd pipeline failed: {e}", file=sys.stderr)
+            auto_doc["stages"]["lecmd"] = f"error: {e}"
 
     # 6) Optional enrichment stage
     if args.enrichment_policy == "always":
