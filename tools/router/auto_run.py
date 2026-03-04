@@ -25,6 +25,7 @@ RBCMD_RUNNER = Path("pipelines/rbcmd/run.sh")
 LECMD_RUNNER = Path("pipelines/lecmd/run.sh")
 RFC_RUNNER = Path("pipelines/recentfilecache/run.sh")
 JLECMD_RUNNER = Path("pipelines/jlecmd/run.sh")
+RECMD_RUNNER = Path("pipelines/recmd/run.sh")
 
 VALIDATE_AUTO = Path("tools/contracts/validate_auto.py")
 AUTO_SCHEMA = Path("contracts/auto.schema.json")
@@ -95,6 +96,9 @@ def main() -> int:
         elif any("destinations-ms" in name.lower() for name in ev_names):
             kind = "windows_jumplist"
             rec = "jlecmd"
+        elif any(".dat" in name.lower() or "software" in name.lower() or "security" in name.lower() or "sam" in name.lower() or "default" in name.lower() for name in ev_names):
+            kind = "windows_registry"
+            rec = "recmd"
         else:
             kind = "generic"
             rec = None
@@ -169,6 +173,7 @@ def main() -> int:
             "lecmd": "skipped",
             "recentfilecache": "skipped",
             "jlecmd": "skipped",
+            "recmd": "skipped",
             "enrichment": "skipped",
             "merge": "skipped"
         }
@@ -311,6 +316,23 @@ def main() -> int:
         except Exception as e:
             print(f"WARNING: JLECmd pipeline failed: {e}", file=sys.stderr)
             auto_doc["stages"]["jlecmd"] = f"error: {e}"
+
+    # --- Phase: Automated RECmd ---
+    if rec == "recmd" and dispatch_block["status"] == "ok":
+        print("INFO: starting recmd pipeline")
+        auto_doc["stages"]["recmd"] = "running"
+        try:
+            staged = [e for e in intake.get("evidence", []) if e.get("root") == "staged"]
+            if staged:
+                target_path = Path(intake["evidence_roots"]["staged"]) / staged[0]["relpath"]
+                re_run_id = f"{intake_id}-re"
+                run_must([str(RECMD_RUNNER), re_run_id, ts, str(target_path)])
+                auto_doc["stages"]["recmd"] = "ok"
+            else:
+                auto_doc["stages"]["recmd"] = "skipped (no evidence)"
+        except Exception as e:
+            print(f"WARNING: RECmd pipeline failed: {e}", file=sys.stderr)
+            auto_doc["stages"]["recmd"] = f"error: {e}"
 
     # 6) Optional enrichment stage
     if args.enrichment_policy == "always":
