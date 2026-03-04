@@ -157,6 +157,9 @@
         "jlecmd": {
           "type": "string"
         },
+        "recmd": {
+          "type": "string"
+        },
         "enrichment": {
           "type": "string"
         },
