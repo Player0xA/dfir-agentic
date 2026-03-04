@@ -162,28 +162,52 @@ window.renderFindings = async (caseId) => {
         const data = await response.json();
         findingsData = data.findings || [];
 
-        renderFindingsTable(container, findingsData, 'all');
+        renderFindingsTable(container, findingsData, 'all', '');
 
     } catch (e) {
         container.innerHTML = `<div class="error">Failed to load findings: ${e.message}</div>`;
     }
 };
 
-const renderFindingsTable = (container, data, filter) => {
+const renderFindingsTable = (container, data, sevFilter, textFilter) => {
     let filtered = data;
-    if (filter !== 'all') {
-        filtered = data.filter(f => f.severity?.toLowerCase() === filter.toLowerCase());
+
+    // Apply Severity Filter
+    if (sevFilter !== 'all') {
+        filtered = filtered.filter(f => f.severity?.toLowerCase() === sevFilter.toLowerCase());
+    }
+
+    // Apply Text Search Filter (Case-insensitive)
+    if (textFilter && textFilter.trim() !== '') {
+        const query = textFilter.toLowerCase();
+        filtered = filtered.filter(f => {
+            const type = (f.category || f.type || 'Unknown').toLowerCase();
+            const desc = (f.summary || f.statement || f.description || 'N/A').toLowerCase();
+
+            let source = '';
+            if (f.evidence_id) source += f.evidence_id.toLowerCase() + ' ';
+            if (f.tool_name) source += f.tool_name.toLowerCase() + ' ';
+
+            return type.includes(query) || desc.includes(query) || source.includes(query);
+        });
     }
 
     let html = `
-        <div style="margin-bottom: 10px;">
-            <select id="severity-filter" onchange="renderFindingsTable(document.getElementById('panel-findings'), findingsData, this.value)">
-                <option value="all" ${filter === 'all' ? 'selected' : ''}>All Severities</option>
-                <option value="critical" ${filter === 'critical' ? 'selected' : ''}>Critical Only</option>
-                <option value="high" ${filter === 'high' ? 'selected' : ''}>High+</option>
-                <option value="medium" ${filter === 'medium' ? 'selected' : ''}>Medium+</option>
+        <div style="margin-bottom: 10px; display: flex; gap: 10px; align-items: center;">
+            <select id="severity-filter" onchange="renderFindingsTable(document.getElementById('panel-findings'), findingsData, this.value, document.getElementById('search-filter').value)">
+                <option value="all" ${sevFilter === 'all' ? 'selected' : ''}>All Severities</option>
+                <option value="critical" ${sevFilter === 'critical' ? 'selected' : ''}>Critical</option>
+                <option value="high" ${sevFilter === 'high' ? 'selected' : ''}>High</option>
+                <option value="medium" ${sevFilter === 'medium' ? 'selected' : ''}>Medium</option>
+                <option value="low" ${sevFilter === 'low' ? 'selected' : ''}>Low</option>
+                <option value="informational" ${sevFilter === 'informational' ? 'selected' : ''}>Info</option>
             </select>
-            <span style="float:right; color: var(--text-secondary);">${filtered.length} total</span>
+            
+            <input type="text" id="search-filter" placeholder="Search findings..." value="${textFilter}" 
+                onkeyup="if(event.key === 'Enter'){ renderFindingsTable(document.getElementById('panel-findings'), findingsData, document.getElementById('severity-filter').value, this.value); }"
+                style="flex-grow: 1; padding: 5px; background: var(--bg); border: 1px solid var(--border); color: var(--text); border-radius: 4px;">
+            
+            <span style="color: var(--text-secondary); white-space: nowrap;">${filtered.length} total</span>
         </div>
         <div style="overflow-x: auto;">
             <table class="data-table">

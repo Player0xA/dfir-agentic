@@ -158,15 +158,37 @@ async def get_generated_artifacts(case_id: str):
                     # Ignore python scripts, standard logs, and hidden files
                     if item.is_file() and not item.name.endswith(".py") and not item.name.endswith(".log") and not item.name.startswith("."):
                         # Only grab actual data outputs like csv, json, sqlite, txt
-                        if item.suffix.lower() in [".csv", ".json", ".sqlite", ".db", ".txt", ".plaso"]:
+                        if item.suffix.lower() in [".csv", ".json", ".sqlite", ".db", ".txt", ".plaso", ".toon"]:
                             # Skip the standard orchestrator framework files
-                            if item.name not in ["summary.md", "audit_ledger.jsonl", "manifest.json", "plan.md", "progress.md"]:
+                            if item.name not in ["summary.md", "audit_ledger.jsonl", "manifest.json", "plan.md", "progress.md", "request.json"]:
                                 found_artifacts.append({
                                     "name": item.name,
-                                    "relpath": str(item.relative_to(case_dir)),
+                                    "relpath": f"orchestrator/{item.relative_to(orch_dir)}",
                                     "size": item.stat().st_size
                                 })
                                 
+    # Check global output directories for this specific case_id
+    global_out_dirs = ["jsonl", "csv", "toon", "html", "plaso"]
+    outputs_root = PROJECT_ROOT / "outputs"
+    
+    for g_dir in global_out_dirs:
+        target_dir = outputs_root / g_dir
+        if target_dir.exists():
+            # Tools often write to outputs/<format>/<tool_name>/<case_id>/
+            for tool_dir in target_dir.iterdir():
+                if tool_dir.is_dir():
+                    case_specific_dir = tool_dir / case_id
+                    if case_specific_dir.exists():
+                        for item in case_specific_dir.rglob("*"):
+                            if item.is_file() and not item.name.startswith("."):
+                                # Skip noisy framework files
+                                if item.name not in ["request.json", "stdout.log", "stderr.log"]:
+                                    found_artifacts.append({
+                                        "name": item.name,
+                                        "relpath": f"outputs/{g_dir}/{tool_dir.name}/{case_id}/{item.relative_to(case_specific_dir)}",
+                                        "size": item.stat().st_size
+                                    })
+                                    
     return {"artifacts": found_artifacts}
 
 @app.get("/api/cases/{case_id}/audit")
