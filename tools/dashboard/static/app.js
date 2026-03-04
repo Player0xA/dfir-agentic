@@ -8,15 +8,28 @@ const initTheme = () => {
     const savedTheme = localStorage.getItem('dfir-theme') || 'dark';
     document.documentElement.setAttribute('data-theme', savedTheme);
 
+    const getThemeIcon = (theme) => {
+        if (theme === 'dark') return '☀️'; // Next is chill-dark? Or light? 
+        // Let's just use icons that represent the NEXT state, or CURRENT. 
+        // Previously: dark ? ☀️ : 🌙. This meant: if dark, show sun (click for light). 
+        if (theme === 'dark') return '☕'; // Click for chill-dark
+        if (theme === 'chill-dark') return '☀️'; // Click for light
+        return '🌙'; // Click for dark
+    };
+
     const btn = document.getElementById('btn-theme-toggle');
-    if (btn) btn.innerHTML = savedTheme === 'dark' ? '☀️' : '🌙';
+    if (btn) btn.innerHTML = getThemeIcon(savedTheme);
 
     document.getElementById('btn-theme-toggle').addEventListener('click', () => {
         const currentTheme = document.documentElement.getAttribute('data-theme');
-        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+        let newTheme = 'dark';
+        if (currentTheme === 'dark') newTheme = 'chill-dark';
+        else if (currentTheme === 'chill-dark') newTheme = 'light';
+        else newTheme = 'dark';
+
         document.documentElement.setAttribute('data-theme', newTheme);
         localStorage.setItem('dfir-theme', newTheme);
-        document.getElementById('btn-theme-toggle').innerHTML = newTheme === 'dark' ? '☀️' : '🌙';
+        document.getElementById('btn-theme-toggle').innerHTML = getThemeIcon(newTheme);
     });
 };
 
