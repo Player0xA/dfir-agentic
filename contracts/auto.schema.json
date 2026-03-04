@@ -151,6 +151,9 @@
         "lecmd": {
           "type": "string"
         },
+        "recentfilecache": {
+          "type": "string"
+        },
         "enrichment": {
           "type": "string"
         },
