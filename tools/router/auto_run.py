@@ -20,6 +20,7 @@ PLASO_RUNNER = Path("pipelines/plaso_evtx/run.sh")
 MERGE_TOOL = Path("tools/merge/merge_case_findings.py")
 
 APPCOMPAT_RUNNER = Path("pipelines/appcompatcache/run.sh")
+MFTECMD_RUNNER = Path("pipelines/mftecmd/run.sh")
 
 VALIDATE_AUTO = Path("tools/contracts/validate_auto.py")
 AUTO_SCHEMA = Path("contracts/auto.schema.json")
@@ -75,6 +76,9 @@ def main() -> int:
         elif any("system" in name for name in ev_names):
             kind = "windows_registry"
             rec = "appcompatcache"
+        elif any("$mft" in name or "mft" in name for name in ev_names):
+            kind = "windows_mft"
+            rec = "mftecmd"
         else:
             kind = "generic"
             rec = None
@@ -144,6 +148,7 @@ def main() -> int:
         "stages": {
             "plaso": "skipped",
             "appcompatcache": "skipped",
+            "mftecmd": "skipped",
             "enrichment": "skipped",
             "merge": "skipped"
         }
@@ -201,6 +206,23 @@ def main() -> int:
         except Exception as e:
             print(f"WARNING: AppCompatCache pipeline failed: {e}", file=sys.stderr)
             auto_doc["stages"]["appcompatcache"] = f"error: {e}"
+
+    # --- Phase: Automated MFTECmd ---
+    if rec == "mftecmd" and dispatch_block["status"] == "ok":
+        print("INFO: starting mftecmd pipeline")
+        auto_doc["stages"]["mftecmd"] = "running"
+        try:
+            staged = [e for e in intake.get("evidence", []) if e.get("root") == "staged"]
+            if staged:
+                mft_file = Path(intake["evidence_roots"]["staged"]) / staged[0]["relpath"]
+                mft_run_id = f"{intake_id}-mft"
+                run_must([str(MFTECMD_RUNNER), mft_run_id, ts, str(mft_file)])
+                auto_doc["stages"]["mftecmd"] = "ok"
+            else:
+                auto_doc["stages"]["mftecmd"] = "skipped (no evidence)"
+        except Exception as e:
+            print(f"WARNING: MFTECmd pipeline failed: {e}", file=sys.stderr)
+            auto_doc["stages"]["mftecmd"] = f"error: {e}"
 
     # 6) Optional enrichment stage
     if args.enrichment_policy == "always":
