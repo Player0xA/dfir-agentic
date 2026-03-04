@@ -131,65 +131,74 @@ async def get_notes(case_id: str):
 @app.get("/api/cases/{case_id}/generated_artifacts")
 async def get_generated_artifacts(case_id: str):
     """Scan the case directory for any tool-generated artifacts (CSVs, JSONs, etc)."""
+    import json
     case_dir = PROJECT_ROOT / "outputs" / "intake" / case_id
     if not case_dir.exists():
         return {"artifacts": []}
     
     found_artifacts = []
     
-    # Check top level artifacts dir
-    artifacts_dir = case_dir / "artifacts"
-    if artifacts_dir.exists():
-        for item in artifacts_dir.rglob("*"):
-            if item.is_file():
-                found_artifacts.append({
-                    "name": item.name,
-                    "relpath": str(item.relative_to(case_dir)),
-                    "size": item.stat().st_size
-                })
-                
-    # Check inside orchestrator runs for tool outputs
+    def scan_dir(d, prefix=""):
+        if d.exists():
+            for item in d.rglob("*"):
+                if item.is_file() and not item.name.startswith(".") and not item.name.endswith(".py") and not item.name.endswith(".log"):
+                    if item.suffix.lower() in [".csv", ".json", ".sqlite", ".txt", ".plaso", ".jsonl", ".db"]:
+                        found_artifacts.append({
+                            "name": item.name,
+                            "relpath": f"{prefix}{item.name}",
+                            "size": item.stat().st_size
+                        })
+
+    # 1. Check top level artifacts dir
+    scan_dir(case_dir / "artifacts", "artifacts/")
+    
+    # 2. Check orchestrator
     orch_dir = case_dir / "orchestrator"
     if orch_dir.exists():
         for run_dir in orch_dir.iterdir():
             if run_dir.is_dir() and run_dir.name.startswith("run_"):
-                # Sometimes tools drop files directly in run_X or run_X/artifacts
-                for item in run_dir.rglob("*"):
-                    # Ignore python scripts, standard logs, and hidden files
-                    if item.is_file() and not item.name.endswith(".py") and not item.name.endswith(".log") and not item.name.startswith("."):
-                        # Only grab actual data outputs like csv, json, sqlite, txt
-                        if item.suffix.lower() in [".csv", ".json", ".sqlite", ".db", ".txt", ".plaso", ".toon"]:
-                            # Skip the standard orchestrator framework files
-                            if item.name not in ["summary.md", "audit_ledger.jsonl", "manifest.json", "plan.md", "progress.md", "request.json"]:
-                                found_artifacts.append({
-                                    "name": item.name,
-                                    "relpath": f"orchestrator/{item.relative_to(orch_dir)}",
-                                    "size": item.stat().st_size
-                                })
-                                
-    # Check global output directories for this specific case_id
-    global_out_dirs = ["jsonl", "csv", "toon", "html", "plaso"]
-    outputs_root = PROJECT_ROOT / "outputs"
-    
-    for g_dir in global_out_dirs:
-        target_dir = outputs_root / g_dir
-        if target_dir.exists():
-            # Tools often write to outputs/<format>/<tool_name>/<case_id>/
-            for tool_dir in target_dir.iterdir():
-                if tool_dir.is_dir():
-                    case_specific_dir = tool_dir / case_id
-                    if case_specific_dir.exists():
-                        for item in case_specific_dir.rglob("*"):
-                            if item.is_file() and not item.name.startswith("."):
-                                # Skip noisy framework files
-                                if item.name not in ["request.json", "stdout.log", "stderr.log"]:
-                                    found_artifacts.append({
-                                        "name": item.name,
-                                        "relpath": f"outputs/{g_dir}/{tool_dir.name}/{case_id}/{item.relative_to(case_specific_dir)}",
-                                        "size": item.stat().st_size
-                                    })
-                                    
-    return {"artifacts": found_artifacts}
+                scan_dir(run_dir, f"orchestrator/{run_dir.name}/")
+                
+    # 3. Check Plaso
+    plaso_file = case_dir / f"{case_id}.plaso"
+    if plaso_file.exists():
+        found_artifacts.append({
+            "name": plaso_file.name,
+            "relpath": f"supertimeline/{plaso_file.name}",
+            "size": plaso_file.stat().st_size
+        })
+
+    # 4. Check auto.json (Chainsaw baseline)
+    auto_json = case_dir / "auto.json"
+    if auto_json.exists():
+        try:
+            with open(auto_json, "r") as f:
+                auto_data = json.load(f)
+            baseline_run_id = auto_data.get("dispatch", {}).get("run_id")
+            if baseline_run_id:
+                scan_dir(PROJECT_ROOT / "outputs" / "jsonl" / "chainsaw_evtx" / baseline_run_id, "chainsaw/")
+                scan_dir(PROJECT_ROOT / "outputs" / "csv" / "chainsaw_evtx" / baseline_run_id, "chainsaw/")
+        except Exception:
+            pass
+
+    # 5. Check enrichment.json (Hayabusa enrichment)
+    enrich_json = case_dir / "enrichment.json"
+    if enrich_json.exists():
+        try:
+            with open(enrich_json, "r") as f:
+                enrich_data = json.load(f)
+            enrich_run_id = enrich_data.get("result", {}).get("run_id")
+            if enrich_run_id:
+                scan_dir(PROJECT_ROOT / "outputs" / "jsonl" / "hayabusa_evtx" / enrich_run_id, "hayabusa/")
+                scan_dir(PROJECT_ROOT / "outputs" / "csv" / "hayabusa_evtx" / enrich_run_id, "hayabusa/")
+        except Exception:
+            pass
+            
+    # Remove duplicates if any
+    unique_artifacts = {a["relpath"]: a for a in found_artifacts}.values()
+
+    return {"artifacts": list(unique_artifacts)}
+
 
 @app.get("/api/cases/{case_id}/audit")
 async def get_audit(case_id: str):

@@ -169,7 +169,7 @@ window.renderFindings = async (caseId) => {
     }
 };
 
-const renderFindingsTable = (container, data, sevFilter, textFilter) => {
+const renderFindingsTable = (container, data, sevFilter, sourceFilterText) => {
     let filtered = data;
 
     // Apply Severity Filter
@@ -177,24 +177,44 @@ const renderFindingsTable = (container, data, sevFilter, textFilter) => {
         filtered = filtered.filter(f => f.severity?.toLowerCase() === sevFilter.toLowerCase());
     }
 
-    // Apply Text Search Filter (Case-insensitive)
-    if (textFilter && textFilter.trim() !== '') {
-        const query = textFilter.toLowerCase();
+    // Determine all unique sources for the dropdown
+    const allSources = new Set(['all']);
+    data.forEach(f => {
+        let s = 'N/A';
+        if (f.source && f.source.tool) {
+            s = f.source.tool;
+        } else if (f.source_evidence_id) {
+            s = f.source_evidence_id;
+        } else if (f.tool_name) {
+            s = f.tool_name;
+        }
+        allSources.add(s);
+    });
+
+    // Apply Source Filter
+    if (sourceFilterText && sourceFilterText !== 'all') {
         filtered = filtered.filter(f => {
-            const type = (f.category || f.type || 'Unknown').toLowerCase();
-            const desc = (f.summary || f.statement || f.description || 'N/A').toLowerCase();
-
-            let source = '';
-            if (f.evidence_id) source += f.evidence_id.toLowerCase() + ' ';
-            if (f.tool_name) source += f.tool_name.toLowerCase() + ' ';
-
-            return type.includes(query) || desc.includes(query) || source.includes(query);
+            let source = 'N/A';
+            if (f.source && f.source.tool) {
+                source = f.source.tool;
+            } else if (f.source_evidence_id) {
+                source = f.source_evidence_id;
+            } else if (f.tool_name) {
+                source = f.tool_name;
+            }
+            return source === sourceFilterText;
         });
     }
 
+    let sourceOptionsHtml = Array.from(allSources).map(s => {
+        const label = s === 'all' ? 'All Sources' : s;
+        const selected = (sourceFilterText === s || (!sourceFilterText && s === 'all')) ? 'selected' : '';
+        return `<option value="${s}" ${selected}>${label}</option>`;
+    }).join('');
+
     let html = `
         <div style="margin-bottom: 10px; display: flex; gap: 10px; align-items: center;">
-            <select id="severity-filter" onchange="renderFindingsTable(document.getElementById('panel-findings'), findingsData, this.value, document.getElementById('search-filter').value)">
+            <select id="severity-filter" onchange="renderFindingsTable(document.getElementById('panel-findings'), findingsData, this.value, document.getElementById('source-filter').value)">
                 <option value="all" ${sevFilter === 'all' ? 'selected' : ''}>All Severities</option>
                 <option value="critical" ${sevFilter === 'critical' ? 'selected' : ''}>Critical</option>
                 <option value="high" ${sevFilter === 'high' ? 'selected' : ''}>High</option>
@@ -203,9 +223,9 @@ const renderFindingsTable = (container, data, sevFilter, textFilter) => {
                 <option value="informational" ${sevFilter === 'informational' ? 'selected' : ''}>Info</option>
             </select>
             
-            <input type="text" id="search-filter" placeholder="Search findings..." value="${textFilter}" 
-                onkeyup="if(event.key === 'Enter'){ renderFindingsTable(document.getElementById('panel-findings'), findingsData, document.getElementById('severity-filter').value, this.value); }"
-                style="flex-grow: 1; padding: 5px; background: var(--bg); border: 1px solid var(--border); color: var(--text); border-radius: 4px;">
+            <select id="source-filter" onchange="renderFindingsTable(document.getElementById('panel-findings'), findingsData, document.getElementById('severity-filter').value, this.value)" style="flex-grow: 1; padding: 5px; background: var(--bg); border: 1px solid var(--border); color: var(--text); border-radius: 4px;">
+                ${sourceOptionsHtml}
+            </select>
             
             <span style="color: var(--text-secondary); white-space: nowrap;">${filtered.length} total</span>
         </div>
