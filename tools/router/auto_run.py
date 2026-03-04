@@ -24,6 +24,7 @@ MFTECMD_RUNNER = Path("pipelines/mftecmd/run.sh")
 RBCMD_RUNNER = Path("pipelines/rbcmd/run.sh")
 LECMD_RUNNER = Path("pipelines/lecmd/run.sh")
 RFC_RUNNER = Path("pipelines/recentfilecache/run.sh")
+JLECMD_RUNNER = Path("pipelines/jlecmd/run.sh")
 
 VALIDATE_AUTO = Path("tools/contracts/validate_auto.py")
 AUTO_SCHEMA = Path("contracts/auto.schema.json")
@@ -91,6 +92,9 @@ def main() -> int:
         elif any("recentfilecache" in name.lower() for name in ev_names):
             kind = "windows_recentfilecache"
             rec = "recentfilecache"
+        elif any("destinations-ms" in name.lower() for name in ev_names):
+            kind = "windows_jumplist"
+            rec = "jlecmd"
         else:
             kind = "generic"
             rec = None
@@ -164,6 +168,7 @@ def main() -> int:
             "rbcmd": "skipped",
             "lecmd": "skipped",
             "recentfilecache": "skipped",
+            "jlecmd": "skipped",
             "enrichment": "skipped",
             "merge": "skipped"
         }
@@ -289,6 +294,23 @@ def main() -> int:
         except Exception as e:
             print(f"WARNING: RecentFileCache pipeline failed: {e}", file=sys.stderr)
             auto_doc["stages"]["recentfilecache"] = f"error: {e}"
+
+    # --- Phase: Automated JLECmd ---
+    if rec == "jlecmd" and dispatch_block["status"] == "ok":
+        print("INFO: starting jlecmd pipeline")
+        auto_doc["stages"]["jlecmd"] = "running"
+        try:
+            staged = [e for e in intake.get("evidence", []) if e.get("root") == "staged"]
+            if staged:
+                target_path = Path(intake["evidence_roots"]["staged"]) / staged[0]["relpath"]
+                jl_run_id = f"{intake_id}-jl"
+                run_must([str(JLECMD_RUNNER), jl_run_id, ts, str(target_path)])
+                auto_doc["stages"]["jlecmd"] = "ok"
+            else:
+                auto_doc["stages"]["jlecmd"] = "skipped (no evidence)"
+        except Exception as e:
+            print(f"WARNING: JLECmd pipeline failed: {e}", file=sys.stderr)
+            auto_doc["stages"]["jlecmd"] = f"error: {e}"
 
     # 6) Optional enrichment stage
     if args.enrichment_policy == "always":
