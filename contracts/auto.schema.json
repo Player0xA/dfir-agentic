@@ -145,6 +145,9 @@
         "mftecmd": {
           "type": "string"
         },
+        "rbcmd": {
+          "type": "string"
+        },
         "enrichment": {
           "type": "string"
         },

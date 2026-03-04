@@ -21,6 +21,7 @@ MERGE_TOOL = Path("tools/merge/merge_case_findings.py")
 
 APPCOMPAT_RUNNER = Path("pipelines/appcompatcache/run.sh")
 MFTECMD_RUNNER = Path("pipelines/mftecmd/run.sh")
+RBCMD_RUNNER = Path("pipelines/rbcmd/run.sh")
 
 VALIDATE_AUTO = Path("tools/contracts/validate_auto.py")
 AUTO_SCHEMA = Path("contracts/auto.schema.json")
@@ -79,6 +80,9 @@ def main() -> int:
         elif any("$mft" in name or "mft" in name for name in ev_names):
             kind = "windows_mft"
             rec = "mftecmd"
+        elif any("recycle" in name or "$i" in name for name in ev_names):
+            kind = "windows_recycle_bin"
+            rec = "rbcmd"
         else:
             kind = "generic"
             rec = None
@@ -149,6 +153,7 @@ def main() -> int:
             "plaso": "skipped",
             "appcompatcache": "skipped",
             "mftecmd": "skipped",
+            "rbcmd": "skipped",
             "enrichment": "skipped",
             "merge": "skipped"
         }
@@ -223,6 +228,23 @@ def main() -> int:
         except Exception as e:
             print(f"WARNING: MFTECmd pipeline failed: {e}", file=sys.stderr)
             auto_doc["stages"]["mftecmd"] = f"error: {e}"
+
+    # --- Phase: Automated RBCmd ---
+    if rec == "rbcmd" and dispatch_block["status"] == "ok":
+        print("INFO: starting rbcmd pipeline")
+        auto_doc["stages"]["rbcmd"] = "running"
+        try:
+            staged = [e for e in intake.get("evidence", []) if e.get("root") == "staged"]
+            if staged:
+                target_path = Path(intake["evidence_roots"]["staged"]) / staged[0]["relpath"]
+                rb_run_id = f"{intake_id}-rb"
+                run_must([str(RBCMD_RUNNER), rb_run_id, ts, str(target_path)])
+                auto_doc["stages"]["rbcmd"] = "ok"
+            else:
+                auto_doc["stages"]["rbcmd"] = "skipped (no evidence)"
+        except Exception as e:
+            print(f"WARNING: RBCmd pipeline failed: {e}", file=sys.stderr)
+            auto_doc["stages"]["rbcmd"] = f"error: {e}"
 
     # 6) Optional enrichment stage
     if args.enrichment_policy == "always":
