@@ -19,6 +19,8 @@ ENRICH_RUNNER = Path("tools/enrich/run_hayabusa_if_needed.py")
 PLASO_RUNNER = Path("pipelines/plaso_evtx/run.sh")
 MERGE_TOOL = Path("tools/merge/merge_case_findings.py")
 
+APPCOMPAT_RUNNER = Path("pipelines/appcompatcache/run.sh")
+
 VALIDATE_AUTO = Path("tools/contracts/validate_auto.py")
 AUTO_SCHEMA = Path("contracts/auto.schema.json")
 
@@ -65,9 +67,14 @@ def main() -> int:
         intake_id = intake["case_id"]
         # Inferred classification based on evidence
         evidence_types = [e["type"] for e in intake.get("evidence", [])]
+        ev_names = [e["name"].lower() for e in intake.get("evidence", [])]
+        
         if "evtx" in evidence_types or "evtx_dir" in evidence_types:
             kind = "windows_evtx_dir"
             rec = "chainsaw_evtx"
+        elif any("system" in name for name in ev_names):
+            kind = "windows_registry"
+            rec = "appcompatcache"
         else:
             kind = "generic"
             rec = None
@@ -136,6 +143,7 @@ def main() -> int:
         "dispatch": dispatch_block,
         "stages": {
             "plaso": "skipped",
+            "appcompatcache": "skipped",
             "enrichment": "skipped",
             "merge": "skipped"
         }
@@ -175,6 +183,24 @@ def main() -> int:
                 except Exception as e:
                     print(f"WARNING: Plaso pipeline failed: {e}", file=sys.stderr)
                     auto_doc["stages"]["plaso"] = f"error: {e}"
+
+    # --- Phase: Automated AppCompatCache ---
+    if rec == "appcompatcache" and dispatch_block["status"] == "ok":
+        print("INFO: starting appcompatcache pipeline")
+        auto_doc["stages"]["appcompatcache"] = "running"
+        try:
+            staged = [e for e in intake.get("evidence", []) if e.get("root") == "staged"]
+            if staged:
+                # Find the SYSTEM hive or assume the passed dir is the hive
+                system_hive = Path(intake["evidence_roots"]["staged"]) / staged[0]["relpath"]
+                acp_run_id = f"{intake_id}-acp"
+                run_must([str(APPCOMPAT_RUNNER), acp_run_id, ts, str(system_hive)])
+                auto_doc["stages"]["appcompatcache"] = "ok"
+            else:
+                auto_doc["stages"]["appcompatcache"] = "skipped (no evidence)"
+        except Exception as e:
+            print(f"WARNING: AppCompatCache pipeline failed: {e}", file=sys.stderr)
+            auto_doc["stages"]["appcompatcache"] = f"error: {e}"
 
     # 6) Optional enrichment stage
     if args.enrichment_policy == "always":
