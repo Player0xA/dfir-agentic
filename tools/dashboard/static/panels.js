@@ -33,6 +33,34 @@ window.renderProgress = async (caseId) => {
                     <p style="margin-top: 1rem; color: var(--severity-critical);">${data.error || 'Unknown error'}</p>
                 </div>
             `;
+        } else if (data.status === 'initializing') {
+            // Investigation is starting up - all stages are "skipped" (not yet started)
+            const pending = data.pending_tools || [];
+            const pid = data.pid;
+            const processRunning = data.process_running;
+            
+            html = `
+                <div style="text-align: center; padding: 1.5rem;">
+                    <div style="font-size: 3rem; margin-bottom: 1rem; animation: spin 2s linear infinite;">🚀</div>
+                    <div class="badge warning" style="font-size: 1rem; padding: 0.5rem 1rem; animation: pulse 2s infinite;">⏳ Initializing Investigation</div>
+                    <p style="margin-top: 1rem; color: var(--text-secondary);">${data.current_action || 'Starting investigation pipelines...'}</p>
+                    
+                    ${pid ? `<p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.5rem;">Process ID: ${pid} ${processRunning ? '(running)' : '(starting)'}</p>` : ''}
+                    
+                    <div style="margin-top: 1.5rem; text-align: left;">
+                        <div style="color: var(--text-muted); font-size: 0.75rem; margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 1px;">Planned Stages (${pending.length})</div>
+                        <div style="display: flex; flex-direction: column; gap: 0.3rem;">
+                            ${pending.slice(0, 5).map(tool => `
+                                <div style="display: flex; align-items: center; gap: 0.5rem; padding: 0.4rem; background: var(--bg-surface); border-radius: 6px; opacity: 0.6;">
+                                    <span style="color: var(--text-muted);">○</span>
+                                    <span style="font-size: 0.8rem; color: var(--text-secondary);">${tool}</span>
+                                </div>
+                            `).join('')}
+                            ${pending.length > 5 ? `<div style="text-align: center; font-size: 0.75rem; color: var(--text-muted);">+${pending.length - 5} more...</div>` : ''}
+                        </div>
+                    </div>
+                </div>
+            `;
         } else if (data.status === 'running') {
             const progress = data.progress || 0;
             const currentTool = data.current_tool || 'Unknown';

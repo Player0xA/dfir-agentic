@@ -732,28 +732,26 @@ async def get_investigation_status(case_name: str):
                 pass
         
         # If we have stage info, determine current progress
+        # Stage name mapping: auto_run.py stage names → display names
+        stage_display_map = {
+            "plaso": "Plaso Super Timeline",
+            "chainsaw_evtx": "Chainsaw EVTX Analysis",
+            "hayabusa_evtx": "Hayabusa Threat Hunting",
+            "appcompatcache": "AppCompatCache Parser",
+            "mftecmd": "MFT Analysis",
+            "rbcmd": "Recycle Bin Analysis",
+            "lecmd": "LNK File Analysis",
+            "recentfilecache": "RecentFileCache Parser",
+            "jlecmd": "Jump List Analysis",
+            "recmd": "Registry Analysis",
+            "enrichment": "Hayabusa Enrichment",
+            "merge": "Data Aggregation"
+        }
+        
         if stage_info:
             completed = []
             running = None
             pending = []
-            
-            # Stage name mapping: auto_run.py stage names → display names
-            # auto_run.py creates stages: plaso, appcompatcache, mftecmd, rbcmd, lecmd, 
-            # recentfilecache, jlecmd, recmd, enrichment, merge
-            stage_display_map = {
-                "plaso": "Plaso Super Timeline",
-                "chainsaw_evtx": "Chainsaw EVTX Analysis",
-                "hayabusa_evtx": "Hayabusa Threat Hunting",
-                "appcompatcache": "AppCompatCache Parser",
-                "mftecmd": "MFT Analysis",
-                "rbcmd": "Recycle Bin Analysis",
-                "lecmd": "LNK File Analysis",
-                "recentfilecache": "RecentFileCache Parser",
-                "jlecmd": "Jump List Analysis",
-                "recmd": "Registry Analysis",
-                "enrichment": "Hayabusa Enrichment",
-                "merge": "Data Aggregation"
-            }
             
             # Tool order based on what auto_run.py actually creates
             # Dispatch pipelines (chainsaw, hayabusa) run first, then direct runners
@@ -831,6 +829,42 @@ async def get_investigation_status(case_name: str):
                 "current_action": current_action,
                 "completed_tools": completed,
                 "pending_tools": pending,
+                "stages": stage_info,
+                "pid": pid,
+                "process_running": process_running,
+                "log_file": str(case_dir / "investigation.log") if (case_dir / "investigation.log").exists() else None
+            }
+        
+        # Check if all stages are "skipped" - investigation is initializing
+        if stage_info and all(status == "skipped" for status in stage_info.values()):
+            # Check if process is still running
+            pid = None
+            process_running = False
+            if status_file.exists():
+                try:
+                    with open(status_file, "r") as f:
+                        status_data = json.load(f)
+                        pid = status_data.get("pid")
+                        if pid:
+                            try:
+                                os.kill(pid, 0)
+                                process_running = True
+                            except (OSError, ProcessLookupError):
+                                process_running = False
+                except Exception:
+                    pass
+            
+            # Build pending tools list from stage names
+            pending_tools = [stage_display_map.get(tool, tool) for tool in stage_info.keys()]
+            
+            return {
+                "status": "initializing",
+                "case_name": case_name,
+                "progress": 0,
+                "current_tool": "Initializing",
+                "current_action": "Starting investigation pipelines...",
+                "completed_tools": [],
+                "pending_tools": pending_tools,
                 "stages": stage_info,
                 "pid": pid,
                 "process_running": process_running,
