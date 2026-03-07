@@ -38,8 +38,13 @@ def run_capture(cmd):
     return p.returncode, p.stdout, p.stderr
 
 def run_must(cmd):
-    p = subprocess.run(cmd, text=True)
+    p = subprocess.run(cmd, text=True, capture_output=True)
     if p.returncode != 0:
+        print(f"FAILED CMD: {' '.join(cmd)}", file=sys.stderr)
+        if p.stdout:
+            print(f"STDOUT:\n{p.stdout}", file=sys.stderr)
+        if p.stderr:
+            print(f"STDERR:\n{p.stderr}", file=sys.stderr)
         raise SystemExit(p.returncode)
 
 def load_json(p: Path):

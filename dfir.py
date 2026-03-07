@@ -12,7 +12,11 @@ def run_cmd(cmd: list[str], task_name: str):
     print(f"\n>>> [Stage: {task_name}] Running: {' '.join(cmd)}")
     result = subprocess.run(cmd, capture_output=True, text=True)
     if result.returncode != 0:
-        print(f"FAILED: {task_name}\nERROR: {result.stderr}", file=sys.stderr)
+        print(f"FAILED: {task_name}", file=sys.stderr)
+        if result.stdout:
+            print(f"STDOUT:\n{result.stdout}", file=sys.stderr)
+        if result.stderr:
+            print(f"STDERR:\n{result.stderr}", file=sys.stderr)
         return None
     return result.stdout.strip()
 
