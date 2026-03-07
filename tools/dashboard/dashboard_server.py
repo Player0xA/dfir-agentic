@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 from fastapi import FastAPI, HTTPException, UploadFile, File, Form
 from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
@@ -149,26 +150,274 @@ async def get_case(case_id: str):
                 
     return result
 
+@app.get("/api/cases/{case_id}/evidence_files")
+async def get_evidence_files(case_id: str):
+    """List all files within the evidence directories."""
+    case_dir = PROJECT_ROOT / "outputs" / "intake" / case_id
+    if not case_dir.exists():
+        return {"files": []}
+        
+    intake_json = case_dir / "intake.json"
+    if not intake_json.exists():
+        return {"files": []}
+        
+    try:
+        with open(intake_json, "r") as f:
+            intake_data = json.load(f)
+            paths = intake_data.get("inputs", {}).get("paths", [])
+            
+        evidence_files = []
+        MAX_FILES = 2000  # Limit to prevent UI freezing
+        
+        for p in paths:
+            path = Path(p)
+            if not path.exists():
+                continue
+                
+            if path.is_file():
+                evidence_files.append({
+                    "name": path.name,
+                    "path": str(path),
+                    "relpath": path.name,
+                    "size": path.stat().st_size,
+                    "type": "file"
+                })
+            elif path.is_dir():
+                # BFS to list files
+                queue = [path]
+                # We need a root for relative path calculation
+                # If multiple roots, just use the parent of the current root
+                root_parent = path.parent
+                
+                processed_count = 0
+                while queue and processed_count < MAX_FILES:
+                    current_dir = queue.pop(0)
+                    try:
+                        # Sort for deterministic output
+                        entries = sorted(list(current_dir.iterdir()), key=lambda x: x.name)
+                        for item in entries:
+                            if item.is_file():
+                                if item.name.startswith("."): continue
+                                try:
+                                    relpath = str(item.relative_to(root_parent))
+                                except ValueError:
+                                    relpath = item.name
+                                    
+                                evidence_files.append({
+                                    "name": item.name,
+                                    "path": str(item),
+                                    "relpath": relpath,
+                                    "size": item.stat().st_size,
+                                    "type": "file"
+                                })
+                                processed_count += 1
+                                if processed_count >= MAX_FILES:
+                                    break
+                            elif item.is_dir():
+                                if not item.name.startswith("."):
+                                    queue.append(item)
+                    except PermissionError:
+                        pass
+                        
+        return {"files": evidence_files}
+        
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
 @app.get("/api/cases/{case_id}/findings")
 async def get_findings(case_id: str, severity: str | None = None):
-    """Get findings for a case, optionally filtered by severity."""
+    """Get findings for a case, including live results from tools that have finished."""
     case_dir = PROJECT_ROOT / "outputs" / "intake" / case_id
     findings_path = case_dir / "case_findings.json"
     
-    if not findings_path.exists():
-        return {"findings": []}
+    findings = []
+    
+    # First, try to load consolidated findings
+    if findings_path.exists():
+        try:
+            with open(findings_path, "r", encoding="utf-8") as f:
+                data = json.load(f)
+                findings = data.get("findings", [])
+        except Exception:
+            pass
+    
+    # If no consolidated findings yet, look for live tool outputs
+    if not findings:
+        # Check for Chainsaw raw findings
+        chainsaw_findings = await _load_chainsaw_findings(case_id)
+        findings.extend(chainsaw_findings)
         
-    try:
-        with open(findings_path, "r", encoding="utf-8") as f:
-            data = json.load(f)
-            findings = data.get("findings", [])
-            
-            if severity:
-                findings = [f for f in findings if f.get("severity", "").lower() == severity.lower()]
+        # Check for Hayabusa raw findings
+        hayabusa_findings = await _load_hayabusa_findings(case_id)
+        findings.extend(hayabusa_findings)
+        
+    if severity:
+        findings = [f for f in findings if f.get("severity", "").lower() == severity.lower()]
                 
-            return {"findings": findings}
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Failed to load findings: {str(e)}")
+    return {"findings": findings}
+
+async def _load_chainsaw_findings(case_id: str):
+    """Load raw Chainsaw findings from tool output directories."""
+    findings = []
+    
+    # Look for chainsaw_evtx output directories
+    chainsaw_base = PROJECT_ROOT / "outputs" / "jsonl" / "chainsaw_evtx"
+    if not chainsaw_base.exists():
+        return findings
+    
+    # Find all run directories for this case
+    case_intake_json = PROJECT_ROOT / "outputs" / "intake" / case_id / "intake.json"
+    case_uuid = None
+    if case_intake_json.exists():
+        try:
+            with open(case_intake_json, "r") as f:
+                case_uuid = json.load(f).get("intake_id")
+        except:
+            pass
+    
+    for run_dir in chainsaw_base.iterdir():
+        if not run_dir.is_dir():
+            continue
+            
+        # Check if this run belongs to our case
+        # Look for a findings.json or run.json in the run directory
+        findings_json = run_dir / "findings.json"
+        if findings_json.exists():
+            try:
+                with open(findings_json, "r") as f:
+                    data = json.load(f)
+                    # Check if this belongs to our case by looking at run_id or inputs
+                    run_id = data.get("run_metadata", {}).get("run_id", "")
+                    if case_uuid and case_uuid[:8] in run_id.lower():
+                        tool_findings = data.get("findings", [])
+                        # Add source info
+                        for f in tool_findings:
+                            if not f.get("source"):
+                                f["source"] = {"tool": "chainsaw", "rule_title": f.get("summary", "Chainsaw detection")}
+                        findings.extend(tool_findings)
+            except:
+                pass
+        
+        # Also check for raw output.jsonl
+        output_jsonl = run_dir / "output.jsonl"
+        if output_jsonl.exists() and not any(f.get("source", {}).get("tool") == "chainsaw" for f in findings):
+            try:
+                with open(output_jsonl, "r") as f:
+                    idx = 0
+                    for line in f:
+                        idx += 1
+                        try:
+                            rec = json.loads(line.strip())
+                            if rec:
+                                finding = {
+                                    "finding_id": f"F-CHAINSAW-{idx:06d}",
+                                    "category": rec.get("group", rec.get("kind", "unknown")),
+                                    "summary": rec.get("name", rec.get("title", rec.get("rule", "Detection"))),
+                                    "severity": (rec.get("level") or rec.get("severity", "medium")).lower(),
+                                    "source": {
+                                        "tool": "chainsaw",
+                                        "rule_title": rec.get("name", rec.get("title", "Unknown rule"))
+                                    },
+                                    "evidence": {
+                                        "event_refs": [rec.get("event_id", "")],
+                                        "raw": rec
+                                    }
+                                }
+                                findings.append(finding)
+                        except:
+                            continue
+            except:
+                pass
+    
+    return findings
+
+async def _load_hayabusa_findings(case_id: str):
+    """Load raw Hayabusa findings from tool output directories."""
+    findings = []
+    
+    # Look for hayabusa_evtx output directories
+    hayabusa_base = PROJECT_ROOT / "outputs" / "jsonl" / "hayabusa_evtx"
+    if not hayabusa_base.exists():
+        return findings
+    
+    # Find all run directories for this case
+    case_intake_json = PROJECT_ROOT / "outputs" / "intake" / case_id / "intake.json"
+    case_uuid = None
+    if case_intake_json.exists():
+        try:
+            with open(case_intake_json, "r") as f:
+                case_uuid = json.load(f).get("intake_id")
+        except:
+            pass
+    
+    for run_dir in hayabusa_base.iterdir():
+        if not run_dir.is_dir():
+            continue
+            
+        # Check if this run belongs to our case
+        # Look for a findings.json or run.json in the run directory
+        findings_json = run_dir / "findings.json"
+        if findings_json.exists():
+            try:
+                with open(findings_json, "r") as f:
+                    data = json.load(f)
+                    # Check if this belongs to our case
+                    run_id = data.get("run_id", "")
+                    inputs = data.get("inputs", {})
+                    if case_uuid and case_uuid[:8] in run_id.lower():
+                        tool_findings = data.get("findings", [])
+                        # Add source info if missing
+                        for f in tool_findings:
+                            if not f.get("source"):
+                                f["source"] = {"tool": "hayabusa", "rule_title": f.get("rule_title", "Hayabusa detection")}
+                        findings.extend(tool_findings)
+            except:
+                pass
+        
+        # Also check for raw hayabusa timeline CSVs in the CSV output dir
+        csv_base = PROJECT_ROOT / "outputs" / "csv" / "hayabusa_evtx"
+        if csv_base.exists():
+            for csv_run_dir in csv_base.iterdir():
+                if not csv_run_dir.is_dir():
+                    continue
+                for csv_file in csv_run_dir.iterdir():
+                    if csv_file.suffix == ".csv":
+                        try:
+                            import csv
+                            with open(csv_file, "r", encoding="utf-8", errors="replace") as f:
+                                reader = csv.DictReader(f)
+                                idx = 0
+                                for row in reader:
+                                    idx += 1
+                                    severity = (row.get("Level", "medium") or "medium").lower()
+                                    if severity == "info":
+                                        severity = "informational"
+                                    
+                                    finding = {
+                                        "finding_id": f"F-HAYA-{idx:06d}",
+                                        "timestamp": row.get("Timestamp"),
+                                        "category": row.get("Channel", "unknown"),
+                                        "summary": row.get("RuleTitle", row.get("Details", "Hayabusa detection")),
+                                        "severity": severity,
+                                        "source": {
+                                            "tool": "hayabusa",
+                                            "rule_title": row.get("RuleTitle", "Unknown rule")
+                                        },
+                                        "evidence": {
+                                            "event_refs": [row.get("EventID", "")],
+                                            "artifacts": [row.get("EvtxFile", "")],
+                                            "raw": row
+                                        },
+                                        "host": {
+                                            "computer": row.get("Computer", "")
+                                        }
+                                    }
+                                    findings.append(finding)
+                        except Exception as e:
+                            print(f"Error loading Hayabusa CSV: {e}")
+                            continue
+    
+    return findings
 
 @app.get("/api/cases/{case_id}/notes")
 async def get_notes(case_id: str):
@@ -821,11 +1070,21 @@ async def get_investigation_status(case_name: str):
                     "progress": 0
                 }
             
+            # FIX: Use a better fallback when current_tool is unknown
+            if not running:
+                # If process is running but we don't know which tool, show a generic message
+                # instead of "unknown"
+                if process_running:
+                    running = "Processing..."
+                    current_action = "Running forensic tools..."
+                else:
+                    running = "Initializing..."
+            
             return {
                 "status": "running",
                 "case_name": case_name,
                 "progress": progress,
-                "current_tool": running or "unknown",
+                "current_tool": running or "Processing...",
                 "current_action": current_action,
                 "completed_tools": completed,
                 "pending_tools": pending,
@@ -857,12 +1116,16 @@ async def get_investigation_status(case_name: str):
             # Build pending tools list from stage names
             pending_tools = [stage_display_map.get(tool, tool) for tool in stage_info.keys()]
             
+            # FIX: Better messaging for initialization state
+            current_tool = "Initializing..." if process_running else "Waiting to start..."
+            current_action = "Starting investigation pipelines..." if process_running else "Ready to start"
+            
             return {
                 "status": "initializing",
                 "case_name": case_name,
                 "progress": 0,
-                "current_tool": "Initializing",
-                "current_action": "Starting investigation pipelines...",
+                "current_tool": current_tool,
+                "current_action": current_action,
                 "completed_tools": [],
                 "pending_tools": pending_tools,
                 "stages": stage_info,
@@ -877,15 +1140,27 @@ async def get_investigation_status(case_name: str):
                 status = json.load(f)
                 # Check if process is still running
                 pid = status.get("pid")
+                process_running = False
                 if pid:
                     try:
                         os.kill(pid, 0)
+                        process_running = True
                     except (OSError, ProcessLookupError):
-                        status["process_running"] = False
+                        process_running = False
+                
+                # FIX: Ensure current_tool is never "unknown"
+                if status.get("current_tool") == "unknown" or not status.get("current_tool"):
+                    if process_running:
+                        status["current_tool"] = "Processing..."
+                        status["current_action"] = "Running forensic tools..."
+                    else:
+                        status["current_tool"] = "Initializing..."
+                
                 # Add log file path if it exists
                 log_file = case_dir / "investigation.log"
                 if log_file.exists():
                     status["log_file"] = str(log_file)
+                status["process_running"] = process_running
                 return status
         
         # No status files - not started

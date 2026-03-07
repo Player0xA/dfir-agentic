@@ -42,7 +42,7 @@ window.renderProgress = async (caseId) => {
             html = `
                 <div style="text-align: center; padding: 1.5rem;">
                     <div style="font-size: 3rem; margin-bottom: 1rem; animation: spin 2s linear infinite;">🚀</div>
-                    <div class="badge warning" style="font-size: 1rem; padding: 0.5rem 1rem; animation: pulse 2s infinite;">⏳ Initializing Investigation</div>
+                    <div class="badge warning" style="font-size: 1rem; padding: 0.5rem 1rem; animation: pulse 2s infinite;">⏳ ${data.current_tool || 'Initializing...'}</div>
                     <p style="margin-top: 1rem; color: var(--text-secondary);">${data.current_action || 'Starting investigation pipelines...'}</p>
                     
                     ${pid ? `<p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.5rem;">Process ID: ${pid} ${processRunning ? '(running)' : '(starting)'}</p>` : ''}
@@ -63,8 +63,8 @@ window.renderProgress = async (caseId) => {
             `;
         } else if (data.status === 'running') {
             const progress = data.progress || 0;
-            const currentTool = data.current_tool || 'Unknown';
-            const currentAction = data.current_action || 'Processing...';
+            const currentTool = data.current_tool || 'Processing...';
+            const currentAction = data.current_action || 'Running forensic tools...';
             const completed = data.completed_tools || [];
             const pending = data.pending_tools || [];
             
@@ -259,64 +259,112 @@ window.renderOverview = async (caseId) => {
     }
 };
 
-// 1.5 Artifacts / Evidence Panel
+// 1.5 Artifacts / Evidence Panel - Now with collapsible dropdowns
 window.renderArtifacts = async (caseId) => {
     const container = document.getElementById('panel-artifacts');
     if (!container) return;
 
     try {
-        const response = await fetch(`/api/cases/${caseId}`);
-        const data = await response.json();
+        // First, try to get detailed evidence files
+        let filesResponse;
+        let filesData = { files: [] };
+        try {
+            filesResponse = await fetch(`/api/cases/${caseId}/evidence_files`);
+            if (filesResponse.ok) {
+                filesData = await filesResponse.json();
+            }
+        } catch (e) {
+            console.warn("Could not load evidence files:", e);
+        }
 
-        const intake = data.intake || {};
-        const manifest = data.manifest || {};
+        const caseResponse = await fetch(`/api/cases/${caseId}`);
+        const caseData = await caseResponse.json();
+
+        const intake = caseData.intake || {};
+        const manifest = caseData.manifest || {};
 
         let html = '<div style="display: flex; flex-direction: column; gap: 15px;">';
 
-        // Function to build a simple table
-        const buildSimpleTable = (evidenceArray) => {
-            if (!evidenceArray || evidenceArray.length === 0) return '';
-
-            let t = `<div style="overflow-x: auto;"><table class="data-table"><thead><tr><th>ID</th><th>Path</th></tr></thead><tbody>`;
-
-            evidenceArray.forEach(e => {
-                let shortPath = (e.relpath || 'N/A').length > 50 ? '...' + (e.relpath || 'N/A').substring((e.relpath || 'N/A').length - 47) : (e.relpath || 'N/A');
-                let eid = e.evidence_id || 'N/A';
-
-                // Truncate UUIDs for cleaner display
-                if (eid.length > 12 && eid.includes('-')) {
-                    eid = eid.substring(0, 8);
-                }
-
-                t += `<tr><td><code>${eid}</code></td><td title="${e.relpath || ''}"><code>${shortPath}</code></td></tr>`;
-            });
-
-            t += '</tbody></table></div>';
-            return t;
+        // Group files by category
+        const categorizedFiles = {
+            evtx: [],
+            registry: [],
+            mft: [],
+            logs: [],
+            misc: []
         };
 
-        // Check V30 manifest format first
-        if (manifest.evidence && manifest.evidence.length > 0) {
-            html += buildSimpleTable(manifest.evidence);
-        }
-        // Then check V30 intake format
-        else if (intake.evidence && intake.evidence.length > 0) {
-            html += buildSimpleTable(intake.evidence);
-        }
-        // Finally fallback to legacy format (list of paths)
-        else if (intake.inputs && intake.inputs.paths && intake.inputs.paths.length > 0) {
-            // Emulate V30 format for legacy categorization
-            const emulatedEvidence = intake.inputs.paths.map((p, i) => {
-                const parts = p.replace(/\/$/, '').split('/');
-                const name = parts[parts.length - 1] || 'root';
-                return {
-                    evidence_id: `${name}`,
-                    relpath: p
-                };
+        if (filesData.files && filesData.files.length > 0) {
+            filesData.files.forEach(f => {
+                const name = f.name.toLowerCase();
+                if (name.endsWith('.evtx') || name.endsWith('.evt')) {
+                    categorizedFiles.evtx.push(f);
+                } else if (name.includes('system') || name.includes('software') || name.includes('security') || name.includes('sam') || name.endsWith('.hiv')) {
+                    categorizedFiles.registry.push(f);
+                } else if (name === '$mft' || name === '$mftmirr' || name.includes('mft')) {
+                    categorizedFiles.mft.push(f);
+                } else if (name.endsWith('.log') || name.endsWith('.txt')) {
+                    categorizedFiles.logs.push(f);
+                } else {
+                    categorizedFiles.misc.push(f);
+                }
             });
-            html += buildSimpleTable(emulatedEvidence);
-        } else {
-            html += `<div class="loading">No artifacts or evidence listed for this case.</div>`;
+        }
+
+        // Helper function to create collapsible section
+        const createCollapsibleSection = (title, icon, files, id) => {
+            if (!files || files.length === 0) return '';
+            
+            const fileRows = files.slice(0, 50).map(f => {
+                const sizeKB = Math.round(f.size / 1024);
+                const shortPath = f.relpath.length > 60 ? '...' + f.relpath.slice(-57) : f.relpath;
+                return `
+                    <div style="display: flex; align-items: center; gap: 0.5rem; padding: 0.3rem 0.5rem; border-bottom: 1px solid var(--border-subtle); font-size: 0.8rem;">
+                        <span style="font-family: monospace; color: var(--text-secondary); flex: 1; overflow: hidden; text-overflow: ellipsis;" title="${f.relpath}">${shortPath}</span>
+                        <span style="color: var(--text-muted); font-size: 0.75rem; white-space: nowrap;">${sizeKB} KB</span>
+                    </div>
+                `;
+            }).join('');
+
+            const moreCount = files.length > 50 ? `<div style="padding: 0.3rem; text-align: center; font-size: 0.75rem; color: var(--text-muted);">+${files.length - 50} more files...</div>` : '';
+
+            return `
+                <div style="border: 1px solid var(--border); border-radius: 8px; overflow: hidden; margin-bottom: 0.5rem;">
+                    <div style="display: flex; align-items: center; gap: 0.5rem; padding: 0.6rem 0.8rem; background: var(--bg-surface); cursor: pointer;" 
+                         onclick="const d = document.getElementById('${id}'); d.style.display = d.style.display === 'none' ? 'block' : 'none'; this.querySelector('.chevron').style.transform = d.style.display === 'none' ? 'rotate(-90deg)' : 'rotate(0deg)';">
+                        <span style="font-size: 1rem;">${icon}</span>
+                        <span style="font-weight: 600; flex: 1;">${title}</span>
+                        <span class="badge info" style="font-size: 0.7rem;">${files.length}</span>
+                        <span class="chevron" style="transition: transform 0.2s; transform: rotate(0deg);">▼</span>
+                    </div>
+                    <div id="${id}" style="display: block; max-height: 300px; overflow-y: auto;">
+                        ${fileRows}
+                        ${moreCount}
+                    </div>
+                </div>
+            `;
+        };
+
+        // Build categorized sections
+        html += createCollapsibleSection('📋 Windows Event Logs (.evtx)', '📄', categorizedFiles.evtx, 'evtx-files');
+        html += createCollapsibleSection('🔐 Registry Hives', '🔑', categorizedFiles.registry, 'registry-files');
+        html += createCollapsibleSection('💿 Master File Table', '🗂️', categorizedFiles.mft, 'mft-files');
+        html += createCollapsibleSection('📝 Log Files', '📑', categorizedFiles.logs, 'log-files');
+        html += createCollapsibleSection('📦 Other Files', '📂', categorizedFiles.misc, 'misc-files');
+
+        // Fallback: Show raw paths if file listing failed
+        if (!filesData.files || filesData.files.length === 0) {
+            if (manifest.evidence && manifest.evidence.length > 0) {
+                html += '<div style="font-weight: bold; color: var(--text-secondary); margin-bottom: 0.5rem;">Evidence Paths (file details not available)</div>';
+                manifest.evidence.forEach(e => {
+                    html += `<div style="padding: 0.5rem; background: var(--bg-surface); border-radius: 4px; margin-bottom: 0.3rem; font-family: monospace; font-size: 0.8rem;"><code>${e.relpath || e.evidence_id}</code></div>`;
+                });
+            } else if (intake.inputs && intake.inputs.paths && intake.inputs.paths.length > 0) {
+                html += '<div style="font-weight: bold; color: var(--text-secondary); margin-bottom: 0.5rem;">Evidence Paths</div>';
+                intake.inputs.paths.forEach(p => {
+                    html += `<div style="padding: 0.5rem; background: var(--bg-surface); border-radius: 4px; margin-bottom: 0.3rem; font-family: monospace; font-size: 0.8rem;"><code>${p}</code></div>`;
+                });
+            }
         }
 
         // Also fetch generated artifacts from tools
@@ -325,7 +373,6 @@ window.renderArtifacts = async (caseId) => {
             if (genRes.ok) {
                 const genData = await genRes.json();
                 if (genData.artifacts && genData.artifacts.length > 0) {
-
                     html += `<div style="margin-top: 15px; font-weight: bold; color: var(--accent); border-bottom: 1px solid var(--border); padding-bottom: 3px;">⚙️ Tool Outputs & Generated Files (${genData.artifacts.length})</div>`;
                     html += `<div style="overflow-x: auto;"><table class="data-table"><thead><tr><th>File Name</th><th>Path</th><th>Size (KB)</th></tr></thead><tbody>`;
 
@@ -355,7 +402,7 @@ window.renderArtifacts = async (caseId) => {
     }
 };
 
-// 2. Findings Panel (Table with Severity Filter)
+// 2. Findings Panel (Table with Severity Filter) - Now shows live results
 let findingsData = [];
 window.renderFindings = async (caseId) => {
     const container = document.getElementById('panel-findings');
@@ -366,7 +413,23 @@ window.renderFindings = async (caseId) => {
         const data = await response.json();
         findingsData = data.findings || [];
 
+        // Check if we have live results
+        const hasLiveResults = findingsData.some(f => {
+            const tool = (f.source?.tool || '').toLowerCase();
+            return tool === 'chainsaw' || tool === 'hayabusa';
+        });
+        
+        const hasConsolidatedResults = findingsData.some(f => f.finding_id && !f.finding_id.includes('F-CHAINSAW-') && !f.finding_id.includes('F-HAYA-'));
+
         renderFindingsTable(container, findingsData, 'all', '');
+        
+        // Add a notice if showing live results
+        if (hasLiveResults && !hasConsolidatedResults && findingsData.length > 0) {
+            const notice = document.createElement('div');
+            notice.style.cssText = 'background: var(--accent-glow); border-left: 3px solid var(--accent-solid); padding: 0.5rem; margin-bottom: 0.5rem; font-size: 0.8rem; border-radius: 4px;';
+            notice.innerHTML = '<span style="color: var(--accent-solid);">⚡ Live Results</span> - Showing findings as tools finish. Full results will appear when investigation completes.';
+            container.insertBefore(notice, container.firstChild);
+        }
 
     } catch (e) {
         container.innerHTML = `<div class="error">Failed to load findings: ${e.message}</div>`;
