@@ -114,7 +114,7 @@ echo "  EVTX_DIR: $EVTX_DIR"
 echo "  OUT_DIR: $OUT_DIR"
 echo "  CHAINSAW_VERSION: $CHAINSAW_VERSION"
 
-"$CHAINSAW_BIN" hunt "$RULES_DIR" "$EVTX_DIR" --jsonl -o "$CHAINSAW_OUT"
+"$CHAINSAW_BIN" hunt "$RULES_DIR" "$EVTX_DIR" --jsonl -o "$CHAINSAW_OUT" --skip-errors
 test -s "$CHAINSAW_OUT" || fail 4 "chainsaw produced empty jsonl: $CHAINSAW_OUT"
 
 python3 "$NORMALIZER" \
