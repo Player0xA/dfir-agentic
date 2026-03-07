@@ -58,13 +58,13 @@ T3="${T3},msiecf,esedb/msie_webcache,opera_global,opera_typed_history"
 T4="esedb/srum,sqlite/windows_timeline,sqlite/windows_eventtranscript,esedb/file_history,esedb/user_access_logging"
 
 # Tier 5: System / Security Logs
-T5="winfirewall,text/setupapi,winiis"
+T5="text/winfirewall,text/setupapi,text/winiis"
 
 # Tier 6: Security / AV Logs
-T6="windefender_history,symantec_scanlog,mcafee_protection,trendmicro_url,trendmicro_vd,sophos_av"
+T6="windefender_history,symantec_scanlog,mcafee_protection,trendmicro_url,trendmicro_vd,text/sophos_av"
 
 # Tier 7: Cloud / Sync / External Activity
-T7="onedrive_log,skydrive_log_v1,skydrive_log_v2,text/gdrive_synclog,sqlite/google_drive"
+T7="onedrive_log,text/skydrive_log_v1,text/skydrive_log_v2,text/gdrive_synclog,sqlite/google_drive"
 
 # Tier 8: Miscellaneous Windows Artifacts
 T8="pe,networkminer_fileinfo"
