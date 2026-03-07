@@ -342,17 +342,19 @@ const loadCaseData = (caseId, isAutoRefresh = false) => {
     if (!caseId) return;
 
     if (!isAutoRefresh) {
-        // Set loading states
-        ['overview', 'progress', 'artifacts', 'findings', 'notes', 'audit', 'agent'].forEach(id => {
+        // Set loading states for panels that auto-refresh
+        ['overview', 'progress', 'findings', 'notes', 'audit', 'agent'].forEach(id => {
             const container = document.getElementById(`panel-${id}`);
             if (container) container.innerHTML = '<div class="loading">Loading...</div>';
         });
+        // Artifacts panel loads immediately without loading state (uses cache or shows content)
     }
 
     // Call panel renderers defined in panels.js
     if (window.renderOverview) window.renderOverview(caseId);
     if (window.renderProgress) window.renderProgress(caseId);
-    if (window.renderArtifacts) window.renderArtifacts(caseId);
+    // Artifacts panel: render on initial load, but skip during auto-refresh polling
+    if (!isAutoRefresh && window.renderArtifacts) window.renderArtifacts(caseId);
     if (window.renderFindings) window.renderFindings(caseId);
     if (window.renderNotes) window.renderNotes(caseId);
     if (window.renderAudit) window.renderAudit(caseId);

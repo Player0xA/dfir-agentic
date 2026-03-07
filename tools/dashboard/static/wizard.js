@@ -543,6 +543,9 @@ function browseEvidence() {
 function browseFolder() { 
     console.log('Not used - using drop folder browser instead'); 
 }
+function removeEvidence(index) {
+    console.log('removeEvidence called but not used in drop folder design');
+}
 
 function updateNextButton() {
     const btn = document.getElementById('btn-step1-next');

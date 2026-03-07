@@ -1178,12 +1178,19 @@ async def create_and_start_investigation(
                 
                 investigation_pid = process.pid
                 status["pid"] = investigation_pid
-                status["current_action"] = f"Running (PID: {process.pid})..."
-                status["logs"].append(f"[{datetime.now().isoformat()}] Investigation started")
+                status["current_action"] = f"Running dfir.py (PID: {process.pid})..."
+                status["logs"].append(f"[{datetime.now().isoformat()}] Investigation started with command: {' '.join(cmd)}")
                 status["log_file"] = str(log_file_path)
+                status["command"] = ' '.join(cmd)
+                
+                print(f"Started investigation for case {actual_case_name} with PID {process.pid}")
+                print(f"Command: {' '.join(cmd)}")
+                print(f"Log file: {log_file_path}")
                 
                 with open(status_file, "w") as f:
                     json.dump(status, f, indent=2)
+        else:
+            print(f"No tools selected for case {actual_case_name}, skipping investigation start")
         
         # Return immediately - UI can update
         return {

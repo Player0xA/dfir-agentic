@@ -158,8 +158,33 @@ window.renderProgress = async (caseId) => {
             if (data.log_file) {
                 loadLogContent(caseId, data.log_file);
             }
+        } else if (data.status === 'starting' || data.status === 'starting') {
+            html = `
+                <div style="text-align: center; padding: 1.5rem;">
+                    <div style="font-size: 2rem; margin-bottom: 1rem;">⏳</div>
+                    <div class="badge info">Investigation Starting</div>
+                    <p style="margin-top: 1rem; color: var(--text-secondary);">
+                        ${data.current_action || 'Initializing tools...'}
+                    </p>
+                    ${data.pid ? `<p style="font-size: 0.8rem; color: var(--text-muted);">Process ID: ${data.pid}</p>` : ''}
+                    <p style="margin-top: 1rem; font-size: 0.75rem; color: var(--text-muted);">
+                        If investigation doesn't start within 30 seconds, check the server logs.
+                    </p>
+                </div>
+            `;
         } else {
-            html = `<div class="loading">Loading progress...</div>`;
+            html = `
+                <div style="text-align: center; padding: 1.5rem;">
+                    <div style="font-size: 2rem; margin-bottom: 1rem;">❓</div>
+                    <div class="badge warning">Status Unknown</div>
+                    <p style="margin-top: 1rem; color: var(--text-secondary);">
+                        Investigation status is unclear. Check if process is running.
+                    </p>
+                    <p style="margin-top: 0.5rem; font-size: 0.75rem; color: var(--text-muted);">
+                        Status: ${data.status || 'unknown'}
+                    </p>
+                </div>
+            `;
         }
         
         const prevScroll = container.scrollTop;
@@ -259,31 +284,36 @@ window.renderOverview = async (caseId) => {
     }
 };
 
-// 1.5 Artifacts / Evidence Panel - Now with collapsible dropdowns
-window.renderArtifacts = async (caseId) => {
+// Cache for artifacts data
+let artifactsCache = {};
+let artifactsLastUpdated = {};
+
+// 1.5 Artifacts / Evidence Panel - Manual refresh only
+window.renderArtifacts = async (caseId, forceRefresh = false) => {
     const container = document.getElementById('panel-artifacts');
     if (!container) return;
 
-    try {
-        // First, try to get detailed evidence files
-        let filesResponse;
-        let filesData = { files: [] };
-        try {
-            filesResponse = await fetch(`/api/cases/${caseId}/evidence_files`);
-            if (filesResponse.ok) {
-                filesData = await filesResponse.json();
-            }
-        } catch (e) {
-            console.warn("Could not load evidence files:", e);
+    // Use cached data if available and not forced refresh
+    if (!forceRefresh && artifactsCache[caseId] && artifactsLastUpdated[caseId]) {
+        const age = Date.now() - artifactsLastUpdated[caseId];
+        if (age < 300000) { // Cache for 5 minutes
+            container.innerHTML = artifactsCache[caseId];
+            return;
         }
+    }
 
-        const caseResponse = await fetch(`/api/cases/${caseId}`);
-        const caseData = await caseResponse.json();
-
-        const intake = caseData.intake || {};
-        const manifest = caseData.manifest || {};
-
-        let html = '<div style="display: flex; flex-direction: column; gap: 15px;">';
+    try {
+        // Add refresh button header
+        let html = `
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; padding-bottom: 0.5rem; border-bottom: 1px solid var(--border-subtle);">
+                <span style="font-size: 0.8rem; color: var(--text-muted);">
+                    ${artifactsLastUpdated[caseId] ? `Last updated: ${new Date(artifactsLastUpdated[caseId]).toLocaleTimeString()}` : 'Not yet loaded'}
+                </span>
+                <button class="btn secondary small" onclick="window.refreshArtifacts('${caseId}')" style="font-size: 0.75rem; padding: 0.3rem 0.6rem;">
+                    🔄 Refresh
+                </button>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 15px;">`;
 
         // Group files by category
         const categorizedFiles = {
@@ -391,6 +421,10 @@ window.renderArtifacts = async (caseId) => {
 
         html += '</div>';
 
+        // Cache the HTML
+        artifactsCache[caseId] = html;
+        artifactsLastUpdated[caseId] = Date.now();
+
         const prevScroll = container.scrollTop;
         if (container.innerHTML !== html) {
             container.innerHTML = html;
@@ -400,6 +434,15 @@ window.renderArtifacts = async (caseId) => {
     } catch (e) {
         container.innerHTML = `<div class="error">Failed to load artifacts: ${e.message}</div>`;
     }
+};
+
+// Manual refresh function for artifacts
+window.refreshArtifacts = async (caseId) => {
+    const container = document.getElementById('panel-artifacts');
+    if (container) {
+        container.innerHTML = '<div style="text-align: center; padding: 2rem; color: var(--text-muted);">Refreshing...</div>';
+    }
+    await window.renderArtifacts(caseId, true);
 };
 
 // 2. Findings Panel (Table with Severity Filter) - Now shows live results
