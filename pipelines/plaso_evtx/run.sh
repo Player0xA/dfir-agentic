@@ -40,9 +40,39 @@ cat <<EOF > "${REQUEST_JSON}"
 }
 EOF
 
-# 2. Run log2timeline
+# 2. Run log2timeline with explicit Windows parser list (Tiers 1-8)
 LOG_FILE="${PLASO_DIR}/plaso.log"
-"${L2T_BIN}" --logfile "${LOG_FILE}" --storage-file "${PLASO_FILE}" "${EVTX_DIR}"
+
+# Tier 1: Core Windows Timeline Artifacts
+T1="winevtx,winevt,winreg,prefetch,mft,usnjrnl"
+
+# Tier 2: High Value Activity Artifacts
+T2="lnk,olecf/olecf_automatic_destinations,custom_destinations,winjob,recycle_bin,recycle_bin_info2,winpca_db0,winpca_dic"
+
+# Tier 3: Browser and Web Activity
+T3="sqlite/chrome_8_history,sqlite/chrome_17_cookies,sqlite/chrome_27_history,sqlite/chrome_66_cookies,sqlite/chrome_autofill,sqlite/chrome_extension_activity"
+T3="${T3},sqlite/firefox_history,sqlite/firefox_2_cookies,sqlite/firefox_10_cookies,sqlite/firefox_downloads,firefox_cache,firefox_cache2"
+T3="${T3},msiecf,esedb/msie_webcache,opera_global,opera_typed_history"
+
+# Tier 4: System Usage Databases
+T4="esedb/srum,sqlite/windows_timeline,sqlite/windows_eventtranscript,esedb/file_history,esedb/user_access_logging"
+
+# Tier 5: System / Security Logs
+T5="winfirewall,text/setupapi,winiis"
+
+# Tier 6: Security / AV Logs
+T6="windefender_history,symantec_scanlog,mcafee_protection,trendmicro_url,trendmicro_vd,sophos_av"
+
+# Tier 7: Cloud / Sync / External Activity
+T7="onedrive_log,skydrive_log_v1,skydrive_log_v2,text/gdrive_synclog,sqlite/google_drive"
+
+# Tier 8: Miscellaneous Windows Artifacts
+T8="pe,networkminer_fileinfo"
+
+WINDOWS_PARSERS="${T1},${T2},${T3},${T4},${T5},${T6},${T7},${T8}"
+
+echo "INFO: Using explicit Windows parser list (Tiers 1-8)"
+"${L2T_BIN}" --parsers "${WINDOWS_PARSERS}" --logfile "${LOG_FILE}" --storage-file "${PLASO_FILE}" "${EVTX_DIR}"
 
 # 3. Generate Manifest
 python3 - <<PY > "${MANIFEST_JSON}"
