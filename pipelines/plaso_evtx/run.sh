@@ -72,7 +72,7 @@ T8="pe,networkminer_fileinfo"
 WINDOWS_PARSERS="${T1},${T2},${T3},${T4},${T5},${T6},${T7},${T8}"
 
 echo "INFO: Using explicit Windows parser list (Tiers 1-8)"
-"${L2T_BIN}" --status_view none --parsers "${WINDOWS_PARSERS}" --logfile "${LOG_FILE}" --storage_file "${PLASO_FILE}" "${EVIDENCE_DIR}"
+"${L2T_BIN}" -q -u --status_view none --parsers "${WINDOWS_PARSERS}" --logfile "${LOG_FILE}" --storage_file "${PLASO_FILE}" "${EVIDENCE_DIR}"
 
 # 3. Generate Manifest
 python3 - <<PY > "${MANIFEST_JSON}"
