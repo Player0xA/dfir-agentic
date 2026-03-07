@@ -289,8 +289,6 @@ def main() -> int:
 
     doc = {
         "intake_id": intake_id,
-        "case_name": dir_name,  # Directory name (sanitized)
-        "display_name": display_name,  # Human-readable display name
         "timestamp_utc": ts,
         "inputs": {"paths": [str(pathlib.Path(p).expanduser()) for p in args.paths]},
         "classification": {

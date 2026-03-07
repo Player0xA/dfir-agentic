@@ -303,6 +303,24 @@ window.renderArtifacts = async (caseId, forceRefresh = false) => {
     }
 
     try {
+        // Fetch evidence files from API
+        let filesResponse;
+        let filesData = { files: [] };
+        try {
+            filesResponse = await fetch(`/api/cases/${caseId}/evidence_files`);
+            if (filesResponse.ok) {
+                filesData = await filesResponse.json();
+            }
+        } catch (e) {
+            console.warn("Could not load evidence files:", e);
+        }
+
+        const caseResponse = await fetch(`/api/cases/${caseId}`);
+        const caseData = await caseResponse.json();
+
+        const intake = caseData.intake || {};
+        const manifest = caseData.manifest || {};
+
         // Add refresh button header
         let html = `
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; padding-bottom: 0.5rem; border-bottom: 1px solid var(--border-subtle);">
