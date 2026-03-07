@@ -447,6 +447,129 @@ async def classify_evidence(paths: str = Form(...)):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
+@app.post("/api/investigate")
+async def create_and_start_investigation(
+    paths: str = Form(...),  # Comma-separated evidence paths
+    case_name: str = Form(None),  # Optional friendly case name
+    display_name: str = Form(None),  # Optional display name
+    tools: str = Form("")  # Comma-separated tool IDs (optional)
+):
+    """
+    Combined endpoint: create intake AND start investigation in one call.
+    This is optimized for fast UI - user clicks start, wizard closes immediately.
+    """
+    try:
+        path_list = [p.strip() for p in paths.split(",") if p.strip()]
+        if not path_list:
+            raise HTTPException(status_code=400, detail="No valid paths provided")
+        
+        tool_list = [t.strip() for t in tools.split(",") if t.strip()] if tools else []
+        
+        # Step 1: Create intake
+        cmd = [
+            "python3",
+            str(PROJECT_ROOT / "tools" / "intake" / "identify_evidence.py"),
+            *path_list,
+            "--out-base", str(PROJECT_ROOT / "outputs" / "intake")
+        ]
+        
+        if case_name:
+            cmd.extend(["--case-name", case_name])
+        if display_name:
+            cmd.extend(["--display-name", display_name])
+            
+        result = subprocess.run(cmd, capture_output=True, text=True, timeout=30)
+        
+        if result.returncode != 0:
+            raise HTTPException(status_code=500, detail=f"Intake failed: {result.stderr}")
+            
+        # Parse the output to get the case directory
+        output_lines = result.stdout.strip().split('\n')
+        intake_json_path = None
+        for line in output_lines:
+            if "wrote" in line:
+                intake_json_path = line.split("wrote ")[1].strip()
+                break
+                
+        if not intake_json_path:
+            raise HTTPException(status_code=500, detail="Could not determine intake location")
+            
+        # Load the intake.json to get case info
+        intake_path = Path(intake_json_path)
+        with open(intake_path, "r") as f:
+            intake_data = json.load(f)
+        
+        actual_case_name = intake_data.get("case_name")
+        case_dir = PROJECT_ROOT / "outputs" / "intake" / actual_case_name
+        
+        # Step 2: Start investigation in background (if tools specified)
+        investigation_pid = None
+        if tool_list:
+            # Get evidence path from intake
+            evidence_path = intake_data.get("inputs", {}).get("paths", [None])[0]
+            
+            if evidence_path:
+                # Create initial status
+                status_file = case_dir / "investigation_status.json"
+                status = {
+                    "status": "starting",
+                    "started_at": datetime.now().isoformat(),
+                    "tools": tool_list,
+                    "completed_tools": [],
+                    "current_tool": "initializing",
+                    "current_action": "Starting investigation...",
+                    "progress": 0,
+                    "logs": [],
+                    "pid": None
+                }
+                
+                with open(status_file, "w") as f:
+                    json.dump(status, f, indent=2)
+                
+                # Run dfir.py in background
+                dfir_script = PROJECT_ROOT / "dfir.py"
+                cmd = ["python3", str(dfir_script), evidence_path]
+                
+                env = os.environ.copy()
+                env["DFIR_CASE_NAME"] = actual_case_name
+                
+                process = subprocess.Popen(
+                    cmd,
+                    cwd=str(PROJECT_ROOT),
+                    stdout=subprocess.PIPE,
+                    stderr=subprocess.PIPE,
+                    env=env,
+                    start_new_session=True
+                )
+                
+                investigation_pid = process.pid
+                status["pid"] = investigation_pid
+                status["current_action"] = f"Running (PID: {process.pid})..."
+                status["logs"].append(f"[{datetime.now().isoformat()}] Investigation started")
+                
+                with open(status_file, "w") as f:
+                    json.dump(status, f, indent=2)
+        
+        # Return immediately - UI can update
+        return {
+            "success": True,
+            "case_name": actual_case_name,
+            "display_name": intake_data.get("display_name"),
+            "intake_id": intake_data.get("intake_id"),
+            "classification": intake_data.get("classification"),
+            "paths": path_list,
+            "investigation_started": bool(tool_list),
+            "investigation_pid": investigation_pid,
+            "message": "Investigation started" if tool_list else "Case created"
+        }
+        
+    except subprocess.TimeoutExpired:
+        raise HTTPException(status_code=500, detail="Operation timed out")
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
 @app.post("/api/investigate/start")
 async def start_investigation(
     case_name: str = Form(...),

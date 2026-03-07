@@ -334,27 +334,49 @@ const loadCaseData = (caseId, isAutoRefresh = false) => {
     if (window.renderAudit) window.renderAudit(caseId);
     if (window.renderAgent) window.renderAgent(caseId);
 
-    // Setup auto-refresh loop
+    // Setup auto-refresh loop with adaptive frequency
     if (refreshInterval) clearInterval(refreshInterval);
 
-    // Only set up polling if we know the case is active, or if we haven't loaded it yet.
-    // window.isCurrentCaseActive is set by renderOverview. Default to true if undefined.
+    // Only set up polling if we know the case is active
     if (window.isCurrentCaseActive === false) {
         return; // Investigation finished, no need to poll
     }
 
-    refreshInterval = setInterval(() => {
-        // Ping case list first to see if a new one appeared
+    // Adaptive polling: start fast, slow down over time
+    // 0-30s: 2s (responsive)
+    // 30-120s: 5s (moderate)
+    // 120s+: 10s (slow - tools take time)
+    let pollStartTime = Date.now();
+    let currentPollInterval = 2000; // Start at 2 seconds
+    
+    const getAdaptiveInterval = () => {
+        const elapsed = (Date.now() - pollStartTime) / 1000; // seconds
+        if (elapsed < 30) return 2000;      // 0-30s: 2s
+        if (elapsed < 120) return 5000;     // 30-120s: 5s
+        return 10000;                       // 120s+: 10s
+    };
+    
+    const runAdaptivePoll = () => {
+        const interval = getAdaptiveInterval();
+        if (interval !== currentPollInterval) {
+            // Frequency changed, restart with new interval
+            clearInterval(refreshInterval);
+            currentPollInterval = interval;
+            refreshInterval = setInterval(runAdaptivePoll, interval);
+        }
+        
+        // Do the actual polling
         loadCases(true).then(() => {
             const currentSelected = document.getElementById('case-selector').value;
             if (currentSelected && currentSelected === caseId) {
-                // If it didn't switch, and is still active, refresh the current one
                 if (window.isCurrentCaseActive !== false) {
                     loadCaseData(currentSelected, true);
                 }
             }
         });
-    }, 10000); // 10 seconds
+    };
+    
+    refreshInterval = setInterval(runAdaptivePoll, currentPollInterval);
 };
 
 // Bootstrap

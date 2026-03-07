@@ -318,13 +318,13 @@ function toggleTool(toolId) {
     });
 }
 
-// Investigation Start
+// Investigation Start - Optimized for fast UI
 async function startInvestigation() {
     // Get case names from form
-    wizardState.caseName = document.getElementById('case-name').value;
-    wizardState.displayName = document.getElementById('display-name').value;
+    const caseName = document.getElementById('case-name').value;
+    const displayName = document.getElementById('display-name').value;
     
-    if (!wizardState.caseName) {
+    if (!caseName) {
         alert('Please enter a case name');
         return;
     }
@@ -334,76 +334,68 @@ async function startInvestigation() {
         return;
     }
     
-    // Note: Don't call goToStep(4) here - we're already on step 4
-    // Calling goToStep(4) would cause infinite recursion since goToStep(4) calls startInvestigation()
+    // Close wizard IMMEDIATELY - don't wait for server response
+    // This makes the UI feel instant
+    const caseNameToSelect = caseName;
+    closeWizard();
     
+    // Show the case immediately in the selector (optimistic update)
+    const selector = document.getElementById('case-selector');
+    if (selector) {
+        // Add the new case to the dropdown immediately
+        const option = document.createElement('option');
+        option.value = caseNameToSelect;
+        option.textContent = `⚡ ${caseNameToSelect} - Starting...`;
+        selector.appendChild(option);
+        selector.value = caseNameToSelect;
+    }
+    
+    // Now make the API call in the background
+    // UI is already updated - user sees the case
     try {
-        // Create intake
-        updateProgress(10, 'Creating intake...');
-        addLog('Starting investigation with ' + wizardState.selectedTools.length + ' tools');
-        
         const formData = new FormData();
         formData.append('paths', wizardState.evidencePaths.join(','));
-        formData.append('case_name', wizardState.caseName);
-        formData.append('display_name', wizardState.displayName);
+        formData.append('case_name', caseName);
+        formData.append('display_name', displayName);
+        formData.append('tools', wizardState.selectedTools.join(','));
         
-        const intakeResponse = await fetch('/api/intake', {
+        // Single combined API call - intake + start investigation
+        const response = await fetch('/api/investigate', {
             method: 'POST',
             body: formData
         });
         
-        if (!intakeResponse.ok) {
-            throw new Error('Intake failed: ' + await intakeResponse.text());
+        if (!response.ok) {
+            throw new Error('Investigation failed: ' + await response.text());
         }
         
-        const intakeData = await intakeResponse.json();
-        addLog('Intake created: ' + intakeData.case_name);
-        wizardState.caseName = intakeData.case_name; // Use the actual sanitized name
-        wizardState.evidenceType = intakeData.classification?.kind;
+        const data = await response.json();
         
-        updateProgress(30, 'Intake complete. Starting analysis...');
-        
-        // Start investigation
-        const investigateForm = new FormData();
-        investigateForm.append('case_name', wizardState.caseName);
-        investigateForm.append('tools', wizardState.selectedTools.join(','));
-        investigateForm.append('options', JSON.stringify({}));
-        
-        const startResponse = await fetch('/api/investigate/start', {
-            method: 'POST',
-            body: investigateForm
-        });
-        
-        if (!startResponse.ok) {
-            throw new Error('Investigation start failed: ' + await startResponse.text());
-        }
-        
-        const startData = await startResponse.json();
-        addLog('Investigation started in background (PID: ' + startData.pid + ')');
-        
-        // Close wizard and switch to the case immediately
-        closeWizard();
-        
-        // Refresh case list and select the new case
-        // The main dashboard will show progress in the progress panel
-        if (typeof loadCases === 'function') {
-            await loadCases();
-            const selector = document.getElementById('case-selector');
+        // Update selector with actual case name (in case it was sanitized)
+        if (data.case_name && data.case_name !== caseNameToSelect) {
             if (selector) {
-                selector.value = wizardState.caseName;
-                if (typeof loadCaseData === 'function') {
-                    loadCaseData(wizardState.caseName);
+                const opt = selector.querySelector(`option[value="${caseNameToSelect}"]`);
+                if (opt) {
+                    opt.value = data.case_name;
+                    opt.textContent = `⚡ ${data.display_name || data.case_name} - Starting...`;
                 }
+                selector.value = data.case_name;
             }
         }
         
-        // Dashboard's refreshInterval will handle progress panel updates
-        // No need for additional polling here
+        // Refresh the case data to trigger progress panel
+        if (typeof loadCaseData === 'function') {
+            loadCaseData(data.case_name);
+        }
         
     } catch (e) {
         console.error('Investigation error:', e);
+        // Remove the optimistic case from selector if it failed
+        if (selector) {
+            const opt = selector.querySelector(`option[value="${caseNameToSelect}"]`);
+            if (opt) opt.remove();
+        }
         alert('Error starting investigation: ' + e.message);
-        goToStep(3); // Go back to tools selection
     }
 }
 
