@@ -78,6 +78,13 @@ window.renderProgress = async (caseId) => {
         }
         container.scrollTop = prevScroll;
         
+        // Update global active state to control polling
+        if (data.status === 'completed' || data.status === 'error' || data.status === 'not_started' || data.status === 'not_found') {
+            window.isCurrentCaseActive = false;
+        } else if (data.status === 'running') {
+            window.isCurrentCaseActive = true;
+        }
+        
     } catch (e) {
         container.innerHTML = `<div class="error">Failed to load progress: ${e.message}</div>`;
     }

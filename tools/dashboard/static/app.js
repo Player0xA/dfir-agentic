@@ -364,3 +364,8 @@ document.addEventListener('DOMContentLoaded', () => {
         loadCases();
     });
 });
+
+// Expose functions globally for use by other scripts
+window.loadCases = loadCases;
+window.loadCaseData = loadCaseData;
+window.addPanel = addPanel;

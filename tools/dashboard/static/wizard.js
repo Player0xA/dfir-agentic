@@ -397,43 +397,14 @@ async function startInvestigation() {
             }
         }
         
-        // Start polling for status in background for notifications
-        startBackgroundPolling(wizardState.caseName);
+        // Dashboard's refreshInterval will handle progress panel updates
+        // No need for additional polling here
         
     } catch (e) {
         console.error('Investigation error:', e);
         alert('Error starting investigation: ' + e.message);
         goToStep(3); // Go back to tools selection
     }
-}
-
-// Background polling for notifications (not tied to wizard)
-let backgroundPollingInterval = null;
-
-function startBackgroundPolling(caseName) {
-    if (backgroundPollingInterval) {
-        clearInterval(backgroundPollingInterval);
-    }
-    
-    backgroundPollingInterval = setInterval(async () => {
-        try {
-            const response = await fetch(`/api/investigate/status/${caseName}`);
-            const data = await response.json();
-            
-            if (data.status === 'completed') {
-                clearInterval(backgroundPollingInterval);
-                backgroundPollingInterval = null;
-                // Could show a notification here
-                console.log('Investigation completed!');
-            } else if (data.status === 'error') {
-                clearInterval(backgroundPollingInterval);
-                backgroundPollingInterval = null;
-                console.error('Investigation error:', data.error);
-            }
-        } catch (e) {
-            // Silent fail for background polling
-        }
-    }, 10000);
 }
 
 async function pollInvestigationStatus() {
