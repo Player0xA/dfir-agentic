@@ -323,6 +323,11 @@ function toggleEvidenceSelection(evidenceId) {
 }
 
 function updateEvidenceSelectionUI() {
+    // Get selected items first (available in all code paths)
+    const selectedItems = wizardState.availableEvidence.filter(item => 
+        wizardState.selectedEvidenceIds.includes(item.id)
+    );
+    
     // Update checkboxes
     document.querySelectorAll('.evidence-item-detailed').forEach(el => {
         const id = el.dataset.id;
@@ -340,10 +345,6 @@ function updateEvidenceSelectionUI() {
     if (wizardState.selectedEvidenceIds.length === 0) {
         selectedListEl.innerHTML = '<p style="color: var(--text-muted);">No evidence selected</p>';
     } else {
-        const selectedItems = wizardState.availableEvidence.filter(item => 
-            wizardState.selectedEvidenceIds.includes(item.id)
-        );
-        
         selectedListEl.innerHTML = selectedItems.map(item => `
             <div class="selected-evidence-item">
                 <span>${item.name}</span>
@@ -535,27 +536,12 @@ document.getElementById('folder-input')?.addEventListener('change', (e) => {
 });
 */
 
-function updateNextButton() {
-    
-    dropZone.addEventListener('dragleave', () => {
-        dropZone.classList.remove('drag-over');
-    });
-    
-    dropZone.addEventListener('drop', async (e) => {
-        e.preventDefault();
-        dropZone.classList.remove('drag-over');
-        
-        const items = e.dataTransfer.items;
-        if (items) {
-            for (let item of items) {
-                const entry = item.webkitGetAsEntry();
-                if (entry) {
-                    const path = await getFullPath(entry);
-                    addEvidencePath(path);
-                }
-            }
-        }
-    });
+// Stub functions for old drag-and-drop (prevent errors if HTML still references them)
+function browseEvidence() { 
+    console.log('Not used - using drop folder browser instead'); 
+}
+function browseFolder() { 
+    console.log('Not used - using drop folder browser instead'); 
 }
 
 function updateNextButton() {
