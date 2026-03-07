@@ -1,2 +1,0 @@
-2026-03-03 22:49:29,429 [WARNING] (MainProcess) PID:2096 <tools> This version of plaso is more than 6 months old. We strongly recommend to update it.
-2026-03-03 22:49:42,764 [INFO] (MainProcess) PID:2096 <zeromq_queue> Queue main_task_queue responder exiting.

@@ -49,6 +49,7 @@
         "kind": {
           "type": "string",
           "enum": [
+            "windows_triage_dir",
             "windows_evtx_dir",
             "windows_evtx_file",
             "linux_logs_dir",
@@ -73,6 +74,7 @@
           ],
           "enum": [
             "chainsaw_evtx",
+            "plaso_evtx",
             null
           ]
         }

@@ -6,10 +6,10 @@ set -e
 
 RUN_ID="${1}"
 TS_UTC="${2}"
-EVTX_DIR="${3}"
+EVIDENCE_DIR="${3}"
 # Expand tilde if present
-if [[ "${EVTX_DIR}" == "~"* ]]; then
-  EVTX_DIR="${EVTX_DIR/#\~/$HOME}"
+if [[ "${EVIDENCE_DIR}" == "~"* ]]; then
+  EVIDENCE_DIR="${EVIDENCE_DIR/#\~/$HOME}"
 fi
 OUT_ROOT="${4:-outputs/plaso_evtx}"
 
@@ -22,9 +22,9 @@ MANIFEST_JSON="${PLASO_DIR}/manifest.json"
 mkdir -p "${PLASO_DIR}"
 
 echo "INFO: Generating Plaso timeline"
-echo "  RUN_ID:   ${RUN_ID}"
-echo "  EVTX_DIR: ${EVTX_DIR}"
-echo "  OUT_FILE: ${PLASO_FILE}"
+echo "  RUN_ID:       ${RUN_ID}"
+echo "  EVIDENCE_DIR: ${EVIDENCE_DIR}"
+echo "  OUT_FILE:     ${PLASO_FILE}"
 
 # 1. Audit Request
 cat <<EOF > "${REQUEST_JSON}"
@@ -32,7 +32,7 @@ cat <<EOF > "${REQUEST_JSON}"
   "timestamp_utc": "${TS_UTC}",
   "pipeline": "plaso_evtx",
   "run_id": "${RUN_ID}",
-  "evtx_dir": "${EVTX_DIR}",
+  "evidence_dir": "${EVIDENCE_DIR}",
   "plaso": {
     "bin": "${L2T_BIN}",
     "storage_file": "${PLASO_FILE}"
@@ -72,7 +72,7 @@ T8="pe,networkminer_fileinfo"
 WINDOWS_PARSERS="${T1},${T2},${T3},${T4},${T5},${T6},${T7},${T8}"
 
 echo "INFO: Using explicit Windows parser list (Tiers 1-8)"
-"${L2T_BIN}" --parsers "${WINDOWS_PARSERS}" --logfile "${LOG_FILE}" --storage-file "${PLASO_FILE}" "${EVTX_DIR}"
+"${L2T_BIN}" --parsers "${WINDOWS_PARSERS}" --logfile "${LOG_FILE}" --storage-file "${PLASO_FILE}" "${EVIDENCE_DIR}"
 
 # 3. Generate Manifest
 python3 - <<PY > "${MANIFEST_JSON}"
@@ -97,7 +97,7 @@ manifest = {
   "pipeline": {"name": "plaso_evtx", "version": "0.1.0"},
   "status": "ok",
   "inputs": {
-    "evtx_dir": ${EVTX_DIR@Q}
+    "evidence_dir": ${EVIDENCE_DIR@Q}
   },
   "tooling": {
     "plaso": {

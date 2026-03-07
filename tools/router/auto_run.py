@@ -75,7 +75,10 @@ def main() -> int:
         evidence_types = [e["type"] for e in intake.get("evidence", [])]
         ev_names = [e["name"].lower() for e in intake.get("evidence", [])]
         
-        if "evtx" in evidence_types or "evtx_dir" in evidence_types:
+        if "windows_triage_dir" in evidence_types:
+            kind = "windows_triage_dir"
+            rec = "plaso_evtx"
+        elif "evtx" in evidence_types or "evtx_dir" in evidence_types:
             kind = "windows_evtx_dir"
             rec = "chainsaw_evtx"
         elif any("system" in name for name in ev_names):
@@ -187,32 +190,46 @@ def main() -> int:
         manifest_path = Path(manifest_path_str) if manifest_path_str else None
         
         # Plaso usually needs a manifest to run, but we can also infer from intake
-        if manifest_path and manifest_path.is_file():
+        if (manifest_path and manifest_path.is_file()) or "windows_triage_dir" in kind or rec == "plaso_evtx":
             # Step 8/9: Resolve primary evidence for Plaso
             if "case_id" in intake:
                 staged = [e for e in intake.get("evidence", []) if e.get("root") == "staged"]
                 evtx_dir = Path(intake["evidence_roots"]["staged"]) / staged[0]["relpath"] if staged else None
+                # Plaso can be run purely from intake if it's the primary recommendation
+                if "windows_triage_dir" in kind or rec == "plaso_evtx":
+                    staged = [e for e in intake.get("evidence", []) if e.get("root") == "staged"]
+                    if staged:
+                        evtx_dir = Path(intake["evidence_roots"]["staged"]) / staged[0]["relpath"]
+                    else:
+                        evtx_dir = Path(intake["evidence_roots"]["original"]) / intake["evidence"][0]["relpath"]
             else:
-                manifest = load_json(manifest_path)
-                evtx_dir = manifest.get("inputs", {}).get("evtx_dir")
+                if "windows_triage_dir" in kind or rec == "plaso_evtx":
+                    evtx_dir = Path(intake["inputs"]["paths"][0])
+                else:    
+                    manifest = load_json(manifest_path)
+                    evtx_dir = Path(manifest.get("inputs", {}).get("evtx_dir"))
                 
-            if evtx_dir:
-                print("INFO: starting plaso pipeline")
-                auto_doc["stages"]["plaso"] = "running"
-                try:
-                    # Use deterministic run_id for plaso so the Map can find it
-                    plaso_run_id = f"{intake_id}-plaso"
-                    run_must([str(PLASO_RUNNER), plaso_run_id, ts, str(evtx_dir), str(intake_json.parent)])
-                    
-                    src_plaso = intake_json.parent / plaso_run_id / "case.plaso"
-                    dest_plaso = intake_json.parent / f"{intake_id}.plaso"
-                    if src_plaso.exists():
-                        import shutil
-                        shutil.move(str(src_plaso), str(dest_plaso))
-                    auto_doc["stages"]["plaso"] = "ok"
-                except Exception as e:
-                    print(f"WARNING: Plaso pipeline failed: {e}", file=sys.stderr)
-                    auto_doc["stages"]["plaso"] = f"error: {e}"
+            if evtx_dir and evtx_dir.exists():
+                dest_plaso = intake_json.parent / f"{intake_id}.plaso"
+                if dest_plaso.exists():
+                    print("INFO: plaso pipeline already completed successfully in dispatch stage.")
+                    auto_doc["stages"]["plaso"] = "ok (from dispatch block)"
+                else:
+                    print("INFO: starting plaso pipeline")
+                    auto_doc["stages"]["plaso"] = "running"
+                    try:
+                        # Use deterministic run_id for plaso so the Map can find it
+                        plaso_run_id = f"{intake_id}-plaso"
+                        run_must([str(PLASO_RUNNER), plaso_run_id, ts, str(evtx_dir), str(intake_json.parent)])
+                        
+                        src_plaso = intake_json.parent / plaso_run_id / "case.plaso"
+                        if src_plaso.exists():
+                            import shutil
+                            shutil.move(str(src_plaso), str(dest_plaso))
+                        auto_doc["stages"]["plaso"] = "ok"
+                    except Exception as e:
+                        print(f"WARNING: Plaso pipeline failed: {e}", file=sys.stderr)
+                        auto_doc["stages"]["plaso"] = f"error: {e}"
 
     # --- Phase: Automated AppCompatCache ---
     if rec == "appcompatcache" and dispatch_block["status"] == "ok":

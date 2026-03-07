@@ -6,6 +6,12 @@ playbooks:
       - run: hayabusa_evtx
       - run: plaso_evtx
 
+  windows_triage_v1:
+    description: "Full timeline extraction from a Windows artifact root."
+    steps:
+      - run: plaso_evtx
+
+
   log_tampering_v1:
     description: "Focused triage for evidence of log clearing or audit subversion."
     steps:

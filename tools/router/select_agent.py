@@ -32,7 +32,9 @@ def main() -> int:
         intake_id = intake["case_id"]
         # Inferred classification based on evidence
         evidence_types = [e["type"] for e in intake.get("evidence", [])]
-        if "evtx" in evidence_types or "evtx_dir" in evidence_types:
+        if "windows_triage_dir" in evidence_types:
+            kind = "windows_triage_dir"
+        elif "evtx" in evidence_types or "evtx_dir" in evidence_types:
             kind = "windows_evtx_dir"
         else:
             kind = "generic"
@@ -42,13 +44,16 @@ def main() -> int:
         kind = intake["classification"]["kind"]
 
     # deterministic mapping
-    if kind in ("windows_evtx_dir", "windows_evtx_file"):
+    if kind in ("windows_evtx_dir", "windows_evtx_file", "windows_triage_dir"):
         agent_id = "windows_evtx_agent"
     else:
         agent_id = "triage_agent"
 
     # Playbook Selection (V37)
     playbook = "initial_access_v1"
+    if kind == "windows_triage_dir":
+        playbook = "windows_triage_v1"
+        
     if args.task:
         task_lower = args.task.lower()
         if any(k in task_lower for k in ["tamper", "clear", "audit"]):

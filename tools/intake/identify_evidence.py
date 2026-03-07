@@ -77,6 +77,20 @@ def classify_path(p: pathlib.Path) -> Tuple[str, List[str], str, Optional[str]]:
         return ("unknown", [f"path_not_found:{str(p)}"], "low", None)
 
     if p.is_dir():
+        # First, check for structural Windows triage characteristics
+        triage_signals = []
+        if (p / "Windows/System32/config").exists() or (p / "Windows/System32/winevt").exists():
+            triage_signals.append("windows_system_folder_detected")
+        if (p / "$MFT").exists():
+            triage_signals.append("mft_detected")
+        if (p / "Users").exists() and any(p.rglob("NTUSER.DAT")):
+            triage_signals.append("ntuser_dat_detected")
+        if any(p.rglob("SYSTEM")) and any(p.rglob("SOFTWARE")):
+            triage_signals.append("registry_hives_detected")
+            
+        if triage_signals:
+            return ("windows_triage_dir", triage_signals, "high", "plaso_evtx")
+
         evtx = sorted([str(x) for x in p.rglob("*.evtx")])
         evt = sorted([str(x) for x in p.rglob("*.evt")])
         if evtx or evt:
