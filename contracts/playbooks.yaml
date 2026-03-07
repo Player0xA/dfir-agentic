@@ -9,6 +9,8 @@ playbooks:
   windows_triage_v1:
     description: "Full timeline extraction from a Windows artifact root."
     steps:
+      - run: chainsaw_evtx
+      - run: hayabusa_evtx
       - run: plaso_evtx
 
 
