@@ -413,13 +413,47 @@ async def create_intake(
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
+@app.post("/api/classify")
+async def classify_evidence(paths: str = Form(...)):
+    """Classify evidence paths without creating a case."""
+    try:
+        path_list = [p.strip() for p in paths.split(",") if p.strip()]
+        if not path_list:
+            raise HTTPException(status_code=400, detail="No valid paths provided")
+        
+        # Run identify_evidence.py in classify-only mode
+        cmd = [
+            "python3",
+            str(PROJECT_ROOT / "tools" / "intake" / "identify_evidence.py"),
+            "--classify-only",
+            *path_list
+        ]
+        
+        result = subprocess.run(cmd, capture_output=True, text=True, timeout=30)
+        
+        if result.returncode != 0:
+            raise HTTPException(status_code=500, detail=f"Classification failed: {result.stderr}")
+        
+        # Parse the JSON output
+        classification = json.loads(result.stdout)
+        return {"success": True, "classification": classification}
+        
+    except subprocess.TimeoutExpired:
+        raise HTTPException(status_code=500, detail="Classification timed out")
+    except json.JSONDecodeError:
+        raise HTTPException(status_code=500, detail="Failed to parse classification result")
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
 @app.post("/api/investigate/start")
 async def start_investigation(
     case_name: str = Form(...),
     tools: str = Form(...),  # Comma-separated tool IDs
     options: str = Form("{}")  # JSON string of options
 ):
-    """Start an investigation with selected tools."""
+    """Start an investigation with selected tools in background."""
     try:
         tool_list = [t.strip() for t in tools.split(",") if t.strip()]
         options_dict = json.loads(options)
@@ -428,7 +462,18 @@ async def start_investigation(
         case_dir = PROJECT_ROOT / "outputs" / "intake" / case_name
         if not case_dir.exists():
             raise HTTPException(status_code=404, detail=f"Case '{case_name}' not found")
-            
+        
+        # Get evidence path from intake.json
+        intake_json = case_dir / "intake.json"
+        evidence_path = None
+        if intake_json.exists():
+            with open(intake_json, "r") as f:
+                intake_data = json.load(f)
+                evidence_path = intake_data.get("inputs", {}).get("paths", [None])[0]
+        
+        if not evidence_path:
+            raise HTTPException(status_code=400, detail="No evidence path found in case")
+        
         # Create investigation status file
         status_file = case_dir / "investigation_status.json"
         status = {
@@ -436,22 +481,59 @@ async def start_investigation(
             "started_at": datetime.now().isoformat(),
             "tools": tool_list,
             "completed_tools": [],
-            "current_tool": None,
+            "current_tool": "initializing",
+            "current_action": "Starting investigation...",
             "progress": 0,
-            "logs": []
+            "logs": [],
+            "pid": None
         }
         
         with open(status_file, "w") as f:
             json.dump(status, f, indent=2)
-            
-        # TODO: Trigger actual pipeline execution (this would integrate with router)
-        # For now, return the status
+        
+        # Run the dfir.py pipeline in background using subprocess.Popen
+        # This will run auto_run.py which runs all the selected tools
+        dfir_script = PROJECT_ROOT / "dfir.py"
+        
+        # Build command - dfir.py takes evidence path as argument
+        # It will automatically run the appropriate tools based on evidence type
+        cmd = [
+            "python3",
+            str(dfir_script),
+            evidence_path
+        ]
+        
+        # Set environment to track this run
+        env = os.environ.copy()
+        env["DFIR_CASE_NAME"] = case_name
+        
+        # Start process in background - don't wait for completion
+        process = subprocess.Popen(
+            cmd,
+            cwd=str(PROJECT_ROOT),
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            env=env,
+            start_new_session=True  # Detach from parent process
+        )
+        
+        # Update status with PID
+        status["pid"] = process.pid
+        status["current_action"] = f"Running dfir.py (PID: {process.pid})..."
+        status["logs"].append(f"[{datetime.now().isoformat()}] Starting investigation with {len(tool_list)} tools")
+        status["logs"].append(f"[{datetime.now().isoformat()}] Evidence path: {evidence_path}")
+        
+        with open(status_file, "w") as f:
+            json.dump(status, f, indent=2)
+        
         return {
             "success": True,
             "case_name": case_name,
+            "evidence_path": evidence_path,
             "tools_selected": tool_list,
             "status": "started",
-            "message": "Investigation started. Check status endpoint for progress."
+            "pid": process.pid,
+            "message": "Investigation started in background."
         }
         
     except HTTPException:
@@ -461,34 +543,145 @@ async def start_investigation(
 
 @app.get("/api/investigate/status/{case_name}")
 async def get_investigation_status(case_name: str):
-    """Get the current status of an investigation."""
+    """Get verbose status of an investigation by reading pipeline logs."""
     try:
         case_dir = PROJECT_ROOT / "outputs" / "intake" / case_name
         status_file = case_dir / "investigation_status.json"
         
-        if not status_file.exists():
-            # Check if case is finished (has summary.md)
-            orchestrator_dir = case_dir / "orchestrator"
-            if orchestrator_dir.exists():
-                for run_dir in orchestrator_dir.iterdir():
-                    if run_dir.is_dir() and (run_dir / "summary.md").exists():
-                        return {
-                            "status": "completed",
-                            "case_name": case_name,
-                            "has_summary": True
-                        }
+        # Check if case directory exists
+        if not case_dir.exists():
+            return {"status": "not_found", "case_name": case_name}
+        
+        # Check if completed (has summary.md in orchestrator)
+        orchestrator_dir = case_dir / "orchestrator"
+        if orchestrator_dir.exists():
+            for run_dir in orchestrator_dir.iterdir():
+                if run_dir.is_dir() and (run_dir / "summary.md").exists():
+                    return {
+                        "status": "completed",
+                        "case_name": case_name,
+                        "has_summary": True,
+                        "progress": 100,
+                        "current_tool": "completed",
+                        "current_action": "Investigation complete"
+                    }
+        
+        # Check if there's an auto.json with stage status (from auto_run.py)
+        auto_json_path = case_dir / "auto.json"
+        stage_info = {}
+        if auto_json_path.exists():
+            try:
+                with open(auto_json_path, "r") as f:
+                    auto_data = json.load(f)
+                    stage_info = auto_data.get("stages", {})
+            except Exception:
+                pass
+        
+        # If we have stage info, determine current progress
+        if stage_info:
+            completed = []
+            running = None
+            pending = []
+            
+            tool_order = ["chainsaw_evtx", "hayabusa_evtx", "plaso_evtx", "mem_forensics", 
+                         "recmd", "mftecmd", "rbcmd", "lecmd", "jlecmd", "appcompatcache", 
+                         "recentfilecache", "enrichment", "orchestrator"]
+            
+            for tool in tool_order:
+                if tool in stage_info:
+                    status = stage_info[tool]
+                    if status == "ok":
+                        completed.append(tool)
+                    elif status == "running":
+                        running = tool
+                    elif status == "skipped":
+                        pass  # Skip skipped tools
+                    else:
+                        pending.append(tool)
+            
+            # Build verbose current action
+            current_action = "Waiting..."
+            if running:
+                current_action = f"Running {running}..."
+            elif completed:
+                last_tool = completed[-1]
+                # Try to get more verbose info
+                if last_tool == "chainsaw_evtx":
+                    current_action = "Chainsaw analysis complete. Processing detections..."
+                elif last_tool == "hayabusa_evtx":
+                    current_action = "Hayabusa threat hunting complete. Correlating findings..."
+                elif last_tool == "plaso_evtx":
+                    current_action = "Plaso timeline generation complete."
+                elif last_tool == "orchestrator":
+                    current_action = "AI analysis in progress..."
+                else:
+                    current_action = f"{last_tool} complete."
+            
+            progress = int((len(completed) / max(len(completed) + len(pending) + (1 if running else 0), 1)) * 100)
+            
+            # Check if process is still running
+            pid = None
+            if status_file.exists():
+                try:
+                    with open(status_file, "r") as f:
+                        status_data = json.load(f)
+                        pid = status_data.get("pid")
+                except Exception:
+                    pass
+            
+            # Check if process is dead
+            process_running = False
+            if pid:
+                try:
+                    import signal
+                    os.kill(pid, 0)  # Signal 0 just checks if process exists
+                    process_running = True
+                except (OSError, ProcessLookupError):
+                    process_running = False
+            
+            # If process is not running but no summary yet, it might have failed
+            if not process_running and not completed and not (orchestrator_dir and any((orchestrator_dir / d).is_dir() for d in os.listdir(orchestrator_dir))):
+                return {
+                    "status": "error",
+                    "case_name": case_name,
+                    "error": "Investigation process ended unexpectedly",
+                    "progress": 0
+                }
+            
             return {
-                "status": "not_started",
-                "case_name": case_name
+                "status": "running",
+                "case_name": case_name,
+                "progress": progress,
+                "current_tool": running or "unknown",
+                "current_action": current_action,
+                "completed_tools": completed,
+                "pending_tools": pending,
+                "stages": stage_info,
+                "pid": pid,
+                "process_running": process_running
             }
-            
-        with open(status_file, "r") as f:
-            status = json.load(f)
-            
-        return status
+        
+        # If no auto.json yet, check if investigation_status.json exists
+        if status_file.exists():
+            with open(status_file, "r") as f:
+                status = json.load(f)
+                # Check if process is still running
+                pid = status.get("pid")
+                if pid:
+                    try:
+                        os.kill(pid, 0)
+                    except (OSError, ProcessLookupError):
+                        status["process_running"] = False
+                return status
+        
+        # No status files - not started
+        return {
+            "status": "not_started",
+            "case_name": case_name
+        }
         
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        return {"status": "error", "case_name": case_name, "error": str(e)}
 
 @app.get("/api/investigate/summary/{case_name}")
 async def get_investigation_summary(case_name: str):

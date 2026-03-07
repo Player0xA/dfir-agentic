@@ -1,5 +1,88 @@
 // panels.js - Individual Panel Renderers
 
+// 0. Investigation Progress Panel
+window.renderProgress = async (caseId) => {
+    const container = document.getElementById('panel-progress');
+    if (!container) return;
+
+    try {
+        const response = await fetch(`/api/investigate/status/${caseId}`);
+        const data = await response.json();
+        
+        let html = '';
+        
+        if (data.status === 'not_started' || data.status === 'not_found') {
+            html = `
+                <div style="text-align: center; padding: 2rem; color: var(--text-muted);">
+                    <div style="font-size: 2rem; margin-bottom: 1rem;">⏳</div>
+                    <p>No investigation running</p>
+                    <p style="font-size: 0.8rem;">Click "New Investigation" to start analyzing evidence</p>
+                </div>
+            `;
+        } else if (data.status === 'completed') {
+            html = `
+                <div style="text-align: center; padding: 1rem;">
+                    <div class="badge info" style="font-size: 1rem; padding: 0.5rem 1rem;">✅ Investigation Complete</div>
+                    <p style="margin-top: 1rem; color: var(--text-secondary);">Click "View Summary" to see AI analysis</p>
+                </div>
+            `;
+        } else if (data.status === 'error') {
+            html = `
+                <div style="text-align: center; padding: 1rem;">
+                    <div class="badge critical">❌ Investigation Error</div>
+                    <p style="margin-top: 1rem; color: var(--severity-critical);">${data.error || 'Unknown error'}</p>
+                </div>
+            `;
+        } else if (data.status === 'running') {
+            const progress = data.progress || 0;
+            const currentTool = data.current_tool || 'Unknown';
+            const currentAction = data.current_action || 'Processing...';
+            const completed = data.completed_tools || [];
+            const pending = data.pending_tools || [];
+            
+            html = `
+                <div style="margin-bottom: 1rem;">
+                    <div class="progress-bar" style="height: 20px; background: var(--bg-surface); border-radius: 10px; overflow: hidden;">
+                        <div style="height: 100%; background: var(--accent-gradient); width: ${progress}%; transition: width 0.5s ease; border-radius: 10px;"></div>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; margin-top: 0.5rem; font-size: 0.85rem;">
+                        <span style="color: var(--accent-solid); font-weight: 600;">${progress}%</span>
+                        <span style="color: var(--text-secondary);">${currentAction}</span>
+                    </div>
+                </div>
+                
+                <div style="display: flex; gap: 1rem; font-size: 0.8rem; flex-wrap: wrap;">
+                    ${completed.length > 0 ? `
+                        <div style="flex: 1; min-width: 150px;">
+                            <div style="color: var(--text-muted); margin-bottom: 0.3rem;">Completed</div>
+                            ${completed.map(t => `<span class="badge info" style="margin: 2px;">✓ ${t}</span>`).join('')}
+                        </div>
+                    ` : ''}
+                    ${pending.length > 0 ? `
+                        <div style="flex: 1; min-width: 150px;">
+                            <div style="color: var(--text-muted); margin-bottom: 0.3rem;">Pending</div>
+                            ${pending.map(t => `<span class="badge" style="margin: 2px; opacity: 0.5;">○ ${t}</span>`).join('')}
+                        </div>
+                    ` : ''}
+                </div>
+                
+                ${data.pid ? `<div style="margin-top: 1rem; font-size: 0.75rem; color: var(--text-muted);">Process ID: ${data.pid}</div>` : ''}
+            `;
+        } else {
+            html = `<div class="loading">Loading progress...</div>`;
+        }
+        
+        const prevScroll = container.scrollTop;
+        if (container.innerHTML !== html) {
+            container.innerHTML = html;
+        }
+        container.scrollTop = prevScroll;
+        
+    } catch (e) {
+        container.innerHTML = `<div class="error">Failed to load progress: ${e.message}</div>`;
+    }
+};
+
 // 1. Overview Panel
 window.renderOverview = async (caseId) => {
     const container = document.getElementById('panel-overview');

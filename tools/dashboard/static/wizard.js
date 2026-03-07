@@ -68,6 +68,7 @@ function goToStep(step) {
     // Step-specific actions
     if (step === 2) {
         generateCaseNameSuggestion();
+        classifyEvidence();
     } else if (step === 3) {
         loadRecommendedTools();
     } else if (step === 4) {
@@ -191,6 +192,60 @@ function generateCaseNameSuggestion() {
         
         document.getElementById('case-name').value = suggestion;
         document.getElementById('display-name').value = cleanBase.charAt(0).toUpperCase() + cleanBase.slice(1) + ' Investigation';
+    }
+}
+
+// Evidence Classification
+async function classifyEvidence() {
+    const detectedTypeEl = document.getElementById('detected-type');
+    detectedTypeEl.innerHTML = '<span style="color: var(--accent-solid);">Classifying evidence...</span>';
+    
+    try {
+        const formData = new FormData();
+        formData.append('paths', wizardState.evidencePaths.join(','));
+        
+        const response = await fetch('/api/classify', {
+            method: 'POST',
+            body: formData
+        });
+        
+        if (!response.ok) {
+            throw new Error('Classification failed');
+        }
+        
+        const data = await response.json();
+        if (data.success && data.classification) {
+            const c = data.classification;
+            wizardState.evidenceType = c.kind;
+            
+            // Display friendly evidence type
+            const typeNames = {
+                'windows_triage_dir': 'Windows Triage Directory',
+                'windows_evtx_dir': 'Windows EVTX Directory',
+                'windows_evtx_file': 'Windows EVTX File',
+                'memory_dump_file': 'Memory Dump',
+                'disk_image_file': 'Disk Image',
+                'pcap_file': 'Network Capture (PCAP)',
+                'linux_logs_dir': 'Linux Logs Directory',
+                'unknown': 'Unknown'
+            };
+            
+            const friendlyType = typeNames[c.kind] || c.kind;
+            const confidence = c.confidence ? `(${c.confidence} confidence)` : '';
+            
+            detectedTypeEl.innerHTML = `
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <span class="badge info">${friendlyType}</span>
+                    <span style="color: var(--text-muted); font-size: 0.85rem;">${confidence}</span>
+                </div>
+                ${c.recommended_pipeline ? `<div style="margin-top: 8px; font-size: 0.8rem; color: var(--text-secondary);">Recommended: ${c.recommended_pipeline}</div>` : ''}
+            `;
+        } else {
+            detectedTypeEl.textContent = 'Unable to classify evidence';
+        }
+    } catch (e) {
+        console.error('Classification error:', e);
+        detectedTypeEl.textContent = 'Classification error: ' + e.message;
     }
 }
 
@@ -323,16 +378,62 @@ async function startInvestigation() {
             throw new Error('Investigation start failed: ' + await startResponse.text());
         }
         
-        addLog('Investigation started');
+        const startData = await startResponse.json();
+        addLog('Investigation started in background (PID: ' + startData.pid + ')');
         
-        // Start polling for status
-        pollInvestigationStatus();
+        // Close wizard and switch to the case immediately
+        closeWizard();
+        
+        // Refresh case list and select the new case
+        // The main dashboard will show progress in the progress panel
+        if (typeof loadCases === 'function') {
+            await loadCases();
+            const selector = document.getElementById('case-selector');
+            if (selector) {
+                selector.value = wizardState.caseName;
+                if (typeof loadCaseData === 'function') {
+                    loadCaseData(wizardState.caseName);
+                }
+            }
+        }
+        
+        // Start polling for status in background for notifications
+        startBackgroundPolling(wizardState.caseName);
         
     } catch (e) {
         console.error('Investigation error:', e);
-        addLog('Error: ' + e.message);
-        updateProgress(0, 'Error: ' + e.message);
+        alert('Error starting investigation: ' + e.message);
+        goToStep(3); // Go back to tools selection
     }
+}
+
+// Background polling for notifications (not tied to wizard)
+let backgroundPollingInterval = null;
+
+function startBackgroundPolling(caseName) {
+    if (backgroundPollingInterval) {
+        clearInterval(backgroundPollingInterval);
+    }
+    
+    backgroundPollingInterval = setInterval(async () => {
+        try {
+            const response = await fetch(`/api/investigate/status/${caseName}`);
+            const data = await response.json();
+            
+            if (data.status === 'completed') {
+                clearInterval(backgroundPollingInterval);
+                backgroundPollingInterval = null;
+                // Could show a notification here
+                console.log('Investigation completed!');
+            } else if (data.status === 'error') {
+                clearInterval(backgroundPollingInterval);
+                backgroundPollingInterval = null;
+                console.error('Investigation error:', data.error);
+            }
+        } catch (e) {
+            // Silent fail for background polling
+        }
+    }, 10000);
 }
 
 async function pollInvestigationStatus() {

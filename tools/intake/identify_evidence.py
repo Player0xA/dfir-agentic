@@ -198,13 +198,52 @@ def classify_path(p: pathlib.Path) -> Tuple[str, List[str], str, Optional[str]]:
 
     return ("unknown", ["file_no_known_signals"], "low", None)
 
+def classify_and_return(paths: List[str]) -> int:
+    """Classify evidence paths and print JSON result without creating case."""
+    results = []
+    all_signals: List[str] = []
+    
+    for s in paths:
+        p = pathlib.Path(s).expanduser()
+        kind, signals, conf, rec = classify_path(p)
+        results.append((kind, conf, rec or "", str(p), signals))
+        for sig in signals:
+            all_signals.append(f"{os.path.basename(str(p))}:{sig}")
+
+    conf_rank = {"high": 0, "medium": 1, "low": 2}
+    best = sorted(results, key=lambda r: (conf_rank.get(r[1], 9), r[0], r[3] or ""))[0]
+    best_kind, best_conf, best_rec, best_path, _best_signals = best
+
+    # Extract evidence name (no path)
+    evidence_name = os.path.basename(best_path.rstrip('/'))
+    if os.path.isdir(best_path):
+        # For directories, show the folder name
+        evidence_name = os.path.basename(best_path.rstrip('/'))
+
+    output = {
+        "kind": best_kind,
+        "confidence": best_conf,
+        "recommended_pipeline": best_rec,
+        "signals": all_signals,
+        "evidence_name": evidence_name,
+        "evidence_count": len(paths)
+    }
+    
+    print(json.dumps(output, indent=2))
+    return 0
+
 def main() -> int:
     ap = argparse.ArgumentParser(description="Deterministic evidence identification")
     ap.add_argument("paths", nargs="+", help="one or more evidence paths (file or dir)")
     ap.add_argument("--out-base", default="outputs/intake", help="base output directory")
     ap.add_argument("--case-name", help="Friendly case name (will be sanitized for directory)")
     ap.add_argument("--display-name", help="Display name for the case (if different from case-name)")
+    ap.add_argument("--classify-only", action="store_true", help="Only classify evidence, don't create case")
     args = ap.parse_args()
+
+    # If classify-only mode, just classify and return immediately
+    if args.classify_only:
+        return classify_and_return(args.paths)
 
     # Generate internal intake_id (UUID for tracking)
     intake_id = str(uuid.uuid4())
