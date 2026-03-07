@@ -1,0 +1,15 @@
+
+ ██████╗██╗  ██╗ █████╗ ██╗███╗   ██╗███████╗ █████╗ ██╗    ██╗
+██╔════╝██║  ██║██╔══██╗██║████╗  ██║██╔════╝██╔══██╗██║    ██║
+██║     ███████║███████║██║██╔██╗ ██║███████╗███████║██║ █╗ ██║
+██║     ██╔══██║██╔══██║██║██║╚██╗██║╚════██║██╔══██║██║███╗██║
+╚██████╗██║  ██║██║  ██║██║██║ ╚████║███████║██║  ██║╚███╔███╔╝
+ ╚═════╝╚═╝  ╚═╝╚═╝  ╚═╝╚═╝╚═╝  ╚═══╝╚══════╝╚═╝  ╚═╝ ╚══╝╚══╝
+    By WithSecure Countercept (@FranticTyping, @AlexKornitzer)
+
+[+] Loading detection rules from: /opt/dfir-tools/chainsaw/rules/evtx
+[+] Loaded 78 detection rules
+[+] Loading forensic artefacts from: /home/nevermore/windowsValidation/evidence/ (extensions: .evtx, .evt)
+[+] Loaded 120 forensic artefacts (78.5 MiB)
+[38;5;9m[x] Failed to hunt through file '/home/nevermore/windowsValidation/evidence/C/Windows/System32/winevt/Logs/Microsoft-Windows-Store%4Operational.evtx' (Use --skip-errors to continue processing) - An error occurred while trying to deserialize evtx stream. in /home/nevermore/windowsValidation/evidence/C/Windows/System32/winevt/Logs/Microsoft-Windows-Store%4Operational.evtx[0m
+FAIL: unexpected error (see stderr.log)

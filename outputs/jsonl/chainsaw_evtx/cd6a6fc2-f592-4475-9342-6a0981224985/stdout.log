@@ -1,0 +1,6 @@
+INFO: starting pipeline
+  RUN_ID: cd6a6fc2-f592-4475-9342-6a0981224985
+  TS_UTC: 2026-03-07T08:53:24Z
+  EVTX_DIR: /home/nevermore/windowsValidation/evidence/
+  OUT_DIR: outputs/jsonl/chainsaw_evtx/cd6a6fc2-f592-4475-9342-6a0981224985
+  CHAINSAW_VERSION: 2.13.1
