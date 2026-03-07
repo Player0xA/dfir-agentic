@@ -139,6 +139,12 @@
         "plaso": {
           "type": "string"
         },
+        "chainsaw_evtx": {
+          "type": "string"
+        },
+        "hayabusa_evtx": {
+          "type": "string"
+        },
         "appcompatcache": {
           "type": "string"
         },
