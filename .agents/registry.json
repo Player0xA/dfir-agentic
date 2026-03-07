@@ -27,7 +27,8 @@
       "description": "May dispatch chainsaw_evtx (baseline) and run hayabusa_evtx enrichment; may read their outputs.",
       "capabilities": {
         "can_dispatch_pipelines": [
-          "chainsaw_evtx"
+          "chainsaw_evtx",
+          "plaso_evtx"
         ],
         "can_run_enrichments": [
           "hayabusa_evtx"
@@ -60,4 +61,3 @@
     }
   ]
 }
-
