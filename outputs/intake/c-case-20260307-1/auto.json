@@ -1,0 +1,38 @@
+{
+  "auto_id": "d20a28b5-013c-4429-96a8-f943382d1b78",
+  "timestamp_utc": "2026-03-07T08:39:41Z",
+  "intake": {
+    "intake_id": "6a8c38ee-9041-4df4-921a-b7fccdd7e24c",
+    "intake_json": "outputs/intake/c-case-20260307-1/intake.json"
+  },
+  "selection": {
+    "selected_agent": "triage_agent",
+    "selected_playbook": "initial_access_v1",
+    "kind": "unknown"
+  },
+  "enforcement": {
+    "allowed": true,
+    "action": "skip",
+    "details": "no recommended pipeline"
+  },
+  "dispatch": {
+    "status": "skipped",
+    "dispatch_json": null,
+    "run_id": null,
+    "manifest_path": null
+  },
+  "stages": {
+    "plaso": "skipped",
+    "chainsaw_evtx": "skipped",
+    "hayabusa_evtx": "skipped",
+    "appcompatcache": "skipped",
+    "mftecmd": "skipped",
+    "rbcmd": "skipped",
+    "lecmd": "skipped",
+    "recentfilecache": "skipped",
+    "jlecmd": "skipped",
+    "recmd": "skipped",
+    "enrichment": "ok",
+    "merge": "skipped (missing baseline manifest)"
+  }
+}

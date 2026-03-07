@@ -1,0 +1,23 @@
+{
+  "timestamp_utc": "2026-03-07T08:39:41Z",
+  "plan_json": "outputs/intake/c-case-20260307-1/enrichment_plan.json",
+  "agent_id": "triage_agent",
+  "baseline": {
+    "auto_json": "outputs/intake/c-case-20260307-1/auto.json",
+    "baseline_manifest_path": "MISSING",
+    "evtx_dir": "MISSING"
+  },
+  "decision": {
+    "should_run": false,
+    "reason": "Baseline manifest missing (pipeline failure)",
+    "policy": {
+      "mode": "agent_decision"
+    }
+  },
+  "enforcement": null,
+  "result": {
+    "status": "skipped",
+    "run_id": null,
+    "manifest_path": null
+  }
+}
