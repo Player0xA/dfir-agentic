@@ -1,0 +1,19 @@
+{
+  "status": "starting",
+  "started_at": "2026-03-07T18:49:05.163427",
+  "tools": [
+    "chainsaw_evtx",
+    "plaso_evtx",
+    "mftecmd",
+    "rbcmd"
+  ],
+  "completed_tools": [],
+  "current_tool": "initializing",
+  "current_action": "Running (PID: 1946)...",
+  "progress": 0,
+  "logs": [
+    "[2026-03-07T18:49:05.164122] Investigation started"
+  ],
+  "pid": 1946,
+  "log_file": "/home/nevermore/dfir-agentic/outputs/intake/testlight/investigation.log"
+}

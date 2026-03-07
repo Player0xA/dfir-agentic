@@ -1,0 +1,19 @@
+INFO: starting pipeline
+  RUN_ID: 44a5d69c-4ebd-4921-95ec-e309e16f1abb
+  TS_UTC: 2026-03-07T09:15:34Z
+  EVTX_DIR: /home/nevermore/windowsValidation/evidence/
+  OUT_DIR: outputs/jsonl/chainsaw_evtx/44a5d69c-4ebd-4921-95ec-e309e16f1abb
+  CHAINSAW_VERSION: 2.13.1
+OK: document validates
+OK: wrote outputs/jsonl/chainsaw_evtx/44a5d69c-4ebd-4921-95ec-e309e16f1abb/triage.json
+OK: triage validated
+✔ Encoded outputs/jsonl/chainsaw_evtx/44a5d69c-4ebd-4921-95ec-e309e16f1abb/findings.json → outputs/toon/chainsaw_evtx/44a5d69c-4ebd-4921-95ec-e309e16f1abb/findings.toon
+OK: manifest validated
+OK: pipeline complete
+  RUN_ID:        44a5d69c-4ebd-4921-95ec-e309e16f1abb
+  chainsaw_out:  outputs/jsonl/chainsaw_evtx/44a5d69c-4ebd-4921-95ec-e309e16f1abb/chainsaw.evtx.jsonl
+  findings_out:  outputs/jsonl/chainsaw_evtx/44a5d69c-4ebd-4921-95ec-e309e16f1abb/findings.json
+  triage_out:    outputs/jsonl/chainsaw_evtx/44a5d69c-4ebd-4921-95ec-e309e16f1abb/triage.json
+  toon_out:      outputs/toon/chainsaw_evtx/44a5d69c-4ebd-4921-95ec-e309e16f1abb/findings.toon
+  request:       outputs/jsonl/chainsaw_evtx/44a5d69c-4ebd-4921-95ec-e309e16f1abb/request.json
+  manifest:      outputs/jsonl/chainsaw_evtx/44a5d69c-4ebd-4921-95ec-e309e16f1abb/manifest.json

@@ -1,0 +1,23 @@
+
+ ██████╗██╗  ██╗ █████╗ ██╗███╗   ██╗███████╗ █████╗ ██╗    ██╗
+██╔════╝██║  ██║██╔══██╗██║████╗  ██║██╔════╝██╔══██╗██║    ██║
+██║     ███████║███████║██║██╔██╗ ██║███████╗███████║██║ █╗ ██║
+██║     ██╔══██║██╔══██║██║██║╚██╗██║╚════██║██╔══██║██║███╗██║
+╚██████╗██║  ██║██║  ██║██║██║ ╚████║███████║██║  ██║╚███╔███╔╝
+ ╚═════╝╚═╝  ╚═╝╚═╝  ╚═╝╚═╝╚═╝  ╚═══╝╚══════╝╚═╝  ╚═╝ ╚══╝╚══╝
+    By WithSecure Countercept (@FranticTyping, @AlexKornitzer)
+
+[+] Loading detection rules from: /opt/dfir-tools/chainsaw/rules/evtx
+[+] Loaded 78 detection rules
+[+] Loading forensic artefacts from: /home/nevermore/windowsValidation/evidence/ (extensions: .evt, .evtx)
+[+] Loaded 120 forensic artefacts (78.5 MiB)
+[[[[38;38;5;1138;38;5;11m[!] failed to parse document '/home/nevermore/windowsValidation/evidence/C/Windows/System32/winevt/Logs/Microsoft-Windows-Store%4Operational.evtx' - Failed to parse chunk number 149 - use --skip-errors to continue...
+[0m5;11m[!] failed to parse document '/home/nevermore/windowsValidation/evidence/C/Windows/System32/winevt/Logs/Microsoft-Windows-Store%4Operational.evtx' - An error occurred while trying to deserialize evtx stream. - use --skip-errors to continue...
+[0m
+m[!] failed to parse document '/home/nevermore/windowsValidation/evidence/C/Windows/System32/winevt/Logs/Microsoft-Windows-Store%4Operational.evtx' - Failed to parse chunk number 148 - use --skip-errors to continue...
+[0m
+
+5;11m[!] failed to parse document '/home/nevermore/windowsValidation/evidence/C/Windows/System32/winevt/Logs/Microsoft-Windows-Store%4Operational.evtx' - Failed to parse record number 12843 - use --skip-errors to continue...
+[0m
+
+[+] 784 Detections found on 784 documents

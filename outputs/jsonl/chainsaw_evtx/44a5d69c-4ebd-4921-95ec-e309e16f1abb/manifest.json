@@ -1,0 +1,686 @@
+{
+  "run_id": "44a5d69c-4ebd-4921-95ec-e309e16f1abb",
+  "timestamp_utc": "2026-03-07T09:15:34Z",
+  "pipeline": {
+    "name": "chainsaw-evtx",
+    "version": "0.1.0"
+  },
+  "status": "ok",
+  "inputs": {
+    "evtx_dir": "/home/nevermore/windowsValidation/evidence/",
+    "evtx_files": [
+      {
+        "path": "/home/nevermore/windowsValidation/evidence/C/Windows/System32/winevt/Logs/Application.evtx",
+        "sha256": "61ea0f50ce332305117f3b284e5f05e6eab2cae1668e49e0c1c229c49d195281",
+        "size": 3215360
+      },
+      {
+        "path": "/home/nevermore/windowsValidation/evidence/C/Windows/System32/winevt/Logs/Microsoft-Client-Licensing-Platform%4Admin.evtx",
+        "sha256": "6be378c51c23f65f1e5047cedbb5ab37fbc7109fb3eabd15aa09cedfd0b0dc54",
+        "size": 1052672
+      },
+      {
+        "path": "/home/nevermore/windowsValidation/evidence/C/Windows/System32/winevt/Logs/Microsoft-Windows-AAD%4Operational.evtx",
+        "sha256": "67485150eaf2aa8bbc7d9b308599483f50dd2ac5faa1a739e5eb7340e4d5b90b",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/windowsValidation/evidence/C/Windows/System32/winevt/Logs/Microsoft-Windows-AppID%4Operational.evtx",
+        "sha256": "ff735d23f03c876fa88d1468987148ec401d13870d3a0c58d73e307f96ec7346",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/windowsValidation/evidence/C/Windows/System32/winevt/Logs/Microsoft-Windows-AppLocker%4EXE and DLL.evtx",
+        "sha256": "8894d0fef68966a2fefa3dcec01326bb2640735b4693495fe9313529d255d31d",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/windowsValidation/evidence/C/Windows/System32/winevt/Logs/Microsoft-Windows-AppLocker%4MSI and Script.evtx",
+        "sha256": "24ff8e4c891edac19da05da8d8fbf53e9159fa012b27884fc29d56dda4fe1392",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/windowsValidation/evidence/C/Windows/System32/winevt/Logs/Microsoft-Windows-AppLocker%4Packaged app-Deployment.evtx",
+        "sha256": "f5f9e97a6b1ec8d46a9bd5b9d4ccae96521b85517b0337b248814d2e974a968b",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/windowsValidation/evidence/C/Windows/System32/winevt/Logs/Microsoft-Windows-AppModel-Runtime%4Admin.evtx",
+        "sha256": "4f88c1e8a3ba079afeaa8f5240847d5c57428bad0a8b6a9344e53b459f79ee8f",
+        "size": 1052672
+      },
+      {
+        "path": "/home/nevermore/windowsValidation/evidence/C/Windows/System32/winevt/Logs/Microsoft-Windows-AppReadiness%4Admin.evtx",
+        "sha256": "03b83e79ec942ff9fe02794495fe773d55198146b0a09687fbde5c48eec850da",
+        "size": 1118208
+      },
+      {
+        "path": "/home/nevermore/windowsValidation/evidence/C/Windows/System32/winevt/Logs/Microsoft-Windows-AppReadiness%4Operational.evtx",
+        "sha256": "067fb4126178bbe070f33d32189615c25a61aed91d47945c2f0b550862438065",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/windowsValidation/evidence/C/Windows/System32/winevt/Logs/Microsoft-Windows-AppXDeployment%4Operational.evtx",
+        "sha256": "610787562ac0ab93770f8c41b1841474d50156f32fcb54fe76101297947b6f2e",
+        "size": 1052672
+      },
+      {
+        "path": "/home/nevermore/windowsValidation/evidence/C/Windows/System32/winevt/Logs/Microsoft-Windows-AppXDeployment-Server%4Operational.evtx",
+        "sha256": "3264eb96df6aefd407a2057131969b2a6a02517a1f31f31864a9cdc520e61f91",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/windowsValidation/evidence/C/Windows/System32/winevt/Logs/Microsoft-Windows-AppXDeploymentServer%4Operational.evtx",
+        "sha256": "753b48f3b0024ad21a52dfec9cc7918b3f62a121fb95142ecafec33d0c2317b5",
+        "size": 5246976
+      },
+      {
+        "path": "/home/nevermore/windowsValidation/evidence/C/Windows/System32/winevt/Logs/Microsoft-Windows-AppXDeploymentServer%4Restricted.evtx",
+        "sha256": "7eedfc4389b4fcbac7e614da0abb2a4559031bbaef5f80e4638eab2d43887223",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/windowsValidation/evidence/C/Windows/System32/winevt/Logs/Microsoft-Windows-Application-Experience%4Program-Compatibility-Assistant.evtx",
+        "sha256": "a9ea5d7e3f55fcfa7355600371ac47dc90786065d0bb1449732c5af033fde764",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/windowsValidation/evidence/C/Windows/System32/winevt/Logs/Microsoft-Windows-Application-Experience%4Program-Telemetry.evtx",
+        "sha256": "9dd6b0de140eb99d146411af56a246e244776b8f574128bf0dc18bdfea71c0cc",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/windowsValidation/evidence/C/Windows/System32/winevt/Logs/Microsoft-Windows-AppxPackaging%4Operational.evtx",
+        "sha256": "b58d1246b14c5a856d124c4e07e02b5cfddac8e9d49e7242523612a7050fe5ee",
+        "size": 1052672
+      },
+      {
+        "path": "/home/nevermore/windowsValidation/evidence/C/Windows/System32/winevt/Logs/Microsoft-Windows-Audio%4Operational.evtx",
+        "sha256": "2f4d8db08a8420352192ce3805b300430b77b836b61e63dd349b5a35f4279579",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/windowsValidation/evidence/C/Windows/System32/winevt/Logs/Microsoft-Windows-Audio%4PlaybackManager.evtx",
+        "sha256": "1a62e873b6e9d3aa9e70169ab7787cea1c2d42240b0cc435a1d28e42e2cc0a40",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/windowsValidation/evidence/C/Windows/System32/winevt/Logs/Microsoft-Windows-Authentication User Interface%4Operational.evtx",
+        "sha256": "56785cbe470d5d583b530e9cb4193d745525f5e3b44c325b435bd1c9b7d721c4",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/windowsValidation/evidence/C/Windows/System32/winevt/Logs/Microsoft-Windows-Biometrics%4Operational.evtx",
+        "sha256": "71f87b7dc149a0c04303a9d270150e9c1453531d0d2c850e446867d422d90e35",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/windowsValidation/evidence/C/Windows/System32/winevt/Logs/Microsoft-Windows-BitLocker%4BitLocker Management.evtx",
+        "sha256": "8e70d0a55da1fbb64203d1b8e06111255a813e56a35bdfebc49a0f6c523a1cfb",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/windowsValidation/evidence/C/Windows/System32/winevt/Logs/Microsoft-Windows-Bits-Client%4Operational.evtx",
+        "sha256": "d7f1b980cd853d6d2e84e06200df03a225778fc6a131acead724fb2022b98238",
+        "size": 1052672
+      },
+      {
+        "path": "/home/nevermore/windowsValidation/evidence/C/Windows/System32/winevt/Logs/Microsoft-Windows-CertificateServicesClient-Lifecycle-System%4Operational.evtx",
+        "sha256": "2adf2d3c5b7f19898b3d0528f1abae3c26d3b27d9a3f1490d1b91feb49b52b4e",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/windowsValidation/evidence/C/Windows/System32/winevt/Logs/Microsoft-Windows-CloudFiles-Filter%4Operational.evtx",
+        "sha256": "599309b66f1f3a30e767f7317316d650f8a8a4602f12ce66c5edddf446a6b8a9",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/windowsValidation/evidence/C/Windows/System32/winevt/Logs/Microsoft-Windows-CloudRestoreLauncher%4Operational.evtx",
+        "sha256": "d08ca2cd41094500ec60608d1dc3a25703165b4256e94f2d829ab0fbb1edb441",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/windowsValidation/evidence/C/Windows/System32/winevt/Logs/Microsoft-Windows-CloudStore%4Initialization.evtx",
+        "sha256": "f41bf80222e6bebec3cfeb8d0eb8aa7690d714388467c36d56407899bbf3dcd1",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/windowsValidation/evidence/C/Windows/System32/winevt/Logs/Microsoft-Windows-CloudStore%4Operational.evtx",
+        "sha256": "13e31de1e3cbe319738de1072e14e7d9ecb0ba84e6efe6b771c3112724f6e7e9",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/windowsValidation/evidence/C/Windows/System32/winevt/Logs/Microsoft-Windows-CodeIntegrity%4Operational.evtx",
+        "sha256": "e83f869566bccf6b31d0cc67cfddf9cb8c2a5c7ade98ab636fbfa55f59d24912",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/windowsValidation/evidence/C/Windows/System32/winevt/Logs/Microsoft-Windows-Containers-BindFlt%4Operational.evtx",
+        "sha256": "275d5f578b9a5371c69c056d7a94c3005205baa6c37a4b302fb79f9c044cb58f",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/windowsValidation/evidence/C/Windows/System32/winevt/Logs/Microsoft-Windows-Containers-Wcifs%4Operational.evtx",
+        "sha256": "b4c3a6bccabb6eaf6bfd6cc98e15eb1dab8baf1bcec7cd60a3d1c9bb3b5364e8",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/windowsValidation/evidence/C/Windows/System32/winevt/Logs/Microsoft-Windows-Crypto-DPAPI%4BackUpKeySvc.evtx",
+        "sha256": "2edb9d808c049328473ae742023b20287a67e56851012c17c127c0ed56279bfa",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/windowsValidation/evidence/C/Windows/System32/winevt/Logs/Microsoft-Windows-Crypto-DPAPI%4Operational.evtx",
+        "sha256": "b33243c9a4ca9d6f103989cb210bee03907982490c678aad76ef163a5a0ad99c",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/windowsValidation/evidence/C/Windows/System32/winevt/Logs/Microsoft-Windows-Crypto-NCrypt%4KeyMgmt.evtx",
+        "sha256": "f0138a7ef5b444713224c90e33c13794e8ba3ab422828a23eae4a3911c788aae",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/windowsValidation/evidence/C/Windows/System32/winevt/Logs/Microsoft-Windows-Crypto-NCrypt%4Operational.evtx",
+        "sha256": "c1e271994b15d6d36c4a46e47f815ae4712b8d8d1d94b073476eed4c4c71008a",
+        "size": 1052672
+      },
+      {
+        "path": "/home/nevermore/windowsValidation/evidence/C/Windows/System32/winevt/Logs/Microsoft-Windows-DeviceManagement-Enterprise-Diagnostics-Provider%4Admin.evtx",
+        "sha256": "074ab7dd9fcc28ca599d6a74ccacac00a10484aec532d1c8c93693e63c06fac2",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/windowsValidation/evidence/C/Windows/System32/winevt/Logs/Microsoft-Windows-DeviceManagement-Enterprise-Diagnostics-Provider%4Operational.evtx",
+        "sha256": "58e27ea78c79ee5c47422130120030c961f7fe01a4252940420b8748ff9b75bd",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/windowsValidation/evidence/C/Windows/System32/winevt/Logs/Microsoft-Windows-DeviceSetupManager%4Admin.evtx",
+        "sha256": "b868a1750201080bcde924e5aafcef5663dba2cceed20e42c2c5c7f73efbbf69",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/windowsValidation/evidence/C/Windows/System32/winevt/Logs/Microsoft-Windows-DeviceSetupManager%4Operational.evtx",
+        "sha256": "375aef3b13bbd6457158a3703c2f86f50f6b234b3b09d2cb18a63daf0c036333",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/windowsValidation/evidence/C/Windows/System32/winevt/Logs/Microsoft-Windows-Dhcp-Client%4Admin.evtx",
+        "sha256": "3e0c9144d5ec76296dc988403c1ae54b5b0b4c2ac5770d55cfec228e8031523f",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/windowsValidation/evidence/C/Windows/System32/winevt/Logs/Microsoft-Windows-Diagnosis-DPS%4Operational.evtx",
+        "sha256": "02681ac1899d40118fbba22c7ff9d393abf7e3c04e69af7ef9487ed9a2e3280c",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/windowsValidation/evidence/C/Windows/System32/winevt/Logs/Microsoft-Windows-Diagnosis-PCW%4Operational.evtx",
+        "sha256": "c18c532afe4e4acf38637c3cda4fff74ab09ac69e224efe57e62dace22c6508c",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/windowsValidation/evidence/C/Windows/System32/winevt/Logs/Microsoft-Windows-Diagnostics-Performance%4Operational.evtx",
+        "sha256": "d3b0a16afcfb904a9870c018b5f21b280d0ea98f8c679e3c65aa5472370a67dc",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/windowsValidation/evidence/C/Windows/System32/winevt/Logs/Microsoft-Windows-GroupPolicy%4Operational.evtx",
+        "sha256": "fa984a060dbec10cfca7d454773370e27d14000c7eb81a29a2e85b30211c663d",
+        "size": 1118208
+      },
+      {
+        "path": "/home/nevermore/windowsValidation/evidence/C/Windows/System32/winevt/Logs/Microsoft-Windows-HelloForBusiness%4Operational.evtx",
+        "sha256": "242116f8aca4f488f47aa52674e3ae61e5dcf854e091932a6d22fecc6832a651",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/windowsValidation/evidence/C/Windows/System32/winevt/Logs/Microsoft-Windows-Kernel-Boot%4Operational.evtx",
+        "sha256": "35702f36dc3501966a162f1e14fec23109e9c0137a2637afe2093a3c1759f1d1",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/windowsValidation/evidence/C/Windows/System32/winevt/Logs/Microsoft-Windows-Kernel-Cache%4Operational.evtx",
+        "sha256": "b3643ff59cfae47b58d028bb60d2095df42dec519924477312a69b3474a1a4ec",
+        "size": 1052672
+      },
+      {
+        "path": "/home/nevermore/windowsValidation/evidence/C/Windows/System32/winevt/Logs/Microsoft-Windows-Kernel-Dump%4Operational.evtx",
+        "sha256": "bb94dc180faa9054fca789821c7b7654b0283994ee508f9550be2afa5a5f2b9e",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/windowsValidation/evidence/C/Windows/System32/winevt/Logs/Microsoft-Windows-Kernel-EventTracing%4Admin.evtx",
+        "sha256": "63555451ff2dfe9f6eb5be75a524339f81bf32bff8a2ab74018d3835a0b58be2",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/windowsValidation/evidence/C/Windows/System32/winevt/Logs/Microsoft-Windows-Kernel-PnP%4Configuration.evtx",
+        "sha256": "e8bd539fa5f1ede5c1ea7f217f130d839840d7b62cd13d8c55b24fc5c8e48d04",
+        "size": 1052672
+      },
+      {
+        "path": "/home/nevermore/windowsValidation/evidence/C/Windows/System32/winevt/Logs/Microsoft-Windows-Kernel-PnP%4Device Management.evtx",
+        "sha256": "b6daadf80d0fde9184a789b1aab3c86b0c82e89cf4d265b0222edcf49c660aba",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/windowsValidation/evidence/C/Windows/System32/winevt/Logs/Microsoft-Windows-Kernel-ShimEngine%4Operational.evtx",
+        "sha256": "bd856e8af4eed56209bb87f2bd95e30692d930d70b622c6909c72ed015c63950",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/windowsValidation/evidence/C/Windows/System32/winevt/Logs/Microsoft-Windows-Kernel-WHEA%4Operational.evtx",
+        "sha256": "85195b77f6231611b18829cf41073a95f9054b2fa0aeaee530344ea24da14e12",
+        "size": 1118208
+      },
+      {
+        "path": "/home/nevermore/windowsValidation/evidence/C/Windows/System32/winevt/Logs/Microsoft-Windows-Known Folders API Service.evtx",
+        "sha256": "59800286cc02ccbeddeaab577133e67b3c17196ebf44e4ea9c5be007a066f5b0",
+        "size": 1052672
+      },
+      {
+        "path": "/home/nevermore/windowsValidation/evidence/C/Windows/System32/winevt/Logs/Microsoft-Windows-LanguagePackSetup%4Operational.evtx",
+        "sha256": "c46c9aa36ba9eb5933fc1f0a8c35ad4fb87ad1044b5c313d61faea81d536e817",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/windowsValidation/evidence/C/Windows/System32/winevt/Logs/Microsoft-Windows-LiveId%4Operational.evtx",
+        "sha256": "261ee3dc3c218715c9e7cd0bcacc234ebf7ca77e2f76e3626a16c3183db3c3f1",
+        "size": 1052672
+      },
+      {
+        "path": "/home/nevermore/windowsValidation/evidence/C/Windows/System32/winevt/Logs/Microsoft-Windows-MUI%4Operational.evtx",
+        "sha256": "495e187da5c032a2040b16fea0ea77fde5fcb55d07a3870a68c3da8e3726f615",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/windowsValidation/evidence/C/Windows/System32/winevt/Logs/Microsoft-Windows-ModernDeployment-Diagnostics-Provider%4Autopilot.evtx",
+        "sha256": "47d39a7340ce60d7c986a69705ea6744863417f344c3b38610db234fc8515bba",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/windowsValidation/evidence/C/Windows/System32/winevt/Logs/Microsoft-Windows-ModernDeployment-Diagnostics-Provider%4ManagementService.evtx",
+        "sha256": "920a86831e8a43475281cbf55466d7472f274210d76058dc516e5ffe3db4a15d",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/windowsValidation/evidence/C/Windows/System32/winevt/Logs/Microsoft-Windows-NCSI%4Operational.evtx",
+        "sha256": "0fdd1ef5f7adf8db39c72660f10de4a68e8b742eb0e3add42d2bf3e773367adf",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/windowsValidation/evidence/C/Windows/System32/winevt/Logs/Microsoft-Windows-NetworkProfile%4Operational.evtx",
+        "sha256": "0dda0e85ddd20a63dddbb39daf6320c331a3b4814165f302b90d3aaee03d4c6b",
+        "size": 1052672
+      },
+      {
+        "path": "/home/nevermore/windowsValidation/evidence/C/Windows/System32/winevt/Logs/Microsoft-Windows-NlaSvc%4Operational.evtx",
+        "sha256": "f648e60f52c25263e06610c03cf8db99d4f00b9a87d647b3dfb20d74e1039e53",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/windowsValidation/evidence/C/Windows/System32/winevt/Logs/Microsoft-Windows-Ntfs%4Operational.evtx",
+        "sha256": "1e41193027272cc273f10edd4aef3e2f60a9e3696c6d0dab9fc2b029e5747935",
+        "size": 1118208
+      },
+      {
+        "path": "/home/nevermore/windowsValidation/evidence/C/Windows/System32/winevt/Logs/Microsoft-Windows-Ntfs%4WHC.evtx",
+        "sha256": "055f29a30cbfff7a1202da2d89812d4e1882a21bc84a53e85e6c64d5bd607caa",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/windowsValidation/evidence/C/Windows/System32/winevt/Logs/Microsoft-Windows-PCI%4Operational.evtx",
+        "sha256": "b6d702a3b241ba0c22ee1724bd5a496ce225832f993b020fed40c22013f65527",
+        "size": 1052672
+      },
+      {
+        "path": "/home/nevermore/windowsValidation/evidence/C/Windows/System32/winevt/Logs/Microsoft-Windows-Partition%4Diagnostic.evtx",
+        "sha256": "c6f37b079d857054de1d4ba0b0ab08dc792bfb43910c7e39439d6239eb905c3e",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/windowsValidation/evidence/C/Windows/System32/winevt/Logs/Microsoft-Windows-Perflib%4Operational.evtx",
+        "sha256": "57e03185c5b868093775d4725a8560d188e6aeb5383c526b0a2d8655caac002f",
+        "size": 1052672
+      },
+      {
+        "path": "/home/nevermore/windowsValidation/evidence/C/Windows/System32/winevt/Logs/Microsoft-Windows-PowerShell%4Admin.evtx",
+        "sha256": "ba4e48bc44d8cb1585e1f66cc2fa547ebba31dd81b8f569460ad42cea0b930b2",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/windowsValidation/evidence/C/Windows/System32/winevt/Logs/Microsoft-Windows-PowerShell%4Operational.evtx",
+        "sha256": "a8064b40fa00a240ff8e99214874b18fd58c22d64021b205e3c27f16af4d8153",
+        "size": 15732736
+      },
+      {
+        "path": "/home/nevermore/windowsValidation/evidence/C/Windows/System32/winevt/Logs/Microsoft-Windows-Privacy-Auditing%4Operational.evtx",
+        "sha256": "9190b13038d3eed65810bd834c496924036e4ad1ea9f29baa618b3c917c2ae79",
+        "size": 1118208
+      },
+      {
+        "path": "/home/nevermore/windowsValidation/evidence/C/Windows/System32/winevt/Logs/Microsoft-Windows-Provisioning-Diagnostics-Provider%4Admin.evtx",
+        "sha256": "601abd784aca96c8481a42b3e6c9fa2533a8a1e597b932c8c779dd1a10630723",
+        "size": 1052672
+      },
+      {
+        "path": "/home/nevermore/windowsValidation/evidence/C/Windows/System32/winevt/Logs/Microsoft-Windows-PushNotification-Platform%4Operational.evtx",
+        "sha256": "85ca057de2a28be4fb4172d2c83fe60d9fd23e684684c3416f2a98cbca070580",
+        "size": 1052672
+      },
+      {
+        "path": "/home/nevermore/windowsValidation/evidence/C/Windows/System32/winevt/Logs/Microsoft-Windows-ReadyBoost%4Operational.evtx",
+        "sha256": "487da9ed46bc9c4e12c0d30ce95e75ee59976e9261220531af14b94782c79940",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/windowsValidation/evidence/C/Windows/System32/winevt/Logs/Microsoft-Windows-Resource-Exhaustion-Detector%4Operational.evtx",
+        "sha256": "37272b06028c6f53db0f25f08b9071f4103901defdf748ee656bc4e5a08e39c6",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/windowsValidation/evidence/C/Windows/System32/winevt/Logs/Microsoft-Windows-RestartManager%4Operational.evtx",
+        "sha256": "d4a5796119eddae83ceedaf3076b51762a35fd2678e9ccda12c0e1368511f5dd",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/windowsValidation/evidence/C/Windows/System32/winevt/Logs/Microsoft-Windows-SMBClient%4Operational.evtx",
+        "sha256": "d9706e27fe694fe5f741551c220f79ffbf926fef00594edc620708861f91b1d1",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/windowsValidation/evidence/C/Windows/System32/winevt/Logs/Microsoft-Windows-SMBServer%4Operational.evtx",
+        "sha256": "5912522d43c938e76d63040b78281b349247c78fec3eae62699822b7e3df72ce",
+        "size": 1118208
+      },
+      {
+        "path": "/home/nevermore/windowsValidation/evidence/C/Windows/System32/winevt/Logs/Microsoft-Windows-Security-LessPrivilegedAppContainer%4Operational.evtx",
+        "sha256": "30219c4159b5117b9e21737aefa9eb610bc6311de47cbd126989fc8e7b0b1b2e",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/windowsValidation/evidence/C/Windows/System32/winevt/Logs/Microsoft-Windows-Security-Mitigations%4KernelMode.evtx",
+        "sha256": "bc822951cb0d797bda3dc206025b34599da4f48b4962b7017e2a07bd36ca4ceb",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/windowsValidation/evidence/C/Windows/System32/winevt/Logs/Microsoft-Windows-Security-SPP-UX-Notifications%4ActionCenter.evtx",
+        "sha256": "56108f2486fd0c54397c127c70085e0bf6b9798148c9fa012b639e93d5f1c42d",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/windowsValidation/evidence/C/Windows/System32/winevt/Logs/Microsoft-Windows-Shell-Core%4ActionCenter.evtx",
+        "sha256": "e5d309b3fd83574ad6cfe35ee07c9dc1cf1d54b4a0872f3a6f7c6c83af73e99f",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/windowsValidation/evidence/C/Windows/System32/winevt/Logs/Microsoft-Windows-Shell-Core%4AppDefaults.evtx",
+        "sha256": "b0292a0eb86643da8f1367db92a71e21a62033a60ffaf79b7e749e890a58a5f5",
+        "size": 1052672
+      },
+      {
+        "path": "/home/nevermore/windowsValidation/evidence/C/Windows/System32/winevt/Logs/Microsoft-Windows-Shell-Core%4Operational.evtx",
+        "sha256": "f4b738fd9b2c9dda630e3c9fde31c3c4727aef4ccb4b20cb52f8d12668768b40",
+        "size": 1052672
+      },
+      {
+        "path": "/home/nevermore/windowsValidation/evidence/C/Windows/System32/winevt/Logs/Microsoft-Windows-ShellCommon-StartLayoutPopulation%4Operational.evtx",
+        "sha256": "162e427e2b634dd5b3c21971182844f78452592473df546fcbfcd297a3471e52",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/windowsValidation/evidence/C/Windows/System32/winevt/Logs/Microsoft-Windows-SmbClient%4Connectivity.evtx",
+        "sha256": "c3d0ccd31c556593d574189d1bf93b883113f6d5192cffe73bd0ecd632794915",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/windowsValidation/evidence/C/Windows/System32/winevt/Logs/Microsoft-Windows-StateRepository%4Operational.evtx",
+        "sha256": "8fb8eed469504fa8817a2860c88247fbffdac1ac52c901c75caf7973d68b16da",
+        "size": 1118208
+      },
+      {
+        "path": "/home/nevermore/windowsValidation/evidence/C/Windows/System32/winevt/Logs/Microsoft-Windows-Storage-Storport%4Health.evtx",
+        "sha256": "a47f15890bac364363e5bd517f6d2e9be717182064f5114c7ac089459fd71f0c",
+        "size": 1118208
+      },
+      {
+        "path": "/home/nevermore/windowsValidation/evidence/C/Windows/System32/winevt/Logs/Microsoft-Windows-Storage-Storport%4Operational.evtx",
+        "sha256": "5c1c13f5639d25f9a330f5d2304fbd6839f1c72a542bdba88ef3cec366b908a0",
+        "size": 1118208
+      },
+      {
+        "path": "/home/nevermore/windowsValidation/evidence/C/Windows/System32/winevt/Logs/Microsoft-Windows-StorageManagement%4Operational.evtx",
+        "sha256": "0b9d75e73f8c4cb6d800e02d289283d0dd26347c7bdd0826d682a00a42efcbde",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/windowsValidation/evidence/C/Windows/System32/winevt/Logs/Microsoft-Windows-StorageSpaces-Driver%4Operational.evtx",
+        "sha256": "1feadca81bbb471456234760682fbbe96c85122ed2f2b078fbcd5762b66bd236",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/windowsValidation/evidence/C/Windows/System32/winevt/Logs/Microsoft-Windows-StorageVolume%4Operational.evtx",
+        "sha256": "7365bb3923aa4b77b4e7a77e0a938374b5558de6428295ee44db282fc8f7073a",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/windowsValidation/evidence/C/Windows/System32/winevt/Logs/Microsoft-Windows-Store%4Operational.evtx",
+        "sha256": "b16e3d4c3818eb4558bf09e45c000586a4030a2354c92a9bdeab2612cc561546",
+        "size": 10555392
+      },
+      {
+        "path": "/home/nevermore/windowsValidation/evidence/C/Windows/System32/winevt/Logs/Microsoft-Windows-Storsvc%4Diagnostic.evtx",
+        "sha256": "1c5f440e5e8b009a16b688833b240cccc1dcff7716b652f58c112519fea717c8",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/windowsValidation/evidence/C/Windows/System32/winevt/Logs/Microsoft-Windows-TWinUI%4Operational.evtx",
+        "sha256": "403bdd0c834a6c3111b8a290edf1a98b1537f8a250ef24b9c59491d3200af2c5",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/windowsValidation/evidence/C/Windows/System32/winevt/Logs/Microsoft-Windows-TZSync%4Operational.evtx",
+        "sha256": "cefc60669b1e133522abc4e77d48642b788d2a383b0688c0e5f26aa36be07152",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/windowsValidation/evidence/C/Windows/System32/winevt/Logs/Microsoft-Windows-TaskScheduler%4Maintenance.evtx",
+        "sha256": "ef33ed5ff76e5f8211861f5a345b381cfe4dca8ea7c2aeaa0c0c24fae1803cdc",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/windowsValidation/evidence/C/Windows/System32/winevt/Logs/Microsoft-Windows-TerminalServices-LocalSessionManager%4Admin.evtx",
+        "sha256": "840f408af9bf69168a81ce52f4dcdecd34e8b0b7e04d83bccbd20dfc4cac9c89",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/windowsValidation/evidence/C/Windows/System32/winevt/Logs/Microsoft-Windows-TerminalServices-LocalSessionManager%4Operational.evtx",
+        "sha256": "c819f7d14dbbdb66a1a5f8d434ab62dc7f36c8d9ac713899e8fc2dedb82f861e",
+        "size": 1052672
+      },
+      {
+        "path": "/home/nevermore/windowsValidation/evidence/C/Windows/System32/winevt/Logs/Microsoft-Windows-Time-Service%4Operational.evtx",
+        "sha256": "f1f63e2606ef7dfa3be60579364032b77db8bc91eb5cae58ba3262d226e2152e",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/windowsValidation/evidence/C/Windows/System32/winevt/Logs/Microsoft-Windows-UniversalTelemetryClient%4Operational.evtx",
+        "sha256": "10b99402ff4a349c87efb0deedddb36f5ceefa187c1d366a767594f658dd0fa7",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/windowsValidation/evidence/C/Windows/System32/winevt/Logs/Microsoft-Windows-User Device Registration%4Admin.evtx",
+        "sha256": "42f26c218489dc79b1fd62d3b1401fed0b42772af156a1cdacb65c564a63cac9",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/windowsValidation/evidence/C/Windows/System32/winevt/Logs/Microsoft-Windows-User Profile Service%4Operational.evtx",
+        "sha256": "02071358cac2eece5da9237988ac9bb30ce8f3c899c5b888c6c21fd5eccdf5e5",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/windowsValidation/evidence/C/Windows/System32/winevt/Logs/Microsoft-Windows-UserPnp%4DeviceInstall.evtx",
+        "sha256": "04c7a8c48af9cab9d72f1de27fc0dcd5fbf7e21bc280fba15d1ef819232a4157",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/windowsValidation/evidence/C/Windows/System32/winevt/Logs/Microsoft-Windows-VolumeSnapshot-Driver%4Operational.evtx",
+        "sha256": "765d75cf5ad00c2a5dee174c9fe9b55ff6246eadab5af8b744b28eaf48bfc878",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/windowsValidation/evidence/C/Windows/System32/winevt/Logs/Microsoft-Windows-WER-PayloadHealth%4Operational.evtx",
+        "sha256": "44f003abf307a0c07cd0a249e13998632b7686f099d7a0b237dd7131c57a7ce0",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/windowsValidation/evidence/C/Windows/System32/winevt/Logs/Microsoft-Windows-WMI-Activity%4Operational.evtx",
+        "sha256": "38517bea4423c56aad8e1f020710607dd99ff28cd62ba09f6008aa5f9f144162",
+        "size": 1052672
+      },
+      {
+        "path": "/home/nevermore/windowsValidation/evidence/C/Windows/System32/winevt/Logs/Microsoft-Windows-Wcmsvc%4Operational.evtx",
+        "sha256": "83fbec389c556aebfacbae02c8c1b179769573c932437155dfc100242187ee65",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/windowsValidation/evidence/C/Windows/System32/winevt/Logs/Microsoft-Windows-WebAuthN%4Operational.evtx",
+        "sha256": "1be074933880e7ba02c449d62221fb7781f3eb31052cb6ea00368131b8614f20",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/windowsValidation/evidence/C/Windows/System32/winevt/Logs/Microsoft-Windows-WinINet-Config%4ProxyConfigChanged.evtx",
+        "sha256": "f77d44e020d8413bc50bfca22e9b0c133e5e43e21fe1d54906098c662581c831",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/windowsValidation/evidence/C/Windows/System32/winevt/Logs/Microsoft-Windows-WinRM%4Operational.evtx",
+        "sha256": "321985ab3bd2d31e9c77ad39ac1cc61c5479357535e89030a73b27d83e50e27b",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/windowsValidation/evidence/C/Windows/System32/winevt/Logs/Microsoft-Windows-Windows Defender%4Operational.evtx",
+        "sha256": "216580c2bd2cd45d50d83a45f1e44d2d76b82d77522e172aa45d7c165943e2f5",
+        "size": 1052672
+      },
+      {
+        "path": "/home/nevermore/windowsValidation/evidence/C/Windows/System32/winevt/Logs/Microsoft-Windows-Windows Defender%4WHC.evtx",
+        "sha256": "f573debbde4827a8b16f6f1a7da3639d37bdd12a70ad40cc7db68b7105fbda5c",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/windowsValidation/evidence/C/Windows/System32/winevt/Logs/Microsoft-Windows-Windows Firewall With Advanced Security%4Firewall.evtx",
+        "sha256": "8183c657900bb08dcaed63c968cfe0d750a661db652ba5a9b196d2013ec28d9b",
+        "size": 1052672
+      },
+      {
+        "path": "/home/nevermore/windowsValidation/evidence/C/Windows/System32/winevt/Logs/Microsoft-Windows-WindowsUpdateClient%4Operational.evtx",
+        "sha256": "c550916565273b1650f259bbdebcbb367a9206df1ebd56b0b07ed9f7a75cadf7",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/windowsValidation/evidence/C/Windows/System32/winevt/Logs/Microsoft-Windows-Winlogon%4Operational.evtx",
+        "sha256": "8f5bff9ca798ba090b5b1def90b40db3dd0191639d67a7a506ea0dc081b44b89",
+        "size": 1052672
+      },
+      {
+        "path": "/home/nevermore/windowsValidation/evidence/C/Windows/System32/winevt/Logs/OAlerts.evtx",
+        "sha256": "c187f7bf37d1eba8fd1d20f3cbd8c61f9dc3ee2326d5705a1843cee96548841e",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/windowsValidation/evidence/C/Windows/System32/winevt/Logs/Security.evtx",
+        "sha256": "f549401d2315609b1aae3858eb80fb60db000140e2417b54fb6eb2f90f51a296",
+        "size": 4263936
+      },
+      {
+        "path": "/home/nevermore/windowsValidation/evidence/C/Windows/System32/winevt/Logs/Setup.evtx",
+        "sha256": "c119196f8bdedb4812fc6e8b0f616b08c513a963d23de4edac2881b7fc368d16",
+        "size": 69632
+      },
+      {
+        "path": "/home/nevermore/windowsValidation/evidence/C/Windows/System32/winevt/Logs/System.evtx",
+        "sha256": "b3445ed19969006602ac3958aca1a093b1acc75eb64fdae98c0b70004468991e",
+        "size": 1118208
+      },
+      {
+        "path": "/home/nevermore/windowsValidation/evidence/C/Windows/System32/winevt/Logs/Windows PowerShell.evtx",
+        "sha256": "350fbf9c4546c6c7297db40920b7b07ae40bedb369952c0c70244810c80da2c7",
+        "size": 3215360
+      }
+    ]
+  },
+  "tooling": {
+    "chainsaw": {
+      "path": "/opt/dfir-tools/chainsaw/chainsaw.bin",
+      "version": "2.13.1",
+      "rules_dir": "/opt/dfir-tools/chainsaw/rules/evtx",
+      "cmd": [
+        "/opt/dfir-tools/chainsaw/chainsaw.bin",
+        "hunt",
+        "/opt/dfir-tools/chainsaw/rules/evtx",
+        "/home/nevermore/windowsValidation/evidence/",
+        "--jsonl",
+        "-o",
+        "outputs/jsonl/chainsaw_evtx/44a5d69c-4ebd-4921-95ec-e309e16f1abb/chainsaw.evtx.jsonl"
+      ]
+    },
+    "normalizer": {
+      "path": "adapters/chainsaw_evtx_to_findings.py"
+    },
+    "schema": {
+      "path": "contracts/findings.schema.json"
+    },
+    "validator": {
+      "path": "tools/contracts/validate_findings.py"
+    },
+    "triage": {
+      "generator": "tools/triage/gen_triage_from_findings.py"
+    },
+    "toon": {
+      "cli": "@toon-format/cli"
+    }
+  },
+  "artifacts": {
+    "request": {
+      "path": "outputs/jsonl/chainsaw_evtx/44a5d69c-4ebd-4921-95ec-e309e16f1abb/request.json",
+      "sha256": "7e9efaee3c43ed679e2f90c8abd80571b5d0b384e0a2f37096f8f383a78fd03e",
+      "size": 944
+    },
+    "chainsaw_jsonl": {
+      "path": "outputs/jsonl/chainsaw_evtx/44a5d69c-4ebd-4921-95ec-e309e16f1abb/chainsaw.evtx.jsonl",
+      "sha256": "c49a8dcfc435a90188561a99dedd7d8142005a3b77fb55fce59f2c92f0000bee",
+      "size": 4444564
+    },
+    "findings_json": {
+      "path": "outputs/jsonl/chainsaw_evtx/44a5d69c-4ebd-4921-95ec-e309e16f1abb/findings.json",
+      "sha256": "209f4230d26bda009a92ad01cd9b6019e410d4fd188b21dde54ee608c565dede",
+      "size": 5807542
+    },
+    "triage_json": {
+      "path": "outputs/jsonl/chainsaw_evtx/44a5d69c-4ebd-4921-95ec-e309e16f1abb/triage.json",
+      "sha256": "5b2a52e1d74ff0266ad9e1e669d542b93681157d06a7ded8577396f8b45a18cb",
+      "size": 141316
+    },
+    "findings_toon": {
+      "path": "outputs/toon/chainsaw_evtx/44a5d69c-4ebd-4921-95ec-e309e16f1abb/findings.toon",
+      "sha256": "aec5eb7fd9c6c2c99d7f172654c1171628b0f55b0d1b91b1f04c83004023a87b",
+      "size": 5275626
+    },
+    "stdout_log": {
+      "path": "outputs/jsonl/chainsaw_evtx/44a5d69c-4ebd-4921-95ec-e309e16f1abb/stdout.log",
+      "sha256": "3a03bedbfa872884ede206d1692ec0fa7420af2739e471542e902f96e7af2c31",
+      "size": 565
+    },
+    "stderr_log": {
+      "path": "outputs/jsonl/chainsaw_evtx/44a5d69c-4ebd-4921-95ec-e309e16f1abb/stderr.log",
+      "sha256": "9f04450d691b7161d7315828a1762f166e57e2eb65ffb922da4c0ecff50343bb",
+      "size": 2350
+    }
+  },
+  "latest": {
+    "outputs/toon/chainsaw_evtx/LATEST": true,
+    "outputs/jsonl/chainsaw_evtx/LATEST": true
+  }
+}

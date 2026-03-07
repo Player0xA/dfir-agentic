@@ -1,0 +1,22 @@
+{
+  "intake_id": "b0107739-e986-4ef7-9142-a5498196d9fe",
+  "case_name": "testlight",
+  "display_name": "testlight",
+  "timestamp_utc": "2026-03-07T18:49:05Z",
+  "inputs": {
+    "paths": [
+      "/home/nevermore/windowsValidation/evidence/C"
+    ]
+  },
+  "classification": {
+    "kind": "windows_triage_dir",
+    "confidence": "high",
+    "recommended_pipeline": "plaso_evtx"
+  },
+  "signals": [
+    "C:windows_system_folder_detected",
+    "C:mft_detected",
+    "C:ntuser_dat_detected",
+    "C:registry_hives_detected"
+  ]
+}

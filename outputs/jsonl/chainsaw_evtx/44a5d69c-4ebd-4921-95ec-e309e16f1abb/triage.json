@@ -1,0 +1,4174 @@
+{
+  "run_id": "44a5d69c-4ebd-4921-95ec-e309e16f1abb",
+  "timestamp_utc": "2026-03-07T09:15:34Z",
+  "pipeline": {
+    "name": "chainsaw-evtx",
+    "version": "0.1.0"
+  },
+  "source_findings": {
+    "path": "outputs/jsonl/chainsaw_evtx/44a5d69c-4ebd-4921-95ec-e309e16f1abb/findings.json",
+    "sha256": "209f4230d26bda009a92ad01cd9b6019e410d4fd188b21dde54ee608c565dede",
+    "size": 5807542,
+    "count": 784
+  },
+  "time_bounds": {
+    "min_first_seen": "2026-02-15T23:41:30.102514+00:00",
+    "max_last_seen": "2026-03-05T23:52:14.870113+00:00"
+  },
+  "counts": {
+    "total_findings": 784,
+    "by_severity": {
+      "informational": 771,
+      "medium": 13
+    },
+    "by_rule_id": [
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:1",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:10",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:100",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:101",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:102",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:103",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:104",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:105",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:106",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:107",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:108",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:109",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:11",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:110",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:111",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:112",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:113",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:114",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:115",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:116",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:117",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:118",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:119",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:12",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:120",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:121",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:122",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:123",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:124",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:125",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:126",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:127",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:128",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:129",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:13",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:130",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:131",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:132",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:133",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:134",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:135",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:136",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:137",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:138",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:139",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:14",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:140",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:141",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:142",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:143",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:144",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:145",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:146",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:147",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:148",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:149",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:15",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:150",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:151",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:152",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:153",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:154",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:155",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:156",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:157",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:158",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:159",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:16",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:160",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:161",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:162",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:163",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:164",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:165",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:166",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:167",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:168",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:169",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:17",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:170",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:171",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:172",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:173",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:174",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:175",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:176",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:177",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:178",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:179",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:18",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:180",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:181",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:182",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:183",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:184",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:185",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:186",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:187",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:188",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:189",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:19",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:190",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:191",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:192",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:193",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:194",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:195",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:196",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:197",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:198",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:199",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:2",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:20",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:200",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:201",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:202",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:203",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:204",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:205",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:206",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:207",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:208",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:209",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:21",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:210",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:211",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:212",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:213",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:214",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:215",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:216",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:217",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:218",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:219",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:22",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:220",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:221",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:222",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:223",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:224",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:225",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:226",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:227",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:228",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:229",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:23",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:230",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:231",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:232",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:233",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:234",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:235",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:236",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:237",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:238",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:239",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:24",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:240",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:241",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:242",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:243",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:244",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:245",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:246",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:247",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:248",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:249",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:25",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:250",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:251",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:252",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:253",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:254",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:255",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:256",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:257",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:258",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:259",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:26",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:260",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:261",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:262",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:263",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:264",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:265",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:266",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:267",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:268",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:269",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:27",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:270",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:271",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:272",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:273",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:274",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:275",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:276",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:277",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:278",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:279",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:28",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:280",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:281",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:282",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:283",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:284",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:285",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:286",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:287",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:288",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:289",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:29",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:290",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:291",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:292",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:293",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:294",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:295",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:296",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:297",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:298",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:299",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:3",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:30",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:300",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:301",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:302",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:303",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:304",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:305",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:306",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:307",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:308",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:309",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:31",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:310",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:311",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:312",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:313",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:314",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:315",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:316",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:317",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:318",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:319",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:32",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:320",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:321",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:322",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:323",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:324",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:325",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:326",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:327",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:328",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:329",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:33",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:330",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:331",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:332",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:333",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:334",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:335",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:336",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:337",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:338",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:339",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:34",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:340",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:341",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:342",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:343",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:344",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:345",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:346",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:347",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:348",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:349",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:35",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:350",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:351",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:352",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:353",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:354",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:355",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:356",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:357",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:358",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:359",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:36",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:360",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:361",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:362",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:363",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:364",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:365",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:366",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:367",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:368",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:369",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:37",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:370",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:371",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:372",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:373",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:374",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:375",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:376",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:377",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:378",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:379",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:38",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:380",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:381",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:382",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:383",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:384",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:385",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:386",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:387",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:388",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:389",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:39",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:390",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:391",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:392",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:393",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:394",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:395",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:396",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:397",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:398",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:399",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:4",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:40",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:400",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:401",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:402",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:403",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:404",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:405",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:406",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:407",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:408",
+        "rule_title": "Suspicious Paths Service Installation",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:409",
+        "rule_title": "Suspicious Paths Service Installation",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:41",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:410",
+        "rule_title": "Suspicious Paths Service Installation",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:411",
+        "rule_title": "Suspicious Paths Service Installation",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:412",
+        "rule_title": "Suspicious Paths Service Installation",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:413",
+        "rule_title": "Suspicious Paths Service Installation",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:414",
+        "rule_title": "Suspicious Paths Service Installation",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:415",
+        "rule_title": "Suspicious Paths Service Installation",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:416",
+        "rule_title": "Suspicious Paths Service Installation",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:417",
+        "rule_title": "Suspicious Paths Service Installation",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:418",
+        "rule_title": "Suspicious Paths Service Installation",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:419",
+        "rule_title": "Suspicious Paths Service Installation",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:42",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:420",
+        "rule_title": "Suspicious Paths Service Installation",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:421",
+        "rule_title": "RDS - Session logoff succeeded",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:422",
+        "rule_title": "RDS - Session logoff succeeded",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:423",
+        "rule_title": "RDS - Session logoff succeeded",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:424",
+        "rule_title": "RDS - Session logoff succeeded",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:425",
+        "rule_title": "RDS - Session logoff succeeded",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:426",
+        "rule_title": "RDS - Session logoff succeeded",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:427",
+        "rule_title": "RDS - Session logoff succeeded",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:428",
+        "rule_title": "RDS - Session logoff succeeded",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:429",
+        "rule_title": "RDS - Session logoff succeeded",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:43",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:430",
+        "rule_title": "RDS - Session logoff succeeded",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:431",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:432",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:433",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:434",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:435",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:436",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:437",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:438",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:439",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:44",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:440",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:441",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:442",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:443",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:444",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:445",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:446",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:447",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:448",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:449",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:45",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:450",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:451",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:452",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:453",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:454",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:455",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:456",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:457",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:458",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:459",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:46",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:460",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:461",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:462",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:463",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:464",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:465",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:466",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:467",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:468",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:469",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:47",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:470",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:471",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:472",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:473",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:474",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:475",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:476",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:477",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:478",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:479",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:48",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:480",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:481",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:482",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:483",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:484",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:485",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:486",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:487",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:488",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:489",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:49",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:490",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:491",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:492",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:493",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:494",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:495",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:496",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:497",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:498",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:499",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:5",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:50",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:500",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:501",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:502",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:503",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:504",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:505",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:506",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:507",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:508",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:509",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:51",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:510",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:511",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:512",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:513",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:514",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:515",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:516",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:517",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:518",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:519",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:52",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:520",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:521",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:522",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:523",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:524",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:525",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:526",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:527",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:528",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:529",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:53",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:530",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:531",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:532",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:533",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:534",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:535",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:536",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:537",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:538",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:539",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:54",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:540",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:541",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:542",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:543",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:544",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:545",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:546",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:547",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:548",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:549",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:55",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:550",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:551",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:552",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:553",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:554",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:555",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:556",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:557",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:558",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:559",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:56",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:560",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:561",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:562",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:563",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:564",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:565",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:566",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:567",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:568",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:569",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:57",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:570",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:571",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:572",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:573",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:574",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:575",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:576",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:577",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:578",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:579",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:58",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:580",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:581",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:582",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:583",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:584",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:585",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:586",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:587",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:588",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:589",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:59",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:590",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:591",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:592",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:593",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:594",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:595",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:596",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:597",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:598",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:599",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:6",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:60",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:600",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:601",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:602",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:603",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:604",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:605",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:606",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:607",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:608",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:609",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:61",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:610",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:611",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:612",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:613",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:614",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:615",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:616",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:617",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:618",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:619",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:62",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:620",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:621",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:622",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:623",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:624",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:625",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:626",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:627",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:628",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:629",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:63",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:630",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:631",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:632",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:633",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:634",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:635",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:636",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:637",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:638",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:639",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:64",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:640",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:641",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:642",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:643",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:644",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:645",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:646",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:647",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:648",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:649",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:65",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:650",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:651",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:652",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:653",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:654",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:655",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:656",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:657",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:658",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:659",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:66",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:660",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:661",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:662",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:663",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:664",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:665",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:666",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:667",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:668",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:669",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:67",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:670",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:671",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:672",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:673",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:674",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:675",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:676",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:677",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:678",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:679",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:68",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:680",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:681",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:682",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:683",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:684",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:685",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:686",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:687",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:688",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:689",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:69",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:690",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:691",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:692",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:693",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:694",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:695",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:696",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:697",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:698",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:699",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:7",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:70",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:700",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:701",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:702",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:703",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:704",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:705",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:706",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:707",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:708",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:709",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:71",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:710",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:711",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:712",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:713",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:714",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:715",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:716",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:717",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:718",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:719",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:72",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:720",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:721",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:722",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:723",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:724",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:725",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:726",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:727",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:728",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:729",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:73",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:730",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:731",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:732",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:733",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:734",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:735",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:736",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:737",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:738",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:739",
+        "rule_title": "PowerShell - Script Block Auditing",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:74",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:740",
+        "rule_title": "User Profile Disk - Registry file loaded",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:741",
+        "rule_title": "User Profile Disk - Registry file loaded",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:742",
+        "rule_title": "User Profile Disk - Registry file loaded",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:743",
+        "rule_title": "User Profile Disk - Registry file loaded",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:744",
+        "rule_title": "User Profile Disk - Registry file loaded",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:745",
+        "rule_title": "User Profile Disk - Registry file loaded",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:746",
+        "rule_title": "User Profile Disk - Registry file loaded",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:747",
+        "rule_title": "User Profile Disk - Registry file loaded",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:748",
+        "rule_title": "User Profile Disk - Registry file loaded",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:749",
+        "rule_title": "User Profile Disk - Registry file loaded",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:75",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:750",
+        "rule_title": "User Profile Disk - Registry file loaded",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:751",
+        "rule_title": "User Profile Disk - Registry file loaded",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:752",
+        "rule_title": "User Profile Disk - Registry file loaded",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:753",
+        "rule_title": "User Profile Disk - Registry file loaded",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:754",
+        "rule_title": "User Profile Disk - Registry file loaded",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:755",
+        "rule_title": "User Profile Disk - Registry file loaded",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:756",
+        "rule_title": "User Profile Disk - Registry file loaded",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:757",
+        "rule_title": "User Profile Disk - Registry file loaded",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:758",
+        "rule_title": "User Profile Disk - Registry file loaded",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:759",
+        "rule_title": "User Profile Disk - Registry file loaded",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:76",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:760",
+        "rule_title": "User Profile Disk - Registry file loaded",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:761",
+        "rule_title": "User Profile Disk - Registry file loaded",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:762",
+        "rule_title": "User Profile Disk - Registry file loaded",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:763",
+        "rule_title": "User Profile Disk - Registry file loaded",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:764",
+        "rule_title": "User Profile Disk - Registry file loaded",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:765",
+        "rule_title": "User Profile Disk - Registry file loaded",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:766",
+        "rule_title": "User Profile Disk - Registry file loaded",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:767",
+        "rule_title": "User Profile Disk - Registry file loaded",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:768",
+        "rule_title": "User Profile Disk - Registry file loaded",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:769",
+        "rule_title": "User Profile Disk - Registry file loaded",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:77",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:770",
+        "rule_title": "User Profile Disk - Registry file loaded",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:771",
+        "rule_title": "User Profile Disk - Registry file loaded",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:772",
+        "rule_title": "User Added to Global Group",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:773",
+        "rule_title": "New User Created",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:774",
+        "rule_title": "User Added to Local Group",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:775",
+        "rule_title": "User Added to Local Group",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:776",
+        "rule_title": "User Added to Local Group",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:777",
+        "rule_title": "User Added to Global Group",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:778",
+        "rule_title": "New User Created",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:779",
+        "rule_title": "User Added to Local Group",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:78",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:780",
+        "rule_title": "User Added to Local Group",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:781",
+        "rule_title": "User Added to Global Group",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:782",
+        "rule_title": "New User Created",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:783",
+        "rule_title": "User Added to Local Group",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:784",
+        "rule_title": "User Added to Local Group",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:79",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:8",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:80",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:81",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:82",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:83",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:84",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:85",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:86",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:87",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:88",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:89",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:9",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:90",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:91",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:92",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:93",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:94",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:95",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:96",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:97",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:98",
+        "rule_title": "PowerShell - Engine state is changed from None to Available",
+        "count": 1
+      },
+      {
+        "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:99",
+        "rule_title": "PowerShell - Engine state is changed from Available to Stopped",
+        "count": 1
+      }
+    ]
+  },
+  "top_findings": [
+    {
+      "finding_id": "F-44a5d69c-000408",
+      "severity": "medium",
+      "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:408",
+      "rule_title": "Suspicious Paths Service Installation",
+      "first_seen": "2026-02-15T23:48:44.368274+00:00",
+      "last_seen": "2026-02-15T23:48:44.368274+00:00",
+      "summary": "Suspicious Paths Service Installation"
+    },
+    {
+      "finding_id": "F-44a5d69c-000409",
+      "severity": "medium",
+      "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:409",
+      "rule_title": "Suspicious Paths Service Installation",
+      "first_seen": "2026-02-15T23:48:53.780479+00:00",
+      "last_seen": "2026-02-15T23:48:53.780479+00:00",
+      "summary": "Suspicious Paths Service Installation"
+    },
+    {
+      "finding_id": "F-44a5d69c-000410",
+      "severity": "medium",
+      "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:410",
+      "rule_title": "Suspicious Paths Service Installation",
+      "first_seen": "2026-02-15T23:48:55.668090+00:00",
+      "last_seen": "2026-02-15T23:48:55.668090+00:00",
+      "summary": "Suspicious Paths Service Installation"
+    },
+    {
+      "finding_id": "F-44a5d69c-000411",
+      "severity": "medium",
+      "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:411",
+      "rule_title": "Suspicious Paths Service Installation",
+      "first_seen": "2026-02-15T23:48:56.003665+00:00",
+      "last_seen": "2026-02-15T23:48:56.003665+00:00",
+      "summary": "Suspicious Paths Service Installation"
+    },
+    {
+      "finding_id": "F-44a5d69c-000412",
+      "severity": "medium",
+      "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:412",
+      "rule_title": "Suspicious Paths Service Installation",
+      "first_seen": "2026-02-15T23:48:57.697004+00:00",
+      "last_seen": "2026-02-15T23:48:57.697004+00:00",
+      "summary": "Suspicious Paths Service Installation"
+    },
+    {
+      "finding_id": "F-44a5d69c-000413",
+      "severity": "medium",
+      "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:413",
+      "rule_title": "Suspicious Paths Service Installation",
+      "first_seen": "2026-02-15T23:49:02.945446+00:00",
+      "last_seen": "2026-02-15T23:49:02.945446+00:00",
+      "summary": "Suspicious Paths Service Installation"
+    },
+    {
+      "finding_id": "F-44a5d69c-000414",
+      "severity": "medium",
+      "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:414",
+      "rule_title": "Suspicious Paths Service Installation",
+      "first_seen": "2026-02-15T23:49:02.952371+00:00",
+      "last_seen": "2026-02-15T23:49:02.952371+00:00",
+      "summary": "Suspicious Paths Service Installation"
+    },
+    {
+      "finding_id": "F-44a5d69c-000415",
+      "severity": "medium",
+      "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:415",
+      "rule_title": "Suspicious Paths Service Installation",
+      "first_seen": "2026-02-15T23:49:02.958690+00:00",
+      "last_seen": "2026-02-15T23:49:02.958690+00:00",
+      "summary": "Suspicious Paths Service Installation"
+    },
+    {
+      "finding_id": "F-44a5d69c-000416",
+      "severity": "medium",
+      "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:416",
+      "rule_title": "Suspicious Paths Service Installation",
+      "first_seen": "2026-02-15T23:49:02.965113+00:00",
+      "last_seen": "2026-02-15T23:49:02.965113+00:00",
+      "summary": "Suspicious Paths Service Installation"
+    },
+    {
+      "finding_id": "F-44a5d69c-000417",
+      "severity": "medium",
+      "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:417",
+      "rule_title": "Suspicious Paths Service Installation",
+      "first_seen": "2026-02-16T01:32:29.239295+00:00",
+      "last_seen": "2026-02-16T01:32:29.239295+00:00",
+      "summary": "Suspicious Paths Service Installation"
+    },
+    {
+      "finding_id": "F-44a5d69c-000418",
+      "severity": "medium",
+      "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:418",
+      "rule_title": "Suspicious Paths Service Installation",
+      "first_seen": "2026-02-16T01:32:29.500766+00:00",
+      "last_seen": "2026-02-16T01:32:29.500766+00:00",
+      "summary": "Suspicious Paths Service Installation"
+    },
+    {
+      "finding_id": "F-44a5d69c-000419",
+      "severity": "medium",
+      "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:419",
+      "rule_title": "Suspicious Paths Service Installation",
+      "first_seen": "2026-02-16T03:06:21.698990+00:00",
+      "last_seen": "2026-02-16T03:06:21.698990+00:00",
+      "summary": "Suspicious Paths Service Installation"
+    },
+    {
+      "finding_id": "F-44a5d69c-000420",
+      "severity": "medium",
+      "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:420",
+      "rule_title": "Suspicious Paths Service Installation",
+      "first_seen": "2026-02-16T05:32:06.710541+00:00",
+      "last_seen": "2026-02-16T05:32:06.710541+00:00",
+      "summary": "Suspicious Paths Service Installation"
+    },
+    {
+      "finding_id": "F-44a5d69c-000421",
+      "severity": "informational",
+      "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:421",
+      "rule_title": "RDS - Session logoff succeeded",
+      "first_seen": "2026-02-15T23:41:30.102514+00:00",
+      "last_seen": "2026-02-15T23:41:30.102514+00:00",
+      "summary": "RDS - Session logoff succeeded"
+    },
+    {
+      "finding_id": "F-44a5d69c-000740",
+      "severity": "informational",
+      "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:740",
+      "rule_title": "User Profile Disk - Registry file loaded",
+      "first_seen": "2026-02-15T23:42:05.505765+00:00",
+      "last_seen": "2026-02-15T23:42:05.505765+00:00",
+      "summary": "User Profile Disk - Registry file loaded"
+    },
+    {
+      "finding_id": "F-44a5d69c-000741",
+      "severity": "informational",
+      "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:741",
+      "rule_title": "User Profile Disk - Registry file loaded",
+      "first_seen": "2026-02-15T23:42:05.522036+00:00",
+      "last_seen": "2026-02-15T23:42:05.522036+00:00",
+      "summary": "User Profile Disk - Registry file loaded"
+    },
+    {
+      "finding_id": "F-44a5d69c-000772",
+      "severity": "informational",
+      "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:772",
+      "rule_title": "User Added to Global Group",
+      "first_seen": "2026-02-15T23:43:25.368652+00:00",
+      "last_seen": "2026-02-15T23:43:25.368652+00:00",
+      "summary": "User Added to Global Group"
+    },
+    {
+      "finding_id": "F-44a5d69c-000773",
+      "severity": "informational",
+      "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:773",
+      "rule_title": "New User Created",
+      "first_seen": "2026-02-15T23:43:25.368996+00:00",
+      "last_seen": "2026-02-15T23:43:25.368996+00:00",
+      "summary": "New User Created"
+    },
+    {
+      "finding_id": "F-44a5d69c-000774",
+      "severity": "informational",
+      "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:774",
+      "rule_title": "User Added to Local Group",
+      "first_seen": "2026-02-15T23:43:25.370090+00:00",
+      "last_seen": "2026-02-15T23:43:25.370090+00:00",
+      "summary": "User Added to Local Group"
+    },
+    {
+      "finding_id": "F-44a5d69c-000775",
+      "severity": "informational",
+      "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:775",
+      "rule_title": "User Added to Local Group",
+      "first_seen": "2026-02-15T23:43:25.445310+00:00",
+      "last_seen": "2026-02-15T23:43:25.445310+00:00",
+      "summary": "User Added to Local Group"
+    },
+    {
+      "finding_id": "F-44a5d69c-000742",
+      "severity": "informational",
+      "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:742",
+      "rule_title": "User Profile Disk - Registry file loaded",
+      "first_seen": "2026-02-15T23:43:26.004921+00:00",
+      "last_seen": "2026-02-15T23:43:26.004921+00:00",
+      "summary": "User Profile Disk - Registry file loaded"
+    },
+    {
+      "finding_id": "F-44a5d69c-000743",
+      "severity": "informational",
+      "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:743",
+      "rule_title": "User Profile Disk - Registry file loaded",
+      "first_seen": "2026-02-15T23:43:26.064004+00:00",
+      "last_seen": "2026-02-15T23:43:26.064004+00:00",
+      "summary": "User Profile Disk - Registry file loaded"
+    },
+    {
+      "finding_id": "F-44a5d69c-000422",
+      "severity": "informational",
+      "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:422",
+      "rule_title": "RDS - Session logoff succeeded",
+      "first_seen": "2026-02-15T23:43:43.649077+00:00",
+      "last_seen": "2026-02-15T23:43:43.649077+00:00",
+      "summary": "RDS - Session logoff succeeded"
+    },
+    {
+      "finding_id": "F-44a5d69c-000744",
+      "severity": "informational",
+      "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:744",
+      "rule_title": "User Profile Disk - Registry file loaded",
+      "first_seen": "2026-02-15T23:43:44.088199+00:00",
+      "last_seen": "2026-02-15T23:43:44.088199+00:00",
+      "summary": "User Profile Disk - Registry file loaded"
+    },
+    {
+      "finding_id": "F-44a5d69c-000745",
+      "severity": "informational",
+      "rule_id": "RAWREF:chainsaw.evtx.jsonl:line:745",
+      "rule_title": "User Profile Disk - Registry file loaded",
+      "first_seen": "2026-02-15T23:43:44.095804+00:00",
+      "last_seen": "2026-02-15T23:43:44.095804+00:00",
+      "summary": "User Profile Disk - Registry file loaded"
+    }
+  ]
+}

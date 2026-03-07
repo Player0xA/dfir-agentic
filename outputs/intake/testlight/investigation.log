@@ -1,0 +1,13 @@
+FAILED: Deterministic Ingestion
+STDERR:
+FAILED CMD: tools/router/dispatch_intake.py --intake-json /home/nevermore/dfir-agentic/outputs/intake/testlight/intake.json --playbook windows_triage_v1
+STDERR:
+FAIL: intake schema validation failed
+  - $: Additional properties are not allowed ('case_name', 'display_name' were unexpected)
+
+
+MCP SERVER sys.executable = /home/nevermore/dfir-agentic/venv/bin/python3
+MCP SERVER VIRTUAL_ENV    = /home/nevermore/dfir-agentic/venv
+[+] Using existing case metadata: /home/nevermore/dfir-agentic/outputs/intake/testlight/intake.json
+
+>>> [Stage: Deterministic Ingestion] Running: python3 tools/router/auto_run.py --intake-json /home/nevermore/dfir-agentic/outputs/intake/testlight/intake.json --enrichment-policy always --run-merge
