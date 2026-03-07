@@ -1,0 +1,51 @@
+{
+  "drop_folder": "/home/nevermore/windowsValidation/evidence",
+  "auto_create": true,
+  "scan_on_startup": false,
+  "max_display_items": 50,
+  "refresh_interval_seconds": 0,
+  "categories": {
+    "windows_triage": {
+      "name": "Windows Triage",
+      "icon": "🪟",
+      "patterns": ["windows_system_folder", "users_folder", "registry_hives", "mft"]
+    },
+    "evtx": {
+      "name": "Windows Event Logs",
+      "icon": "📋",
+      "patterns": ["evtx_files"]
+    },
+    "memory": {
+      "name": "Memory Dumps",
+      "icon": "🧠",
+      "patterns": ["memory_dump"]
+    },
+    "disk": {
+      "name": "Disk Images",
+      "icon": "💾",
+      "patterns": ["disk_image"]
+    },
+    "network": {
+      "name": "Network Captures",
+      "icon": "🌐",
+      "patterns": ["pcap"]
+    },
+    "unknown": {
+      "name": "Unknown",
+      "icon": "❓",
+      "patterns": []
+    }
+  },
+  "exclude_patterns": [
+    ".*",
+    "*.tmp",
+    "*.temp",
+    "__pycache__",
+    "node_modules"
+  ],
+  "symlink_settings": {
+    "create_symlinks": true,
+    "symlink_type": "relative",
+    "preserve_structure": true
+  }
+}

@@ -8,14 +8,48 @@ import os
 import subprocess
 import shutil
 from datetime import datetime
-
-# Import evidence scanner
-import sys
-sys.path.insert(0, str(Path(__file__).parent))
-from evidence_scanner import scan_drop_folder, get_evidence_details, ensure_drop_folder, get_drop_folder
+import hashlib
 
 app = FastAPI(title="DFIR-Agentic Dashboard API")
 PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
+
+# Config paths
+CONFIG_FILE = PROJECT_ROOT / "config" / "drop_folder.json"
+
+def load_drop_folder_config():
+    """Load drop folder configuration from config file."""
+    default_config = {
+        "drop_folder": os.environ.get("DFIR_EVIDENCE_DROP", "/home/nevermore/evidence_drop"),
+        "auto_create": True,
+        "scan_on_startup": False,
+        "max_display_items": 50
+    }
+    
+    if CONFIG_FILE.exists():
+        try:
+            with open(CONFIG_FILE, "r") as f:
+                config = json.load(f)
+                # Merge with defaults
+                default_config.update(config)
+        except Exception as e:
+            print(f"Warning: Could not load config file: {e}")
+    
+    return default_config
+
+def get_drop_folder():
+    """Get the configured drop folder path."""
+    config = load_drop_folder_config()
+    return Path(config["drop_folder"])
+
+def ensure_drop_folder():
+    """Ensure drop folder exists, create if configured."""
+    config = load_drop_folder_config()
+    drop_folder = Path(config["drop_folder"])
+    
+    if config.get("auto_create", True):
+        drop_folder.mkdir(parents=True, exist_ok=True)
+    
+    return drop_folder
 
 # Available tools configuration
 AVAILABLE_TOOLS = {
@@ -714,30 +748,66 @@ async def get_recommended_tools(evidence_type: str):
 async def get_drop_folder_status():
     """Get the configured drop folder path and status."""
     try:
-        drop_folder = get_drop_folder()
+        config = load_drop_folder_config()
+        drop_folder = Path(config["drop_folder"])
         exists = drop_folder.exists()
         
         return {
             "path": str(drop_folder),
             "exists": exists,
             "configured": True,
+            "config": config,
             "message": "Drop folder configured" if exists else "Drop folder does not exist - will be created on first use"
         }
     except Exception as e:
         return {"error": str(e), "configured": False}
 
+def list_drop_folder_items():
+    """Fast scan - just list items in drop folder without deep classification."""
+    config = load_drop_folder_config()
+    drop_folder = Path(config["drop_folder"])
+    
+    if not drop_folder.exists():
+        return {"error": "Drop folder not found", "evidence_items": []}
+    
+    items = []
+    try:
+        for item in sorted(drop_folder.iterdir(), key=lambda x: x.stat().st_mtime, reverse=True):
+            if item.is_dir() and not item.name.startswith("."):
+                # Generate ID from path
+                item_id = hashlib.md5(str(item).encode()).hexdigest()[:12]
+                
+                # Get basic stats
+                stat = item.stat()
+                
+                items.append({
+                    "id": item_id,
+                    "name": item.name,
+                    "path": str(item),
+                    "type": "folder",
+                    "last_modified": datetime.fromtimestamp(stat.st_mtime).isoformat(),
+                    "size_bytes": stat.st_size,
+                    "classification": None,  # Will be populated on-demand
+                    "status": "pending"  # Will be updated after classification
+                })
+    except Exception as e:
+        return {"error": str(e), "evidence_items": []}
+    
+    return {
+        "drop_folder": str(drop_folder),
+        "scanned_at": datetime.now().isoformat(),
+        "evidence_items": items,
+        "total_items": len(items)
+    }
+
 @app.get("/api/evidence/available")
 async def get_available_evidence(refresh: bool = False):
     """
     Scan the drop folder and return available evidence.
-    
-    Returns:
-        - List of evidence folders with classification
-        - Category summaries
-        - Statistics
+    Fast listing - items shown immediately with "pending" status.
     """
     try:
-        results = scan_drop_folder()
+        results = list_drop_folder_items()
         
         if "error" in results:
             raise HTTPException(status_code=500, detail=results["error"])
@@ -747,22 +817,95 @@ async def get_available_evidence(refresh: bool = False):
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to scan drop folder: {str(e)}")
 
+@app.post("/api/evidence/classify")
+async def classify_evidence_item(path: str = Form(...)):
+    """
+    Classify a specific evidence item using identify_evidence.py.
+    Called on-demand when user selects an item or clicks refresh.
+    """
+    try:
+        evidence_path = Path(path)
+        if not evidence_path.exists():
+            raise HTTPException(status_code=404, detail=f"Evidence not found: {path}")
+        
+        # Run identify_evidence.py to classify
+        cmd = [
+            "python3",
+            str(PROJECT_ROOT / "tools" / "intake" / "identify_evidence.py"),
+            str(evidence_path),
+            "--classify-only"
+        ]
+        
+        result = subprocess.run(cmd, capture_output=True, text=True, timeout=30)
+        
+        if result.returncode != 0:
+            return {
+                "path": str(evidence_path),
+                "name": evidence_path.name,
+                "classification": {
+                    "kind": "unknown",
+                    "confidence": "low",
+                    "description": "Classification failed",
+                    "error": result.stderr
+                },
+                "status": "error"
+            }
+        
+        try:
+            classification = json.loads(result.stdout)
+            return {
+                "path": str(evidence_path),
+                "name": evidence_path.name,
+                "classification": classification,
+                "status": "classified"
+            }
+        except json.JSONDecodeError:
+            # If not JSON, parse the text output
+            return {
+                "path": str(evidence_path),
+                "name": evidence_path.name,
+                "classification": {
+                    "kind": "unknown",
+                    "confidence": "low",
+                    "description": "Unable to parse classification",
+                    "raw_output": result.stdout
+                },
+                "status": "parsed"
+            }
+            
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
 @app.get("/api/evidence/{evidence_id}/details")
 async def get_evidence_item_details(evidence_id: str):
     """Get detailed information about a specific evidence item."""
     try:
-        # First, scan to find the evidence by ID
-        scan_results = scan_drop_folder()
+        # List items to find by ID
+        scan_results = list_drop_folder_items()
         
         for item in scan_results.get("evidence_items", []):
             if item["id"] == evidence_id:
-                # Get full details
-                details = get_evidence_details(item["path"])
-                return {
-                    "id": evidence_id,
-                    "name": item["name"],
-                    **details
-                }
+                # If not classified yet, classify now
+                if item.get("status") == "pending" or item.get("classification") is None:
+                    # Run classification
+                    cmd = [
+                        "python3",
+                        str(PROJECT_ROOT / "tools" / "intake" / "identify_evidence.py"),
+                        item["path"],
+                        "--classify-only"
+                    ]
+                    result = subprocess.run(cmd, capture_output=True, text=True, timeout=30)
+                    
+                    if result.returncode == 0:
+                        try:
+                            item["classification"] = json.loads(result.stdout)
+                            item["status"] = "classified"
+                        except:
+                            pass
+                
+                return item
         
         raise HTTPException(status_code=404, detail=f"Evidence item with ID {evidence_id} not found")
         

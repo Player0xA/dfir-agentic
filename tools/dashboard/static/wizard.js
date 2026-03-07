@@ -84,10 +84,14 @@ async function loadDropFolderEvidence() {
         
         wizardState.availableEvidence = data.evidence_items || [];
         
+        // Show items immediately (fast listing)
         renderEvidenceBrowser(data);
         
         loadingEl.style.display = 'none';
         contentEl.style.display = 'block';
+        
+        // Now classify items asynchronously
+        classifyEvidenceItemsAsync();
         
     } catch (e) {
         console.error('Failed to load drop folder:', e);
@@ -97,14 +101,73 @@ async function loadDropFolderEvidence() {
     }
 }
 
+async function classifyEvidenceItemsAsync() {
+    // Classify each pending item
+    for (const item of wizardState.availableEvidence) {
+        if (item.status === 'pending' || !item.classification) {
+            try {
+                const formData = new FormData();
+                formData.append('path', item.path);
+                
+                const response = await fetch('/api/evidence/classify', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                if (response.ok) {
+                    const result = await response.json();
+                    
+                    // Update item in state
+                    const idx = wizardState.availableEvidence.findIndex(i => i.id === item.id);
+                    if (idx !== -1) {
+                        wizardState.availableEvidence[idx].classification = result.classification;
+                        wizardState.availableEvidence[idx].status = result.status;
+                    }
+                    
+                    // Update UI for this item only
+                    updateEvidenceItemUI(item.id, result);
+                }
+            } catch (e) {
+                console.warn(`Failed to classify ${item.name}:`, e);
+            }
+        }
+    }
+    
+    // After all classified, refresh the browser view to update categories
+    renderEvidenceBrowser({evidence_items: wizardState.availableEvidence});
+}
+
+function updateEvidenceItemUI(itemId, result) {
+    // Update the specific item in the list
+    const itemEl = document.querySelector(`.evidence-item-detailed[data-id="${itemId}"]`);
+    if (!itemEl) return;
+    
+    const classification = result.classification || {};
+    const typeClass = classification.kind || 'unknown';
+    const confidence = classification.confidence || 'low';
+    
+    const badgeEl = itemEl.querySelector('.type-badge');
+    const confEl = itemEl.querySelector('.badge');
+    
+    if (badgeEl) {
+        badgeEl.className = `type-badge ${typeClass}`;
+        badgeEl.textContent = classification.description || 'Unknown';
+    }
+    
+    if (confEl) {
+        confEl.className = `badge ${confidence}`;
+        confEl.textContent = confidence;
+    }
+}
+
 function renderEvidenceBrowser(data) {
     const categoriesEl = document.getElementById('evidence-categories');
     const listEl = document.getElementById('evidence-list-detailed');
     
-    // Group evidence by classification type
+    // Group evidence by classification type (or 'pending' if not classified yet)
     const grouped = {};
     data.evidence_items.forEach(item => {
-        const kind = item.classification?.kind || 'unknown';
+        const kind = item.classification?.kind || (item.status === 'pending' ? 'pending' : 'unknown');
         if (!grouped[kind]) {
             grouped[kind] = [];
         }
@@ -118,6 +181,7 @@ function renderEvidenceBrowser(data) {
         'memory_dump_file': { icon: '🧠', name: 'Memory Dumps' },
         'disk_image_file': { icon: '💾', name: 'Disk Images' },
         'pcap_file': { icon: '🌐', name: 'Network Captures' },
+        'pending': { icon: '⏳', name: 'Analyzing...' },
         'unknown': { icon: '❓', name: 'Unknown' }
     };
     
@@ -125,69 +189,76 @@ function renderEvidenceBrowser(data) {
     let categoriesHtml = '';
     Object.entries(grouped).forEach(([kind, items]) => {
         const info = categoryInfo[kind] || { icon: '📁', name: kind };
-        const totalFiles = items.reduce((sum, item) => sum + (item.stats?.total_files || 0), 0);
-        
-        // Get top file types
-        const fileTypes = {};
-        items.forEach(item => {
-            const cats = item.stats?.categories || {};
-            Object.entries(cats).forEach(([cat, count]) => {
-                fileTypes[cat] = (fileTypes[cat] || 0) + count;
-            });
-        });
-        
-        const topTypes = Object.entries(fileTypes)
-            .sort((a, b) => b[1] - a[1])
-            .slice(0, 5);
         
         categoriesHtml += `
-            <div class="category-card" data-kind="${kind}" onclick="toggleCategory('${kind}')">
+            <div class="category-card" data-kind="${kind}" onclick="filterEvidenceList('${kind}')">
                 <div class="icon">${info.icon}</div>
                 <div class="name">${info.name}</div>
-                <div class="count">${items.length} folders, ${totalFiles} files</div>
-                <div class="files-preview" id="preview-${kind}">
-                    ${topTypes.map(([type, count]) => `
-                        <div class="file-item">
-                            <span>${type}</span>
-                            <span>${count}</span>
-                        </div>
-                    `).join('')}
-                </div>
+                <div class="count">${items.length} items</div>
             </div>
         `;
     });
     
-    categoriesEl.innerHTML = categoriesHtml;
+    categoriesEl.innerHTML = categoriesHtml || '<p style="text-align: center; color: var(--text-muted);">No evidence in drop folder</p>';
     
     // Render detailed list
     let listHtml = '';
     data.evidence_items.forEach(item => {
         const isSelected = wizardState.selectedEvidenceIds.includes(item.id);
         const classification = item.classification || {};
-        const typeClass = classification.kind || 'unknown';
-        const confidence = classification.confidence || 'low';
+        const isPending = item.status === 'pending' || !item.classification;
+        
+        const typeClass = isPending ? 'pending' : (classification.kind || 'unknown');
+        const confidence = isPending ? 'pending' : (classification.confidence || 'low');
+        const description = isPending ? 'Analyzing...' : (classification.description || 'Unknown');
         
         listHtml += `
-            <div class="evidence-item-detailed ${isSelected ? 'selected' : ''}" data-id="${item.id}">
+            <div class="evidence-item-detailed ${isSelected ? 'selected' : ''}" data-id="${item.id}" data-status="${item.status}">
                 <input type="checkbox" ${isSelected ? 'checked' : ''} 
                        onchange="toggleEvidenceSelection('${item.id}')">
                 <div class="info">
                     <div class="name">${item.name}</div>
                     <div class="meta">
-                        ${item.stats?.total_files || 0} files • 
-                        ${formatBytes(item.stats?.size_bytes || 0)} • 
-                        Modified: ${new Date(item.stats?.last_modified).toLocaleDateString()}
+                        ${isPending ? '⏳ Analyzing evidence type...' : ''}
+                        Modified: ${new Date(item.last_modified).toLocaleDateString()}
                     </div>
                 </div>
                 <div class="classification">
-                    <span class="type-badge ${typeClass}">${classification.description || 'Unknown'}</span>
-                    <span class="badge ${confidence}">${confidence}</span>
+                    <span class="type-badge ${typeClass}">${description}</span>
+                    <span class="badge ${confidence}">${isPending ? '...' : confidence}</span>
                 </div>
             </div>
         `;
     });
     
     listEl.innerHTML = listHtml || '<p style="text-align: center; color: var(--text-muted);">No evidence available in drop folder</p>';
+}
+
+function filterEvidenceList(filter) {
+    // Update filter buttons
+    document.querySelectorAll('#filter-buttons button').forEach(btn => {
+        btn.classList.remove('active');
+        if (btn.dataset.filter === filter || (filter === 'all' && btn.dataset.filter === 'all')) {
+            btn.classList.add('active');
+        }
+    });
+    
+    // Show/hide items
+    const items = document.querySelectorAll('.evidence-item-detailed');
+    items.forEach(el => {
+        const id = el.dataset.id;
+        const item = wizardState.availableEvidence.find(e => e.id === id);
+        
+        if (!item) return;
+        
+        const kind = item.classification?.kind || (item.status === 'pending' ? 'pending' : 'unknown');
+        
+        if (filter === 'all' || kind === filter) {
+            el.style.display = 'flex';
+        } else {
+            el.style.display = 'none';
+        }
+    });
 }
 
 function toggleCategory(kind) {
@@ -287,25 +358,6 @@ if (document.getElementById('filter-buttons')) {
             // Apply filter
             const filter = e.target.dataset.filter;
             filterEvidenceList(filter);
-        }
-    });
-}
-
-function filterEvidenceList(filter) {
-    const items = document.querySelectorAll('.evidence-item-detailed');
-    
-    items.forEach(el => {
-        const id = el.dataset.id;
-        const item = wizardState.availableEvidence.find(e => e.id === id);
-        
-        if (!item) return;
-        
-        const kind = item.classification?.kind || 'unknown';
-        
-        if (filter === 'all' || kind === filter) {
-            el.style.display = 'flex';
-        } else {
-            el.style.display = 'none';
         }
     });
 }

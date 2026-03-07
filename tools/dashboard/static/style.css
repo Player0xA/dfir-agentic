@@ -954,6 +954,25 @@ pre code {
     border-radius: 4px;
 }
 
+.evidence-item-detailed .type-badge.pending {
+    background: var(--bg-surface-hover);
+    color: var(--text-muted);
+    animation: pulse 1.5s ease-in-out infinite;
+}
+
+.evidence-item-detailed[data-status="pending"] {
+    opacity: 0.8;
+}
+
+.evidence-item-detailed[data-status="pending"] .meta {
+    color: var(--accent-solid);
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
 .selected-evidence-summary {
     border: 1px solid var(--border-subtle);
     border-radius: 10px;
