@@ -320,16 +320,18 @@ function toggleTool(toolId) {
 
 // Investigation Start - Optimized for fast UI
 async function startInvestigation() {
-    // Get case names from form
+    // Get ALL values from wizard state BEFORE closing
     const caseName = document.getElementById('case-name').value;
     const displayName = document.getElementById('display-name').value;
+    const evidencePaths = [...wizardState.evidencePaths];  // Copy array
+    const selectedTools = [...wizardState.selectedTools];  // Copy array
     
     if (!caseName) {
         alert('Please enter a case name');
         return;
     }
     
-    if (wizardState.selectedTools.length === 0) {
+    if (selectedTools.length === 0) {
         alert('Please select at least one tool');
         return;
     }
@@ -354,10 +356,10 @@ async function startInvestigation() {
     // UI is already updated - user sees the case
     try {
         const formData = new FormData();
-        formData.append('paths', wizardState.evidencePaths.join(','));
+        formData.append('paths', evidencePaths.join(','));  // Use local var
         formData.append('case_name', caseName);
         formData.append('display_name', displayName);
-        formData.append('tools', wizardState.selectedTools.join(','));
+        formData.append('tools', selectedTools.join(','));  // Use local var
         
         // Single combined API call - intake + start investigation
         const response = await fetch('/api/investigate', {
