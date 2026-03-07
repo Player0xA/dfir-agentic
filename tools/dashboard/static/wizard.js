@@ -39,23 +39,46 @@ function resetWizard() {
         selectedEvidenceIds: []
     };
     
-    // Reset UI
-    document.getElementById('evidence-list').innerHTML = '';
-    document.getElementById('case-name').value = '';
-    document.getElementById('display-name').value = '';
-    document.getElementById('detected-type').textContent = 'Analyzing...';
-    document.getElementById('tools-container').innerHTML = '<div class="loading">Loading available tools...</div>';
-    document.getElementById('progress-fill').style.width = '0%';
-    document.getElementById('progress-text').textContent = 'Initializing...';
-    document.getElementById('logs-container').innerHTML = '<div class="log-entry">Waiting to start...</div>';
-    document.getElementById('step4-nav').style.display = 'none';
+    // Reset UI - only reset elements that exist
+    const caseNameInput = document.getElementById('case-name');
+    if (caseNameInput) caseNameInput.value = '';
     
-    // Reset drop folder browser
-    document.getElementById('browser-loading').style.display = 'flex';
-    document.getElementById('browser-content').style.display = 'none';
-    document.getElementById('browser-error').style.display = 'none';
-    document.getElementById('selected-evidence-list').innerHTML = '';
-    document.getElementById('selected-count').textContent = '0';
+    const displayNameInput = document.getElementById('display-name');
+    if (displayNameInput) displayNameInput.value = '';
+    
+    const detectedType = document.getElementById('detected-type');
+    if (detectedType) detectedType.textContent = 'Analyzing...';
+    
+    const toolsContainer = document.getElementById('tools-container');
+    if (toolsContainer) toolsContainer.innerHTML = '<div class="loading">Loading available tools...</div>';
+    
+    const progressFill = document.getElementById('progress-fill');
+    if (progressFill) progressFill.style.width = '0%';
+    
+    const progressText = document.getElementById('progress-text');
+    if (progressText) progressText.textContent = 'Initializing...';
+    
+    const logsContainer = document.getElementById('logs-container');
+    if (logsContainer) logsContainer.innerHTML = '<div class="log-entry">Waiting to start...</div>';
+    
+    const step4Nav = document.getElementById('step4-nav');
+    if (step4Nav) step4Nav.style.display = 'none';
+    
+    // Reset drop folder browser (new design)
+    const browserLoading = document.getElementById('browser-loading');
+    if (browserLoading) browserLoading.style.display = 'flex';
+    
+    const browserContent = document.getElementById('browser-content');
+    if (browserContent) browserContent.style.display = 'none';
+    
+    const browserError = document.getElementById('browser-error');
+    if (browserError) browserError.style.display = 'none';
+    
+    const selectedList = document.getElementById('selected-evidence-list');
+    if (selectedList) selectedList.innerHTML = '';
+    
+    const selectedCount = document.getElementById('selected-count');
+    if (selectedCount) selectedCount.textContent = '0';
     
     goToStep(1);
 }
@@ -362,6 +385,31 @@ if (document.getElementById('filter-buttons')) {
     });
 }
 
+// Case Name Generation
+function generateCaseNameSuggestion() {
+    // If we have selected evidence, generate a suggestion based on first item
+    if (wizardState.selectedEvidenceIds.length > 0) {
+        const firstItem = wizardState.availableEvidence.find(
+            item => item.id === wizardState.selectedEvidenceIds[0]
+        );
+        
+        if (firstItem) {
+            const baseName = firstItem.name || 'case';
+            const timestamp = new Date().toISOString().split('T')[0].replace(/-/g, '');
+            const suggestion = `${baseName}-investigation-${timestamp}`;
+            
+            const caseNameInput = document.getElementById('case-name');
+            const displayNameInput = document.getElementById('display-name');
+            
+            if (caseNameInput) caseNameInput.value = suggestion;
+            if (displayNameInput) {
+                const cleanBase = baseName.charAt(0).toUpperCase() + baseName.slice(1);
+                displayNameInput.value = `${cleanBase} Investigation`;
+            }
+        }
+    }
+}
+
 // Step Navigation
 function goToStep(step) {
     wizardState.currentStep = step;
@@ -394,13 +442,16 @@ function goToStep(step) {
     updateNextButton();
 }
 
-// Evidence Handling
+/*
+// OLD: Evidence Handling (Drag and Drop) - Replaced by Drop Folder Browser
+// This code is kept for reference but not used in the current drop folder design
+
 function browseEvidence() {
-    document.getElementById('file-input').click();
+    document.getElementById('file-input')?.click();
 }
 
 function browseFolder() {
-    document.getElementById('folder-input').click();
+    document.getElementById('folder-input')?.click();
 }
 
 function addEvidencePath(path) {
@@ -419,6 +470,7 @@ function removeEvidence(index) {
 
 function renderEvidenceList() {
     const container = document.getElementById('evidence-list');
+    if (!container) return;
     if (wizardState.evidencePaths.length === 0) {
         container.innerHTML = '<div style="color: var(--text-muted); text-align: center; padding: 1rem;">No evidence added yet. Drag & drop or browse to add.</div>';
         return;
@@ -430,13 +482,6 @@ function renderEvidenceList() {
             <button class="remove" onclick="removeEvidence(${idx})" title="Remove">&times;</button>
         </div>
     `).join('');
-}
-
-function updateNextButton() {
-    const btn = document.getElementById('btn-step1-next');
-    if (btn) {
-        btn.disabled = wizardState.evidencePaths.length === 0;
-    }
 }
 
 // Drag and Drop
@@ -470,59 +515,53 @@ if (dropZone) {
 }
 
 async function getFullPath(entry) {
-    // Note: For security, browsers don't provide full filesystem paths
-    // In a real implementation, you might need a native bridge or file picker
-    // For now, we'll use the name as a placeholder
     return entry.fullPath || entry.name;
 }
 
-// File Input Handling - Fixed to capture the parent folder path only
+// File Input Handling
 document.getElementById('file-input')?.addEventListener('change', (e) => {
     Array.from(e.target.files).forEach(file => {
-        // For single files, we can't get the full path for security reasons
-        // But we can try to resolve it via the server
-        console.log('File selected:', file.name, 'path:', file.path, 'webkitRelativePath:', file.webkitRelativePath);
+        console.log('File selected:', file.name);
         addEvidencePath(file.name);
     });
 });
 
 document.getElementById('folder-input')?.addEventListener('change', (e) => {
     if (e.target.files.length === 0) return;
-    
-    // Get the first file to determine the folder structure
     const firstFile = e.target.files[0];
     const relativePath = firstFile.webkitRelativePath || firstFile.name;
-    
-    // The webkitRelativePath looks like "C/Windows/System32/..."
-    // We need to extract just the top-level folder name (e.g., "C")
-    // But we need the ABSOLUTE path on the server, not the relative path
-    
-    // The folder picker doesn't give us the absolute path for security reasons
-    // So we'll use the relative top-level folder name
-    // The server will need to resolve this to an absolute path
     const topLevelFolder = relativePath.split('/')[0];
-    
-    console.log('Folder selected - relative path:', relativePath, 'top level:', topLevelFolder);
-    
-    // Add just the top-level folder as the evidence path
-    // The server-side classification will handle the rest
-    if (topLevelFolder && !wizardState.evidencePaths.includes(topLevelFolder)) {
-        addEvidencePath(topLevelFolder);
-    }
+    addEvidencePath(topLevelFolder);
 });
+*/
 
-// Case Name Generation
-function generateCaseNameSuggestion() {
-    // If we have evidence paths, generate a suggestion
-    if (wizardState.evidencePaths.length > 0) {
-        const firstPath = wizardState.evidencePaths[0];
-        const baseName = firstPath.split('/').pop() || firstPath.split('\\').pop() || 'case';
-        const cleanBase = baseName.replace(/\.[^/.]+$/, ''); // Remove extension
-        const timestamp = new Date().toISOString().split('T')[0].replace(/-/g, '');
-        const suggestion = `${cleanBase}-case-${timestamp}`;
+function updateNextButton() {
+    
+    dropZone.addEventListener('dragleave', () => {
+        dropZone.classList.remove('drag-over');
+    });
+    
+    dropZone.addEventListener('drop', async (e) => {
+        e.preventDefault();
+        dropZone.classList.remove('drag-over');
         
-        document.getElementById('case-name').value = suggestion;
-        document.getElementById('display-name').value = cleanBase.charAt(0).toUpperCase() + cleanBase.slice(1) + ' Investigation';
+        const items = e.dataTransfer.items;
+        if (items) {
+            for (let item of items) {
+                const entry = item.webkitGetAsEntry();
+                if (entry) {
+                    const path = await getFullPath(entry);
+                    addEvidencePath(path);
+                }
+            }
+        }
+    });
+}
+
+function updateNextButton() {
+    const btn = document.getElementById('btn-step1-next');
+    if (btn) {
+        btn.disabled = wizardState.selectedEvidenceIds.length === 0;
     }
 }
 
