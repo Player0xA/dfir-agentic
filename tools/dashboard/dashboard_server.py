@@ -880,8 +880,11 @@ async def create_and_start_investigation(
                     json.dump(status, f, indent=2)
                 
                 # Run dfir.py in background
+                # IMPORTANT: Pass the intake.json path, NOT the raw evidence path
+                # This prevents dfir.py from recreating the case
                 dfir_script = PROJECT_ROOT / "dfir.py"
-                cmd = ["python3", str(dfir_script), evidence_path]
+                intake_json_path = case_dir / "intake.json"
+                cmd = ["python3", str(dfir_script), str(intake_json_path)]
                 
                 env = os.environ.copy()
                 env["DFIR_CASE_NAME"] = actual_case_name
@@ -976,12 +979,12 @@ async def start_investigation(
         # This will run auto_run.py which runs all the selected tools
         dfir_script = PROJECT_ROOT / "dfir.py"
         
-        # Build command - dfir.py takes evidence path as argument
-        # It will automatically run the appropriate tools based on evidence type
+        # Build command - dfir.py takes intake.json path as argument
+        # Pass intake.json instead of raw evidence path to avoid recreating the case
         cmd = [
             "python3",
             str(dfir_script),
-            evidence_path
+            str(intake_json)
         ]
         
         # Set environment to track this run
