@@ -334,8 +334,8 @@ async function startInvestigation() {
         return;
     }
     
-    // Show progress
-    goToStep(4);
+    // Note: Don't call goToStep(4) here - we're already on step 4
+    // Calling goToStep(4) would cause infinite recursion since goToStep(4) calls startInvestigation()
     
     try {
         // Create intake
