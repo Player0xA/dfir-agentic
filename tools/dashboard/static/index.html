@@ -52,6 +52,8 @@
             <button id="btn-reset-layout" class="btn secondary" title="Reset Current Layout">🔄 Reset</button>
             <button id="btn-delete-profile" class="btn error" title="Delete Profile" style="display:none;">🗑️
                 Delete</button>
+            <div style="border-left: 1px solid var(--border); margin: 0 10px; height: 30px;"></div>
+            <button id="btn-ai-mode" class="btn secondary" title="AI Analysis Mode: OFF">🤖 AI: OFF</button>
             <button id="btn-theme-toggle" class="btn icon" title="Toggle Theme">☀️</button>
         </div>
     </div>
@@ -74,22 +76,46 @@
                 
                 <!-- Step 1: Evidence -->
                 <div class="wizard-step active" data-step="1">
-                    <h3>Add Evidence</h3>
-                    <p>Drag and drop files/folders or browse to select evidence</p>
+                    <h3>Select Evidence</h3>
+                    <p>Browse available evidence from the drop folder. Multiple items can be selected.</p>
                     
-                    <div class="drop-zone" id="drop-zone">
-                        <div class="drop-zone-content">
-                            <div class="drop-icon">📁</div>
-                            <p>Drag & drop files or folders here</p>
-                            <p class="or">- or -</p>
-                            <button class="btn secondary" onclick="browseEvidence()">Browse Files</button>
-                            <button class="btn secondary" onclick="browseFolder()">Browse Folder</button>
+                    <div class="drop-folder-browser" id="drop-folder-browser">
+                        <div class="browser-loading" id="browser-loading">
+                            <div class="spinner"></div>
+                            <p>Scanning drop folder...</p>
                         </div>
-                        <input type="file" id="file-input" multiple style="display: none;">
-                        <input type="file" id="folder-input" webkitdirectory directory multiple style="display: none;">
+                        
+                        <div class="browser-content" id="browser-content" style="display: none;">
+                            <div class="browser-toolbar">
+                                <div class="filter-buttons" id="filter-buttons">
+                                    <button class="btn small active" data-filter="all">All</button>
+                                    <button class="btn small" data-filter="windows_triage_dir">Windows Triage</button>
+                                    <button class="btn small" data-filter="windows_evtx_dir">EVTX</button>
+                                    <button class="btn small" data-filter="memory_dump_file">Memory</button>
+                                    <button class="btn small" data-filter="disk_image_file">Disk</button>
+                                </div>
+                                <button class="btn secondary small" onclick="refreshDropFolder()">🔄 Refresh</button>
+                            </div>
+                            
+                            <div class="evidence-categories" id="evidence-categories">
+                                <!-- Categories will be populated here -->
+                            </div>
+                            
+                            <div class="evidence-list-detailed" id="evidence-list-detailed">
+                                <!-- Evidence items will be populated here -->
+                            </div>
+                        </div>
+                        
+                        <div class="browser-error" id="browser-error" style="display: none;">
+                            <p>❌ Failed to load drop folder</p>
+                            <p id="browser-error-message"></p>
+                        </div>
                     </div>
                     
-                    <div class="evidence-list" id="evidence-list"></div>
+                    <div class="selected-evidence-summary" id="selected-evidence-summary">
+                        <h4>Selected Evidence (<span id="selected-count">0</span>)</h4>
+                        <div id="selected-evidence-list"></div>
+                    </div>
                     
                     <div class="wizard-nav">
                         <button class="btn secondary" onclick="closeWizard()">Cancel</button>

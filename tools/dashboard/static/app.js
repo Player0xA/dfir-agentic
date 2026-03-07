@@ -33,6 +33,30 @@ const initTheme = () => {
     });
 };
 
+// AI Mode Management
+const initAIMode = () => {
+    // Load saved AI mode preference, default to OFF
+    window.aiModeEnabled = localStorage.getItem('dfir-ai-mode') === 'true';
+    
+    const updateAIModeButton = () => {
+        const btn = document.getElementById('btn-ai-mode');
+        if (btn) {
+            btn.innerHTML = window.aiModeEnabled ? '🤖 AI: ON' : '🤖 AI: OFF';
+            btn.className = window.aiModeEnabled ? 'btn primary' : 'btn secondary';
+            btn.title = window.aiModeEnabled ? 'AI Analysis Mode: ON (requires API key)' : 'AI Analysis Mode: OFF (deterministic only)';
+        }
+    };
+    
+    updateAIModeButton();
+    
+    document.getElementById('btn-ai-mode')?.addEventListener('click', () => {
+        window.aiModeEnabled = !window.aiModeEnabled;
+        localStorage.setItem('dfir-ai-mode', window.aiModeEnabled);
+        updateAIModeButton();
+        console.log('AI Mode:', window.aiModeEnabled ? 'ON' : 'OFF');
+    });
+};
+
 // GridStack Initialization
 const initGrid = async () => {
     grid = GridStack.init({
@@ -382,6 +406,7 @@ const loadCaseData = (caseId, isAutoRefresh = false) => {
 // Bootstrap
 document.addEventListener('DOMContentLoaded', () => {
     initTheme();
+    initAIMode();
     initGrid().then(() => {
         loadCases();
     });

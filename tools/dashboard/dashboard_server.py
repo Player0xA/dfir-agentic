@@ -9,6 +9,11 @@ import subprocess
 import shutil
 from datetime import datetime
 
+# Import evidence scanner
+import sys
+sys.path.insert(0, str(Path(__file__).parent))
+from evidence_scanner import scan_drop_folder, get_evidence_details, ensure_drop_folder, get_drop_folder
+
 app = FastAPI(title="DFIR-Agentic Dashboard API")
 PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
 
@@ -704,6 +709,125 @@ async def get_recommended_tools(evidence_type: str):
             recommended[tool_id] = tool_info
     return {"tools": recommended, "evidence_type": evidence_type}
 
+# Evidence Drop Folder API Endpoints
+@app.get("/api/evidence/drop-folder")
+async def get_drop_folder_status():
+    """Get the configured drop folder path and status."""
+    try:
+        drop_folder = get_drop_folder()
+        exists = drop_folder.exists()
+        
+        return {
+            "path": str(drop_folder),
+            "exists": exists,
+            "configured": True,
+            "message": "Drop folder configured" if exists else "Drop folder does not exist - will be created on first use"
+        }
+    except Exception as e:
+        return {"error": str(e), "configured": False}
+
+@app.get("/api/evidence/available")
+async def get_available_evidence(refresh: bool = False):
+    """
+    Scan the drop folder and return available evidence.
+    
+    Returns:
+        - List of evidence folders with classification
+        - Category summaries
+        - Statistics
+    """
+    try:
+        results = scan_drop_folder()
+        
+        if "error" in results:
+            raise HTTPException(status_code=500, detail=results["error"])
+        
+        return results
+        
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to scan drop folder: {str(e)}")
+
+@app.get("/api/evidence/{evidence_id}/details")
+async def get_evidence_item_details(evidence_id: str):
+    """Get detailed information about a specific evidence item."""
+    try:
+        # First, scan to find the evidence by ID
+        scan_results = scan_drop_folder()
+        
+        for item in scan_results.get("evidence_items", []):
+            if item["id"] == evidence_id:
+                # Get full details
+                details = get_evidence_details(item["path"])
+                return {
+                    "id": evidence_id,
+                    "name": item["name"],
+                    **details
+                }
+        
+        raise HTTPException(status_code=404, detail=f"Evidence item with ID {evidence_id} not found")
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.post("/api/cases/{case_id}/link-evidence")
+async def link_evidence_to_case(
+    case_id: str,
+    evidence_paths: str = Form(...)
+):
+    """Create symlinks from case directory to external evidence."""
+    try:
+        case_dir = PROJECT_ROOT / "outputs" / "intake" / case_id
+        if not case_dir.exists():
+            raise HTTPException(status_code=404, detail=f"Case '{case_id}' not found")
+        
+        # Create evidence directory in case
+        evidence_dir = case_dir / "evidence"
+        evidence_dir.mkdir(exist_ok=True)
+        
+        paths = [p.strip() for p in evidence_paths.split(",") if p.strip()]
+        linked = []
+        failed = []
+        
+        for path_str in paths:
+            source = Path(path_str)
+            if not source.exists():
+                failed.append({"path": path_str, "error": "Source not found"})
+                continue
+            
+            try:
+                # Create relative symlink
+                link_name = evidence_dir / source.name
+                
+                # Remove existing link if present
+                if link_name.exists() or link_name.is_symlink():
+                    link_name.unlink()
+                
+                # Create symlink
+                link_name.symlink_to(source.resolve(), target_is_directory=source.is_dir())
+                
+                linked.append({
+                    "source": str(source),
+                    "link": str(link_name),
+                    "name": source.name
+                })
+            except Exception as e:
+                failed.append({"path": path_str, "error": str(e)})
+        
+        return {
+            "success": len(failed) == 0,
+            "linked": linked,
+            "failed": failed,
+            "case_id": case_id,
+            "evidence_dir": str(evidence_dir)
+        }
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
 @app.post("/api/intake")
 async def create_intake(
     paths: str = Form(...),  # Comma-separated paths
@@ -805,7 +929,8 @@ async def create_and_start_investigation(
     paths: str = Form(...),  # Comma-separated evidence paths
     case_name: str = Form(None),  # Optional friendly case name
     display_name: str = Form(None),  # Optional display name
-    tools: str = Form("")  # Comma-separated tool IDs (optional)
+    tools: str = Form(""),  # Comma-separated tool IDs (optional)
+    use_ai: str = Form("false")  # Whether to use AI orchestrator
 ):
     """
     Combined endpoint: create intake AND start investigation in one call.
@@ -817,6 +942,7 @@ async def create_and_start_investigation(
             raise HTTPException(status_code=400, detail="No valid paths provided")
         
         tool_list = [t.strip() for t in tools.split(",") if t.strip()] if tools else []
+        ai_enabled = use_ai.lower() == 'true'
         
         # Step 1: Create intake
         cmd = [
@@ -885,6 +1011,11 @@ async def create_and_start_investigation(
                 dfir_script = PROJECT_ROOT / "dfir.py"
                 intake_json_path = case_dir / "intake.json"
                 cmd = ["python3", str(dfir_script), str(intake_json_path)]
+                
+                # Add --skip-orchestrator flag if AI mode is disabled
+                if not ai_enabled:
+                    cmd.append("--skip-orchestrator")
+                    print(f"AI mode disabled - skipping orchestrator for case {actual_case_name}")
                 
                 env = os.environ.copy()
                 env["DFIR_CASE_NAME"] = actual_case_name

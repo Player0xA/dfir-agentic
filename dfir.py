@@ -32,6 +32,9 @@ def main():
     parser.add_argument("--dashboard", action="store_true", help="Launch the web-based dashboard UI")
     parser.add_argument("--port", type=int, default=8080, help="Port for the dashboard (default 8080)")
     
+    # AI Orchestrator Control
+    parser.add_argument("--skip-orchestrator", action="store_true", help="Skip the AI orchestrator phase and run deterministic tools only")
+    
     # Phase 50: Local LLM Support
     llm_group = parser.add_argument_group("Local LLM Configuration")
     llm_group.add_argument("--ollama", type=str, metavar="MODEL", help="Use local Ollama instance with specified model (e.g., llama3.3)")
@@ -107,28 +110,32 @@ def main():
         ingest_cmd.extend(["--playbook", args.playbook])
     if run_cmd(ingest_cmd, "Deterministic Ingestion") is None: sys.exit(1)
 
-    # 3. ORCHESTRATE (Agentic Loop)
-    orchestrate_cmd = [
-        "python3", "tools/orchestrator/deepseek_orchestrator.py",
-        "--intake-json", intake_path,
-        "--mode", effective_mode
-    ]
-    if args.task:
-        orchestrate_cmd.extend(["--task", args.task])
-        
-    # Phase 50: Pass Local LLM Arguments
-    if args.ollama:
-        orchestrate_cmd.extend(["--ollama", args.ollama])
-    if args.llm_base_url:
-        orchestrate_cmd.extend(["--base-url", args.llm_base_url])
-    if args.llm_api_key:
-        orchestrate_cmd.extend(["--api-key", args.llm_api_key])
-    if args.llm_model:
-        orchestrate_cmd.extend(["--model", args.llm_model])
+    # 3. ORCHESTRATE (Agentic Loop) - Skip if --skip-orchestrator flag is set
+    if not args.skip_orchestrator:
+        orchestrate_cmd = [
+            "python3", "tools/orchestrator/deepseek_orchestrator.py",
+            "--intake-json", intake_path,
+            "--mode", effective_mode
+        ]
+        if args.task:
+            orchestrate_cmd.extend(["--task", args.task])
+            
+        # Phase 50: Pass Local LLM Arguments
+        if args.ollama:
+            orchestrate_cmd.extend(["--ollama", args.ollama])
+        if args.llm_base_url:
+            orchestrate_cmd.extend(["--base-url", args.llm_base_url])
+        if args.llm_api_key:
+            orchestrate_cmd.extend(["--api-key", args.llm_api_key])
+        if args.llm_model:
+            orchestrate_cmd.extend(["--model", args.llm_model])
 
-    # For the orchestrator, we don't want to capture output because of interactive prompts
-    print(f"\n>>> [Stage: Agentic Loop] Running: {' '.join(orchestrate_cmd)}")
-    subprocess.run(orchestrate_cmd)
+        # For the orchestrator, we don't want to capture output because of interactive prompts
+        print(f"\n>>> [Stage: Agentic Loop] Running: {' '.join(orchestrate_cmd)}")
+        subprocess.run(orchestrate_cmd)
+    else:
+        print("\n>>> [Stage: Agentic Loop] SKIPPED - Running in deterministic-only mode")
+        print("    (Use --skip-orchestrator to skip AI analysis)")
 
 if __name__ == "__main__":
     main()
