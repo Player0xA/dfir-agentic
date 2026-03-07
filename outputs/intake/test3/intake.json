@@ -1,0 +1,22 @@
+{
+  "intake_id": "5f298ae1-62b1-4c1e-bbfa-b8eaea048674",
+  "case_name": "test3",
+  "display_name": "test5",
+  "timestamp_utc": "2026-03-07T19:06:40Z",
+  "inputs": {
+    "paths": [
+      "/home/nevermore/windowsValidation/evidence/C"
+    ]
+  },
+  "classification": {
+    "kind": "windows_triage_dir",
+    "confidence": "high",
+    "recommended_pipeline": "plaso_evtx"
+  },
+  "signals": [
+    "C:windows_system_folder_detected",
+    "C:mft_detected",
+    "C:ntuser_dat_detected",
+    "C:registry_hives_detected"
+  ]
+}

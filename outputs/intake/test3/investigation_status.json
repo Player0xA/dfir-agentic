@@ -1,0 +1,19 @@
+{
+  "status": "starting",
+  "started_at": "2026-03-07T19:06:40.131628",
+  "tools": [
+    "chainsaw_evtx",
+    "hayabusa_evtx",
+    "mem_forensics"
+  ],
+  "completed_tools": [],
+  "current_tool": "initializing",
+  "current_action": "Running dfir.py (PID: 1950)...",
+  "progress": 0,
+  "logs": [
+    "[2026-03-07T19:06:40.132491] Investigation started with command: python3 /home/nevermore/dfir-agentic/dfir.py /home/nevermore/dfir-agentic/outputs/intake/test3/intake.json --skip-orchestrator"
+  ],
+  "pid": 1950,
+  "log_file": "/home/nevermore/dfir-agentic/outputs/intake/test3/investigation.log",
+  "command": "python3 /home/nevermore/dfir-agentic/dfir.py /home/nevermore/dfir-agentic/outputs/intake/test3/intake.json --skip-orchestrator"
+}
