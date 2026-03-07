@@ -257,50 +257,86 @@ async def get_findings(case_id: str, severity: str | None = None):
     return {"findings": findings}
 
 async def _load_chainsaw_findings(case_id: str):
-    """Load raw Chainsaw findings from tool output directories."""
+    """Load Chainsaw findings by matching evidence paths or parsing raw output."""
     findings = []
+    
+    # Get case evidence paths
+    case_intake_json = PROJECT_ROOT / "outputs" / "intake" / case_id / "intake.json"
+    case_evidence_paths = []
+    if case_intake_json.exists():
+        try:
+            with open(case_intake_json, "r") as f:
+                intake_data = json.load(f)
+                case_evidence_paths = intake_data.get("inputs", {}).get("paths", [])
+        except:
+            pass
+    
+    if not case_evidence_paths:
+        return findings
+    
+    # Normalize case evidence paths for matching
+    case_paths_normalized = set()
+    for p in case_evidence_paths:
+        path = Path(p).resolve()
+        case_paths_normalized.add(str(path))
+        case_paths_normalized.add(str(path.parent))
+        case_paths_normalized.add(path.name)
     
     # Look for chainsaw_evtx output directories
     chainsaw_base = PROJECT_ROOT / "outputs" / "jsonl" / "chainsaw_evtx"
     if not chainsaw_base.exists():
         return findings
     
-    # Find all run directories for this case
-    case_intake_json = PROJECT_ROOT / "outputs" / "intake" / case_id / "intake.json"
-    case_uuid = None
-    if case_intake_json.exists():
-        try:
-            with open(case_intake_json, "r") as f:
-                case_uuid = json.load(f).get("intake_id")
-        except:
-            pass
-    
     for run_dir in chainsaw_base.iterdir():
         if not run_dir.is_dir():
             continue
-            
-        # Check if this run belongs to our case
-        # Look for a findings.json or run.json in the run directory
+        
+        request_json = run_dir / "request.json"
+        run_evidence_path = None
+        is_match = False
+        
+        # Check request.json for evidence path
+        if request_json.exists():
+            try:
+                with open(request_json, "r") as f:
+                    req_data = json.load(f)
+                    run_evidence_path = req_data.get("inputs", {}).get("evtx_dir", "")
+                    if run_evidence_path:
+                        run_path = Path(run_evidence_path).resolve()
+                        # Check if paths match
+                        for case_path in case_evidence_paths:
+                            if run_evidence_path in case_path or case_path in run_evidence_path:
+                                is_match = True
+                                break
+                            case_p = Path(case_path).resolve()
+                            if run_path == case_p or str(run_path) in str(case_p) or str(case_p) in str(run_path):
+                                is_match = True
+                                break
+            except:
+                pass
+        
+        if not is_match:
+            continue
+        
+        # First try to load findings.json
         findings_json = run_dir / "findings.json"
         if findings_json.exists():
             try:
                 with open(findings_json, "r") as f:
                     data = json.load(f)
-                    # Check if this belongs to our case by looking at run_id or inputs
-                    run_id = data.get("run_metadata", {}).get("run_id", "")
-                    if case_uuid and case_uuid[:8] in run_id.lower():
-                        tool_findings = data.get("findings", [])
-                        # Add source info
-                        for f in tool_findings:
-                            if not f.get("source"):
-                                f["source"] = {"tool": "chainsaw", "rule_title": f.get("summary", "Chainsaw detection")}
-                        findings.extend(tool_findings)
+                    tool_findings = data.get("findings", [])
+                    for finding in tool_findings:
+                        if not finding.get("source"):
+                            finding["source"] = {"tool": "chainsaw", "rule_title": finding.get("summary", "Chainsaw detection")}
+                        finding["_run_id"] = run_dir.name
+                    findings.extend(tool_findings)
+                    continue
             except:
                 pass
         
-        # Also check for raw output.jsonl
-        output_jsonl = run_dir / "output.jsonl"
-        if output_jsonl.exists() and not any(f.get("source", {}).get("tool") == "chainsaw" for f in findings):
+        # If no findings.json, parse raw chainsaw.evtx.jsonl
+        output_jsonl = run_dir / "chainsaw.evtx.jsonl"
+        if output_jsonl.exists():
             try:
                 with open(output_jsonl, "r") as f:
                     idx = 0
@@ -308,114 +344,161 @@ async def _load_chainsaw_findings(case_id: str):
                         idx += 1
                         try:
                             rec = json.loads(line.strip())
-                            if rec:
-                                finding = {
-                                    "finding_id": f"F-CHAINSAW-{idx:06d}",
-                                    "category": rec.get("group", rec.get("kind", "unknown")),
-                                    "summary": rec.get("name", rec.get("title", rec.get("rule", "Detection"))),
-                                    "severity": (rec.get("level") or rec.get("severity", "medium")).lower(),
-                                    "source": {
-                                        "tool": "chainsaw",
-                                        "rule_title": rec.get("name", rec.get("title", "Unknown rule"))
-                                    },
-                                    "evidence": {
-                                        "event_refs": [rec.get("event_id", "")],
-                                        "raw": rec
-                                    }
-                                }
-                                findings.append(finding)
+                            if not rec:
+                                continue
+                            
+                            # Extract severity
+                            level = rec.get("level", "medium")
+                            if level == "info":
+                                severity = "informational"
+                            else:
+                                severity = level.lower()
+                            
+                            finding = {
+                                "finding_id": f"F-CHAINSAW-{run_dir.name[:8]}-{idx:06d}",
+                                "category": rec.get("group", rec.get("kind", "unknown")),
+                                "summary": rec.get("name", rec.get("title", rec.get("rule", "Detection"))),
+                                "severity": severity,
+                                "source": {
+                                    "tool": "chainsaw",
+                                    "rule_title": rec.get("name", rec.get("title", "Unknown rule"))
+                                },
+                                "evidence": {
+                                    "event_refs": [rec.get("event_id", "")],
+                                    "artifacts": [rec.get("document", {}).get("kind", "")],
+                                    "raw": rec
+                                },
+                                "_run_id": run_dir.name,
+                                "_is_live": True
+                            }
+                            findings.append(finding)
                         except:
                             continue
-            except:
+            except Exception as e:
+                print(f"Error parsing chainsaw jsonl: {e}")
                 pass
     
     return findings
 
 async def _load_hayabusa_findings(case_id: str):
-    """Load raw Hayabusa findings from tool output directories."""
+    """Load Hayabusa findings by matching evidence paths or parsing raw output."""
     findings = []
+    
+    # Get case evidence paths
+    case_intake_json = PROJECT_ROOT / "outputs" / "intake" / case_id / "intake.json"
+    case_evidence_paths = []
+    if case_intake_json.exists():
+        try:
+            with open(case_intake_json, "r") as f:
+                intake_data = json.load(f)
+                case_evidence_paths = intake_data.get("inputs", {}).get("paths", [])
+        except:
+            pass
+    
+    if not case_evidence_paths:
+        return findings
     
     # Look for hayabusa_evtx output directories
     hayabusa_base = PROJECT_ROOT / "outputs" / "jsonl" / "hayabusa_evtx"
     if not hayabusa_base.exists():
         return findings
     
-    # Find all run directories for this case
-    case_intake_json = PROJECT_ROOT / "outputs" / "intake" / case_id / "intake.json"
-    case_uuid = None
-    if case_intake_json.exists():
-        try:
-            with open(case_intake_json, "r") as f:
-                case_uuid = json.load(f).get("intake_id")
-        except:
-            pass
-    
     for run_dir in hayabusa_base.iterdir():
         if not run_dir.is_dir():
             continue
-            
-        # Check if this run belongs to our case
-        # Look for a findings.json or run.json in the run directory
+        
+        request_json = run_dir / "request.json"
+        run_evidence_path = None
+        is_match = False
+        
+        # Check request.json for evidence path
+        if request_json.exists():
+            try:
+                with open(request_json, "r") as f:
+                    req_data = json.load(f)
+                    run_evidence_path = req_data.get("inputs", {}).get("evtx_dir", "")
+                    if run_evidence_path:
+                        # Check if paths match
+                        for case_path in case_evidence_paths:
+                            if run_evidence_path in case_path or case_path in run_evidence_path:
+                                is_match = True
+                                break
+            except:
+                pass
+        
+        if not is_match:
+            continue
+        
+        # First try to load findings.json
         findings_json = run_dir / "findings.json"
         if findings_json.exists():
             try:
                 with open(findings_json, "r") as f:
                     data = json.load(f)
-                    # Check if this belongs to our case
-                    run_id = data.get("run_id", "")
-                    inputs = data.get("inputs", {})
-                    if case_uuid and case_uuid[:8] in run_id.lower():
-                        tool_findings = data.get("findings", [])
-                        # Add source info if missing
-                        for f in tool_findings:
-                            if not f.get("source"):
-                                f["source"] = {"tool": "hayabusa", "rule_title": f.get("rule_title", "Hayabusa detection")}
-                        findings.extend(tool_findings)
+                    tool_findings = data.get("findings", [])
+                    for finding in tool_findings:
+                        if not finding.get("source"):
+                            finding["source"] = {"tool": "hayabusa", "rule_title": finding.get("rule_title", "Hayabusa detection")}
+                        finding["_run_id"] = run_dir.name
+                    findings.extend(tool_findings)
+                    continue
             except:
                 pass
         
-        # Also check for raw hayabusa timeline CSVs in the CSV output dir
-        csv_base = PROJECT_ROOT / "outputs" / "csv" / "hayabusa_evtx"
-        if csv_base.exists():
-            for csv_run_dir in csv_base.iterdir():
-                if not csv_run_dir.is_dir():
-                    continue
-                for csv_file in csv_run_dir.iterdir():
-                    if csv_file.suffix == ".csv":
-                        try:
-                            import csv
-                            with open(csv_file, "r", encoding="utf-8", errors="replace") as f:
-                                reader = csv.DictReader(f)
-                                idx = 0
-                                for row in reader:
-                                    idx += 1
-                                    severity = (row.get("Level", "medium") or "medium").lower()
-                                    if severity == "info":
-                                        severity = "informational"
-                                    
-                                    finding = {
-                                        "finding_id": f"F-HAYA-{idx:06d}",
-                                        "timestamp": row.get("Timestamp"),
-                                        "category": row.get("Channel", "unknown"),
-                                        "summary": row.get("RuleTitle", row.get("Details", "Hayabusa detection")),
-                                        "severity": severity,
-                                        "source": {
-                                            "tool": "hayabusa",
-                                            "rule_title": row.get("RuleTitle", "Unknown rule")
-                                        },
-                                        "evidence": {
-                                            "event_refs": [row.get("EventID", "")],
-                                            "artifacts": [row.get("EvtxFile", "")],
-                                            "raw": row
-                                        },
-                                        "host": {
-                                            "computer": row.get("Computer", "")
-                                        }
-                                    }
-                                    findings.append(finding)
-                        except Exception as e:
-                            print(f"Error loading Hayabusa CSV: {e}")
+        # Check for CSV files in jsonl output dir or CSV output dir
+        csv_files = []
+        for csv_file in run_dir.iterdir():
+            if csv_file.suffix == ".csv":
+                csv_files.append(csv_file)
+        
+        # Also check CSV output directory
+        csv_run_dir = PROJECT_ROOT / "outputs" / "csv" / "hayabusa_evtx" / run_dir.name
+        if csv_run_dir.exists():
+            for csv_file in csv_run_dir.iterdir():
+                if csv_file.suffix == ".csv":
+                    csv_files.append(csv_file)
+        
+        # Parse CSV files
+        for csv_file in csv_files:
+            try:
+                import csv
+                with open(csv_file, "r", encoding="utf-8", errors="replace") as f:
+                    reader = csv.DictReader(f)
+                    idx = 0
+                    for row in reader:
+                        idx += 1
+                        if not row:
                             continue
+                        
+                        severity = (row.get("Level", "medium") or "medium").lower()
+                        if severity == "info":
+                            severity = "informational"
+                        
+                        finding = {
+                            "finding_id": f"F-HAYA-{run_dir.name[:8]}-{idx:06d}",
+                            "timestamp": row.get("Timestamp"),
+                            "category": row.get("Channel", "unknown"),
+                            "summary": row.get("RuleTitle") or row.get("Details", "Hayabusa detection"),
+                            "severity": severity,
+                            "source": {
+                                "tool": "hayabusa",
+                                "rule_title": row.get("RuleTitle", "Unknown rule")
+                            },
+                            "evidence": {
+                                "event_refs": [row.get("EventID", "")],
+                                "artifacts": [row.get("EvtxFile", "")],
+                                "raw": row
+                            },
+                            "host": {
+                                "computer": row.get("Computer", "")
+                            },
+                            "_run_id": run_dir.name,
+                            "_is_live": True
+                        }
+                        findings.append(finding)
+            except Exception as e:
+                print(f"Error loading Hayabusa CSV {csv_file}: {e}")
+                continue
     
     return findings
 
