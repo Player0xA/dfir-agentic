@@ -1121,7 +1121,8 @@ async def create_and_start_investigation(
         with open(intake_path, "r") as f:
             intake_data = json.load(f)
         
-        actual_case_name = intake_data.get("case_name")
+        # Extract case name from directory path (intake.json is in outputs/intake/{case_name}/)
+        actual_case_name = intake_path.parent.name
         case_dir = PROJECT_ROOT / "outputs" / "intake" / actual_case_name
         
         # Step 2: Start investigation in background (if tools specified)
@@ -1196,7 +1197,7 @@ async def create_and_start_investigation(
         return {
             "success": True,
             "case_name": actual_case_name,
-            "display_name": intake_data.get("display_name"),
+            "display_name": actual_case_name,  # Use case_name as display_name since display_name removed from intake.json
             "intake_id": intake_data.get("intake_id"),
             "classification": intake_data.get("classification"),
             "paths": path_list,
