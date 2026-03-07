@@ -40,34 +40,96 @@ window.renderProgress = async (caseId) => {
             const completed = data.completed_tools || [];
             const pending = data.pending_tools || [];
             
+            // Build visual timeline
+            const totalStages = completed.length + pending.length + (data.current_tool ? 1 : 0);
+            const currentIndex = completed.length;
+            
             html = `
+                <div style="margin-bottom: 1.5rem;">
+                    <!-- Main Progress Bar -->
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                        <span style="font-size: 1.1rem; font-weight: 600; color: var(--text-primary);">
+                            ${currentIndex + 1} of ${totalStages}
+                        </span>
+                        <span style="font-size: 1.2rem; font-weight: 700; color: var(--accent-solid);">${progress}%</span>
+                    </div>
+                    
+                    <div class="progress-bar" style="height: 24px; background: var(--bg-surface); border-radius: 12px; overflow: hidden; box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);">
+                        <div style="height: 100%; background: var(--accent-gradient); width: ${progress}%; transition: width 0.5s ease; border-radius: 12px; display: flex; align-items: center; justify-content: flex-end; padding-right: 10px;">
+                            ${progress > 10 ? `<span style="color: white; font-weight: 700; font-size: 0.75rem;">${progress}%</span>` : ''}
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Currently Running Section -->
+                <div style="background: var(--accent-glow); border: 2px solid var(--accent-solid); border-radius: 12px; padding: 1rem; margin-bottom: 1rem; animation: pulse 2s infinite;">
+                    <div style="display: flex; align-items: center; gap: 0.8rem; margin-bottom: 0.5rem;">
+                        <span style="font-size: 1.5rem;">⚡</span>
+                        <span style="font-weight: 600; color: var(--accent-solid);">Running Now</span>
+                    </div>
+                    <div style="font-size: 1rem; color: var(--text-primary); font-weight: 500;">${currentTool}</div>
+                    <div style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 0.3rem;">${currentAction}</div>
+                </div>
+                
+                <!-- Visual Timeline -->
                 <div style="margin-bottom: 1rem;">
-                    <div class="progress-bar" style="height: 20px; background: var(--bg-surface); border-radius: 10px; overflow: hidden;">
-                        <div style="height: 100%; background: var(--accent-gradient); width: ${progress}%; transition: width 0.5s ease; border-radius: 10px;"></div>
-                    </div>
-                    <div style="display: flex; justify-content: space-between; margin-top: 0.5rem; font-size: 0.85rem;">
-                        <span style="color: var(--accent-solid); font-weight: 600;">${progress}%</span>
-                        <span style="color: var(--text-secondary);">${currentAction}</span>
+                    <div style="color: var(--text-muted); font-size: 0.75rem; margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 1px;">Timeline</div>
+                    <div style="display: flex; flex-direction: column; gap: 0.4rem;">
+                        ${completed.map((tool, idx) => `
+                            <div style="display: flex; align-items: center; gap: 0.8rem; padding: 0.5rem; background: var(--bg-surface); border-radius: 8px; opacity: 0.7;">
+                                <span style="color: var(--severity-info); font-weight: 700;">✓</span>
+                                <span style="font-size: 0.85rem; color: var(--text-secondary); text-decoration: line-through;">${tool}</span>
+                                <span style="margin-left: auto; font-size: 0.7rem; color: var(--text-muted);">Done</span>
+                            </div>
+                        `).join('')}
+                        
+                        ${data.current_tool ? `
+                            <div style="display: flex; align-items: center; gap: 0.8rem; padding: 0.5rem; background: var(--accent-glow); border: 1px solid var(--accent-solid); border-radius: 8px;">
+                                <span style="font-size: 1rem;">⚡</span>
+                                <span style="font-size: 0.9rem; color: var(--text-primary); font-weight: 600;">${data.current_tool}</span>
+                                <span style="margin-left: auto; font-size: 0.7rem; color: var(--accent-solid); font-weight: 600;">ACTIVE</span>
+                            </div>
+                        ` : ''}
+                        
+                        ${pending.slice(0, 3).map(tool => `
+                            <div style="display: flex; align-items: center; gap: 0.8rem; padding: 0.5rem; background: var(--bg-surface); border-radius: 8px; opacity: 0.5;">
+                                <span style="color: var(--text-muted);">○</span>
+                                <span style="font-size: 0.85rem; color: var(--text-muted);">${tool}</span>
+                            </div>
+                        `).join('')}
+                        ${pending.length > 3 ? `
+                            <div style="text-align: center; font-size: 0.75rem; color: var(--text-muted); padding: 0.3rem;">
+                                +${pending.length - 3} more pending...
+                            </div>
+                        ` : ''}
                     </div>
                 </div>
                 
-                <div style="display: flex; gap: 1rem; font-size: 0.8rem; flex-wrap: wrap;">
-                    ${completed.length > 0 ? `
-                        <div style="flex: 1; min-width: 150px;">
-                            <div style="color: var(--text-muted); margin-bottom: 0.3rem;">Completed</div>
-                            ${completed.map(t => `<span class="badge info" style="margin: 2px;">✓ ${t}</span>`).join('')}
-                        </div>
-                    ` : ''}
-                    ${pending.length > 0 ? `
-                        <div style="flex: 1; min-width: 150px;">
-                            <div style="color: var(--text-muted); margin-bottom: 0.3rem;">Pending</div>
-                            ${pending.map(t => `<span class="badge" style="margin: 2px; opacity: 0.5;">○ ${t}</span>`).join('')}
-                        </div>
-                    ` : ''}
+                <!-- Stats Row -->
+                <div style="display: flex; gap: 1rem; font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.5rem;">
+                    <span>✓ ${completed.length} completed</span>
+                    <span>○ ${pending.length} pending</span>
+                    ${data.pid ? `<span>🆔 PID: ${data.pid}</span>` : ''}
                 </div>
                 
-                ${data.pid ? `<div style="margin-top: 1rem; font-size: 0.75rem; color: var(--text-muted);">Process ID: ${data.pid}</div>` : ''}
+                <!-- Log File Section -->
+                ${data.log_file ? `
+                    <div style="margin-top: 1rem; border-top: 1px solid var(--border-subtle); padding-top: 1rem;">
+                        <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+                            <span style="font-size: 0.9rem;">📄</span>
+                            <span style="font-size: 0.75rem; color: var(--text-muted);">Live Log Output</span>
+                        </div>
+                        <div id="log-content-${caseId}" style="font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; background: var(--bg-surface); padding: 0.75rem; border-radius: 8px; max-height: 200px; overflow-y: auto; color: var(--text-secondary); border: 1px solid var(--border-subtle);">
+                            Loading...
+                        </div>
+                    </div>
+                ` : ''}
             `;
+            
+            // Load log content if available
+            if (data.log_file) {
+                loadLogContent(caseId, data.log_file);
+            }
         } else {
             html = `<div class="loading">Loading progress...</div>`;
         }
@@ -89,6 +151,30 @@ window.renderProgress = async (caseId) => {
         container.innerHTML = `<div class="error">Failed to load progress: ${e.message}</div>`;
     }
 };
+
+// Helper function to load log file content
+async function loadLogContent(caseId, logFile) {
+    const logContainer = document.getElementById(`log-content-${caseId}`);
+    if (!logContainer) return;
+    
+    try {
+        const response = await fetch(`/api/cases/${caseId}/logs`);
+        if (response.ok) {
+            const data = await response.json();
+            if (data.logs && data.logs.length > 0) {
+                // Show last 20 lines
+                const lastLines = data.logs.slice(-20);
+                logContainer.innerHTML = lastLines.join('<br>');
+                // Auto-scroll to bottom
+                logContainer.scrollTop = logContainer.scrollHeight;
+            } else {
+                logContainer.innerHTML = '<span style="opacity: 0.5;">No logs yet...</span>';
+            }
+        }
+    } catch (e) {
+        logContainer.innerHTML = '<span style="opacity: 0.5;">Unable to load logs</span>';
+    }
+}
 
 // 1. Overview Panel
 window.renderOverview = async (caseId) => {

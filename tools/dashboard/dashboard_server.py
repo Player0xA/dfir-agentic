@@ -291,6 +291,27 @@ async def get_audit(case_id: str):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
+@app.get("/api/cases/{case_id}/logs")
+async def get_case_logs(case_id: str, lines: int = 50):
+    """Get investigation log file for a case."""
+    try:
+        case_dir = PROJECT_ROOT / "outputs" / "intake" / case_id
+        log_file = case_dir / "investigation.log"
+        
+        if not log_file.exists():
+            return {"logs": []}
+        
+        # Read last N lines from log file
+        logs = []
+        with open(log_file, "r", encoding="utf-8", errors="ignore") as f:
+            all_lines = f.readlines()
+            logs = [line.rstrip() for line in all_lines[-lines:]]
+        
+        return {"logs": logs}
+        
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to read logs: {str(e)}")
+
 # Layout persistence endpoints
 SETTINGS_FILE = Path.home() / ".dfir-agentic" / "dashboard_prefs.json"
 
@@ -533,11 +554,15 @@ async def create_and_start_investigation(
                 env = os.environ.copy()
                 env["DFIR_CASE_NAME"] = actual_case_name
                 
+                # Open log file for verbose output (prevents pipe deadlock)
+                log_file_path = case_dir / "investigation.log"
+                log_file = open(log_file_path, "w")
+                
                 process = subprocess.Popen(
                     cmd,
                     cwd=str(PROJECT_ROOT),
-                    stdout=subprocess.PIPE,
-                    stderr=subprocess.PIPE,
+                    stdout=log_file,
+                    stderr=subprocess.STDOUT,
                     env=env,
                     start_new_session=True
                 )
@@ -546,6 +571,7 @@ async def create_and_start_investigation(
                 status["pid"] = investigation_pid
                 status["current_action"] = f"Running (PID: {process.pid})..."
                 status["logs"].append(f"[{datetime.now().isoformat()}] Investigation started")
+                status["log_file"] = str(log_file_path)
                 
                 with open(status_file, "w") as f:
                     json.dump(status, f, indent=2)
@@ -630,12 +656,16 @@ async def start_investigation(
         env = os.environ.copy()
         env["DFIR_CASE_NAME"] = case_name
         
+        # Open log file for verbose output (prevents pipe deadlock)
+        log_file_path = case_dir / "investigation.log"
+        log_file = open(log_file_path, "w")
+        
         # Start process in background - don't wait for completion
         process = subprocess.Popen(
             cmd,
             cwd=str(PROJECT_ROOT),
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
+            stdout=log_file,
+            stderr=subprocess.STDOUT,
             env=env,
             start_new_session=True  # Detach from parent process
         )
@@ -645,6 +675,7 @@ async def start_investigation(
         status["current_action"] = f"Running dfir.py (PID: {process.pid})..."
         status["logs"].append(f"[{datetime.now().isoformat()}] Starting investigation with {len(tool_list)} tools")
         status["logs"].append(f"[{datetime.now().isoformat()}] Evidence path: {evidence_path}")
+        status["log_file"] = str(log_file_path)
         
         with open(status_file, "w") as f:
             json.dump(status, f, indent=2)
@@ -706,37 +737,58 @@ async def get_investigation_status(case_name: str):
             running = None
             pending = []
             
-            tool_order = ["chainsaw_evtx", "hayabusa_evtx", "plaso_evtx", "mem_forensics", 
-                         "recmd", "mftecmd", "rbcmd", "lecmd", "jlecmd", "appcompatcache", 
-                         "recentfilecache", "enrichment", "orchestrator"]
+            # Stage name mapping: auto_run.py stage names → display names
+            # auto_run.py creates stages: plaso, appcompatcache, mftecmd, rbcmd, lecmd, 
+            # recentfilecache, jlecmd, recmd, enrichment, merge
+            stage_display_map = {
+                "plaso": "Plaso Super Timeline",
+                "chainsaw_evtx": "Chainsaw EVTX Analysis",
+                "hayabusa_evtx": "Hayabusa Threat Hunting",
+                "appcompatcache": "AppCompatCache Parser",
+                "mftecmd": "MFT Analysis",
+                "rbcmd": "Recycle Bin Analysis",
+                "lecmd": "LNK File Analysis",
+                "recentfilecache": "RecentFileCache Parser",
+                "jlecmd": "Jump List Analysis",
+                "recmd": "Registry Analysis",
+                "enrichment": "Hayabusa Enrichment",
+                "merge": "Data Aggregation"
+            }
+            
+            # Tool order based on what auto_run.py actually creates
+            # Dispatch pipelines (chainsaw, hayabusa) run first, then direct runners
+            tool_order = ["chainsaw_evtx", "hayabusa_evtx", "plaso", "appcompatcache", "mftecmd", "rbcmd", 
+                         "lecmd", "recentfilecache", "jlecmd", "recmd", 
+                         "enrichment", "merge"]
             
             for tool in tool_order:
                 if tool in stage_info:
                     status = stage_info[tool]
+                    display_name = stage_display_map.get(tool, tool)
                     if status == "ok":
-                        completed.append(tool)
+                        completed.append(display_name)
                     elif status == "running":
-                        running = tool
+                        running = display_name
                     elif status == "skipped":
                         pass  # Skip skipped tools
                     else:
-                        pending.append(tool)
+                        pending.append(display_name)
             
             # Build verbose current action
-            current_action = "Waiting..."
+            current_action = "Initializing..."
             if running:
                 current_action = f"Running {running}..."
             elif completed:
                 last_tool = completed[-1]
-                # Try to get more verbose info
-                if last_tool == "chainsaw_evtx":
-                    current_action = "Chainsaw analysis complete. Processing detections..."
-                elif last_tool == "hayabusa_evtx":
+                # Add context based on the tool
+                if "Plaso" in last_tool:
+                    current_action = "Plaso timeline generation complete. Starting next analysis..."
+                elif "Hayabusa" in last_tool:
                     current_action = "Hayabusa threat hunting complete. Correlating findings..."
-                elif last_tool == "plaso_evtx":
-                    current_action = "Plaso timeline generation complete."
-                elif last_tool == "orchestrator":
-                    current_action = "AI analysis in progress..."
+                elif "MFT" in last_tool:
+                    current_action = "MFT analysis complete."
+                elif "Registry" in last_tool:
+                    current_action = "Registry analysis complete."
                 else:
                     current_action = f"{last_tool} complete."
             
@@ -781,7 +833,8 @@ async def get_investigation_status(case_name: str):
                 "pending_tools": pending,
                 "stages": stage_info,
                 "pid": pid,
-                "process_running": process_running
+                "process_running": process_running,
+                "log_file": str(case_dir / "investigation.log") if (case_dir / "investigation.log").exists() else None
             }
         
         # If no auto.json yet, check if investigation_status.json exists
@@ -795,6 +848,10 @@ async def get_investigation_status(case_name: str):
                         os.kill(pid, 0)
                     except (OSError, ProcessLookupError):
                         status["process_running"] = False
+                # Add log file path if it exists
+                log_file = case_dir / "investigation.log"
+                if log_file.exists():
+                    status["log_file"] = str(log_file)
                 return status
         
         # No status files - not started

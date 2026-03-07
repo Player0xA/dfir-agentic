@@ -160,7 +160,8 @@ def main() -> int:
             "status": "ok" if d["result"]["ok"] else "error",
             "dispatch_json": str(dispatch_json),
             "run_id": d["result"]["run_id"],
-            "manifest_path": d["result"]["manifest_path"]
+            "manifest_path": d["result"]["manifest_path"],
+            "steps": d["result"].get("steps", [])  # Include step history for stage tracking
         }
     elif enforcement["action"] == "dispatch_pipeline" and not enforcement["allowed"]:
         dispatch_block = {"status": "denied", "dispatch_json": None, "run_id": None, "manifest_path": None}
@@ -175,6 +176,8 @@ def main() -> int:
         "dispatch": dispatch_block,
         "stages": {
             "plaso": "skipped",
+            "chainsaw_evtx": "skipped",
+            "hayabusa_evtx": "skipped",
             "appcompatcache": "skipped",
             "mftecmd": "skipped",
             "rbcmd": "skipped",
@@ -186,6 +189,17 @@ def main() -> int:
             "merge": "skipped"
         }
     }
+    # 5) Populate dispatch pipeline stages (chainsaw, hayabusa) from step history
+    if dispatch_block["status"] == "ok" and "steps" in dispatch_block:
+        for step_result in dispatch_block["steps"]:
+            # step_result format: "chainsaw_evtx: ok" or "chainsaw_evtx: failed (rc=2)"
+            if ": " in step_result:
+                parts = step_result.split(": ", 1)
+                if len(parts) == 2:
+                    pipeline_name, status = parts
+                    if pipeline_name in ["chainsaw_evtx", "hayabusa_evtx"]:
+                        auto_doc["stages"][pipeline_name] = status
+    
     out_path = intake_json.parent / "auto.json"
     out_path.write_text(json.dumps(auto_doc, indent=2), encoding="utf-8")
 
