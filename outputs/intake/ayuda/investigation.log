@@ -1,0 +1,8 @@
+FAIL: DEEPSEEK_API_KEY (or local --api-key / --ollama) not set
+MCP SERVER sys.executable = /usr/bin/python3
+MCP SERVER VIRTUAL_ENV    = None
+[+] Using existing case metadata: /home/nevermore/dfir-agentic/outputs/intake/ayuda/intake.json
+
+>>> [Stage: Deterministic Ingestion] Running: python3 tools/router/auto_run.py --intake-json /home/nevermore/dfir-agentic/outputs/intake/ayuda/intake.json --enrichment-policy always --run-merge
+
+>>> [Stage: Agentic Loop] Running: python3 tools/orchestrator/deepseek_orchestrator.py --intake-json /home/nevermore/dfir-agentic/outputs/intake/ayuda/intake.json --mode structured

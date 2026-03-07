@@ -1,0 +1,19 @@
+{
+  "status": "starting",
+  "started_at": "2026-03-07T16:12:32.593955",
+  "tools": [
+    "chainsaw_evtx",
+    "hayabusa_evtx",
+    "plaso_evtx",
+    "mem_forensics"
+  ],
+  "completed_tools": [],
+  "current_tool": "initializing",
+  "current_action": "Running (PID: 1895)...",
+  "progress": 0,
+  "logs": [
+    "[2026-03-07T16:12:32.594662] Investigation started"
+  ],
+  "pid": 1895,
+  "log_file": "/home/nevermore/dfir-agentic/outputs/intake/ayuda/investigation.log"
+}

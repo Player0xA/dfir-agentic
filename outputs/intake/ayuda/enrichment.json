@@ -1,9 +1,9 @@
 {
-  "timestamp_utc": "2026-03-07T08:39:41Z",
-  "plan_json": "outputs/intake/c-case-20260307-1/enrichment_plan.json",
+  "timestamp_utc": "2026-03-07T16:12:32Z",
+  "plan_json": "/home/nevermore/dfir-agentic/outputs/intake/ayuda/enrichment_plan.json",
   "agent_id": "triage_agent",
   "baseline": {
-    "auto_json": "outputs/intake/c-case-20260307-1/auto.json",
+    "auto_json": "/home/nevermore/dfir-agentic/outputs/intake/ayuda/auto.json",
     "baseline_manifest_path": "MISSING",
     "evtx_dir": "MISSING"
   },

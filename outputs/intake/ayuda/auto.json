@@ -1,9 +1,9 @@
 {
-  "auto_id": "d20a28b5-013c-4429-96a8-f943382d1b78",
-  "timestamp_utc": "2026-03-07T08:39:41Z",
+  "auto_id": "eff24f3a-55a0-49d9-bdab-9ac1f67cefd0",
+  "timestamp_utc": "2026-03-07T16:12:32Z",
   "intake": {
-    "intake_id": "6a8c38ee-9041-4df4-921a-b7fccdd7e24c",
-    "intake_json": "outputs/intake/c-case-20260307-1/intake.json"
+    "intake_id": "cda2e3e2-dad7-4172-a2d8-813d201cde49",
+    "intake_json": "/home/nevermore/dfir-agentic/outputs/intake/ayuda/intake.json"
   },
   "selection": {
     "selected_agent": "triage_agent",

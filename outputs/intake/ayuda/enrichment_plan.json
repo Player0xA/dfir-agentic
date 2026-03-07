@@ -1,9 +1,9 @@
 {
-  "plan_id": "8e4182c9-822c-4558-9a2c-a9aff8fda73f",
-  "timestamp_utc": "2026-03-07T08:39:41Z",
+  "plan_id": "20718a7f-1e62-48a4-8451-1f39694a2d38",
+  "timestamp_utc": "2026-03-07T16:12:32Z",
   "agent_id": "triage_agent",
   "baseline": {
-    "auto_json": "outputs/intake/c-case-20260307-1/auto.json",
+    "auto_json": "/home/nevermore/dfir-agentic/outputs/intake/ayuda/auto.json",
     "baseline_manifest_path": "MISSING",
     "evtx_dir": "MISSING"
   },
