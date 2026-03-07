@@ -38,6 +38,8 @@
         </div>
 
         <div class="controls">
+            <button id="btn-new-investigation" class="btn primary" title="Start New Investigation">🔍 New Investigation</button>
+            <div style="border-left: 1px solid var(--border); margin: 0 10px; height: 30px;"></div>
             <select id="case-selector" aria-label="Select Case">
                 <option value="">Loading cases...</option>
             </select>
@@ -54,12 +56,132 @@
         </div>
     </div>
 
+    <!-- Investigation Wizard Modal -->
+    <div id="wizard-modal" class="modal" style="display: none;">
+        <div class="modal-content wizard-modal">
+            <div class="modal-header">
+                <h2>🔍 New Investigation</h2>
+                <button class="close-btn" onclick="closeWizard()">&times;</button>
+            </div>
+            
+            <div class="wizard-steps">
+                <div class="step-indicator">
+                    <div class="step active" data-step="1">1. Evidence</div>
+                    <div class="step" data-step="2">2. Name</div>
+                    <div class="step" data-step="3">3. Tools</div>
+                    <div class="step" data-step="4">4. Investigate</div>
+                </div>
+                
+                <!-- Step 1: Evidence -->
+                <div class="wizard-step active" data-step="1">
+                    <h3>Add Evidence</h3>
+                    <p>Drag and drop files/folders or browse to select evidence</p>
+                    
+                    <div class="drop-zone" id="drop-zone">
+                        <div class="drop-zone-content">
+                            <div class="drop-icon">📁</div>
+                            <p>Drag & drop files or folders here</p>
+                            <p class="or">- or -</p>
+                            <button class="btn secondary" onclick="browseEvidence()">Browse Files</button>
+                            <button class="btn secondary" onclick="browseFolder()">Browse Folder</button>
+                        </div>
+                        <input type="file" id="file-input" multiple style="display: none;">
+                        <input type="file" id="folder-input" webkitdirectory directory multiple style="display: none;">
+                    </div>
+                    
+                    <div class="evidence-list" id="evidence-list"></div>
+                    
+                    <div class="wizard-nav">
+                        <button class="btn secondary" onclick="closeWizard()">Cancel</button>
+                        <button class="btn primary" onclick="goToStep(2)" id="btn-step1-next" disabled>Next →</button>
+                    </div>
+                </div>
+                
+                <!-- Step 2: Case Name -->
+                <div class="wizard-step" data-step="2">
+                    <h3>Name Your Investigation</h3>
+                    <p>Based on your evidence, we've suggested a name. You can customize it.</p>
+                    
+                    <div class="form-group">
+                        <label for="case-name">Case Name (for folder)</label>
+                        <input type="text" id="case-name" placeholder="acme-breach-2024">
+                        <small>This will be used as the directory name (auto-sanitized)</small>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="display-name">Display Name</label>
+                        <input type="text" id="display-name" placeholder="ACME Breach Investigation 2024">
+                        <small>This is the friendly name shown in the dashboard</small>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Evidence Type Detected</label>
+                        <div id="detected-type" class="info-box">Analyzing...</div>
+                    </div>
+                    
+                    <div class="wizard-nav">
+                        <button class="btn secondary" onclick="goToStep(1)">← Back</button>
+                        <button class="btn primary" onclick="goToStep(3)">Next →</button>
+                    </div>
+                </div>
+                
+                <!-- Step 3: Tool Selection -->
+                <div class="wizard-step" data-step="3">
+                    <h3>Select Analysis Tools</h3>
+                    <p>Choose which forensic tools to run. Recommended tools are pre-selected.</p>
+                    
+                    <div class="tools-container" id="tools-container">
+                        <div class="loading">Loading available tools...</div>
+                    </div>
+                    
+                    <div class="wizard-nav">
+                        <button class="btn secondary" onclick="goToStep(2)">← Back</button>
+                        <button class="btn primary" onclick="startInvestigation()">🔍 Start Investigation</button>
+                    </div>
+                </div>
+                
+                <!-- Step 4: Progress -->
+                <div class="wizard-step" data-step="4">
+                    <h3>Investigation in Progress</h3>
+                    
+                    <div class="progress-container">
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progress-fill"></div>
+                        </div>
+                        <div class="progress-text" id="progress-text">Initializing...</div>
+                    </div>
+                    
+                    <div class="realtime-details">
+                        <div class="details-header" onclick="toggleDetails()">
+                            <span>Real-time Details</span>
+                            <span id="details-toggle">▼</span>
+                        </div>
+                        <div class="details-content" id="details-content" style="display: block;">
+                            <div class="logs-container" id="logs-container">
+                                <div class="log-entry">Waiting to start...</div>
+                            </div>
+                            <div class="generated-files" id="generated-files">
+                                <h4>Generated Files</h4>
+                                <div class="file-list"></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="wizard-nav" id="step4-nav" style="display: none;">
+                        <button class="btn primary" onclick="viewResults()">View Results →</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <main class="grid-container">
         <div class="grid-stack"></div>
     </main>
 
     <script>
         const cb_js = new Date().getTime();
+        document.write('<script src="/static/wizard.js?v=' + cb_js + '"></scr' + 'ipt>');
         document.write('<script src="/static/panels.js?v=' + cb_js + '"></scr' + 'ipt>');
         document.write('<script src="/static/app.js?v=' + cb_js + '"></scr' + 'ipt>');
     </script>

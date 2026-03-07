@@ -1,12 +1,69 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, UploadFile, File, Form
 from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 from pathlib import Path
 import json
 import os
+import subprocess
+import shutil
+from datetime import datetime
 
 app = FastAPI(title="DFIR-Agentic Dashboard API")
 PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
+
+# Available tools configuration
+AVAILABLE_TOOLS = {
+    "chainsaw_evtx": {
+        "name": "Chainsaw EVTX",
+        "description": "Fast Sigma-based detection for Windows Event Logs",
+        "evidence_types": ["windows_evtx_dir", "windows_triage_dir", "windows_evtx_file"],
+        "speed": "fast",
+        "default": True
+    },
+    "hayabusa_evtx": {
+        "name": "Hayabusa EVTX", 
+        "description": "High-speed threat hunting for Windows Event Logs",
+        "evidence_types": ["windows_evtx_dir", "windows_triage_dir", "windows_evtx_file"],
+        "speed": "medium",
+        "default": True,
+        "tiers": ["quick", "deep"]
+    },
+    "plaso_evtx": {
+        "name": "Plaso Super Timeline",
+        "description": "Comprehensive timeline generation from all evidence",
+        "evidence_types": ["windows_triage_dir", "disk_image_file"],
+        "speed": "slow",
+        "default": True
+    },
+    "mem_forensics": {
+        "name": "Memory Analysis",
+        "description": "Volatility 3 memory forensics analysis",
+        "evidence_types": ["memory_dump_file"],
+        "speed": "medium",
+        "default": True
+    },
+    "recmd": {
+        "name": "Registry Analysis",
+        "description": "Parse Windows registry hives with RECmd",
+        "evidence_types": ["windows_triage_dir"],
+        "speed": "fast",
+        "default": False
+    },
+    "mftecmd": {
+        "name": "MFT Analysis",
+        "description": "Parse Master File Table with MFTECmd",
+        "evidence_types": ["windows_triage_dir"],
+        "speed": "fast", 
+        "default": False
+    },
+    "rbcmd": {
+        "name": "Recycle Bin Analysis",
+        "description": "Parse Recycle Bin artifacts",
+        "evidence_types": ["windows_triage_dir"],
+        "speed": "fast",
+        "default": False
+    }
+}
 
 # Serve static files from the static directory
 static_dir = Path(__file__).resolve().parent / "static"
@@ -46,9 +103,11 @@ async def list_cases():
                             data = json.load(f)
                             cases.append({
                                 "id": d.name,
-                                "name": data.get("case_id", d.name),
+                                "name": data.get("display_name") or data.get("case_name") or d.name,
+                                "case_name": data.get("case_name"),
+                                "display_name": data.get("display_name"),
                                 "classification": data.get("classification", {}),
-                                "intake_utc": data.get("intake_utc", "")
+                                "intake_utc": data.get("timestamp_utc", "")
                             })
                     except json.JSONDecodeError:
                         continue
@@ -91,7 +150,7 @@ async def get_case(case_id: str):
     return result
 
 @app.get("/api/cases/{case_id}/findings")
-async def get_findings(case_id: str, severity: str = None):
+async def get_findings(case_id: str, severity: str | None = None):
     """Get findings for a case, optionally filtered by severity."""
     case_dir = PROJECT_ROOT / "outputs" / "intake" / case_id
     findings_path = case_dir / "case_findings.json"
@@ -278,7 +337,198 @@ async def save_settings(payload: dict):
     
     return {"status": "success"}
 
+@app.get("/api/tools")
+async def list_tools():
+    """List all available forensic tools with their descriptions."""
+    return {"tools": AVAILABLE_TOOLS}
+
+@app.get("/api/tools/recommended")
+async def get_recommended_tools(evidence_type: str):
+    """Get recommended tools for a specific evidence type."""
+    recommended = {}
+    for tool_id, tool_info in AVAILABLE_TOOLS.items():
+        if evidence_type in tool_info.get("evidence_types", []):
+            recommended[tool_id] = tool_info
+    return {"tools": recommended, "evidence_type": evidence_type}
+
+@app.post("/api/intake")
+async def create_intake(
+    paths: str = Form(...),  # Comma-separated paths
+    case_name: str = Form(None),
+    display_name: str = Form(None)
+):
+    """Create a new intake from evidence paths with friendly naming."""
+    try:
+        # Parse paths
+        path_list = [p.strip() for p in paths.split(",") if p.strip()]
+        if not path_list:
+            raise HTTPException(status_code=400, detail="No valid paths provided")
+        
+        # Run identify_evidence.py
+        cmd = [
+            "python3", 
+            str(PROJECT_ROOT / "tools" / "intake" / "identify_evidence.py"),
+            *path_list,
+            "--out-base", str(PROJECT_ROOT / "outputs" / "intake")
+        ]
+        
+        if case_name:
+            cmd.extend(["--case-name", case_name])
+        if display_name:
+            cmd.extend(["--display-name", display_name])
+            
+        result = subprocess.run(cmd, capture_output=True, text=True)
+        
+        if result.returncode != 0:
+            raise HTTPException(status_code=500, detail=f"Intake failed: {result.stderr}")
+            
+        # Parse the output to get the case directory
+        output_lines = result.stdout.strip().split('\n')
+        intake_json_path = None
+        for line in output_lines:
+            if "wrote" in line:
+                # Extract path from "OK: wrote /path/to/intake.json"
+                intake_json_path = line.split("wrote ")[1].strip()
+                break
+                
+        if not intake_json_path:
+            raise HTTPException(status_code=500, detail="Could not determine intake location")
+            
+        # Load the intake.json to get case info
+        intake_path = Path(intake_json_path)
+        with open(intake_path, "r") as f:
+            intake_data = json.load(f)
+            
+        return {
+            "success": True,
+            "case_name": intake_data.get("case_name"),
+            "display_name": intake_data.get("display_name"),
+            "intake_id": intake_data.get("intake_id"),
+            "classification": intake_data.get("classification"),
+            "paths": path_list
+        }
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.post("/api/investigate/start")
+async def start_investigation(
+    case_name: str = Form(...),
+    tools: str = Form(...),  # Comma-separated tool IDs
+    options: str = Form("{}")  # JSON string of options
+):
+    """Start an investigation with selected tools."""
+    try:
+        tool_list = [t.strip() for t in tools.split(",") if t.strip()]
+        options_dict = json.loads(options)
+        
+        # Check if case exists
+        case_dir = PROJECT_ROOT / "outputs" / "intake" / case_name
+        if not case_dir.exists():
+            raise HTTPException(status_code=404, detail=f"Case '{case_name}' not found")
+            
+        # Create investigation status file
+        status_file = case_dir / "investigation_status.json"
+        status = {
+            "status": "running",
+            "started_at": datetime.now().isoformat(),
+            "tools": tool_list,
+            "completed_tools": [],
+            "current_tool": None,
+            "progress": 0,
+            "logs": []
+        }
+        
+        with open(status_file, "w") as f:
+            json.dump(status, f, indent=2)
+            
+        # TODO: Trigger actual pipeline execution (this would integrate with router)
+        # For now, return the status
+        return {
+            "success": True,
+            "case_name": case_name,
+            "tools_selected": tool_list,
+            "status": "started",
+            "message": "Investigation started. Check status endpoint for progress."
+        }
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.get("/api/investigate/status/{case_name}")
+async def get_investigation_status(case_name: str):
+    """Get the current status of an investigation."""
+    try:
+        case_dir = PROJECT_ROOT / "outputs" / "intake" / case_name
+        status_file = case_dir / "investigation_status.json"
+        
+        if not status_file.exists():
+            # Check if case is finished (has summary.md)
+            orchestrator_dir = case_dir / "orchestrator"
+            if orchestrator_dir.exists():
+                for run_dir in orchestrator_dir.iterdir():
+                    if run_dir.is_dir() and (run_dir / "summary.md").exists():
+                        return {
+                            "status": "completed",
+                            "case_name": case_name,
+                            "has_summary": True
+                        }
+            return {
+                "status": "not_started",
+                "case_name": case_name
+            }
+            
+        with open(status_file, "r") as f:
+            status = json.load(f)
+            
+        return status
+        
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.get("/api/investigate/summary/{case_name}")
+async def get_investigation_summary(case_name: str):
+    """Get the AI summary for a completed investigation."""
+    try:
+        case_dir = PROJECT_ROOT / "outputs" / "intake" / case_name
+        
+        # Look for summary.md in orchestrator runs
+        orchestrator_dir = case_dir / "orchestrator"
+        summary_content = None
+        
+        if orchestrator_dir.exists():
+            for run_dir in orchestrator_dir.iterdir():
+                if run_dir.is_dir():
+                    summary_path = run_dir / "summary.md"
+                    if summary_path.exists():
+                        with open(summary_path, "r") as f:
+                            summary_content = f.read()
+                        break
+                        
+        if not summary_content:
+            return {
+                "status": "not_available",
+                "case_name": case_name,
+                "summary": None
+            }
+            
+        return {
+            "status": "available",
+            "case_name": case_name,
+            "summary": summary_content
+        }
+        
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
 def run_server(host="0.0.0.0", port=8080):
     import uvicorn
     print(f"Starting DFIR-Agentic Dashboard on http://{host}:{port}")
     uvicorn.run(app, host=host, port=port)
+
+if __name__ == "__main__":
+    run_server()

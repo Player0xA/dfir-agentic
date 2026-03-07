@@ -4,6 +4,7 @@ import json
 import os
 import pathlib
 import uuid
+import re
 from datetime import datetime, timezone
 from typing import List, Tuple, Optional
 
@@ -13,6 +14,49 @@ MEM_EXT = {".mem", ".rawmem", ".dmp", ".dd"}
 
 def utc_now_z() -> str:
     return datetime.now(timezone.utc).replace(microsecond=0).strftime("%Y-%m-%dT%H:%M:%SZ")
+
+def sanitize_case_name(name: str) -> str:
+    """Convert a friendly case name to a safe directory name."""
+    # Remove or replace unsafe characters
+    safe = re.sub(r'[^\w\s-]', '', name)
+    # Replace spaces with hyphens
+    safe = re.sub(r'\s+', '-', safe)
+    # Remove multiple consecutive hyphens
+    safe = re.sub(r'-+', '-', safe)
+    # Trim and lowercase
+    safe = safe.strip('-').lower()
+    # If empty, use timestamp
+    if not safe:
+        safe = f"case-{datetime.now().strftime('%Y%m%d-%H%M%S')}"
+    return safe
+
+def generate_case_name_suggestion(paths: List[str], classification_kind: str) -> str:
+    """Auto-suggest a case name based on evidence."""
+    timestamp = datetime.now().strftime('%Y%m%d')
+    
+    # Try to extract a hostname or meaningful name from the first path
+    first_path = paths[0] if paths else "unknown"
+    base_name = os.path.basename(first_path.rstrip('/'))
+    
+    # Clean up the base name
+    clean_base = base_name.replace('.evtx', '').replace('.mem', '').replace('.dmp', '')
+    clean_base = re.sub(r'[^\w-]', '', clean_base)[:20]  # Limit length
+    
+    # Add classification type
+    type_map = {
+        'windows_triage_dir': 'windows',
+        'windows_evtx_dir': 'evtx',
+        'memory_dump_file': 'memory',
+        'disk_image_file': 'disk',
+        'pcap_file': 'network',
+        'linux_logs_dir': 'linux'
+    }
+    type_prefix = type_map.get(classification_kind, 'case')
+    
+    if clean_base:
+        return f"{clean_base}-{type_prefix}-{timestamp}"
+    else:
+        return f"{type_prefix}-{timestamp}"
 
 def is_evtx_file(p: pathlib.Path) -> bool:
     return p.is_file() and p.suffix.lower() in {".evtx", ".evt"}
@@ -123,7 +167,8 @@ def classify_path(p: pathlib.Path) -> Tuple[str, List[str], str, Optional[str]]:
     # Phase 47: Magic Signature Probing
     magic_kind, sig_name = probe_magic(p)
     if magic_kind:
-        signals.append(sig_name)
+        if sig_name:
+            signals.append(sig_name)
         if magic_kind == "memory_dump_file":
             # Extra signal if extension matches, but trust magic as HIGH
             if ext in MEM_EXT:
@@ -157,8 +202,11 @@ def main() -> int:
     ap = argparse.ArgumentParser(description="Deterministic evidence identification")
     ap.add_argument("paths", nargs="+", help="one or more evidence paths (file or dir)")
     ap.add_argument("--out-base", default="outputs/intake", help="base output directory")
+    ap.add_argument("--case-name", help="Friendly case name (will be sanitized for directory)")
+    ap.add_argument("--display-name", help="Display name for the case (if different from case-name)")
     args = ap.parse_args()
 
+    # Generate internal intake_id (UUID for tracking)
     intake_id = str(uuid.uuid4())
     ts = utc_now_z()
 
@@ -168,21 +216,42 @@ def main() -> int:
     for s in args.paths:
         p = pathlib.Path(s).expanduser()
         kind, signals, conf, rec = classify_path(p)
-        results.append((kind, conf, rec, str(p), signals))
+        results.append((kind, conf, rec or "", str(p), signals))
         for sig in signals:
             all_signals.append(f"{os.path.basename(str(p))}:{sig}")
 
     conf_rank = {"high": 0, "medium": 1, "low": 2}
-    # choose best (deterministic sort)
-    best = sorted(results, key=lambda r: (conf_rank.get(r[1], 9), r[0], r[3]))[0]
+    # choose best (deterministic sort) - handle None values in rec by converting to empty string
+    best = sorted(results, key=lambda r: (conf_rank.get(r[1], 9), r[0], r[3] or ""))[0]
     best_kind, best_conf, best_rec, best_path, _best_signals = best
 
-    out_dir = pathlib.Path(args.out_base) / intake_id
+    # Determine case naming
+    if args.case_name:
+        # User provided a case name - sanitize it for directory
+        dir_name = sanitize_case_name(args.case_name)
+        display_name = args.display_name or args.case_name
+    else:
+        # Auto-generate case name based on evidence
+        suggested = generate_case_name_suggestion(args.paths, best_kind)
+        dir_name = sanitize_case_name(suggested)
+        display_name = suggested
+
+    # Ensure unique directory name by appending intake_id suffix if needed
+    out_dir = pathlib.Path(args.out_base) / dir_name
+    counter = 1
+    original_dir_name = dir_name
+    while out_dir.exists():
+        dir_name = f"{original_dir_name}-{counter}"
+        out_dir = pathlib.Path(args.out_base) / dir_name
+        counter += 1
+
     out_dir.mkdir(parents=True, exist_ok=True)
     out_path = out_dir / "intake.json"
 
     doc = {
         "intake_id": intake_id,
+        "case_name": dir_name,  # Directory name (sanitized)
+        "display_name": display_name,  # Human-readable display name
         "timestamp_utc": ts,
         "inputs": {"paths": [str(pathlib.Path(p).expanduser()) for p in args.paths]},
         "classification": {
@@ -199,4 +268,3 @@ def main() -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
-
