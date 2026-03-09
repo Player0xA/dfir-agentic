@@ -35,6 +35,9 @@ def main():
     # AI Orchestrator Control
     parser.add_argument("--skip-orchestrator", action="store_true", help="Skip the AI orchestrator phase and run deterministic tools only")
     
+    # Tool Selection
+    parser.add_argument("--selected-tools", type=str, help="Comma-separated list of tools to run (enforces exact tool selection)")
+    
     # Phase 50: Local LLM Support
     llm_group = parser.add_argument_group("Local LLM Configuration")
     llm_group.add_argument("--ollama", type=str, metavar="MODEL", help="Use local Ollama instance with specified model (e.g., llama3.3)")
@@ -108,6 +111,8 @@ def main():
         ingest_cmd.extend(["--task", args.task])
     if args.playbook:
         ingest_cmd.extend(["--playbook", args.playbook])
+    if args.selected_tools:
+        ingest_cmd.extend(["--selected-tools", args.selected_tools])
     if run_cmd(ingest_cmd, "Deterministic Ingestion") is None: sys.exit(1)
 
     # 3. ORCHESTRATE (Agentic Loop) - Skip if --skip-orchestrator flag is set

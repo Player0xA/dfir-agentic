@@ -2,7 +2,7 @@
 set -euo pipefail
 
 # Usage:
-#   pipelines/hayabusa_evtx/run.sh /path/to/evtx_dir
+#   pipelines/hayabusa_evtx/run.sh /path/to/evtx_dir [case_id]
 #
 # Outputs:
 #   outputs/csv/hayabusa_evtx/<run_id>/timeline.csv
@@ -10,9 +10,10 @@ set -euo pipefail
 #   outputs/jsonl/hayabusa_evtx/<run_id>/{stdout.log,stderr.log,request.json}
 
 EVTX_DIR="${1:-}"
+CASE_ID="${2:-}"  # Optional case_id for findings aggregation
 TIER="quick"
-if [[ "${2:-}" == "--tier" && -n "${3:-}" ]]; then
-  TIER="${3}"
+if [[ "${3:-}" == "--tier" && -n "${4:-}" ]]; then
+  TIER="${4}"
 fi
 
 case "${TIER}" in
@@ -138,6 +139,7 @@ cat > "${REQUEST_JSON}" <<JSON
   "timestamp_utc": "${TS_UTC}",
   "pipeline": "hayabusa_evtx",
   "run_id": "${RUN_ID}",
+  "case_id": "${CASE_ID}",
   "evtx_dir": "${EVTX_DIR}",
   "hayabusa": {
     "bin": "${HAYA_BIN}",

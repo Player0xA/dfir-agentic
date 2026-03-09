@@ -86,6 +86,18 @@
         "type": "string",
         "minLength": 1
       }
+    },
+    "selected_tools": {
+      "type": "array",
+      "description": "List of tools selected to run for this investigation",
+      "items": {
+        "type": "string"
+      }
+    },
+    "tool_selection_timestamp": {
+      "type": "string",
+      "description": "ISO timestamp when tools were selected",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(\\.\\d+)?Z?$"
     }
   }
 }

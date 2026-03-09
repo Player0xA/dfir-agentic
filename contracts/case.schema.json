@@ -99,6 +99,18 @@
             "items": {
                 "type": "string"
             }
+        },
+        "selected_tools": {
+            "type": "array",
+            "description": "List of tools selected to run for this investigation",
+            "items": {
+                "type": "string"
+            }
+        },
+        "tool_selection_timestamp": {
+            "type": "string",
+            "description": "ISO timestamp when tools were selected",
+            "format": "date-time"
         }
     }
 }

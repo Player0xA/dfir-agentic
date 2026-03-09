@@ -2,7 +2,8 @@
 set -euo pipefail
 
 EVTX_DIR="${1:?EVTX_DIR required}"
-BASE_OUT_DIR="${2:-outputs/jsonl/chainsaw_evtx}"
+CASE_ID="${2:-}"  # Optional case_id for findings aggregation
+BASE_OUT_DIR="${3:-outputs/jsonl/chainsaw_evtx}"
 
 CHAINSAW_BIN="/opt/dfir-tools/chainsaw/chainsaw.bin"
 RULES_DIR="/opt/dfir-tools/chainsaw/rules/evtx"
@@ -88,6 +89,7 @@ req = {
   "run_id": os.environ["RUN_ID"],
   "timestamp_utc": os.environ["TS_UTC"],
   "pipeline": {"name": os.environ["PIPELINE_NAME"], "version": os.environ["PIPELINE_VERSION"]},
+  "case_id": ${CASE_ID@Q},
   "inputs": {"evtx_dir": ${EVTX_DIR@Q}},
   "tools": {
     "chainsaw_bin": ${CHAINSAW_BIN@Q},
