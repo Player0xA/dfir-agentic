@@ -1,0 +1,86 @@
+[project]
+name = "winforensics-mcp"
+version = "1.0.2"
+description = "Windows Forensics MCP Server - EVTX parsing, Registry analysis, PE analysis, API Monitor knowledge base, and remote artifact collection for DFIR"
+readme = "README.md"
+license = { text = "MIT" }
+authors = [{ name = "xtk" }]
+requires-python = ">=3.10"
+keywords = ["mcp", "forensics", "dfir", "evtx", "registry", "windows", "incident-response", "pe-analysis", "malware", "api-monitor"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Information Technology",
+    "Topic :: Security",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+]
+
+dependencies = [
+    "mcp>=1.0.0",
+    "python-evtx>=0.7.0",
+    "python-registry>=1.3.0",
+    "python-dateutil>=2.8.2",
+    "pefile>=2023.2.7",
+    "libscca-python>=20240427",
+    "libesedb-python>=20240420",
+    "mft>=0.7.0",
+    "pylnk3>=0.4.3",
+]
+
+[project.optional-dependencies]
+remote = [
+    "pywinrm>=0.4.3",
+    "paramiko>=3.4.0",
+    "smbprotocol>=1.12.0",
+]
+yara = [
+    "yara-python>=4.3.0",
+]
+virustotal = [
+    "vt-py>=0.18.0",
+]
+pcap = [
+    "scapy>=2.5.0",
+]
+dev = [
+    "pytest>=7.4.0",
+    "pytest-cov>=4.1.0",
+    "ruff>=0.1.0",
+]
+all = [
+    "winforensics-mcp[remote,yara,virustotal,pcap]",
+]
+
+[project.scripts]
+winforensics-mcp = "winforensics_mcp.server:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["winforensics_mcp"]
+
+[tool.hatch.build.targets.wheel.sources]
+"winforensics_mcp" = "winforensics_mcp"
+
+[tool.hatch.build]
+include = [
+    "winforensics_mcp/**/*.py",
+    "winforensics_mcp/rules/*.yar",
+    "winforensics_mcp/rules/README.md",
+    "winforensics_mcp/data/api_definitions.db",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "N", "UP", "B", "C4"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-v --cov=winforensics_mcp"

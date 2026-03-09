@@ -1,0 +1,202 @@
+<img src="icon.png" width="150" alt="Memory forensics MCP">
+
+
+# mem-forensics-mcp
+
+> **Unified Memory Forensics MCP Server** - Multi-tier engine combining Rust speed with Vol3 coverage.
+
+---
+
+## Architecture
+
+Three-tier engine automatically routes each tool to the fastest backend:
+
+```
+LLM <-> [mem-forensics-mcp (Python)] <-> memoxide (Rust child, stdio MCP)
+                                     <-> Volatility3 (Python library)
+```
+
+| Tier | Engine | Speed | Coverage |
+|------|--------|-------|----------|
+| **Tier 1** | Rust (memoxide) | Fast | pslist, psscan, cmdline, dlllist, malfind, netscan, cmdscan, search, readraw, rsds |
+| **Tier 2** | Python analyzers | Medium | Process anomalies, C2 detection, credentials, YARA, VT integration |
+| **Tier 3** | Volatility3 | Slower | Any vol3 plugin (filescan, handles, svcscan, driverscan, ...) |
+
+---
+
+## Installation
+
+### Prerequisites
+
+```bash
+# Install uv (fast Python package manager)
+curl -LsSf https://astral.sh/uv/install.sh | sh
+
+# Ensure Python 3.10+
+python3 --version
+```
+
+### Install from PyPI
+
+```bash
+uv pip install mem-forensics-mcp
+```
+
+### Install from source
+
+```bash
+git clone https://github.com/x746b/mem_forensics-mcp.git
+cd mem_forensics-mcp
+
+# Full install (recommended)
+uv sync --extra full
+
+# Minimal (Vol3 only, no YARA/VT)
+uv sync --extra volatility3
+```
+
+### Build Rust Engine (optional)
+
+Prebuilt binaries ship for `aarch64-linux` and `x86_64-linux` in `engines/memoxide/`. The server auto-detects the host architecture. To build from source:
+
+```bash
+# Requires Rust toolchain (https://rustup.rs)
+cd engines/memoxide-src
+cargo build --release
+
+# Binary lands at engines/memoxide-src/target/release/memoxide
+# The server auto-detects it (prefers local build over prebuilt)
+```
+
+### Configure Volatility3 (optional)
+
+If Vol3 is installed at `/opt/volatility3` it's auto-detected. Otherwise: `export VOLATILITY3_PATH="/path/to/volatility3"`
+
+### Verify
+
+```bash
+uv run python -m mem_forensics_mcp.server
+# Should show: Rust engine: available, Volatility3: available
+```
+
+---
+
+## Adding to Claude CLI
+
+```bash
+claude mcp add mem-forensics-mcp \
+  --scope user \
+  -- uv run --directory /opt/mem_forensics-mcp python -m mem_forensics_mcp.server
+```
+
+With custom Volatility3 path:
+
+```bash
+claude mcp add mem-forensics-mcp \
+  --scope user \
+  -e VOLATILITY3_PATH=/opt/volatility3 \
+  -- uv run --directory /opt/mem_forensics-mcp python -m mem_forensics_mcp.server
+```
+
+---
+
+## Quick Start
+
+```python
+# 1. Initialize
+memory_analyze_image(image_path="/evidence/memory.raw")
+
+# 2. Full triage
+memory_full_triage(image_path="/evidence/memory.raw")
+
+# 3. Drill down
+memory_run_plugin(image_path="/evidence/memory.raw", plugin="malfind", pid=1234)
+```
+
+---
+
+## Tool Reference
+
+### Core
+
+| Tool | Tier | Description |
+|------|------|-------------|
+| `memory_analyze_image` | 1->2 | Initialize image, auto-detect profile |
+| `memory_run_plugin` | 1->3 | Run any plugin (Rust or Vol3) |
+| `memory_list_plugins` | - | List available plugins |
+| `memory_list_sessions` | - | List active sessions |
+| `memory_get_status` | - | Show engine status |
+
+### Analysis
+
+| Tool | Tier | Description |
+|------|------|-------------|
+| `memory_full_triage` | 1+2 | Complete automated investigation |
+| `memory_hunt_process_anomalies` | 2 | DKOM detection, parent-child validation |
+| `memory_get_process_tree` | 2 | Process tree with suspicious highlighting |
+| `memory_find_injected_code` | 1->2 | Code injection + YARA scanning |
+| `memory_find_c2_connections` | 1+2 | Network C2 detection |
+| `memory_get_command_history` | 1+2 | Command recovery + classification |
+| `memory_extract_credentials` | 2 | Hash/secret extraction via Vol3 |
+
+### Extraction
+
+| Tool | Tier | Description |
+|------|------|-------------|
+| `memory_dump_process` | 2 | Process info and loaded DLLs |
+| `memory_dump_vad` | 2 | Examine memory region details |
+| `memory_list_dumpable_files` | 3 | List cached files |
+
+### Threat Intelligence
+
+| Tool | Description |
+|------|-------------|
+| `vt_lookup_hash` | VirusTotal hash lookup |
+| `vt_lookup_ip` | VirusTotal IP reputation |
+| `vt_lookup_domain` | VirusTotal domain reputation |
+| `vt_lookup_file` | Hash file + VT lookup |
+
+---
+
+## Example: Full Triage Output
+
+Running `memory_full_triage` on a Windows 10 memory dump (Win10 19041, x64, VMware):
+
+```json
+{
+  "threat_level": "critical",
+  "risk_score": 100,
+  "summary": "Processes: 115 found. Process Anomalies: 4 info-level. Network: 4 flagged of 79 connections. Commands: 56 memory fragments. Injected Code: 12 RWX regions. Correlations: 2 critical.",
+  "engine": "rust+python"
+}
+```
+
+**Key findings:**
+
+| Category | Detail |
+|----------|--------|
+| Suspicious process | `mmc.exe` launched from explorer.exe, loading a `.msc` file from browser downloads |
+| Injected code | 4 RWX private memory regions in mmc.exe, 2 in EXCEL.EXE |
+| Child process | `dllhost.exe` spawned by mmc.exe with executable RWX region |
+| Network | svchost.exe connections to external IPs on ports 443/80 |
+| Correlations | `active_implant` + `active_c2_session` flagged as critical |
+| IOCs | Suspicious external IPs extracted automatically |
+
+**Drill-down with filtered filescan:**
+```
+memory_run_plugin(image_path="memory.raw", plugin="filescan", filter="notepad")
+# Returns: 2 of 7612 results matched (server-side grep before truncation)
+```
+
+---
+
+## Related Projects
+
+- **winforensics-mcp** — Windows disk forensics (EVTX, Registry, MFT, Prefetch, YARA, PCAP)
+- **mac_forensics-mcp** — macOS DFIR (Unified Logs, FSEvents, Spotlight, Plists)
+
+---
+
+MIT License | __xtk__ | Built for the DFIR community. No Windows required >)
+<!-- mcp-name: io.github.x746b/mem-forensics-mcp -->
+

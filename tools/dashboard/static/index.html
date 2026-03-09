@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AegisFORGE</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+
+    <!-- GridStack CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/gridstack@10.3.1/dist/gridstack.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/gridstack@10.3.1/dist/gridstack-extra.min.css" rel="stylesheet" />
+
+    <!-- Marked.js for Case Notes -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+    <!-- GridStack JS -->
+    <script src="https://cdn.jsdelivr.net/npm/gridstack@10.3.1/dist/gridstack-all.js"></script>
+
+    <script>
+        const cb = new Date().getTime();
+        document.write('<link rel="stylesheet" href="/static/style.css?v=' + cb + '">');
+    </script>
+</head>
+
+<body>
+
+    <div class="topbar">
+        <div class="brand">
+            <span class="logo">uwu</span>
+            <h1>AegisFORGE</h1>
+        </div>
+
+        <div class="controls">
+            <button id="btn-new-investigation" class="btn primary" title="Start New Investigation">🔍 New
+                Investigation</button>
+            <div style="border-left: 1px solid var(--border); margin: 0 10px; height: 30px;"></div>
+            <select id="case-selector" aria-label="Select Case">
+                <option value="">Loading cases...</option>
+            </select>
+            <button id="btn-run-tools" class="btn secondary" title="Run additional tools on this case" disabled>🛠️ Run
+                Tools</button>
+            <div style="border-left: 1px solid var(--border); margin: 0 10px; height: 30px;"></div>
+            <select id="profile-selector" aria-label="Select Layout Profile">
+                <option value="Default">Default Profile</option>
+            </select>
+            <button id="btn-save-layout" class="btn primary" title="Save Layout">💾 Save</button>
+            <button id="btn-save-as" class="btn secondary" title="Save As New Profile">📝 Save As</button>
+            <button id="btn-reset-layout" class="btn secondary" title="Reset Current Layout">🔄 Reset</button>
+            <button id="btn-delete-profile" class="btn error" title="Delete Profile" style="display:none;">🗑️
+                Delete</button>
+            <div style="border-left: 1px solid var(--border); margin: 0 10px; height: 30px;"></div>
+            <button id="btn-ai-mode" class="btn secondary" title="AI Analysis Mode: OFF">🤖 AI: OFF</button>
+            <button id="btn-theme-toggle" class="btn icon" title="Toggle Theme">☀️</button>
+        </div>
+    </div>
+
+    <!-- Investigation Wizard Modal -->
+    <div id="wizard-modal" class="modal" style="display: none;">
+        <div class="modal-content wizard-modal">
+            <div class="modal-header">
+                <h2>🔍 New Investigation</h2>
+                <button class="close-btn" onclick="closeWizard()">&times;</button>
+            </div>
+
+            <div class="wizard-steps">
+                <div class="step-indicator">
+                    <div class="step active" data-step="1">1. Evidence</div>
+                    <div class="step" data-step="2">2. Name</div>
+                    <div class="step" data-step="3">3. Tools</div>
+                    <div class="step" data-step="4">4. Investigate</div>
+                </div>
+
+                <!-- Step 1: Evidence -->
+                <div class="wizard-step active" data-step="1">
+                    <h3>Select Evidence</h3>
+                    <p>Browse available evidence from the drop folder. Multiple items can be selected.</p>
+
+                    <div class="drop-folder-browser" id="drop-folder-browser">
+                        <div class="browser-loading" id="browser-loading">
+                            <div class="spinner"></div>
+                            <p>Scanning drop folder...</p>
+                        </div>
+
+                        <div class="browser-content" id="browser-content" style="display: none;">
+                            <div class="browser-toolbar">
+                                <div class="filter-buttons" id="filter-buttons">
+                                    <button class="btn small active" data-filter="all">All</button>
+                                    <button class="btn small" data-filter="windows_triage_dir">Windows Triage</button>
+                                    <button class="btn small" data-filter="windows_evtx_dir">EVTX</button>
+                                    <button class="btn small" data-filter="memory_dump_file">Memory</button>
+                                    <button class="btn small" data-filter="disk_image_file">Disk</button>
+                                </div>
+                                <button class="btn secondary small" onclick="refreshDropFolder()">🔄 Refresh</button>
+                            </div>
+
+                            <div class="evidence-categories" id="evidence-categories">
+                                <!-- Categories will be populated here -->
+                            </div>
+
+                            <div class="evidence-list-detailed" id="evidence-list-detailed">
+                                <!-- Evidence items will be populated here -->
+                            </div>
+                        </div>
+
+                        <div class="browser-error" id="browser-error" style="display: none;">
+                            <p>❌ Failed to load drop folder</p>
+                            <p id="browser-error-message"></p>
+                        </div>
+                    </div>
+
+                    <div class="selected-evidence-summary" id="selected-evidence-summary">
+                        <h4>Selected Evidence (<span id="selected-count">0</span>)</h4>
+                        <div id="selected-evidence-list"></div>
+                    </div>
+
+                    <div class="wizard-nav">
+                        <button class="btn secondary" onclick="closeWizard()">Cancel</button>
+                        <button class="btn primary" onclick="goToStep(2)" id="btn-step1-next" disabled>Next →</button>
+                    </div>
+                </div>
+
+                <!-- Step 2: Case Name -->
+                <div class="wizard-step" data-step="2">
+                    <h3>Name Your Investigation</h3>
+                    <p>Based on your evidence, we've suggested a name. You can customize it.</p>
+
+                    <div class="form-group">
+                        <label for="case-name">Case Name (for folder)</label>
+                        <input type="text" id="case-name" placeholder="acme-breach-2024">
+                        <small>This will be used as the directory name (auto-sanitized)</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="display-name">Display Name</label>
+                        <input type="text" id="display-name" placeholder="ACME Breach Investigation 2024">
+                        <small>This is the friendly name shown in the dashboard</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Evidence Type Detected</label>
+                        <div id="detected-type" class="info-box">Analyzing...</div>
+                    </div>
+
+                    <div class="wizard-nav">
+                        <button class="btn secondary" onclick="goToStep(1)">← Back</button>
+                        <button class="btn primary" onclick="goToStep(3)">Next →</button>
+                    </div>
+                </div>
+
+                <!-- Step 3: Tool Selection -->
+                <div class="wizard-step" data-step="3">
+                    <h3>Select Analysis Tools</h3>
+                    <p>Choose which forensic tools to run. Recommended tools are pre-selected.</p>
+
+                    <div class="tools-container" id="tools-container">
+                        <div class="loading">Loading available tools...</div>
+                    </div>
+
+                    <div class="wizard-nav">
+                        <button class="btn secondary" onclick="goToStep(2)">← Back</button>
+                        <button class="btn primary" onclick="startInvestigation()">🔍 Start Investigation</button>
+                    </div>
+                </div>
+
+                <!-- Step 4: Progress -->
+                <div class="wizard-step" data-step="4">
+                    <h3>Investigation in Progress</h3>
+
+                    <div class="progress-container">
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progress-fill"></div>
+                        </div>
+                        <div class="progress-text" id="progress-text">Initializing...</div>
+                    </div>
+
+                    <div class="realtime-details">
+                        <div class="details-header" onclick="toggleDetails()">
+                            <span>Real-time Details</span>
+                            <span id="details-toggle">▼</span>
+                        </div>
+                        <div class="details-content" id="details-content" style="display: block;">
+                            <div class="logs-container" id="logs-container">
+                                <div class="log-entry">Waiting to start...</div>
+                            </div>
+                            <div class="generated-files" id="generated-files">
+                                <h4>Generated Files</h4>
+                                <div class="file-list"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="wizard-nav" id="step4-nav" style="display: none;">
+                        <button class="btn primary" onclick="viewResults()">View Results →</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Run Tools Modal -->
+    <div id="run-tools-modal" class="modal" style="display: none;">
+        <div class="modal-content wizard-modal" style="max-width: 600px;">
+            <div class="modal-header">
+                <h2>🛠️ Run Tools</h2>
+                <button class="close-btn" onclick="closeRunToolsModal()">&times;</button>
+            </div>
+            <div style="padding: 1.5rem;">
+                <p style="color: var(--text-secondary); margin-bottom: 1rem;">
+                    Select tools to run on <strong id="rt-case-name"></strong>.
+                    Tools that already ran are marked with ✅.
+                </p>
+                <div id="rt-tools-list"
+                    style="display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 1.5rem;">
+                    <div class="loading">Loading tools...</div>
+                </div>
+                <div id="rt-error"
+                    style="display: none; color: var(--severity-critical); padding: 0.5rem; margin-bottom: 1rem; border-radius: 6px; background: rgba(255,50,50,0.1);">
+                </div>
+                <div style="display: flex; justify-content: flex-end; gap: 0.5rem;">
+                    <button class="btn secondary" onclick="closeRunToolsModal()">Cancel</button>
+                    <button id="rt-submit" class="btn primary" onclick="submitRunTools()" disabled>▶ Run
+                        Selected</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <main class="grid-container">
+        <div class="grid-stack"></div>
+    </main>
+
+    <script>
+        const cb_js = new Date().getTime();
+        document.write('<script src="/static/wizard.js?v=' + cb_js + '"></scr' + 'ipt>');
+        document.write('<script src="/static/panels.js?v=' + cb_js + '"></scr' + 'ipt>');
+        document.write('<script src="/static/app.js?v=' + cb_js + '"></scr' + 'ipt>');
+    </script>
+</body>
+
+</html>
