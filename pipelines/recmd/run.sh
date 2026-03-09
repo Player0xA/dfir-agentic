@@ -7,6 +7,7 @@ set -e
 RUN_ID="${1}"
 TS_UTC="${2}"
 TARGET_PATH="${3}"
+CASE_ID="${4:-}"  # Optional case_id for findings aggregation
 
 if [[ "${TARGET_PATH}" == "~"* ]]; then
   TARGET_PATH="${TARGET_PATH/#\~/$HOME}"
@@ -50,6 +51,7 @@ cat <<EOF > "${REQUEST_JSON}"
   "timestamp_utc": "${TS_UTC}",
   "pipeline": "recmd",
   "run_id": "${RUN_ID}",
+  "case_id": "${CASE_ID}",
   "target_path": "${TARGET_PATH}",
   "tool": {
     "bin": "${RECMD_BIN}",
@@ -127,6 +129,7 @@ find_json = "${OUT_JSON_DIR}/findings.json"
 
 manifest = {
   "run_id": ${RUN_ID@Q},
+  "case_id": ${CASE_ID@Q},
   "timestamp_utc": ${TS_UTC@Q},
   "pipeline": {"name": "recmd", "version": "2.1.0"},
   "status": "ok",

@@ -7,6 +7,8 @@ set -e
 RUN_ID="${1}"
 TS_UTC="${2}"
 MFT_FILE="${3}"
+CASE_ID="${4:-}"  # Optional case_id for findings aggregation
+
 # Expand tilde if present
 if [[ "${MFT_FILE}" == "~"* ]]; then
   MFT_FILE="${MFT_FILE/#\~/$HOME}"
@@ -43,6 +45,7 @@ cat <<EOF > "${REQUEST_JSON}"
   "timestamp_utc": "${TS_UTC}",
   "pipeline": "mftecmd",
   "run_id": "${RUN_ID}",
+  "case_id": "${CASE_ID}",
   "mft_file": "${MFT_FILE}",
   "tool": {
     "bin": "${MFT_BIN}",
@@ -101,6 +104,7 @@ def fmeta(p: str):
 
 manifest = {
   "run_id": ${RUN_ID@Q},
+  "case_id": ${CASE_ID@Q},
   "timestamp_utc": ${TS_UTC@Q},
   "pipeline": {"name": "mftecmd", "version": "0.1.0"},
   "status": "ok",

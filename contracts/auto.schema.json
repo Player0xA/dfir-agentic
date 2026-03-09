@@ -124,6 +124,13 @@
             "string",
             "null"
           ]
+        },
+        "steps": {
+          "type": "array",
+          "description": "Pipeline execution step history",
+          "items": {
+            "type": "string"
+          }
         }
       }
     },
@@ -164,6 +171,9 @@
           "type": "string"
         },
         "recmd": {
+          "type": "string"
+        },
+        "plaso_evtx": {
           "type": "string"
         },
         "enrichment": {
