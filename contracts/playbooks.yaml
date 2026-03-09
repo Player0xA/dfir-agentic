@@ -18,7 +18,6 @@ playbooks:
     description: "Focused triage for evidence of log clearing or audit subversion."
     steps:
       - run: hayabusa_evtx
-        args: ["--profile", "log-tampering"] # Conceptual, passed if pipeline supports
       - run: plaso_evtx
       - run: chainsaw_evtx
 
