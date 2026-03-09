@@ -25,3 +25,6 @@ cases/
 
 #plaso zipped packets
 *.log.gz
+
+#disk artifacts
+*.dd
