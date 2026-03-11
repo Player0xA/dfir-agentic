@@ -75,10 +75,9 @@ EOF
 # For testing, we'll just search for a dummy key so it produces an output, or rely on normal RECmd behavior.
 # Let's use `--sa "Windows"` as a generic search across the hive so it produces a CSV. 
 # Alternatively, if the user explicitly provided parameters, those should have been passed.
-# For this automated pipeline, we'll use a broad search: `--sa "Run"` to find persistence keys.
-
+# Let's use a batch file instead so it actually outputs a CSV
 set +e
-"${RECMD_BIN}" "${TARGET_ARG}" "${TARGET_PATH}" --sa "Run" --csv "${OUT_CSV_DIR}" >"${STDOUT_LOG}" 2>"${STDERR_LOG}"
+"${RECMD_BIN}" "${TARGET_ARG}" "${TARGET_PATH}" --bn "/opt/ez_tools/recmd/RECmd/BatchExamples/Kroll_Batch.reb" --csv "${OUT_CSV_DIR}" >"${STDOUT_LOG}" 2>"${STDERR_LOG}"
 RC=$?
 set -e
 

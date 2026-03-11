@@ -3,6 +3,26 @@
 let grid;
 const panels = {};
 
+// Global polling state (persists across loadCaseData calls)
+let refreshInterval;
+let pollStartTime = null;
+let currentPollInterval = 2000;
+
+// Dashboard cache for smart panel updates (hash-based)
+window.dashboardCache = {
+    lastFetchTime: 0,
+    overview: { data: null, hash: null },
+    progress: { data: null, hash: null },
+    artifacts: { data: null, hash: null },
+    findings: { data: null, hash: null },
+    notes: { data: null, hash: null },
+    audit: { data: null, hash: null }
+};
+
+// Dashboard polling control
+let dashboardPollInterval = null;
+let isDashboardPolling = false;
+
 // Theme Management
 const initTheme = () => {
     const savedTheme = localStorage.getItem('dfir-theme') || 'dark';
@@ -49,234 +69,428 @@ const initAIMode = () => {
 
     updateAIModeButton();
 
-    document.getElementById('btn-ai-mode')?.addEventListener('click', () => {
+    document.getElementById('btn-ai-mode').addEventListener('click', () => {
         window.aiModeEnabled = !window.aiModeEnabled;
         localStorage.setItem('dfir-ai-mode', window.aiModeEnabled);
         updateAIModeButton();
-        console.log('AI Mode:', window.aiModeEnabled ? 'ON' : 'OFF');
     });
 };
 
-// GridStack Initialization
-const initGrid = async () => {
-    grid = GridStack.init({
-        cellHeight: 100,
-        margin: 10,
-        handle: '.panel-header',
-        animate: true,
-        float: true // Allow panels to float anywhere
-    });
+// Panel Management - Simplified for Production
 
-    // Default Layout
-    const defaultLayout = [
-        { id: 'overview', x: 0, y: 0, w: 4, h: 3 },
-        { id: 'progress', x: 0, y: 0, w: 4, h: 3 },
-        { id: 'artifacts', x: 4, y: 0, w: 4, h: 3 },
-        { id: 'notes', x: 8, y: 0, w: 4, h: 8 },
-        { id: 'agent', x: 0, y: 3, w: 4, h: 5 },
-        { id: 'findings', x: 4, y: 3, w: 8, h: 5 },
-        { id: 'audit', x: 0, y: 8, w: 12, h: 4 }
-    ];
-
-    window.dashboardProfiles = {
-        "Default": []
-    };
-    window.activeProfile = "Default";
-
-    const loadLayoutFromData = (data) => {
-        grid.removeAll();
-        let layoutToUse = [...defaultLayout];
-
-        if (data && data.active_profile && data.profiles) {
-            window.dashboardProfiles = data.profiles;
-            window.activeProfile = data.active_profile;
-
-            if (data.profiles[window.activeProfile] && data.profiles[window.activeProfile].length > 0) {
-                layoutToUse = [...data.profiles[window.activeProfile]];
-            }
-        }
-
-        // Migration: If a default panel (like 'artifacts') is missing from the saved layout,
-        // automatically append it so the user doesn't have to hit "Reset".
-        defaultLayout.forEach(defItem => {
-            if (!layoutToUse.find(item => item.id === defItem.id)) {
-                console.log(`Migrating: Adding missing panel ${defItem.id}`);
-                layoutToUse.push(defItem);
-            }
-        });
-
-        layoutToUse.forEach(item => {
-            addPanel(item.id, item.x, item.y, item.w, item.h);
-        });
-
-        updateProfileUI();
-    };
-
-    const updateProfileUI = () => {
-        const selector = document.getElementById('profile-selector');
-        selector.innerHTML = '';
-        Object.keys(window.dashboardProfiles).forEach(pName => {
-            const opt = document.createElement('option');
-            opt.value = pName;
-            opt.textContent = pName;
-            if (pName === window.activeProfile) opt.selected = true;
-            selector.appendChild(opt);
-        });
-
-        // Show/hide delete button (cannot delete Default)
-        document.getElementById('btn-delete-profile').style.display = window.activeProfile === 'Default' ? 'none' : 'inline-block';
-    };
-
-    try {
-        const response = await fetch('/api/settings');
-        const data = await response.json();
-        loadLayoutFromData(data);
-    } catch (e) {
-        console.error("Failed to load settings:", e);
-        loadLayoutFromData(null);
+const initPanels = () => {
+    const gridElement = document.querySelector('.grid-stack');
+    if (!gridElement) {
+        console.error("[Dashboard] Grid container not found");
+        return;
     }
 
-    // Profile Dropdown Change
-    document.getElementById('profile-selector').addEventListener('change', (e) => {
-        window.activeProfile = e.target.value;
-        const savedLayout = window.dashboardProfiles[window.activeProfile];
+    // Initialize GridStack with existing panel elements in HTML
+    if (typeof GridStack !== 'undefined') {
+        grid = GridStack.init({
+            cellHeight: 80,
+            minRow: 10,
+            margin: 10,
+            draggable: { 
+                handle: '.panel-header',
+                scroll: true
+            },
+            resizable: { 
+                handles: 'se, sw, ne, nw',
+                autoHide: true
+            },
+            float: false,
+            column: 12,
+            animate: true,
+            removable: false,
+            acceptWidgets: false
+        }, gridElement);
+        
+        console.log("[Dashboard] GridStack initialized");
+        
+        // Try to load saved layout
+        if (typeof loadSavedLayout === 'function') {
+            loadSavedLayout();
+        }
+    } else {
+        console.warn("[Dashboard] GridStack not loaded");
+    }
+};
 
-        grid.removeAll();
-        let layoutToUse = savedLayout && savedLayout.length > 0 ? [...savedLayout] : [...defaultLayout];
+// Default panel layout configuration
+const DEFAULT_PANEL_LAYOUT = [
+    { id: 'panel-overview', title: 'Overview', x: 0, y: 0, w: 6, h: 4, minW: 4, minH: 3 },
+    { id: 'panel-progress', title: 'Investigation Progress', x: 6, y: 0, w: 6, h: 5, minW: 4, minH: 4 },
+    { id: 'panel-artifacts', title: 'Evidence & Artifacts', x: 0, y: 4, w:6, h: 6, minW: 4, minH: 4 },
+    { id: 'panel-findings', title: 'Findings', x: 6, y: 5, w: 6, h: 6, minW: 4, minH: 4 },
+    { id: 'panel-notes', title: 'Case Notes', x: 0, y: 10, w: 6, h: 4, minW: 4, minH: 3 },
+    { id: 'panel-audit', title: 'Audit Trail', x: 6, y: 11, w: 6, h: 4, minW: 4, minH: 3 },
+    { id: 'panel-agent', title: 'Agent Activity', x: 0, y: 14, w: 12, h: 4, minW: 6, minH: 3 }
+];
 
-        defaultLayout.forEach(defItem => {
-            if (!layoutToUse.find(item => item.id === defItem.id)) layoutToUse.push(defItem);
-        });
-
-        layoutToUse.forEach(item => {
-            addPanel(item.id, item.x, item.y, item.w, item.h);
-        });
-
-        saveSettingsToServer(); // Save the new active profile state
-        updateProfileUI();
-        loadCaseData(document.getElementById('case-selector').value);
-    });
-
-    const saveSettingsToServer = async () => {
-        const payload = {
-            active_profile: window.activeProfile,
-            profiles: window.dashboardProfiles
-        };
+const loadSavedLayout = () => {
+    if (!grid) return;
+    
+    // Don't call grid.load() - it adds duplicate widgets!
+    // Panels already exist in HTML and GridStack auto-initializes them
+    // We only save layout changes, not restore them
+    
+    const savedLayout = localStorage.getItem('dfir-layout');
+    if (savedLayout) {
         try {
-            await fetch('/api/settings', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload)
+            const layout = JSON.parse(savedLayout);
+            // Only update positions of EXISTING panels, don't add new ones
+            layout.forEach(item => {
+                const widget = grid.find('#' + item.id);
+                if (widget && widget.length > 0) {
+                    widget[0].update(item);
+                }
             });
-            return true;
+            console.log("[Dashboard] Updated panel positions from saved layout");
         } catch (e) {
-            console.error("Failed to save layout:", e);
-            return false;
+            console.warn("[Dashboard] Failed to apply saved layout:", e.message);
         }
-    };
-
-    // Attach save layout handler (overwrite current)
-    document.getElementById('btn-save-layout').addEventListener('click', async () => {
-        const layout = grid.save().map(item => ({
-            id: item.id, x: item.x, y: item.y, w: item.w, h: item.h
-        }));
-
-        window.dashboardProfiles[window.activeProfile] = layout;
-
-        if (await saveSettingsToServer()) {
-            const btn = document.getElementById('btn-save-layout');
-            const originalText = btn.innerHTML;
-            btn.innerHTML = '✅ Saved';
-            setTimeout(() => btn.innerHTML = originalText, 2000);
-        }
+    }
+    
+    // Save layout on change
+    grid.on('change', (event, items) => {
+        const layout = grid.save();
+        localStorage.setItem('dfir-layout', JSON.stringify(layout));
     });
+};
 
-    // Attach save as handler (new profile)
-    document.getElementById('btn-save-as').addEventListener('click', async () => {
-        const newName = prompt("Enter a name for the new layout profile:");
-        if (!newName || !newName.trim()) return;
+// Note: Panels are now defined in HTML, not created via JavaScript
+// initCSSGridFallback and addPanelsToGrid removed to prevent duplication
 
-        const cleanName = newName.trim();
-        if (cleanName === "Default") {
-            alert("Cannot overwrite the Default profile name this way.");
-            return;
-        }
+const resetLayout = () => {
+    if (grid) {
+        // Clear saved layout - panels will use HTML default positions
+        localStorage.removeItem('dfir-layout');
+        // Reload to restore HTML default layout
+        location.reload();
+        console.log("[Dashboard] Layout reset to default");
+    }
+};
 
-        const layout = grid.save().map(item => ({
-            id: item.id, x: item.x, y: item.y, w: item.w, h: item.h
-        }));
-
-        window.dashboardProfiles[cleanName] = layout;
-        window.activeProfile = cleanName;
-
-        if (await saveSettingsToServer()) {
-            updateProfileUI();
-        }
-    });
-
-    // Delete profile handler
-    document.getElementById('btn-delete-profile').addEventListener('click', async () => {
-        if (window.activeProfile === 'Default') return;
-
-        if (confirm(`Are you sure you want to delete the layout profile '${window.activeProfile}'?`)) {
-            delete window.dashboardProfiles[window.activeProfile];
-            window.activeProfile = 'Default';
-
-            if (await saveSettingsToServer()) {
-                // Switch back to default view
-                const e = new Event('change');
-                const sel = document.getElementById('profile-selector');
-                sel.value = 'Default';
-                sel.dispatchEvent(e);
-            }
-        }
-    });
-
-    // Reset layout handler (resets current view to default)
-    document.getElementById('btn-reset-layout').addEventListener('click', () => {
-        grid.removeAll();
-        defaultLayout.forEach(item => {
-            addPanel(item.id, item.x, item.y, item.w, item.h);
+// Settings Management
+const saveSettings = async (settings) => {
+    try {
+        const response = await fetch('/api/settings', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(settings)
         });
-
-        // Save the reset state to the current profile
-        window.dashboardProfiles[window.activeProfile] = [];
-        saveSettingsToServer();
-
-        loadCaseData(document.getElementById('case-selector').value);
-    });
+        return response.ok;
+    } catch (e) {
+        console.error("Failed to save settings:", e);
+        return false;
+    }
 };
 
-// Add a panel to the grid
-const addPanel = (id, x, y, w, h) => {
-    const titles = {
-        'overview': '📋 Case Overview',
-        'progress': '⚙️ Investigation Progress',
-        'artifacts': '📁 Evidence Artifacts',
-        'findings': '🚨 Findings',
-        'notes': '📝 Case Notes',
-        'audit': '🔍 AI Audit Trail',
-        'agent': '🧠 Agent Thoughts'
-    };
-
-    const content = `
-        <div class="panel-header">
-            <div class="panel-title">${titles[id] || id}</div>
-            <div class="panel-controls">
-                <button onclick="grid.removeWidget(this.closest('.grid-stack-item'))">×</button>
-            </div>
-        </div>
-        <div class="panel-body" id="panel-${id}">
-            <div class="loading">Select a case...</div>
-        </div>
-    `;
-
-    grid.addWidget({ id: id, x: x, y: y, w: w, h: h, content: content });
+const loadSettings = async () => {
+    try {
+        const response = await fetch('/api/settings');
+        if (!response.ok) return null;
+        return await response.json();
+    } catch (e) {
+        console.error("Failed to load settings:", e);
+        return null;
+    }
 };
 
+// Global state for known case IDs (to detect new cases)
 let knownCaseIds = [];
 
-// Case Management
+// =============================================================================
+// CONSOLIDATED DASHBOARD POLLING
+// Single API call with smart hash-based caching for all panels
+// =============================================================================
+
+// Fetch dashboard status from consolidated endpoint
+async function fetchDashboardStatus(caseId) {
+    try {
+        const cacheBuster = `?_t=${Date.now()}`;
+        const response = await fetch(`/api/cases/${caseId}/dashboard-status${cacheBuster}`);
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}`);
+        }
+        return await response.json();
+    } catch (e) {
+        console.error("[Dashboard] Failed to fetch status:", e);
+        return null;
+    }
+}
+
+// Check if panel data changed by comparing hashes
+function hasPanelChanged(panelName, newHash) {
+    const cached = window.dashboardCache[panelName];
+    if (!cached || cached.hash !== newHash) {
+        return true;
+    }
+    return false;
+}
+
+// Update panel with new data if changed
+function updatePanelIfChanged(panelName, newData, newHash) {
+    if (hasPanelChanged(panelName, newHash)) {
+        window.dashboardCache[panelName] = { data: newData, hash: newHash };
+        return true; // Data changed, needs re-render
+    }
+    return false; // No change, skip re-render
+}
+
+// Single polling function that fetches and updates all panels
+async function pollDashboard(caseId) {
+    // Fetch all data in one API call
+    const dashboardData = await fetchDashboardStatus(caseId);
+    if (!dashboardData) return;
+    
+    window.dashboardCache.lastFetchTime = Date.now();
+    
+    // Update global active state
+    window.isCurrentCaseActive = dashboardData.is_active;
+    
+    // Update each panel only if data changed (hash-based)
+    let anyPanelUpdated = false;
+    
+    // 1. Overview Panel
+    if (dashboardData.overview) {
+        if (updatePanelIfChanged('overview', dashboardData.overview, dashboardData.overview._hash)) {
+            if (window.renderOverviewFromData) {
+                window.renderOverviewFromData(dashboardData.overview);
+                anyPanelUpdated = true;
+            } else if (window.renderOverview) {
+                // Fallback to legacy function
+                window.renderOverview(caseId, true);
+                anyPanelUpdated = true;
+            }
+        }
+    }
+    
+    // 2. Progress Panel (always update for smooth progress bar)
+    if (dashboardData.progress) {
+        if (updatePanelIfChanged('progress', dashboardData.progress, dashboardData.progress._hash) || 
+            dashboardData.progress.status === 'running') {
+            if (window.renderProgressFromData) {
+                window.renderProgressFromData(dashboardData.progress);
+                anyPanelUpdated = true;
+            } else if (window.renderProgress) {
+                // Fallback to legacy function
+                window.renderProgress(caseId, true);
+                anyPanelUpdated = true;
+            }
+        }
+    }
+    
+    // 3. Artifacts Panel
+    if (dashboardData.artifacts) {
+        if (updatePanelIfChanged('artifacts', dashboardData.artifacts, dashboardData.artifacts._hash)) {
+            if (window.renderArtifactsFromData) {
+                window.renderArtifactsFromData(dashboardData.artifacts);
+                anyPanelUpdated = true;
+            } else if (window.renderArtifacts) {
+                // Fallback to legacy function
+                window.renderArtifacts(caseId, true);
+                anyPanelUpdated = true;
+            }
+        }
+    }
+    
+    // 4. Findings Panel
+    if (dashboardData.findings) {
+        if (updatePanelIfChanged('findings', dashboardData.findings, dashboardData.findings._hash)) {
+            if (window.renderFindingsFromData) {
+                window.renderFindingsFromData(dashboardData.findings);
+                anyPanelUpdated = true;
+            } else if (window.renderFindings) {
+                // Fallback to legacy function
+                window.renderFindings(caseId, true);
+                anyPanelUpdated = true;
+            }
+        }
+    }
+    
+    // 5. Notes Panel
+    if (dashboardData.notes) {
+        if (updatePanelIfChanged('notes', dashboardData.notes, dashboardData.notes._hash)) {
+            if (window.renderNotesFromData) {
+                window.renderNotesFromData(dashboardData.notes);
+                anyPanelUpdated = true;
+            } else if (window.renderNotes) {
+                // Fallback to legacy function
+                window.renderNotes(caseId, true);
+                anyPanelUpdated = true;
+            }
+        }
+    }
+    
+    // 6. Audit Panel
+    if (dashboardData.audit) {
+        if (updatePanelIfChanged('audit', dashboardData.audit, dashboardData.audit._hash)) {
+            if (window.renderAuditFromData) {
+                window.renderAuditFromData(dashboardData.audit);
+                anyPanelUpdated = true;
+            } else if (window.renderAudit) {
+                // Fallback to legacy function
+                window.renderAudit(caseId, true);
+                anyPanelUpdated = true;
+            }
+        }
+    }
+    
+    // Log updates for debugging (only when something changes)
+    if (anyPanelUpdated) {
+        console.log(`[Dashboard] Panels updated at ${new Date().toLocaleTimeString()}`);
+    }
+    
+    // Stop polling if investigation complete
+    if (!dashboardData.is_active && dashboardPollInterval) {
+        console.log("[Dashboard] Investigation complete, stopping polling");
+        clearInterval(dashboardPollInterval);
+        dashboardPollInterval = null;
+        isDashboardPolling = false;
+        
+        // Enable Run Tools button
+        const rtBtn = document.getElementById('btn-run-tools');
+        if (rtBtn) rtBtn.disabled = false;
+    }
+}
+
+// Start dashboard polling with adaptive frequency
+function startDashboardPolling(caseId) {
+    // Stop any existing polling
+    if (dashboardPollInterval) {
+        clearInterval(dashboardPollInterval);
+        dashboardPollInterval = null;
+    }
+    
+    // Reset polling state
+    pollStartTime = Date.now();
+    currentPollInterval = 2000;
+    isDashboardPolling = true;
+    let nextPollTime = Date.now();
+    
+    // Adaptive interval function
+    const getAdaptiveInterval = () => {
+        const elapsed = (Date.now() - pollStartTime) / 1000;
+        if (elapsed < 30) return 2000;      // 0-30s: 2s
+        if (elapsed < 120) return 5000;      // 30-120s: 5s
+        return 10000;                        // 120s+: 10s
+    };
+    
+    // Polling loop with adaptive timing
+    const pollingLoop = async () => {
+        const now = Date.now();
+        const selector = document.getElementById('case-selector');
+        
+        // Check if we should stop polling
+        if (!selector || selector.value !== caseId) {
+            console.log("[Dashboard] Case changed, stopping polling");
+            if (dashboardPollInterval) {
+                clearInterval(dashboardPollInterval);
+                dashboardPollInterval = null;
+            }
+            isDashboardPolling = false;
+            return;
+        }
+        
+        // Check if it's time to poll
+        if (now >= nextPollTime) {
+            // Update next poll time based on current adaptive interval
+            const interval = getAdaptiveInterval();
+            nextPollTime = now + interval;
+            
+            // Log interval change for debugging
+            if (interval !== currentPollInterval) {
+                console.log(`[Dashboard] Polling interval changed: ${currentPollInterval}ms -> ${interval}ms`);
+                currentPollInterval = interval;
+            }
+            
+            // Perform the poll
+            await pollDashboard(caseId);
+            
+            // Check if investigation is complete
+            if (!window.isCurrentCaseActive && dashboardPollInterval) {
+                console.log("[Dashboard] Investigation complete, stopping polling");
+                clearInterval(dashboardPollInterval);
+                dashboardPollInterval = null;
+                isDashboardPolling = false;
+                
+                // Enable Run Tools button
+                const rtBtn = document.getElementById('btn-run-tools');
+                if (rtBtn) rtBtn.disabled = false;
+                return;
+            }
+        }
+    };
+    
+    // Start polling loop (check every 100ms, but only poll at adaptive intervals)
+    dashboardPollInterval = setInterval(pollingLoop, 100);
+    
+    // Do first poll immediately
+    nextPollTime = Date.now(); // Force immediate poll
+}
+
+// Stop dashboard polling
+function stopDashboardPolling() {
+    if (dashboardPollInterval) {
+        clearInterval(dashboardPollInterval);
+        dashboardPollInterval = null;
+    }
+    isDashboardPolling = false;
+}
+
+// Legacy loadCaseData function - now uses consolidated approach
+const loadCaseData = (caseId, isAutoRefresh = false) => {
+    if (!caseId) return;
+    
+    if (!isAutoRefresh) {
+        // Reset dashboard cache on case switch
+        window.dashboardCache = {
+            lastFetchTime: 0,
+            overview: { data: null, hash: null },
+            progress: { data: null, hash: null },
+            artifacts: { data: null, hash: null },
+            findings: { data: null, hash: null },
+            notes: { data: null, hash: null },
+            audit: { data: null, hash: null }
+        };
+        
+        // Set loading states for panels
+        ['overview', 'progress', 'findings', 'artifacts', 'notes', 'audit', 'agent'].forEach(id => {
+            const container = document.getElementById(`panel-${id}`);
+            if (container) container.innerHTML = '<div class="loading">Loading...</div>';
+        });
+        
+        // Enable Run Tools button
+        const rtBtn = document.getElementById('btn-run-tools');
+        if (rtBtn) rtBtn.disabled = false;
+    }
+    
+    // Do initial fetch and start polling
+    pollDashboard(caseId).then(() => {
+        if (!isAutoRefresh) {
+            // Start polling on initial load
+            startDashboardPolling(caseId);
+        }
+    }).catch(err => {
+        console.error("[Dashboard] Failed to poll dashboard:", err);
+        // Fallback: use legacy rendering if consolidated API fails
+        if (!isAutoRefresh) {
+            if (window.renderOverview) window.renderOverview(caseId, false);
+            if (window.renderProgress) window.renderProgress(caseId, false);
+            if (window.renderArtifacts) window.renderArtifacts(caseId, false);
+            if (window.renderFindings) window.renderFindings(caseId, false);
+            if (window.renderNotes) window.renderNotes(caseId, false);
+            if (window.renderAudit) window.renderAudit(caseId, false);
+        }
+    });
+    
+    // Note: Agent panel still uses legacy approach for now
+    if (window.renderAgent) window.renderAgent(caseId, isAutoRefresh);
+};
+
+// Legacy loadCases function - for case list only
 const loadCases = async (isAutoRefresh = false) => {
     try {
         const response = await fetch('/api/cases');
@@ -318,6 +532,8 @@ const loadCases = async (isAutoRefresh = false) => {
 
             selector.addEventListener('change', (e) => {
                 if (e.target.value) {
+                    // Stop polling old case before loading new one
+                    stopDashboardPolling();
                     loadCaseData(e.target.value);
                 }
             });
@@ -326,6 +542,7 @@ const loadCases = async (isAutoRefresh = false) => {
             if (isNewCaseStarted) {
                 // Instantly switch to the new case
                 selector.value = newLatestId;
+                stopDashboardPolling();
                 loadCaseData(newLatestId);
             } else if (currentValue) {
                 // Maintain current selection if nothing new happened
@@ -337,95 +554,6 @@ const loadCases = async (isAutoRefresh = false) => {
         console.error("Failed to load cases:", e);
         if (!isAutoRefresh) document.getElementById('case-selector').innerHTML = '<option value="">Error loading cases</option>';
     }
-};
-
-let refreshInterval;
-
-const loadCaseData = (caseId, isAutoRefresh = false) => {
-    if (!caseId) return;
-
-    // SMART REFRESH: Reset hashes when switching cases (not auto-refresh)
-    // This ensures fresh data is always rendered for a new case
-    if (!isAutoRefresh) {
-        if (typeof lastFindingsHash !== 'undefined') {
-            window.lastFindingsHash = null;
-        }
-        // Reset progress tracking to prevent stale cached state
-        if (typeof lastProgressHash !== 'undefined') {
-            window.lastProgressHash = null;
-        }
-        if (typeof lastProgressStatus !== 'undefined') {
-            window.lastProgressStatus = null;
-        }
-    }
-
-    if (!isAutoRefresh) {
-        // Set loading states for panels that auto-refresh
-        ['overview', 'progress', 'findings', 'notes', 'audit', 'agent'].forEach(id => {
-            const container = document.getElementById(`panel-${id}`);
-            if (container) container.innerHTML = '<div class="loading">Loading...</div>';
-        });
-        // Artifacts panel loads immediately without loading state (uses cache or shows content)
-        
-        // Enable Run Tools button when a valid case is loaded (not auto-refresh)
-        const rtBtn = document.getElementById('btn-run-tools');
-        if (rtBtn) rtBtn.disabled = false;
-    }
-
-    // Call panel renderers defined in panels.js
-    if (window.renderOverview) window.renderOverview(caseId, isAutoRefresh);
-    if (window.renderProgress) window.renderProgress(caseId, isAutoRefresh);
-    // Artifacts panel: render on initial load, but skip during auto-refresh polling
-    if (!isAutoRefresh && window.renderArtifacts) window.renderArtifacts(caseId);
-    // Findings: Pass isAutoRefresh flag for smart refresh (hash comparison)
-    if (window.renderFindings) window.renderFindings(caseId, isAutoRefresh);
-    if (window.renderNotes) window.renderNotes(caseId, isAutoRefresh);
-    if (window.renderAudit) window.renderAudit(caseId, isAutoRefresh);
-    if (window.renderAgent) window.renderAgent(caseId, isAutoRefresh);
-
-    // Setup auto-refresh loop with adaptive frequency
-    if (refreshInterval) clearInterval(refreshInterval);
-
-    // Only set up polling if we know the case is active
-    if (window.isCurrentCaseActive === false) {
-        return; // Investigation finished, no need to poll
-    }
-
-    // Adaptive polling: start fast, slow down over time
-    // 0-30s: 2s (responsive)
-    // 30-120s: 5s (moderate)
-    // 120s+: 10s (slow - tools take time)
-    let pollStartTime = Date.now();
-    let currentPollInterval = 2000; // Start at 2 seconds
-
-    const getAdaptiveInterval = () => {
-        const elapsed = (Date.now() - pollStartTime) / 1000; // seconds
-        if (elapsed < 30) return 2000;      // 0-30s: 2s
-        if (elapsed < 120) return 5000;     // 30-120s: 5s
-        return 10000;                       // 120s+: 10s
-    };
-
-    const runAdaptivePoll = () => {
-        const interval = getAdaptiveInterval();
-        if (interval !== currentPollInterval) {
-            // Frequency changed, restart with new interval
-            clearInterval(refreshInterval);
-            currentPollInterval = interval;
-            refreshInterval = setInterval(runAdaptivePoll, interval);
-        }
-
-        // Do the actual polling
-        loadCases(true).then(() => {
-            const currentSelected = document.getElementById('case-selector').value;
-            if (currentSelected && currentSelected === caseId) {
-                if (window.isCurrentCaseActive !== false) {
-                    loadCaseData(currentSelected, true);
-                }
-            }
-        });
-    };
-
-    refreshInterval = setInterval(runAdaptivePoll, currentPollInterval);
 };
 
 // ========================
@@ -456,153 +584,188 @@ async function openRunToolsModal() {
         const toolsData = await toolsRes.json();
         const caseData = await caseRes.json();
 
-        const allTools = toolsData.tools || {};
-        const stages = caseData.auto_stages || {};
-        const evidenceKind = caseData.intake?.classification?.kind || '';
+        // Convert tools object to array (API returns {tool_id: {...}})
+        let toolsArray = [];
+        if (toolsData.tools && typeof toolsData.tools === 'object') {
+            toolsArray = Object.entries(toolsData.tools).map(([id, data]) => ({
+                id: id,
+                ...data
+            }));
+        }
 
-        let html = '';
-        Object.entries(allTools).forEach(([toolId, tool]) => {
-            const stageStatus = stages[toolId] || stages[toolId.replace('_evtx', '')] || null;
-            const isCompleted = stageStatus && (stageStatus === 'ok' || stageStatus.startsWith('ok'));
-            const isFailed = stageStatus && stageStatus.startsWith('error');
-            const isRelevant = tool.evidence_types?.includes(evidenceKind);
+        // Get currently running or completed stages from auto.json
+        const autoStages = caseData.auto_stages || {};
+        const runningTools = Object.entries(autoStages)
+            .filter(([tool, status]) => status === 'running')
+            .map(([tool]) => tool);
+        const completedTools = Object.entries(autoStages)
+            .filter(([tool, status]) => status === 'ok' || status.startsWith('ok'))
+            .map(([tool]) => tool);
 
+        renderToolsList(toolsArray, runningTools, completedTools);
+    } catch (e) {
+        console.error("Failed to load tools:", e);
+        document.getElementById('rt-tools-list').innerHTML = '<div class="error">Failed to load tools</div>';
+    }
+}
+
+function renderToolsList(tools, runningTools, completedTools) {
+    const container = document.getElementById('rt-tools-list');
+    if (!tools || tools.length === 0) {
+        container.innerHTML = '<div class="info">No additional tools available</div>';
+        return;
+    }
+
+    // Categorize tools
+    const categories = {
+        'Timeline': ['plaso_evtx'],
+        'Event Logs': ['chainsaw_evtx', 'hayabusa_evtx'],
+        'File System': ['mftecmd'],
+        'Registry': ['recmd', 'appcompatcache'],
+        'System': ['rbcmd', 'lecmd', 'jlecmd', 'recentfilecache']
+    };
+
+    let html = '';
+    
+    Object.entries(categories).forEach(([category, toolIds]) => {
+        const categoryTools = tools.filter(t => toolIds.includes(t.id));
+        if (categoryTools.length === 0) return;
+
+        html += `<div style="margin-bottom: 1.5rem;">`;
+        html += `<div style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0.5rem;">${category}</div>`;
+        html += `<div style="display: grid; gap: 0.5rem;">`;
+
+        categoryTools.forEach(tool => {
+            const isRunning = runningTools.includes(tool.id);
+            const isCompleted = completedTools.includes(tool.id);
+            const isDisabled = isRunning || isCompleted;
+            
             let statusBadge = '';
-            let opacity = '1';
-            let checkState = '';
-
-            if (isCompleted) {
-                statusBadge = '<span class="badge info" style="font-size: 0.7rem;">✅ Completed</span>';
-                opacity = '0.6';
-            } else if (isFailed) {
-                statusBadge = '<span class="badge critical" style="font-size: 0.7rem;">❌ Failed</span>';
-            }
-
-            if (!isRelevant && !isCompleted) {
-                opacity = '0.5';
-            }
-
+            if (isRunning) statusBadge = '<span class="badge warning" style="font-size: 0.7rem; margin-left: auto;">Running</span>';
+            else if (isCompleted) statusBadge = '<span class="badge success" style="font-size: 0.7rem; margin-left: auto;">Done</span>';
+            
+            const tooltip = isDisabled ? 'title="This tool is already running or completed"' : '';
+            
             html += `
-                <div class="tool-item" style="display: flex; align-items: center; gap: 0.8rem; padding: 0.7rem 1rem; border: 1px solid var(--border); border-radius: 8px; cursor: pointer; opacity: ${opacity}; transition: all 0.2s;"
-                     onclick="rtToggleTool('${toolId}', this)" data-tool-id="${toolId}">
-                    <input type="checkbox" ${checkState} style="width: 18px; height: 18px; cursor: pointer;"
-                           onclick="event.stopPropagation(); rtToggleTool('${toolId}', this.closest('.tool-item'))">
-                    <div style="flex: 1;">
-                        <div style="font-weight: 600; font-size: 0.9rem;">${tool.name}</div>
-                        <div style="font-size: 0.75rem; color: var(--text-muted);">
-                            ${tool.description}
-                            ${isRelevant ? ' <span class="badge info" style="font-size: 0.65rem;">recommended</span>' : ''}
-                        </div>
-                    </div>
-                    <div style="display: flex; align-items: center; gap: 0.4rem;">
-                        <span class="badge ${tool.speed}" style="font-size: 0.65rem;">${tool.speed}</span>
-                        ${statusBadge}
-                    </div>
-                </div>
+                <label class="rt-tool-item" style="display: flex; align-items: center; gap: 0.5rem; padding: 0.5rem; background: var(--bg-surface); border-radius: 6px; cursor: ${isDisabled ? 'not-allowed' : 'pointer'}; opacity: ${isDisabled ? 0.6 : 1};" ${tooltip}>
+                    <input type="checkbox" value="${tool.id}" ${isDisabled ? 'disabled' : ''} onchange="updateRTSelection()">
+                    <span style="font-weight: 500;">${tool.name}</span>
+                    <span style="font-size: 0.8rem; color: var(--text-muted);">${tool.description || ''}</span>
+                    ${statusBadge}
+                </label>
             `;
         });
 
-        document.getElementById('rt-tools-list').innerHTML = html || '<div class="loading">No tools available</div>';
+        html += `</div></div>`;
+    });
 
+    container.innerHTML = html;
+}
+
+function updateRTSelection() {
+    const checkboxes = document.querySelectorAll('#rt-tools-list input[type="checkbox"]:checked');
+    rtSelectedTools = Array.from(checkboxes).map(cb => cb.value);
+    document.getElementById('rt-submit').disabled = rtSelectedTools.length === 0;
+}
+
+async function submitRunTools() {
+    if (rtSelectedTools.length === 0 || !rtCaseId) return;
+
+    document.getElementById('rt-submit').disabled = true;
+    document.getElementById('rt-submit').textContent = 'Starting...';
+
+    try {
+        const response = await fetch(`/api/investigate/${rtCaseId}/run-tools`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ tools: rtSelectedTools })
+        });
+
+        if (response.ok) {
+            closeRunToolsModal();
+            // Show success message
+            alert(`Started ${rtSelectedTools.length} tool(s): ${rtSelectedTools.join(', ')}`);
+        } else {
+            const error = await response.text();
+            document.getElementById('rt-error').textContent = `Failed to start tools: ${error}`;
+            document.getElementById('rt-error').style.display = 'block';
+            document.getElementById('rt-submit').disabled = false;
+            document.getElementById('rt-submit').textContent = 'Run Selected Tools';
+        }
     } catch (e) {
-        document.getElementById('rt-tools-list').innerHTML =
-            `<div class="error">Failed to load tools: ${e.message}</div>`;
+        document.getElementById('rt-error').textContent = `Network error: ${e.message}`;
+        document.getElementById('rt-error').style.display = 'block';
+        document.getElementById('rt-submit').disabled = false;
+        document.getElementById('rt-submit').textContent = 'Run Selected Tools';
     }
 }
 
 function closeRunToolsModal() {
     document.getElementById('run-tools-modal').style.display = 'none';
-    rtSelectedTools = [];
-    rtCaseId = null;
+    document.getElementById('rt-submit').textContent = 'Run Selected Tools';
 }
 
-function rtToggleTool(toolId, el) {
-    const idx = rtSelectedTools.indexOf(toolId);
-    const checkbox = el.querySelector('input[type="checkbox"]');
-    if (idx > -1) {
-        rtSelectedTools.splice(idx, 1);
-        el.style.borderColor = 'var(--border)';
-        el.style.background = '';
-        if (checkbox) checkbox.checked = false;
-    } else {
-        rtSelectedTools.push(toolId);
-        el.style.borderColor = 'var(--accent-solid)';
-        el.style.background = 'var(--accent-glow)';
-        if (checkbox) checkbox.checked = true;
+// ========================
+// Modal Escape Handler
+// ========================
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+        // Close any open modals
+        const modals = document.querySelectorAll('.modal-overlay');
+        modals.forEach(m => m.style.display = 'none');
+        // Also close run tools modal
+        const runToolsModal = document.getElementById('run-tools-modal');
+        if (runToolsModal) runToolsModal.style.display = 'none';
     }
-    document.getElementById('rt-submit').disabled = rtSelectedTools.length === 0;
-    document.getElementById('rt-submit').textContent = rtSelectedTools.length > 0
-        ? `▶ Run ${rtSelectedTools.length} Tool${rtSelectedTools.length > 1 ? 's' : ''}`
-        : '▶ Run Selected';
-}
+});
 
-async function submitRunTools() {
-    if (!rtCaseId || rtSelectedTools.length === 0) return;
-
-    const submitBtn = document.getElementById('rt-submit');
-    const errorDiv = document.getElementById('rt-error');
-    submitBtn.disabled = true;
-    submitBtn.textContent = '⏳ Starting...';
-    errorDiv.style.display = 'none';
-
-    try {
-        const formData = new FormData();
-        formData.append('tools', rtSelectedTools.join(','));
-
-        const response = await fetch(`/api/investigate/${rtCaseId}/run-tools`, {
-            method: 'POST',
-            body: formData
-        });
-
-        if (!response.ok) {
-            const errData = await response.json().catch(() => ({ detail: 'Unknown error' }));
-            throw new Error(errData.detail || `HTTP ${response.status}`);
-        }
-
-        const result = await response.json();
-        console.log('Run tools result:', result);
-
-        // Close modal and switch dashboard to tracking mode
-        closeRunToolsModal();
-
-        // Re-enable polling for live progress
-        window.isCurrentCaseActive = true;
-        loadCaseData(rtCaseId);
-
-    } catch (e) {
-        errorDiv.textContent = e.message;
-        errorDiv.style.display = 'block';
-        submitBtn.disabled = false;
-        submitBtn.textContent = `▶ Run ${rtSelectedTools.length} Tool${rtSelectedTools.length > 1 ? 's' : ''}`;
-    }
-}
-
-// Bootstrap
+// ========================
+// Initialization
+// ========================
 document.addEventListener('DOMContentLoaded', () => {
     initTheme();
     initAIMode();
-    initGrid().then(() => {
-        loadCases();
+    initPanels();
+    loadCases();
+
+    // Button event handlers
+    document.getElementById('btn-new-investigation')?.addEventListener('click', () => {
+        openWizard();
     });
 
-    // Run Tools button wiring
-    const runToolsBtn = document.getElementById('btn-run-tools');
-    if (runToolsBtn) {
-        runToolsBtn.addEventListener('click', openRunToolsModal);
+    document.getElementById('btn-run-tools')?.addEventListener('click', openRunToolsModal);
+    document.getElementById('rt-cancel')?.addEventListener('click', closeRunToolsModal);
+    document.getElementById('rt-submit')?.addEventListener('click', submitRunTools);
+    document.getElementById('btn-reset-layout')?.addEventListener('click', resetLayout);
+    
+    document.getElementById('btn-view-summary')?.addEventListener('click', () => {
+        const caseSelector = document.getElementById('case-selector');
+        if (caseSelector && caseSelector.value) {
+            window.open(`/summary.html?case=${caseSelector.value}`, '_blank');
+        } else {
+            alert('Please select a case first');
+        }
+    });
+
+    // Auto-load case from URL parameter
+    const urlParams = new URLSearchParams(window.location.search);
+    const caseParam = urlParams.get('case');
+    if (caseParam) {
+        // Wait for cases to load, then select the case
+        const trySelectCase = setInterval(() => {
+            const selector = document.getElementById('case-selector');
+            if (selector && selector.options.length > 1) {
+                selector.value = caseParam;
+                if (selector.value === caseParam) {
+                    loadCaseData(caseParam);
+                    clearInterval(trySelectCase);
+                }
+            }
+        }, 100);
+        // Stop trying after 5 seconds
+        setTimeout(() => clearInterval(trySelectCase), 5000);
     }
 
-    // Enable/disable Run Tools button when case selection changes
-    document.getElementById('case-selector')?.addEventListener('change', (e) => {
-        const btn = document.getElementById('btn-run-tools');
-        if (btn) btn.disabled = !e.target.value;
-    });
+    // Expose loadCases for the wizard
+    window.loadCases = loadCases;
 });
-
-// Expose functions globally for use by other scripts
-window.loadCases = loadCases;
-window.loadCaseData = loadCaseData;
-window.addPanel = addPanel;
-window.openRunToolsModal = openRunToolsModal;
-window.closeRunToolsModal = closeRunToolsModal;
-window.rtToggleTool = rtToggleTool;
-window.submitRunTools = submitRunTools;

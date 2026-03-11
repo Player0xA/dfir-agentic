@@ -7,7 +7,8 @@ import json
 import os
 import subprocess
 import shutil
-from datetime import datetime
+from datetime import datetime, timezone
+import time
 import hashlib
 import logging
 import sys
@@ -555,6 +556,7 @@ async def get_generated_artifacts(case_id: str):
         return {"artifacts": []}
     
     found_artifacts = []
+    processed_runs = set()
     scan_stats = {
         "directories_scanned": 0,
         "files_found": 0,
@@ -608,6 +610,7 @@ async def get_generated_artifacts(case_id: str):
                 auto_data = json.load(f)
             baseline_run_id = auto_data.get("dispatch", {}).get("run_id")
             if baseline_run_id:
+                processed_runs.add(baseline_run_id)
                 logger.info(f"[ARTIFACTS] Found Chainsaw baseline run_id: {baseline_run_id}")
                 scan_dir(PROJECT_ROOT / "outputs" / "jsonl" / "chainsaw_evtx" / baseline_run_id, "chainsaw/")
                 scan_dir(PROJECT_ROOT / "outputs" / "csv" / "chainsaw_evtx" / baseline_run_id, "chainsaw/")
@@ -623,6 +626,7 @@ async def get_generated_artifacts(case_id: str):
                 enrich_data = json.load(f)
             enrich_run_id = enrich_data.get("result", {}).get("run_id")
             if enrich_run_id:
+                processed_runs.add(enrich_run_id)
                 logger.info(f"[ARTIFACTS] Found Hayabusa enrichment run_id: {enrich_run_id}")
                 scan_dir(PROJECT_ROOT / "outputs" / "jsonl" / "hayabusa_evtx" / enrich_run_id, "hayabusa/")
                 scan_dir(PROJECT_ROOT / "outputs" / "csv" / "hayabusa_evtx" / enrich_run_id, "hayabusa/")
@@ -653,15 +657,16 @@ async def get_generated_artifacts(case_id: str):
                         continue
                     
                     tool_name = tool_dir.name
-                    # Skip already-processed tools
-                    if tool_name in ["chainsaw_evtx", "hayabusa_evtx"]:
-                        continue
                     
                     logger.debug(f"[ARTIFACTS] Checking tool directory: {tool_name}")
                     
                     # Check each run directory in this tool's output
                     for run_dir in tool_dir.iterdir():
                         if not run_dir.is_dir():
+                            continue
+                            
+                        # Skip if we already processed this exact run as a baseline/enrichment
+                        if run_dir.name in processed_runs:
                             continue
                         
                         # Read request.json to match by case_id or run_id
@@ -2076,6 +2081,310 @@ def run_server(host="0.0.0.0", port=8080):
     import uvicorn
     print(f"Starting DFIR-Agentic Dashboard on http://{host}:{port}")
     uvicorn.run(app, host=host, port=port)
+
+
+# =============================================================================
+# CONSOLIDATED DASHBOARD STATUS ENDPOINT
+# Returns all panel data in a single call for efficient polling
+# =============================================================================
+
+@app.get("/api/cases/{case_id}/dashboard-status")
+async def get_dashboard_status(case_id: str):
+    """Get complete dashboard status for all panels in a single call.
+    
+    This consolidated endpoint reduces API calls from 10+ to 1 per poll cycle,
+    significantly reducing bandwidth and server load.
+    
+    Returns:
+        {
+            "case_id": "...",
+            "timestamp": "...",
+            "overview": {...},
+            "progress": {...},
+            "artifacts": {...},
+            "findings": {...},
+            "notes": {...},
+            "audit": {...}
+        }
+    """
+    try:
+        case_dir = PROJECT_ROOT / "outputs" / "intake" / case_id
+        
+        if not case_dir.exists():
+            raise HTTPException(status_code=404, detail=f"Case '{case_id}' not found")
+        
+        # Read all necessary files once and share across panel data
+        intake_data = {}
+        manifest_data = {}
+        auto_data = {}
+        progress_data = {}
+        
+        # 1. Read intake.json
+        intake_path = case_dir / "intake.json"
+        if intake_path.exists():
+            try:
+                with open(intake_path, "r", encoding="utf-8") as f:
+                    intake_data = json.load(f)
+            except:
+                pass
+        
+        # 2. Read case_manifest.json
+        manifest_path = case_dir / "case_manifest.json"
+        if manifest_path.exists():
+            try:
+                with open(manifest_path, "r", encoding="utf-8") as f:
+                    manifest_data = json.load(f)
+            except:
+                pass
+        
+        # 3. Read auto.json (tool stages)
+        auto_path = case_dir / "auto.json"
+        if auto_path.exists():
+            try:
+                with open(auto_path, "r", encoding="utf-8") as f:
+                    auto_data = json.load(f)
+            except:
+                pass
+        
+        # 4. Read progress.json (real-time tool progress)
+        progress_path = case_dir / "progress.json"
+        if progress_path.exists():
+            try:
+                with open(progress_path, "r", encoding="utf-8") as f:
+                    progress_list = json.load(f)
+                    if isinstance(progress_list, list) and progress_list:
+                        progress_data = progress_list[-1]  # Latest entry
+            except:
+                pass
+        
+        # 5. Get investigation status (merged from investigation_status.json)
+        inv_status_path = case_dir / "investigation_status.json"
+        inv_status = {}
+        if inv_status_path.exists():
+            try:
+                with open(inv_status_path, "r", encoding="utf-8") as f:
+                    inv_status = json.load(f)
+            except:
+                pass
+        
+        # ===================================================================
+        # Build OVERVIEW panel data
+        # ===================================================================
+        is_active = True
+        if auto_data.get("stages", {}):
+            stages = auto_data["stages"]
+            # Check if all tools finished
+            selected_tools = intake_data.get("selected_tools", [])
+            if selected_tools:
+                all_done = all(
+                    stages.get(tool, "").startswith("ok") or 
+                    stages.get(tool, "").startswith("error") or
+                    stages.get(tool, "") == "skipped"
+                    for tool in selected_tools
+                )
+                is_active = not all_done
+        
+        overview = {
+            "_last_updated": datetime.now(timezone.utc).isoformat(),
+            "id": case_id,
+            "intake": intake_data,
+            "manifest": manifest_data,
+            "is_active": is_active,
+            "auto_stages": auto_data.get("stages", {}),
+            "classification": intake_data.get("classification", {}),
+            "timestamp_utc": intake_data.get("timestamp_utc", "")
+        }
+        
+        # Generate hash for smart caching
+        overview["_hash"] = hash(f"{case_id}:{overview['is_active']}:{str(overview['auto_stages'])}")
+        
+        # ===================================================================
+        # Build PROGRESS panel data
+        # ===================================================================
+        selected_tools = intake_data.get("selected_tools", [])
+        stages = auto_data.get("stages", {})
+        
+        completed_tools = []
+        failed_tools = []
+        running_tool = None
+        
+        for tool in selected_tools:
+            status = stages.get(tool, "pending")
+            if status == "ok" or status.startswith("ok"):
+                completed_tools.append(tool)
+            elif status.startswith("error"):
+                failed_tools.append(tool)
+            elif status == "running":
+                running_tool = tool
+        
+        total_selected = len(selected_tools)
+        total_done = len(completed_tools) + len(failed_tools)
+        
+        if total_selected > 0:
+            progress_pct = int((total_done / total_selected) * 100)
+        else:
+            progress_pct = 0
+        
+        all_finished = total_done >= total_selected
+        
+        if all_finished:
+            progress_status = "completed"
+            current_tool = "completed"
+            current_action = f"Investigation complete - {len(completed_tools)} tools finished"
+        elif running_tool:
+            progress_status = "running"
+            current_tool = running_tool
+            action = f"Running {running_tool}..."
+            tool_progress = 10
+            if progress_data and progress_data.get("tool_id") == running_tool:
+                action = progress_data.get("current_action", action)
+                tool_progress = progress_data.get("progress", 10)
+            current_action = action
+        else:
+            progress_status = "starting"
+            current_tool = "initializing"
+            current_action = "Preparing forensic tools..."
+        
+        pending_tools = [t for t in selected_tools if t not in completed_tools and t not in failed_tools and t != running_tool]
+        
+        progress = {
+            "_last_updated": datetime.now(timezone.utc).isoformat(),
+            "status": progress_status,
+            "case_name": case_id,
+            "progress": progress_pct,
+            "current_tool": current_tool,
+            "current_action": current_action,
+            "completed_tools": completed_tools,
+            "failed_tools": failed_tools,
+            "pending_tools": pending_tools,
+            "total_tools": total_selected,
+            "tool_progress": progress_data
+        }
+        
+        # Generate hash for smart caching
+        progress["_hash"] = hash(f"{progress_status}:{progress_pct}:{current_tool}:{','.join(completed_tools)}:{','.join(pending_tools)}")
+        
+        # ===================================================================
+        # Build ARTIFACTS panel data
+        # ===================================================================
+        artifacts_response = await get_generated_artifacts(case_id)
+        artifacts_list = artifacts_response.get("artifacts", [])
+        
+        # Calculate artifacts hash based on file list
+        artifacts_hash_str = ",".join(sorted([a["relpath"] for a in artifacts_list]))
+        
+        artifacts = {
+            "_last_updated": datetime.now(timezone.utc).isoformat(),
+            "artifacts": artifacts_list,
+            "count": len(artifacts_list),
+            "_hash": hash(artifacts_hash_str)
+        }
+        
+        # ===================================================================
+        # Build FINDINGS panel data
+        # ===================================================================
+        try:
+            findings_response = await get_findings(case_id, None)
+            findings_list = findings_response.get("findings", [])
+        except:
+            findings_list = []
+        
+        # Calculate findings hash
+        finding_ids = sorted([f.get("finding_id", f.get("id", "")) for f in findings_list])
+        findings_hash_str = ",".join(finding_ids[:100])  # Limit to first 100
+        
+        findings = {
+            "_last_updated": datetime.now(timezone.utc).isoformat(),
+            "findings": findings_list,
+            "count": len(findings_list),
+            "_hash": hash(f"{len(findings_list)}:{findings_hash_str}")
+        }
+        
+        # ===================================================================
+        # Build NOTES panel data
+        # ===================================================================
+        notes_content = ""
+        try:
+            notes_response = await get_notes(case_id)
+            notes_content = notes_response.get("notes", "")
+        except:
+            pass
+        
+        notes = {
+            "_last_updated": datetime.now(timezone.utc).isoformat(),
+            "content": notes_content,
+            "_hash": hash(notes_content[:1000])  # Hash first 1000 chars
+        }
+        
+        # ===================================================================
+        # Build AUDIT panel data
+        # ===================================================================
+        audit_entries = []
+        try:
+            audit_response = await get_audit(case_id)
+            audit_entries = audit_response.get("audit", [])
+        except:
+            pass
+        
+        # Calculate audit hash
+        audit_hash_str = ",".join([str(a.get("timestamp", "")) for a in audit_entries[:50]])
+        
+        audit = {
+            "_last_updated": datetime.now(timezone.utc).isoformat(),
+            "entries": audit_entries,
+            "count": len(audit_entries),
+            "_hash": hash(f"{len(audit_entries)}:{audit_hash_str}")
+        }
+        
+        # ===================================================================
+        # Assemble final response
+        # ===================================================================
+        return {
+            "case_id": case_id,
+            "timestamp": datetime.now(timezone.utc).isoformat(),
+            "is_active": is_active,
+            "overview": overview,
+            "progress": progress,
+            "artifacts": artifacts,
+            "findings": findings,
+            "notes": notes,
+            "audit": audit
+        }
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        import traceback
+        logger.error(f"[DASHBOARD-STATUS] Error getting status for {case_id}: {e}")
+        logger.error(traceback.format_exc())
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+# Cache for file reads (1 second TTL to avoid re-reading same files)
+_file_cache = {}
+_file_cache_ttl = 1.0  # seconds
+
+def _read_file_cached(path: Path) -> dict:
+    """Read a JSON file with caching to avoid repeated reads within 1 second."""
+    global _file_cache
+    
+    now = time.time()
+    cache_key = str(path)
+    
+    if cache_key in _file_cache:
+        cached_data, cached_time = _file_cache[cache_key]
+        if now - cached_time < _file_cache_ttl:
+            return cached_data
+    
+    # Read fresh
+    try:
+        with open(path, "r", encoding="utf-8") as f:
+            data = json.load(f)
+        _file_cache[cache_key] = (data, now)
+        return data
+    except:
+        return {}
+
 
 if __name__ == "__main__":
     run_server()

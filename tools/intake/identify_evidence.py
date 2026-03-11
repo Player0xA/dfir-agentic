@@ -131,6 +131,33 @@ def classify_path(p: pathlib.Path) -> Tuple[str, List[str], str, Optional[str]]:
             triage_signals.append("ntuser_dat_detected")
         if any(p.rglob("SYSTEM")) and any(p.rglob("SOFTWARE")):
             triage_signals.append("registry_hives_detected")
+        
+        # Recycle Bin detection
+        recycle_signals = []
+        if (p / "$Recycle.Bin").exists():
+            recycle_signals.append("recycle_bin_folder_detected")
+        # Also detect $I files anywhere in the directory
+        recycle_bin_files = list(p.rglob("$I*"))
+        if recycle_bin_files:
+            recycle_signals.append(f"recycle_bin_$i_files_detected:{len(recycle_bin_files)}")
+        
+        # If we found recycle bin artifacts, add signals
+        if recycle_signals:
+            triage_signals.extend(recycle_signals)
+            # Check for recycle bin specific path structure
+            recycle_path = p / "$Recycle.Bin"
+            if recycle_path.exists() and recycle_path.is_dir():
+                # Check for S-1-5-21-* user folders in Recycle.Bin
+                user_folders = [x for x in recycle_path.iterdir() if x.is_dir() and x.name.startswith("S-1-5-21")]
+                if user_folders:
+                    triage_signals.append(f"recycle_bin_user_folders_detected:{len(user_folders)}")
+                # Check for $I files in user folders
+                for uf in user_folders:
+                    i_files = list(uf.glob("$I*"))
+                    if i_files:
+                        triage_signals.append(f"recycle_bin_$i_in_user_folder:{len(i_files)}")
+                        break
+                triage_signals.append("windows_recycle_bin_detected")
             
         if triage_signals:
             return ("windows_triage_dir", triage_signals, "high", "plaso_evtx")

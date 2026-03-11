@@ -463,6 +463,68 @@ window.renderArtifacts = async (caseId, forceRefresh = false) => {
     }
 
     try {
+        // Fetch generated artifacts FIRST (tool outputs - most important for forensic analysis)
+        let toolOutputsHtml = '';
+        try {
+            const genRes = await fetch(`/api/cases/${caseId}/generated_artifacts`);
+            if (genRes.ok) {
+                const genData = await genRes.json();
+                if (genData.artifacts && genData.artifacts.length > 0) {
+                    // Group by tool
+                    const artifactsByTool = {};
+                    genData.artifacts.forEach(a => {
+                        const pathParts = a.relpath.split('/');
+                        const toolName = pathParts[0] || 'Other';
+                        if (!artifactsByTool[toolName]) {
+                            artifactsByTool[toolName] = [];
+                        }
+                        artifactsByTool[toolName].push(a);
+                    });
+
+                    // Build enhanced tool outputs HTML
+                    toolOutputsHtml = `
+                        <div style="margin-bottom: 20px; border: 1px solid var(--accent-solid); border-radius: 12px; overflow: hidden; background: linear-gradient(135deg, rgba(47, 129, 247, 0.1) 0%, rgba(47, 129, 247, 0.05) 100%);">
+                            <div style="display: flex; align-items: center; gap: 10px; padding: 12px 16px; background: var(--accent-gradient); color: white; font-weight: 600;">
+                                <span style="font-size: 1.2rem;">⚙️</span>
+                                <span style="flex: 1;">Tool Outputs & Generated Files</span>
+                                <span style="background: rgba(255,255,255,0.2); padding: 2px 10px; border-radius: 12px; font-size: 0.8rem;">${genData.artifacts.length}</span>
+                            </div>
+                            <div style="max-height: 300px; overflow-y: auto;">`;
+                    
+                    Object.entries(artifactsByTool).forEach(([toolName, toolArtifacts]) => {
+                        toolOutputsHtml += `
+                            <div style="border-bottom: 1px solid var(--border-subtle);">
+                                <div style="display: flex; align-items: center; gap: 8px; padding: 10px 16px; background: var(--bg-surface); cursor: pointer;" 
+                                     onclick="const d = document.getElementById('tool-${toolName}'); d.style.display = d.style.display === 'none' ? 'block' : 'none';">
+                                    <span style="font-weight: 600; color: var(--accent-solid);">${toolName}</span>
+                                    <span style="margin-left: auto; font-size: 0.75rem; color: var(--text-muted);">${toolArtifacts.length} files</span>
+                                    <span style="color: var(--text-muted);">▼</span>
+                                </div>
+                                <div id="tool-${toolName}" style="display: block;">`;
+                        
+                        toolArtifacts.forEach(a => {
+                            const kbSize = Math.round((a.size || 0) / 1024);
+                            const sizeStr = kbSize > 1024 ? `${(kbSize/1024).toFixed(1)} MB` : `${kbSize} KB`;
+                            const shortPath = (a.relpath || '').length > 60 ? '...' + a.relpath.slice(-57) : a.relpath;
+                            toolOutputsHtml += `
+                                <div style="display: flex; align-items: center; gap: 8px; padding: 6px 16px; font-size: 0.8rem; border-bottom: 1px solid var(--border-subtle);">
+                                    <span style="font-family: monospace; color: var(--text-secondary); flex: 1; overflow: hidden; text-overflow: ellipsis;" title="${a.relpath}">${shortPath}</span>
+                                    <span style="color: var(--text-muted); white-space: nowrap;">${sizeStr}</span>
+                                </div>`;
+                        });
+                        
+                        toolOutputsHtml += `</div></div>`;
+                    });
+                    
+                    toolOutputsHtml += `
+                            </div>
+                        </div>`;
+                }
+            }
+        } catch (e) {
+            console.warn("Failed to load generated artifacts:", e);
+        }
+
         // Fetch evidence files from API
         let filesResponse;
         let filesData = { files: [] };
@@ -491,6 +553,7 @@ window.renderArtifacts = async (caseId, forceRefresh = false) => {
                     🔄 Refresh
                 </button>
             </div>
+            ${toolOutputsHtml}
             <div style="display: flex; flex-direction: column; gap: 15px;">`;
 
         // Group files by category
@@ -573,28 +636,6 @@ window.renderArtifacts = async (caseId, forceRefresh = false) => {
                     html += `<div style="padding: 0.5rem; background: var(--bg-surface); border-radius: 4px; margin-bottom: 0.3rem; font-family: monospace; font-size: 0.8rem;"><code>${p}</code></div>`;
                 });
             }
-        }
-
-        // Also fetch generated artifacts from tools
-        try {
-            const genRes = await fetch(`/api/cases/${caseId}/generated_artifacts`);
-            if (genRes.ok) {
-                const genData = await genRes.json();
-                if (genData.artifacts && genData.artifacts.length > 0) {
-                    html += `<div style="margin-top: 15px; font-weight: bold; color: var(--accent); border-bottom: 1px solid var(--border); padding-bottom: 3px;">⚙️ Tool Outputs & Generated Files (${genData.artifacts.length})</div>`;
-                    html += `<div style="overflow-x: auto;"><table class="data-table"><thead><tr><th>File Name</th><th>Path</th><th>Size (KB)</th></tr></thead><tbody>`;
-
-                    genData.artifacts.forEach(a => {
-                        let shortPath = (a.relpath || 'N/A').length > 50 ? '...' + (a.relpath || 'N/A').substring((a.relpath || 'N/A').length - 47) : (a.relpath || 'N/A');
-                        let kbSize = Math.round((a.size || 0) / 1024);
-                        html += `<tr><td><code>${a.name}</code></td><td title="${a.relpath}"><code>${shortPath}</code></td><td>${kbSize}</td></tr>`;
-                    });
-
-                    html += '</tbody></table></div>';
-                }
-            }
-        } catch (e) {
-            console.warn("Failed to load generated artifacts:", e);
         }
 
         html += '</div>';
